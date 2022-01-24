@@ -1,0 +1,28 @@
+{
+  "root": "apps/tuto-real-frontend-e2e",
+  "sourceRoot": "apps/tuto-real-frontend-e2e/src",
+  "projectType": "application",
+  "targets": {
+    "e2e": {
+      "executor": "@nrwl/cypress:cypress",
+      "options": {
+        "cypressConfig": "apps/tuto-real-frontend-e2e/cypress.json",
+        "devServerTarget": "tuto-real-frontend:serve"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "tuto-real-frontend:serve:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/tuto-real-frontend-e2e/**/*.js"]
+      }
+    }
+  },
+  "tags": [],
+  "implicitDependencies": ["tuto-real-frontend"]
+}

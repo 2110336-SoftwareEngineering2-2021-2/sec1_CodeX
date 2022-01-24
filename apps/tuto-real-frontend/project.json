@@ -1,0 +1,73 @@
+{
+  "root": "apps/tuto-real-frontend",
+  "sourceRoot": "apps/tuto-real-frontend/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/web:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "compiler": "babel",
+        "outputPath": "dist/apps/tuto-real-frontend",
+        "index": "apps/tuto-real-frontend/src/index.html",
+        "baseHref": "/",
+        "main": "apps/tuto-real-frontend/src/main.js",
+        "polyfills": "apps/tuto-real-frontend/src/polyfills.js",
+        "tsConfig": "apps/tuto-real-frontend/tsconfig.app.json",
+        "assets": [
+          "apps/tuto-real-frontend/src/favicon.ico",
+          "apps/tuto-real-frontend/src/assets"
+        ],
+        "styles": ["apps/tuto-real-frontend/src/styles.css"],
+        "scripts": [],
+        "webpackConfig": "@nrwl/react/plugins/webpack"
+      },
+      "configurations": {
+        "production": {
+          "fileReplacements": [
+            {
+              "replace": "apps/tuto-real-frontend/src/environments/environment.js",
+              "with": "apps/tuto-real-frontend/src/environments/environment.prod.js"
+            }
+          ],
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/web:dev-server",
+      "options": {
+        "buildTarget": "tuto-real-frontend:build",
+        "hmr": true
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "tuto-real-frontend:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/tuto-real-frontend/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/tuto-real-frontend"],
+      "options": {
+        "jestConfig": "apps/tuto-real-frontend/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

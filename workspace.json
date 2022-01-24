@@ -1,6 +1,8 @@
 {
   "version": 2,
   "projects": {
-    "tuto-real-backend": "apps/tuto-real-backend"
+    "tuto-real-backend": "apps/tuto-real-backend",
+    "tuto-real-frontend": "apps/tuto-real-frontend",
+    "tuto-real-frontend-e2e": "apps/tuto-real-frontend-e2e"
   }
 }
