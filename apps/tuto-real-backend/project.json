@@ -1,0 +1,52 @@
+{
+  "root": "apps/tuto-real-backend",
+  "sourceRoot": "apps/tuto-real-backend/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/node:build",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/tuto-real-backend",
+        "main": "apps/tuto-real-backend/src/main.ts",
+        "tsConfig": "apps/tuto-real-backend/tsconfig.app.json",
+        "assets": ["apps/tuto-real-backend/src/assets"]
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false,
+          "fileReplacements": [
+            {
+              "replace": "apps/tuto-real-backend/src/environments/environment.ts",
+              "with": "apps/tuto-real-backend/src/environments/environment.prod.ts"
+            }
+          ]
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/node:execute",
+      "options": {
+        "buildTarget": "tuto-real-backend:build"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/tuto-real-backend/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/tuto-real-backend"],
+      "options": {
+        "jestConfig": "apps/tuto-real-backend/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}
