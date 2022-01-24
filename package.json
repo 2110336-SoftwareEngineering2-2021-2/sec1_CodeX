@@ -5,7 +5,9 @@
   "scripts": {
     "start": "nx serve",
     "build": "nx build",
-    "test": "nx test"
+    "test": "nx test",
+    "start-front": "nx run tuto-real-frontend:serve",
+    "start-back": "nx run tuto-real-backend:serve"
   },
   "private": true,
   "dependencies": {
