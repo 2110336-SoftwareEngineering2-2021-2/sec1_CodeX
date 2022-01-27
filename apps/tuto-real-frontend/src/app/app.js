@@ -42,7 +42,7 @@ export function App() {
           </div>
         )}
       />
-      {/* END: routes */} KUY
+      {/* END: routes */}
     </>
   );
 }
