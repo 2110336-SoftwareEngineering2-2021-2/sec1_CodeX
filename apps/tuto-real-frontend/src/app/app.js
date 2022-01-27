@@ -1,18 +1,18 @@
 // import NxWelcome from './nx-welcome';
 
-import { Route, Link, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
+import NavBar from './components/navbar/navbar';
 import HomePage from './pages/HomePage';
 import LogInPage from './pages/LogInPage';
 import RegistrationPage from './pages/RegistrationPage';
 
 
 export function App() {
-  // User have type => "Guest" | "User" | "Admin" | "Tutor"
-  // const isUser = "User"
 
   return (
     <>
+      <NavBar />
       <Routes>
         <Route exact path="/" element={<HomePage />} />
         <Route exact path="/login" element={<LogInPage />} />
