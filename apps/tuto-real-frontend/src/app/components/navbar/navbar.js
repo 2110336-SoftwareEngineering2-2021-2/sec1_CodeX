@@ -1,5 +1,8 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
+import {MdSearch} from 'react-icons/md'
+
+import './navbar.css'
 import { getNavbarData } from './navbarData'
 
 
@@ -10,17 +13,19 @@ const NavBar = () => {
     <Link to={item.path} >{item.name}</Link>
   ))
 
-
   return (
-    <>
-      <div style={{'flexDirection': 'column'}}>
-        <button>TutoReal</button>
-        <input type='text' placeholder='Search to find your interested tutor.' />
+    <div className='Navbar'>
+      <div className='LeftSide'>
+        <button className='MainIcon'>TutoReal</button>
+        <div className='SearchBar'>
+          <MdSearch />
+          <input  type='text' placeholder='Search to find your interested tutor.'></input>
+        </div>
       </div>
-      <div>
+      <div className='RightSide'>
         {navbarDataList}
       </div>
-    </>
+    </div>
   )
 }
 
