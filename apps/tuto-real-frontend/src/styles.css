@@ -1,1 +1,38 @@
 /* You can add global styles to this file, and also import other style files */
+:root {
+  --primary: #2b6777;
+  --secondary: #c8d8e4;
+  --third: #52ab98;
+  --gray: #f2f2f2;
+  --darkgray: #ccd0d5;
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+body {
+  margin: 0;
+}
+
+.primary-button {
+  padding: 1.5%;
+  border-radius: 10px;
+  border-color: transparent;
+  font-weight: bold;
+  color: white;
+  background-color: var(--third);
+}
+
+.secondary-button {
+  padding: 1.5%;
+  border-radius: 10px;
+  border-color: var(--third);
+  border-style: solid;
+  font-weight: bold;
+  color: var(--third);
+  background-color: white;
+}
