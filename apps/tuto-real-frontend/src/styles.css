@@ -17,3 +17,22 @@
 body {
   margin: 0;
 }
+
+.primary-button {
+  padding: 1.5%;
+  border-radius: 10px;
+  border-color: transparent;
+  font-weight: bold;
+  color: white;
+  background-color: var(--third);
+}
+
+.secondary-button {
+  padding: 1.5%;
+  border-radius: 10px;
+  border-color: var(--third);
+  border-style: solid;
+  font-weight: bold;
+  color: var(--third);
+  background-color: white;
+}
