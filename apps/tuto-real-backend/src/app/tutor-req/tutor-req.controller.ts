@@ -2,7 +2,7 @@ import { Body, Controller, Get, Post } from '@nestjs/common';
 import { TutorReqDto } from './tutor-req.dto';
 import { TutorReqService } from './tutor-req.service';
 
-@Controller('tutor-req')
+@Controller('tutorReq')
 export class TutorReqController {
 
     constructor(private readonly service: TutorReqService){}
