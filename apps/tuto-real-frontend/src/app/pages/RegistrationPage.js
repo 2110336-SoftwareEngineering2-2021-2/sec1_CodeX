@@ -1,12 +1,25 @@
 import React from 'react'
+import './RegistrationPage.css'
 
 const RegistrationPage = () => {
 
   return (
-  <>
-    <p>Dis is LejisterationPag</p>
-    <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Molestias aut, repellat ipsum facere voluptate dicta obcaecati deserunt nobis suscipit eaque?</p>
-  </>
+  <div className="page-container" >
+    <div className='regispage-left-side'>
+      <p className='tutoreal-icon'>TutoReal</p>
+      <p className='tutoreal-desc'>
+        Tutoreal description ..................................... 
+        ..............................................................................
+        ..............................................................................</p>
+      <p className='sponser'>Power by CodeX</p>
+    </div>
+    <div className='regispage-right-side'>
+
+    </div>
+    <div>
+
+    </div>
+  </div>
   )
 }
 
