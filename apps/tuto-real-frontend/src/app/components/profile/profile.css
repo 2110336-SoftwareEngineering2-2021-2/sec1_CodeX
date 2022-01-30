@@ -1,0 +1,41 @@
+hr {
+  border: transparent;
+  border-top: 1px solid var(--lightgray);
+  width: 100%;
+}
+
+p.header {
+  color: var(--darkgray);
+  font-size: medium;
+  width: 30%;
+  text-align: left;
+}
+
+p.title {
+  color: var(--primary);
+  font-size: larger;
+  font-weight: bold;
+}
+
+p {
+  margin: 2% 0%;
+}
+
+.bar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: stretch;
+  width: 50%;
+  background-color: white;
+  border-color: var(--lightgray);
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 30px;
+}
+
+.section {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
+
 import BarButton from '../ui/BarButton'
-import COLORS from '../../constants/color'
+import "./profile.css"
 
 const ProfileMenuBar = ({viewType}) => {
   const [selecting, setSelecting] = useState("Info") // "Info" | "Learn" | "Teach" | "Review"
-  const [widthStyle, setWidthStyle] = useState(() => {
+  const [widthStyle] = useState(() => {
     switch(viewType) {
       case "TutorSelf": return "25%"
       case "StudentSelf": return "50%"
@@ -13,15 +14,10 @@ const ProfileMenuBar = ({viewType}) => {
     }
   })
 
-  // useEffect(() => {
-    
-  //   setWidthStyle()
-  // },[userType])
-
   return (
     <>
       {/* Button Bar Section */}
-      <div style={styles.bar}>
+      <div className="bar">
         <BarButton title="Information" onSelect={() => setSelecting("Info")} isActive={(selecting === "Info")} widthStyle={widthStyle} />
         <BarButton title="Learn Schedule" onSelect={() => setSelecting("Learn")} isActive={(selecting === "Learn")} widthStyle={widthStyle} />
         <BarButton title="Teach Schedule" onSelect={() => setSelecting("Teach")} isActive={(selecting === "Teach")} widthStyle={widthStyle} />
@@ -29,21 +25,6 @@ const ProfileMenuBar = ({viewType}) => {
       </div>
     </>
   )
-}
-
-const styles = {
-  bar: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "stretch",
-    width: "50%",
-    backgroundColor: COLORS.white,
-    borderColor: COLORS.darkgray,
-    borderStyle: "solid",
-    borderWidth: "1px",
-    borderRadius: "30px",
-  }
 }
 
 export default ProfileMenuBar

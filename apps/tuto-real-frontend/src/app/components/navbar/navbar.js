@@ -17,7 +17,7 @@ const NavBar = () => {
   ))
 
   return (
-    <div className='navbar'>
+    <div className='navbar shadow'>
       <div className='left-side'>
         <button className='main-icon' onClick={() => navigate('/')}>TutoReal</button>
         <div className='search-bar'>
