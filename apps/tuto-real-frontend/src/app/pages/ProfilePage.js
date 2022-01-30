@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 
 import { client } from '../axiosConfig'
+import AdvanceInfo from '../components/profile/AdvanceInfo'
 import ContactInfo from '../components/profile/ContactInfo'
 import ProfileMenuBar from '../components/profile/ProfileMenuBar'
 import ViewBasicInfo from '../components/profile/ViewBasicInfo'
@@ -54,6 +55,9 @@ const ProfilePage = () => {
         viewType={viewType}
         contactInfo={contactInfo}
       />
+      {viewType !== "TutorOther"? (
+        <AdvanceInfo advance={advance} />
+      ): null}
     </>
   )
   
