@@ -11,7 +11,7 @@ const NavBar = () => {
   const userType = "Guest"
   const navigate = useNavigate()
   const navbarDataList = getNavbarData(userType).map(item => (
-    <button className={item.style} style={{marginRight: "3%"}} onClick={()=> navigate(item.path)}>
+    <button key={item.id} className={item.style} style={{marginRight: "3%"}} onClick={()=> navigate(item.path)}>
       {item.name}
     </button>     
   ))

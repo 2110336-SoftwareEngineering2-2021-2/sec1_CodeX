@@ -2,7 +2,9 @@ import React from 'react'
 
 import "./profile.css"
 
-const ViewBasicInfo = ({viewType, firstName, lastName, birthDate, citizenId}) => {
+const ViewBasicInfo = ({viewType, basicInfo}) => {
+  const {firstName, lastName, birthDate, citizenId} = basicInfo
+
   return (
     <div className='info-card shadow'>
       <p className='title'>Basic Information</p>

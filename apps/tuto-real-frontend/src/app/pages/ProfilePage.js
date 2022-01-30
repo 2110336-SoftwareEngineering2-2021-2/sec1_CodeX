@@ -1,18 +1,20 @@
 import React, { useState, useEffect, useCallback } from 'react'
 
 import { client } from '../axiosConfig'
+import ContactInfo from '../components/profile/ContactInfo'
 import ProfileMenuBar from '../components/profile/ProfileMenuBar'
-import ViewBasicInfo from '../components/profile/ViewBacicInfo'
+import ViewBasicInfo from '../components/profile/ViewBasicInfo'
 
 const ProfilePage = () => {
   // const [selecting, setSelecting] = useState("Info") // "Info" | "Learn" | "Teach" | "Review"
   const [viewType, setViewType] = useState("TutorSelf") // "TutorSelf" | "StudentSelf" | "TutorOther"
+  const [uid, setUid] = useState()
   const [basicInfo, setBasicInfo] = useState({
     picture: "",
-    firstName: "",
-    lastName: "",
+    firstName: "Veerin",
+    lastName: "Phana-ngam",
     birthDate: new Date(),
-    citizenId: ""
+    citizenId: "1-2345-67891-11-1"
   })
   const [contactInfo, setContactInfo] = useState({
     email: "",
@@ -46,12 +48,12 @@ const ProfilePage = () => {
       <ProfileMenuBar viewType={viewType} />
       <ViewBasicInfo 
         viewType={viewType}  
-        firstName={"Veerin"}
-        lastName={"Phana-ngam"}
-        birthDate={new Date()}
-        citizenId={"1-2345-67891-11-1"}
+        basicInfo={basicInfo}
       />
-
+      <ContactInfo
+        viewType={viewType}
+        contactInfo={contactInfo}
+      />
     </>
   )
   
