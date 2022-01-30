@@ -1,26 +1,32 @@
-import React, { useState, useRef } from 'react';
+import React, { useState} from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import UploadButton from '../components/changeacc/UploadButton';
 
 const ChangeAccountTypePage = () => {
 
     const back = '< back'
-    const [citizenID, setCitizenID] = useState(null)
-    const [transcription, setTranscription] = useState(null)
+    const [citizenID, setCitizenID] = useState({preview: "", raw : ""})
+    const [transcription, setTranscription] = useState({preview: "", raw : ""})
 
-    const handleSelectCid = (event) => {
-        setCitizenID(event.target.files[0])
+    const handleSelectCid = (e) => {
+      if(e.target.files.length){
+        setCitizenID({
+          preview: URL.createObjectURL(e.target.files[0]),
+          raw : e.target.files[0]
+        })
+      }
     }
 
-    const handleSelectTrans = (event) => {
-        setTranscription(event.target.files[0])
+    const handleSelectTrans = (e) => {
+      if(e.target.files.length){
+        setTranscription({
+          preview: URL.createObjectURL(e.target.files[0]),
+          raw : e.target.files[0]
+        })
+      }
     }
 
     const handleUploadFile = (event) => {
-        // const fileList = new FormData()
-        // fileList.append('image',citizenID,citizenID.name)
-        // console.log(fileList)
-        // axios.post()
         console.log(citizenID)
         console.log(transcription)
     }
@@ -31,23 +37,13 @@ const ChangeAccountTypePage = () => {
         <p>upgrade user's type form</p>
         <p>Please submit your  copy of citizen id card and transcription</p>
         <p>COPY OF CITIZEN ID CARD</p>
-        <label htmlFor='cidUpload'>[ click here to upload your image ]</label>
-        <input 
-          id='cidUpload'
-          style={{display: 'none'}} 
-          type='file' 
-          onChange={handleSelectCid}
-        />
+        <UploadButton id='cidUpload' image={citizenID} setimage={handleSelectCid}/>
 
         <p>TRANSCRIPTION</p>
-        <label htmlFor='transUpload'>[ click here to upload your image ]</label>
-        <input 
-          id='transUpload'
-          style={{display: 'none'}} 
-          type='file' 
-          onChange={handleSelectTrans}
-        />
+        <UploadButton id='transUpload' image={transcription} setimage={handleSelectTrans}/>
+
         <br/>
+        
         <button onClick={handleUploadFile}>Submit</button>
     </div>
   );
