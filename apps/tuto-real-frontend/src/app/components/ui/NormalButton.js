@@ -10,6 +10,7 @@ const NormalButton = ({title, whenClick, size, color}) => { // widthStyle is opt
       style={{
         fontWeight: "bold",
         padding: `0.5vh ${size === "s"? 2: 4.5}vw`,
+        marginLeft: "2vw",
         borderColor: "transparent",
         borderRadius: "30px",
         backgroundColor: color,
