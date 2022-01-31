@@ -1,0 +1,99 @@
+* {
+    font-family: Roboto;
+}
+
+input.form-control-regis {
+    margin: 0px;
+    margin-bottom: 0.65vh;
+    font-family: Roboto;
+}
+
+.page-container {
+    background-color:white;
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    flex-direction: row;  
+    width: 100%;
+    height: 80vh;
+}
+.regispage-left-side {
+    background-color:white;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-right: 50px;
+    width: 440px;
+    /* justify-content: flex-end; */
+}
+
+.tutoreal-icon {
+    color: var(--primary);
+     
+    font-size: 96px;
+    font-weight:900;
+    margin-bottom: 0px;
+    margin-top: 0px;
+}
+
+.tutoreal-desc {
+    color: var(--third);
+     
+    font-size: 24px;
+    width: 100%;
+    margin-bottom: 0px;
+    margin-top: 0px;
+}
+
+.sponser {
+    color: var(--third);
+     
+    font-size: 24px;
+    font-weight:400;
+    margin-top: 0px;
+    margin-right: 15px;
+}
+
+.regispage-right-side {
+    background-color:white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 50px;
+    width: 440px;
+}
+
+.mini-lable {
+    font-family: Roboto;
+    font-size: small;
+    margin-bottom: 0px;
+    font-weight: normal;
+    color: darkgray;
+}
+
+.form-group-regis {
+    display: flex; 
+    flex-direction: column; 
+    align-items: flex-start; 
+    margin-bottom: 0.65vh;
+}
+
+.birthday-dropdown-row-regis {
+    display: flex; 
+    width: 100%; 
+    flex-direction: row; 
+    justify-content: space-between; 
+    margin: 0px;
+}
+
+button.signup-button-regis {
+    width: 100%;
+    background-color: var(--third);
+    border-color: var(--third);
+}
+
+.signin-button-regis {
+    margin-top: 3vh;
+    font-family: Roboto;
+    color: var(--third);
+}
