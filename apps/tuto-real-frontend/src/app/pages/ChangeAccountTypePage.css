@@ -1,0 +1,79 @@
+.backtoprofile {
+    text-decoration: none;
+    color: white;
+    cursor: default;
+    background-color: var(--third);
+    padding: 5px 0px;
+    font-size: larger;
+    border-radius: 50px;
+    font-weight: bold;
+    width: 13.5vw;
+    margin-bottom: 2vw;
+    display: flex;
+    justify-content: center;
+}
+
+.backtoprofile:hover{
+    color: white;
+}
+
+.left{
+    text-align: left;
+}
+
+.upload{
+    display: flex;
+    width: 100%;
+}
+
+.upload-text{
+    color: var(--third);
+    font-size: larger;
+    margin: 2.6% 2%;
+}
+
+.upload-image{
+    width: 93%;
+    height: auto;
+    margin: 2.6% 2%;
+}
+
+.submit-open{
+    text-decoration: none;
+    color: white;
+    cursor: default;
+    background-color: var(--third);
+    padding: 5px 0px;
+    font-size: larger;
+    border-radius: 50px;
+    font-weight: bold;
+    display: flex;
+    width: 13.5vw;
+    margin-bottom: 20px;
+    border: none;
+    justify-content: center;
+}
+
+.submit-open:hover{
+    cursor: default;
+}
+
+.submit-close{
+    text-decoration: none;
+    color: white;
+    cursor: default;
+    background-color: var(--lightgray);
+    padding: 5px 0px;
+    font-size: larger;
+    border-radius: 50px;
+    font-weight: bold;
+    display: flex;
+    width: 13.5vw;
+    margin-bottom: 20px;
+    border: none;
+    justify-content: center;
+}
+
+.submit-close:hover{
+    cursor: default;
+}

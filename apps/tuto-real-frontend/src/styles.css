@@ -1,8 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 @import url('https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css');
-@import url('https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js');
-@import url('https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js');
 
 :root {
   --primary: #2b6777;
@@ -11,6 +9,7 @@
   --gray: #f2f2f2;
   --lightgray: #ccd0d5;
   --darkgray: #606469;
+  --bordergray: #B0B4BA;
 }
 
 * {
@@ -32,7 +31,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  width: 46%;
+  width: 45%;
   padding: 1% 2%;
   margin-bottom: 2%;
   border-style: solid;
@@ -61,5 +60,5 @@ body {
 }
 
 .shadow {
-  box-shadow: 0px 4px 4px rgb(0, 0, 0, 0.25);
+  box-shadow: 0px 4px 4px rgb(0, 0, 0, 0.25)!important;
 }

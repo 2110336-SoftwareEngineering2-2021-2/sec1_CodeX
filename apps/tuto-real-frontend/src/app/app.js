@@ -3,6 +3,7 @@
 import { Route, Routes } from 'react-router-dom';
 
 import NavBar from './components/navbar/navbar';
+import ChangeAccountTypePage from './pages/ChangeAccountTypePage';
 import HomePage from './pages/HomePage';
 import LogInPage from './pages/LogInPage';
 import ProfilePage from './pages/ProfilePage';
@@ -19,6 +20,7 @@ export function App() {
         <Route exact path="/login" element={<LogInPage />} />
         <Route exact path="/register" element={<RegistrationPage />} />
         <Route exact path="/profile" element={<ProfilePage />} />
+        <Route exact path="/changeacctype" element={<ChangeAccountTypePage />} />
       </Routes>
 
       {/* <NxWelcome title="tuto-real-frontend" /> */}
