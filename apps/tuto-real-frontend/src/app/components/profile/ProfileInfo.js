@@ -1,19 +1,22 @@
 import React, {useState, useEffect, useCallback} from 'react'
+import {Form} from 'react-bootstrap'
+import {useForm} from "react-hook-form"
 
 import {client} from '../../axiosConfig'
 import AdvanceInfo from './AdvanceInfo'
 import ViewContactInfo from './ViewContactInfo'
 import ViewBasicInfo from './ViewBasicInfo'
-import NormalButton from '../ui/NormalButton'
-
-import COLORS from '../../constants/color'
 import EditBasicInfo from './EditBasicInfo'
 import EditContactInfo from './EditContactInfo'
+import NormalButton from '../ui/NormalButton'
+import "./profile.css"
+
+import COLORS from '../../constants/color'
 
  
 const ProfileInfo = () => {
   const [viewType, setViewType] = useState("TutorSelf") // "TutorSelf" | "StudentSelf" | "TutorOther"
-  const [uid, setUid] = useState()
+  // const [uid, setUid] = useState()
   const [isEditing, setEditing] = useState(false)
   const [basicInfo, setBasicInfo] = useState({
     picture: "",
@@ -32,6 +35,8 @@ const ProfileInfo = () => {
     password: ""
   })
 
+  const {register, handleSubmit, reset, formState: { errors }} = useForm()
+
   const fetchData = useCallback(() => {
     client({
       method: "GET",
@@ -48,6 +53,15 @@ const ProfileInfo = () => {
   useEffect(() => {
     fetchData()
   },[fetchData])
+
+  const onSubmit = (data) => {
+    console.log(data)
+  }
+
+  const onCancel = () => {
+    setEditing(false)
+    reset()
+  }
 
   const renderViewForm = () => {
     return (
@@ -66,10 +80,10 @@ const ProfileInfo = () => {
 
   const renderEditForm = () => {
     return (
-      <>
-        <EditBasicInfo />
+      <Form className='form'>
+        <EditBasicInfo register={register} basicInfo={basicInfo} />
         <EditContactInfo />
-      </>
+      </Form>
     )
   }
 
@@ -77,18 +91,20 @@ const ProfileInfo = () => {
     <>
       {isEditing? renderEditForm(): renderViewForm()}
       {viewType !== "TutorOther"? (
-        <AdvanceInfo advance={advance} />
+        <>
+          <AdvanceInfo advance={advance} />
+          {isEditing? (
+            <div style={{width: "45%", textAlign: "right", marginBottom: "5%"}}>
+              <NormalButton title={"Submit"} whenClick={handleSubmit(onSubmit)} size={"l"} bgColor={COLORS.third} />
+              <NormalButton title={"Cancel"} whenClick={onCancel} size={"l"} bgColor={COLORS.yellow} />
+            </div>
+          ): (
+            <div style={{width: "45%", textAlign: "right", marginBottom: "5%"}}>
+              <NormalButton title={"Edit"} whenClick={() => setEditing(true)} size={"l"} bgColor={COLORS.third} />
+            </div>
+          )}
+        </>
       ): null}
-      {isEditing? (
-        <div style={{width: "45%", textAlign: "right", marginBottom: "5%"}}>
-          <NormalButton title={"Submit"} whenClick={() => console.log("saving")} size={"l"} color={COLORS.third} />
-          <NormalButton title={"Cancel"} whenClick={() => setEditing(false)} size={"l"} color={COLORS.yellow} />
-        </div>
-      ): (
-        <div style={{width: "45%", textAlign: "right", marginBottom: "5%"}}>
-          <NormalButton title={"Edit"} whenClick={() => setEditing(true)} size={"l"} color={COLORS.third} />
-        </div>
-      )}
     </>
   )
 }

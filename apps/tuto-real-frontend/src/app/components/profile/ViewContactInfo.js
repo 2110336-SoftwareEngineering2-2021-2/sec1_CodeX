@@ -1,5 +1,7 @@
 import React from 'react'
 
+import "./profile.css"
+
 const ViewContactInfo = ({viewType, contactInfo}) => {
   const {email, telephone, address} = contactInfo
 
