@@ -5,11 +5,15 @@ import AdvanceInfo from '../components/profile/AdvanceInfo'
 import ContactInfo from '../components/profile/ContactInfo'
 import ProfileMenuBar from '../components/profile/ProfileMenuBar'
 import ViewBasicInfo from '../components/profile/ViewBasicInfo'
+import NormalButton from '../components/ui/NormalButton'
+
+import COLORS from '../constants/color'
 
 const ProfilePage = () => {
   // const [selecting, setSelecting] = useState("Info") // "Info" | "Learn" | "Teach" | "Review"
   const [viewType, setViewType] = useState("TutorSelf") // "TutorSelf" | "StudentSelf" | "TutorOther"
   const [uid, setUid] = useState()
+  const [isEditing, setEditing] = useState(false)
   const [basicInfo, setBasicInfo] = useState({
     picture: "",
     firstName: "Veerin",
@@ -58,24 +62,12 @@ const ProfilePage = () => {
       {viewType !== "TutorOther"? (
         <AdvanceInfo advance={advance} />
       ): null}
+      <div style={{width: "45%", textAlign: "right", marginBottom: "5%"}}>
+        <NormalButton title={"Edit"} whenClick={() => setEditing(true)} size={"l"} color={COLORS.third} />
+      </div>
     </>
   )
   
 }
-
-// const styles = {
-//   bar: {
-//     display: "flex",
-//     flexDirection: "row",
-//     justifyContent: "space-between",
-//     alignItems: "stretch",
-//     width: "50%",
-//     backgroundColor: COLORS.white,
-//     borderColor: COLORS.darkgray,
-//     borderStyle: "solid",
-//     borderWidth: "1px",
-//     borderRadius: "30px",
-//   }
-// }
 
 export default ProfilePage
