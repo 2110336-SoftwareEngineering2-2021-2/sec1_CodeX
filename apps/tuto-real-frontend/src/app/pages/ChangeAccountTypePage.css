@@ -6,15 +6,18 @@ a {
     padding: 5px 0px;
     font-size: 24px;
     border-radius: 50px;
-    font-family: roboto;
     font-weight: bold;
     display: inline-block;
-    width: 12.5%;
+    width: 13.5%;
     margin-right: 37.5%;
     margin-bottom: 20px;
 }
 
-.header{
+a:hover{
+    color: white;
+}
+
+.changeacc-header{
     color: var(--primary);
     font-size: 24px;
     font-weight: medium;
@@ -24,7 +27,7 @@ a {
 }
 
 .header-desc{
-    color: #606469;
+    color: var(--darkgray);
     font-size: 18px;
     font-weight: normal;
     padding-bottom: 20px;
@@ -36,7 +39,7 @@ a {
 }
 
 .normal{
-    color: #606469;
+    color: var(--darkgray);
     font-size: 18px;
     font-weight: normal;
     width: 30%;
@@ -64,7 +67,6 @@ a {
 .submit{
     text-decoration: none;
     color: white;
-    cursor: default;
     background-color: var(--third);
     padding: 5px 0px;
     font-size: 24px;
@@ -75,6 +77,11 @@ a {
     width: 12.5%;
     margin-left: 37.5%;
     margin-bottom: 20px;
+    border: none;
+}
+
+.submit:hover{
+    cursor: default;
 }
 
 .group-content{

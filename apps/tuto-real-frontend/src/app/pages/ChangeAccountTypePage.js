@@ -34,10 +34,10 @@ const ChangeAccountTypePage = () => {
 
   return (
     <div style={{width: '100%'}}>
-        <Link to='/'>{back}</Link>
+        <Link className='shadow' to='/'>{back}</Link>
 
         <div className='group-content'>
-          <p className='header'>upgrade user's type form</p>
+          <p className='changeacc-header'>upgrade user's type form</p>
           <p className='header-desc'>Please submit your  copy of citizen id card and transcription</p>
 
           <div className='inside-line'>
@@ -65,11 +65,17 @@ const ChangeAccountTypePage = () => {
         </div>
 
         <br/>
-        
+
+        {
+          (!transcription.preview | 
+          !citizenID.preview) && 
+          <button onClick={handleUploadFile} className='submit-close' disabled>Submit</button>
+        }
+
         {
           transcription.preview && 
           citizenID.preview && 
-          <button onClick={handleUploadFile} className='submit'>Submit</button>
+          <button onClick={handleUploadFile} className='submit-open'>Submit</button>
         }
     </div>
   );
