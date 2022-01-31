@@ -1,0 +1,79 @@
+a {
+    text-decoration: none;
+    color: white;
+    cursor: default;
+    background-color: var(--third);
+    padding: 5px 0px;
+    font-size: 24px;
+    border-radius: 50px;
+    font-family: roboto;
+    font-weight: bold;
+    display: inline-block;
+    width: 12.5%;
+    margin-right: 37.5%;
+    margin-bottom: 20px;
+}
+
+.header{
+    color: var(--primary);
+    font-size: 24px;
+    font-weight: medium;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    margin-left: 2%;
+}
+
+.header-desc{
+    color: #606469;
+    font-size: 18px;
+    font-weight: normal;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    margin-left: 2%;
+}
+
+.normal{
+    color: #606469;
+    font-size: 18px;
+    font-weight: normal;
+    width: 30%;
+    display: inline-block;
+    margin: 20px 0px;
+    margin-left: 2%;
+}
+
+.upload{
+    width: 40%;
+    display: inline-block;
+}
+
+.upload-text{
+    color: var(--third);
+    font-size: 18px;
+    font-weight: normal;
+    display: inline-block;
+    margin: 20px 0px;
+}
+
+.submit{
+    text-decoration: none;
+    color: white;
+    cursor: default;
+    background-color: var(--third);
+    padding: 5px 0px;
+    font-size: 24px;
+    border-radius: 50px;
+    font-family: roboto;
+    font-weight: bold;
+    display: inline-block;
+    width: 20%;
+}
+
+.group-content{
+    text-align: left;
+    background-color: white;
+    border: 1px solid #B0B4BA;
+    width: 50%;
+    margin-left: 25%;
+    border-radius: 10px;
+}
