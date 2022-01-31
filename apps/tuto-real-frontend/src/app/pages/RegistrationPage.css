@@ -2,9 +2,12 @@
     font-family: Roboto;
 }
 
-button#dropdown-basic-button{
-    width: 100%;
+input.form-control-regis {
+    margin: 0px;
+    margin-bottom: 0.65vh;
+    font-family: Roboto;
 }
+
 .page-container {
     background-color:white;
     display: flex;
@@ -60,38 +63,37 @@ button#dropdown-basic-button{
     width: 440px;
 }
 
-.text-input {
-     
-    font-size:18px ;
-    margin-left: 100;
-}
-
-.text-input-border {
-    display: flex;
-    background-color: var(--gray);
-    height: 41px;
-    width: 98%;
-    border-style: solid;
-    border-width: 1px;
-    border-radius: 5px;
-    border-color: var(--darkgray);
-    align-items: center;
-    padding-left: 10px;
-    margin-bottom: 10px;
-}
-
-#mini-group {
-    width: 100%; 
-    display: flex; 
-    align-items: flex-start; 
-    flex-direction: column;
-    margin-bottom: 10px;
-}
-
-#mini-label {
-    margin-top: 0px;
+.mini-lable {
+    font-family: Roboto;
+    font-size: small;
     margin-bottom: 0px;
-    color: var(--third);
-     
+    font-weight: normal;
+    color: darkgray;
 }
 
+.form-group-regis {
+    display: flex; 
+    flex-direction: column; 
+    align-items: flex-start; 
+    margin-bottom: 0.65vh;
+}
+
+.birthday-dropdown-row-regis {
+    display: flex; 
+    width: 100%; 
+    flex-direction: row; 
+    justify-content: space-between; 
+    margin: 0px;
+}
+
+button.signup-button-regis {
+    width: 100%;
+    background-color: var(--third);
+    border-color: var(--third);
+}
+
+.signin-button-regis {
+    margin-top: 3vh;
+    font-family: Roboto;
+    color: var(--third);
+}

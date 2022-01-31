@@ -42,65 +42,44 @@ const RegistrationPage = () => {
 
     <div className='regispage-right-side'>
       <Form>
-        <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%'}}>
-          <Form.Control type="text" placeholder="First name" style={{marginBottom: '0px'}}/>
-          <Form.Control type="text" placeholder="Last name" style={{marginBottom: '0px'}}/>
-        </div>
+        <Row style={{margin: '0px', marginBottom: '0.65vh'}}>
+          <Col style={{padding: '0px'}}>
+            <Form.Control className='form-control-regis' type="text" placeholder="First name" style={{width: '98%', margin: '0px'}}/>
+          </Col>
+          <Col style={{padding: '0px', display: 'flex', justifyContent: 'flex-end'}}>
+            <Form.Control className='form-control-regis' type="text" placeholder="Last name" style={{width: '98%',  margin: '0px'}}/>
+          </Col>
+        </Row>
 
-        <Form.Control type="text" placeholder="Mobile phone" />
+        <Form.Control className='form-control-regis' type="text" placeholder="Mobile phone" />
 
-        <Form.Control type="email" placeholder="Email address" />
+        <Form.Control className='form-control-regis' type="email" placeholder="Email address" />
 
-        <Form.Control type="password" placeholder="New password" />
+        <Form.Control className='form-control-regis' type="password" placeholder="New password" />
 
-        <Form.Control type="password" placeholder="Confirm password" />
+        <Form.Control className='form-control-regis' type="password" placeholder="Confirm password" />
 
-      
-
-        {/* <div id='mini-group'>
-          <p id='mini-label'>Date of birth</p>
-          <div style={{width: '100%', display: 'flex', alignItems: 'flex-start', flexDirection: 'row'}}>
-
-            <DropdownButton className='drop-down-regis' id="dropdown-basic-button" title="Date" style={{width: '100%'}}>
-              {birthDayChoice.map(e => (
-                <Dropdown.Item href="#/action-1">{e}</Dropdown.Item>
-              ))}
-            </DropdownButton>
-            <DropdownButton id="dropdown-basic-button" title="Month" style={{width: '100%'}}>
-              <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-              <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
-              <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
-            </DropdownButton>
-            <DropdownButton id="dropdown-basic-button" title={birthDay} size='lg' style={{width: '100%'}}>
-              {numbers.map(e => (
-                <Dropdown.Item href="#/action-1">{e}</Dropdown.Item>
-                ))}
-              <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
-              <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
-            </DropdownButton>
-          </div>
-        </div> */}
-        <Form.Group style={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start'}}>
-          <Form.Label style={{marginBottom: '0px'}}>Date of Birth</Form.Label>
-          <Row>
-            <Col>
-              <Form.Select aria-label="Default select example" placeholder='Date'>
+        <Form.Group className='form-group-regis'>
+          <Form.Label className='mini-lable'>Date of Birth</Form.Label>
+          <Row className='birthday-dropdown-row-regis' >
+            <Col style={{padding: '0px'}}>
+              <Form.Select aria-label="Default select example" style={{width: '95%'}}>
                 <option>Date</option>
                 {birthDayChoice.map(e => (
                   <option value='e'>{e}</option>
                 ))}
               </Form.Select>
             </Col>
-            <Col>
-              <Form.Select aria-label="Default select example">
+            <Col style={{padding: '0px', display: 'flex', justifyContent: 'center'}}>
+              <Form.Select aria-label="Default select example" style={{width: '95%'}}>
                 <option>Month</option>
                 {birthMonthChoice.map(e => (
                   <option value='e'>{e}</option>
                 ))}
               </Form.Select>
             </Col>
-            <Col>
-              <Form.Select aria-label="Default select example">
+            <Col style={{padding: '0px', display: 'flex', justifyContent: 'flex-end'}}>
+              <Form.Select aria-label="Default select example" style={{width: '95%'}}>
                 <option>Year</option>
                 {birthYearChoice.map(e => (
                   <option value='e'>{e}</option>
@@ -110,18 +89,20 @@ const RegistrationPage = () => {
           </Row>
         </Form.Group>
 
-        <Form.Group style={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start'}}>
-          <Form.Label style={{marginBottom: '0px'}}>Address</Form.Label>
+        <Form.Group className='form-group-regis'>
+          <Form.Label className='mini-lable'>Address</Form.Label>
           <Form.Control as="textarea" rows={3} />
         </Form.Group>
         
-        <Form.Control type="password" placeholder="Citizen Id" />
+        <Form.Control className='form-control-regis' type="text" placeholder="Citizen Id" />
 
-        <Button variant="primary" type="submit">
-          Submit
+        <Button className='signup-button-regis' variant="secondary" type="submit">
+          Sign up
         </Button>
-        
-        <p>If you already have account, sign in</p>
+
+        <p className='signin-button-regis'>
+          If you already have account, sign in
+        </p>
       </Form>
     </div>
   </div>
