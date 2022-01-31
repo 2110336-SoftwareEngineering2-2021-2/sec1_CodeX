@@ -33,50 +33,58 @@ const ChangeAccountTypePage = () => {
     }
 
   return (
-    <div style={{width: '100%'}}>
-        <Link className='shadow' to='/'>{back}</Link>
+    <div style={{display: 'flex',flexDirection: 'column',alignItems: 'center' , width: '100%'}}>
+        <div style={{display: 'flex', width: '45%'}}>
+          <Link className='backtoprofile shadow' to='/profile'>{back}</Link>
+        </div>
+        
 
-        <div className='group-content'>
-          <p className='changeacc-header'>upgrade user's type form</p>
-          <p className='header-desc'>Please submit your  copy of citizen id card and transcription</p>
-
-          <div className='inside-line'>
-            <p className='normal'>COPY OF CITIZEN ID CARD</p>
+        <div className='info-card shadow' >
+          <p className='title left' style={{width: '100%'}}>upgrade user's type form</p>
+          <p className='header' style={{width: '100%'}}>Please submit your  copy of citizen id card and transcription</p>
+          <hr/>
+          
+          <div className='section'>
+            <p className='header'>COPY OF CITIZEN ID CARD</p>
             <UploadButton 
-              id='cidUpload' 
-              image={citizenID} 
-              setimage={handleSelectCid} 
+                id='cidUpload' 
+                image={citizenID} 
+                setimage={handleSelectCid} 
+                csstext='upload-text' 
+                csslabel='upload' 
+                cssimage='upload-image'
+            />
+          </div>
+          <hr/>
+          
+          <div className='section'>
+            <p className='header'>TRANSCRIPTION</p>
+            <UploadButton 
+              id='transUpload' 
+              image={transcription} 
+              setimage={handleSelectTrans} 
               csstext='upload-text' 
               csslabel='upload' 
               cssimage='upload-image'
             />
           </div>
-          
-          
-          <p className='normal'>TRANSCRIPTION</p>
-          <UploadButton 
-            id='transUpload' 
-            image={transcription} 
-            setimage={handleSelectTrans} 
-            csstext='upload-text' 
-            csslabel='upload' 
-            cssimage='upload-image'
-          />
         </div>
 
-        <br/>
+        <div style={{display: 'flex',flexDirection: 'row-reverse', width: '45%'}}>
+          {
+            (!transcription.preview || 
+            !citizenID.preview) && 
+            <button className='submit-close shadow' disabled>Submit</button>
+          }
+        </div>
 
-        {
-          (!transcription.preview | 
-          !citizenID.preview) && 
-          <button onClick={handleUploadFile} className='submit-close' disabled>Submit</button>
-        }
-
-        {
-          transcription.preview && 
-          citizenID.preview && 
-          <button onClick={handleUploadFile} className='submit-open'>Submit</button>
-        }
+        <div style={{display: 'flex',flexDirection: 'row-reverse', width: '45%'}}>
+          {
+            transcription.preview && 
+            citizenID.preview && 
+            <button onClick={handleUploadFile} className='submit-open shadow'>Submit</button>
+          }
+        </div>
     </div>
   );
 };
