@@ -2,12 +2,12 @@ import React from 'react';
 
 const UploadButton = (props) => {
   return (
-    <div>
-        <label htmlFor={props.id}>
+    <>
+        <label htmlFor={props.id} className={props.csslabel}>
           {props.image.preview ? (
             <img src={props.image.preview} alt='dummy' width='300' height='300' />
           ) : (
-            <p>[ click here to upload your image ]</p>
+            <p className={props.csstext}>[ click here to upload your image ]</p>
           )}
         </label>
         <input 
@@ -16,7 +16,7 @@ const UploadButton = (props) => {
           type='file' 
           onChange={props.setimage}
         />
-    </div>
+    </>
   );
 };
 
