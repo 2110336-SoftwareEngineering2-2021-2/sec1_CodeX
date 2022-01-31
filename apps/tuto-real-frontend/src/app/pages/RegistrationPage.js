@@ -5,12 +5,23 @@ import './RegistrationPage.css'
 
 
 const RegistrationPage = () => {
-
-  const [birthDayToggle, setBirthDayToggle] = useState(false);
-  const [birthDay, setBirthDay] = useState('Day');
-  const numbers = [1,2,3,45];
   
   const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [mobilePhone, setMobilePhone] = useState('');
+  const [emailAddress, setEmailAddress] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  
+  const [birthDay, setBirthDay] = useState('');
+  const [birthMonth, setBirthMonth] = useState('');
+  const [birthYear, setBirthYear] = useState('');
+
+  const [address, setAddress] = useState('');
+  const [citizenId, setCitizenId] = useState('');
+
+
+
   const birthDayChoice = Array.from({length: 31}, (_, i) => i + 1);
   const birthMonthChoice = 
                 ['January', 
@@ -44,46 +55,91 @@ const RegistrationPage = () => {
       <Form>
         <Row style={{margin: '0px', marginBottom: '0.65vh'}}>
           <Col style={{padding: '0px'}}>
-            <Form.Control className='form-control-regis' type="text" placeholder="First name" style={{width: '98%', margin: '0px'}}/>
+            <Form.Control 
+              className='form-control-regis' 
+              type="text" 
+              placeholder="First name" 
+              style={{width: '98%', margin: '0px'}}
+              onChange={e => {setFirstName(e.target.value); 
+                console.log('Edit first name to ',e.target.value)}}
+            />
           </Col>
           <Col style={{padding: '0px', display: 'flex', justifyContent: 'flex-end'}}>
-            <Form.Control className='form-control-regis' type="text" placeholder="Last name" style={{width: '98%',  margin: '0px'}}/>
+            <Form.Control 
+              className='form-control-regis' 
+              type="text" 
+              placeholder="Last name" 
+              style={{width: '98%',  margin: '0px'}}
+              onChange={e => {setLastName(e.target.value); 
+                console.log('Edit last name to ',e.target.value)}}
+              />
           </Col>
         </Row>
 
-        <Form.Control className='form-control-regis' type="text" placeholder="Mobile phone" />
+        <Form.Control 
+          className='form-control-regis' 
+          type="text" placeholder="Mobile phone" 
+          onChange={e => {setMobilePhone(e.target.value); 
+                          console.log('Edit mobile phone to ',e.target.value)}}
+        />
 
-        <Form.Control className='form-control-regis' type="email" placeholder="Email address" />
+        <Form.Control 
+          className='form-control-regis' 
+          type="text" placeholder="Email address" 
+          onChange={e => {setEmailAddress(e.target.value); 
+                          console.log('Edit email address to ',e.target.value)}}
+        />
 
-        <Form.Control className='form-control-regis' type="password" placeholder="New password" />
+        <Form.Control 
+          className='form-control-regis' 
+          type="password" placeholder="New password" 
+          onChange={e => {setPassword(e.target.value); 
+                          console.log('Edit password')}}
+        />
 
-        <Form.Control className='form-control-regis' type="password" placeholder="Confirm password" />
+        <Form.Control 
+          className='form-control-regis' 
+          type="password" placeholder="Confirm password" 
+          onChange={e => {setConfirmPassword(e.target.value); 
+                          console.log('Edit confirm password')}}
+        />
 
         <Form.Group className='form-group-regis'>
           <Form.Label className='mini-lable'>Date of Birth</Form.Label>
           <Row className='birthday-dropdown-row-regis' >
             <Col style={{padding: '0px'}}>
-              <Form.Select aria-label="Default select example" style={{width: '95%'}}>
-                <option>Date</option>
-                {birthDayChoice.map(e => (
-                  <option value='e'>{e}</option>
-                ))}
+              <Form.Select 
+                aria-label="Default select example" 
+                style={{width: '95%'}}
+                onChange={e => {setBirthDay(e.target.value);
+                                console.log('Set day of birth to ', e.target.value)}}
+              >
+                <option disabled>Date</option>
+                {birthDayChoice.map(e => (<option value={e}>{e}</option>))}
               </Form.Select>
             </Col>
+
             <Col style={{padding: '0px', display: 'flex', justifyContent: 'center'}}>
-              <Form.Select aria-label="Default select example" style={{width: '95%'}}>
-                <option>Month</option>
-                {birthMonthChoice.map(e => (
-                  <option value='e'>{e}</option>
-                ))}
+              <Form.Select 
+                aria-label="Default select example" 
+                style={{width: '95%'}}
+                onChange={e => {setBirthMonth(e.target.value);
+                                console.log('Set month of birth to ', e.target.value)}}
+              >
+                <option disabled>Month</option>
+                {birthMonthChoice.map(e => (<option value={e}>{e}</option>))}
               </Form.Select>
             </Col>
+
             <Col style={{padding: '0px', display: 'flex', justifyContent: 'flex-end'}}>
-              <Form.Select aria-label="Default select example" style={{width: '95%'}}>
-                <option>Year</option>
-                {birthYearChoice.map(e => (
-                  <option value='e'>{e}</option>
-                ))}
+              <Form.Select 
+                aria-label="Default select example" 
+                style={{width: '95%'}}
+                onChange={e => {setBirthYear(e.target.value);
+                                console.log('Set year of birth to ', e.target.value)}}
+              >
+                <option disabled>Year</option>
+                {birthYearChoice.map(e => (<option value={e}>{e}</option>))}
               </Form.Select>
             </Col>
           </Row>
@@ -91,10 +147,21 @@ const RegistrationPage = () => {
 
         <Form.Group className='form-group-regis'>
           <Form.Label className='mini-lable'>Address</Form.Label>
-          <Form.Control as="textarea" rows={3} />
+          <Form.Control 
+            as="textarea" 
+            rows={3}
+            onChange={e => {setAddress(e.target.value); 
+                            console.log('Edit address to ',e.target.value)}}
+          />
         </Form.Group>
         
-        <Form.Control className='form-control-regis' type="text" placeholder="Citizen Id" />
+        <Form.Control 
+          className='form-control-regis' 
+          type="text" 
+          placeholder="Citizen Id" 
+          onChange={e => {setCitizenId(e.target.value); 
+                          console.log('Edit citizen id to ',e.target.value)}}
+        />
 
         <Button className='signup-button-regis' variant="secondary" type="submit">
           Sign up
