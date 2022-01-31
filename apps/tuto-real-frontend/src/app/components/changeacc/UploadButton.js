@@ -5,7 +5,7 @@ const UploadButton = (props) => {
     <>
         <label htmlFor={props.id} className={props.csslabel}>
           {props.image.preview ? (
-            <img src={props.image.preview} alt='dummy' width='300' height='300' />
+            <img className={props.cssimage} src={props.image.preview} alt='dummy'/>
           ) : (
             <p className={props.csstext}>[ click here to upload your image ]</p>
           )}

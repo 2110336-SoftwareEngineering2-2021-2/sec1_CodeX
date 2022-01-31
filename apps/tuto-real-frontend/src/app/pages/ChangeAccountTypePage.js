@@ -40,11 +40,28 @@ const ChangeAccountTypePage = () => {
           <p className='header'>upgrade user's type form</p>
           <p className='header-desc'>Please submit your  copy of citizen id card and transcription</p>
 
-          <p className='normal'>COPY OF CITIZEN ID CARD</p>
-          <UploadButton id='cidUpload' image={citizenID} setimage={handleSelectCid} csstext='upload-text' csslabel='upload'/>
+          <div className='inside-line'>
+            <p className='normal'>COPY OF CITIZEN ID CARD</p>
+            <UploadButton 
+              id='cidUpload' 
+              image={citizenID} 
+              setimage={handleSelectCid} 
+              csstext='upload-text' 
+              csslabel='upload' 
+              cssimage='upload-image'
+            />
+          </div>
+          
           
           <p className='normal'>TRANSCRIPTION</p>
-          <UploadButton id='transUpload' image={transcription} setimage={handleSelectTrans} csstext='upload-text' csslabel='upload'/>
+          <UploadButton 
+            id='transUpload' 
+            image={transcription} 
+            setimage={handleSelectTrans} 
+            csstext='upload-text' 
+            csslabel='upload' 
+            cssimage='upload-image'
+          />
         </div>
 
         <br/>
