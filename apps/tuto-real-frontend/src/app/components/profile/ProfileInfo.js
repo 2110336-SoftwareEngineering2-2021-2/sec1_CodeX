@@ -82,14 +82,14 @@ const ProfileInfo = () => {
     return (
       <Form className='form'>
         <EditBasicInfo register={register} basicInfo={basicInfo} />
-        <EditContactInfo />
+        <EditContactInfo register={register} contactInfo={contactInfo} />
       </Form>
     )
   }
 
   return (
     <>
-      {isEditing? renderEditForm(): renderViewForm()}
+      {isEditing ? renderEditForm(): renderViewForm()}
       {viewType !== "TutorOther"? (
         <>
           <AdvanceInfo advance={advance} />

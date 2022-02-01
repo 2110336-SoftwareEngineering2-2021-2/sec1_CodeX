@@ -1,6 +1,8 @@
 import React from 'react'
 import {Form, Col, Row} from 'react-bootstrap'
 
+import "./profile.css"
+
 const EditBasicInfo = ({register, basicInfo}) => {
   const {firstName, lastName, birthDate, citizenId} = basicInfo
   const birthDayChoice = Array.from({length: 31}, (_, i) => i + 1);
@@ -77,15 +79,11 @@ const EditBasicInfo = ({register, basicInfo}) => {
         </Form.Group>
       </div>
       {/* Citizen ID */}
-      {/* {viewType !== "TutorOther"? (
-        <>
-          <hr />
-          <div className='section'>
-            <p className='header'>CITIZEN ID</p>
-            <p>{citizenId}</p>
-          </div>
-        </>
-      ): null} */}
+      <hr />
+      <div className='section'>
+        <p className='header'>CITIZEN ID</p>
+        <Form.Control {...register("citizenId")} type="text" defaultValue={citizenId} />
+      </div>
     </div>
   )
 }
