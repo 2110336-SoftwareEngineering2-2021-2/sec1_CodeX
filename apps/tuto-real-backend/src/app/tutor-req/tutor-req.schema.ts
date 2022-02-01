@@ -1,9 +1,13 @@
 import * as mongoose from 'mongoose';
+import { imgSchema } from '../image.schema';
 
 
 export const TutorReqSchema = new mongoose.Schema({
   uid: String,
-   evidenceURL: [String],
+   evidenceImg: {
+    type : [imgSchema],
+    default : [] 
+   },
    status: {
     type: String,
     enum : ['Approved','Pending'],

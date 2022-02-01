@@ -15,4 +15,8 @@ export class TutorService {
         return this.tutorModel.find({uid:id}).exec()
   
     }
+
+    UploadImage(dto : TutorDto){
+        return this.tutorModel.create(dto);
+    }
 }

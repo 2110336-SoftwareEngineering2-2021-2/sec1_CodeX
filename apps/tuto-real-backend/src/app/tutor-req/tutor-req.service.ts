@@ -14,8 +14,9 @@ export class TutorReqService {
     }
 
     async create(dto : TutorReqDto)  {
-        const createdReq = new this.reqModel(dto);
-        return await createdReq.save();
+        
+        return await this.reqModel.updateOne({ "uid" : dto.uid} , dto , {upsert :true}) ;
+        
       }
     
     

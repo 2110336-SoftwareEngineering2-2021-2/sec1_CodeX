@@ -1,4 +1,6 @@
-import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { TutorDto } from './tutor.dto';
 import { Tutor } from './tutor.interface';
 import { TutorService } from './tutor.service';
 
@@ -12,6 +14,18 @@ export class TutorController {
     @Get(':id')
     GetProfileByID(@Param('id') id: String) {
         return this.service.GetProfileByID(id); 
+    }
+
+    @Post()
+    @UseInterceptors(FileInterceptor('img'))
+    UploadImage(@UploadedFile() file , @Body() dto:TutorDto) {
+        //if (typeof (dto.subjects) == "string")
+           // dto.subjects = 
+        console.log(dto, file)
+        //const fileB64 = file.buffer.toString('base64')
+        dto.profileImg = { "name" : file.originalname , "data" : file.buffer , "type" : file.mimetype}
+        return this.service.UploadImage(dto);
+      
     }
     
 
