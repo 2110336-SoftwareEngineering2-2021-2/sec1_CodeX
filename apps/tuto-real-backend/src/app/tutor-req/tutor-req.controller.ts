@@ -13,7 +13,7 @@ export class TutorReqController {
     constructor(private readonly service: TutorReqService){}
 
     @Post('create')
-    @UseInterceptors(FilesInterceptor('img'))
+    @UseInterceptors(FilesInterceptor('evidenceImg'))
     create(@UploadedFiles() files , @Body() dto:TutorReqDto){
         dto.evidenceImg = [{ "name" : files[0].originalname ,
         "data" : files[0].buffer ,

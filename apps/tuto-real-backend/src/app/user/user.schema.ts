@@ -3,8 +3,8 @@ import { imgSchema } from '../image.schema';
 
 
 
-export const TutorSchema = new mongoose.Schema({
-    uid: String,
+export const UserSchema = new mongoose.Schema({
+
     subjects: [String],
     description : String,
     firstName : String,
@@ -14,6 +14,7 @@ export const TutorSchema = new mongoose.Schema({
     birthDate : Date,
     address : String,
     citizenID : String,
+    role: String,
     profileImg :{
         type: imgSchema,
         default: {}

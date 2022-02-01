@@ -1,10 +1,9 @@
 
 
-export class TutorDto {
-    readonly  uid: String;
+export class UserDto {
+
     readonly subjects: [String];
     readonly description : String;
-
     readonly firstName : String;
     readonly lastName : String;
     readonly phoneNumber : String;
@@ -12,5 +11,6 @@ export class TutorDto {
     readonly birthDate : Date;
     readonly address : String;
     readonly citizenID : String;
+    role : String;
     profileImg : {data : Buffer , name : String , type : String}
 }

@@ -1,20 +1,20 @@
 import { Body, Controller, Get, Param, ParseIntPipe, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { UserDto } from '../user/user.dto';
-import { User } from '../user/user.interface';
-import { TutorService } from './tutor.service';
+import { UserDto } from './user.dto';
+import { User } from './user.interface';
+import { UserService } from './user.service';
 
-@Controller('tutor')
-export class TutorController {
+@Controller('user')
+export class UserController {
 
-    constructor(private readonly service: TutorService){}
+    constructor(private readonly service: UserService){}
 
    
 
-    /*@Get(':id')
+    @Get(':id')
     GetProfileByID(@Param('id') id: String) {
         return this.service.GetProfileByID(id); 
-    }*/
+    }
 
     /*@Post()
     @UseInterceptors(FileInterceptor('img'))

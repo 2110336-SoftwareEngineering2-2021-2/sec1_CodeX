@@ -2,8 +2,8 @@ import { Document } from 'mongoose';
 
 
 
-export interface Tutor extends Document {
-    readonly  uid: String,
+export interface User extends Document {
+
     readonly subjects: [String],
     readonly description : String
 
@@ -14,5 +14,6 @@ export interface Tutor extends Document {
     readonly birthDate : Date,
     readonly address : String,
     readonly citizenID : String,
+    role : String,
     profileImg : {data : Buffer , name : String , type : String}
 }
