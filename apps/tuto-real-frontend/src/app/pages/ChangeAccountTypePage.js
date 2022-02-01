@@ -1,5 +1,6 @@
 import React, { useState} from 'react';
 import { Link } from 'react-router-dom';
+import ModalRequestButton from '../components/changeacc/ModalRequestButton';
 import UploadButton from '../components/changeacc/UploadButton';
 import './ChangeAccountTypePage.css'
 
@@ -8,6 +9,7 @@ const ChangeAccountTypePage = () => {
     const back = '< Back'
     const [citizenID, setCitizenID] = useState({preview: "", raw : ""})
     const [transcription, setTranscription] = useState({preview: "", raw : ""})
+    const [showModal,setShowModal] = useState(false)
 
     const handleSelectCid = (e) => {
       if(e.target.files.length){
@@ -30,6 +32,7 @@ const ChangeAccountTypePage = () => {
     const handleUploadFile = (event) => {
         console.log(citizenID)
         console.log(transcription)
+        setShowModal(true)
     }
 
   return (
@@ -82,9 +85,11 @@ const ChangeAccountTypePage = () => {
           {
             transcription.preview && 
             citizenID.preview && 
-            <button onClick={handleUploadFile} className='submit-open shadow'>Submit</button>
+            <button onClick={handleUploadFile} className='submit-open shadow' data-toggle='modal'>Submit</button>
           }
         </div>
+        
+        <ModalRequestButton setshow={setShowModal} show={showModal}/>
     </div>
   );
 };
