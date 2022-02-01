@@ -11,15 +11,15 @@ const NavBar = () => {
   const userType = "Guest"
   const navigate = useNavigate()
   const navbarDataList = getNavbarData(userType).map(item => (
-    <button key={item.id} className={item.style} style={{marginRight: "3%"}} onClick={()=> navigate(item.path)}>
+    <button className={item.style} style={{marginRight: "3%"}} onClick={()=> navigate(item.path)}>
       {item.name}
     </button>     
   ))
 
   return (
-    <div className='navbar shadow'>
+    <div className='navbar'>
       <div className='left-side'>
-        <button className='main-icon' onClick={() => navigate('/')}>TutoReal</button>
+        <button className='main-icon'>TutoReal</button>
         <div className='search-bar'>
           <MdSearch size="5%" color='gray' style={{marginLeft: "2%"}} />
           <input type='text' placeholder='Search to find your interested tutor.'></input>

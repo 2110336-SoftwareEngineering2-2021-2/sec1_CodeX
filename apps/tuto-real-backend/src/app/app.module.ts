@@ -1,6 +1,5 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 //import { BookingModule } from './booking-req/booking.module';
@@ -12,6 +11,6 @@ import { UserModule } from './user/user.module';
   imports: [MongooseModule.forRoot('mongodb+srv://mainUser:mainUser@codex.iuovi.mongodb.net/CodeX?retryWrites=true&w=majority',{ useNewUrlParser: true })
   ,TutorReqModule,TutorModule,UserModule],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, FirebaseAuthStrategy],
 })
 export class AppModule {}

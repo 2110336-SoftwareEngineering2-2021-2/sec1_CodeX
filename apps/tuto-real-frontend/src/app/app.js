@@ -3,10 +3,8 @@
 import { Route, Routes } from 'react-router-dom';
 
 import NavBar from './components/navbar/navbar';
-import ChangeAccountTypePage from './pages/ChangeAccountTypePage';
 import HomePage from './pages/HomePage';
 import LogInPage from './pages/LogInPage';
-import ProfilePage from './pages/ProfilePage';
 import RegistrationPage from './pages/RegistrationPage';
 import ChangeAccountApprovePage from './pages/ChangeAccountApprovePage'
 import ChangeAccountRequestListPage from './pages/ChangeAccountRequestListPage';

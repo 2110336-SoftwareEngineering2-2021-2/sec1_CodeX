@@ -1,13 +1,11 @@
 const guestData = [
   {
-    id: 1,
     icon: "",
     name: "Log in",
     path: "/login",
     style: "secondary-button"
   },
   {
-    id: 2,
     icon: "",
     name: "Create New Account",
     path: "/register",
