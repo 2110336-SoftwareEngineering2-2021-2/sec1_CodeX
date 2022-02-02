@@ -3,7 +3,7 @@ import {Form, Col, Row} from 'react-bootstrap'
 
 import "./profile.css"
 
-const EditBasicInfo = ({register, basicInfo}) => {
+const EditBasicInfo = ({register, errors, basicInfo}) => {
   const {firstName, lastName, birthDate, citizenId} = basicInfo
   const birthDayChoice = Array.from({length: 31}, (_, i) => i + 1);
   const birthMonthChoice = 
@@ -34,13 +34,19 @@ const EditBasicInfo = ({register, basicInfo}) => {
       {/* First Name */}
       <div className='section'>
         <p className='header'>FIRST NAME</p>
-        <Form.Control {...register("firstName")} type="text" defaultValue={firstName} />
+        <Form.Group className="form-group">
+          <Form.Control {...register("firstName", {required: true, maxLength: 100})} type="text" defaultValue={firstName} />
+          <p className="error">{errors.firstName?.type === 'required' && "First name is required"}</p>
+        </Form.Group>
       </div>
       <hr />
       {/* Last Name */}
       <div className='section'>
         <p className='header'>LAST NAME</p>
-        <Form.Control {...register("lastName")} type="text" defaultValue={lastName} />
+        <Form.Group className="form-group">
+          <Form.Control {...register("lastName", {required: true, maxLength: 100})} type="text" defaultValue={lastName} />
+          <p className="error">{errors.lastName?.type === 'required' && "Last name is required"}</p>
+        </Form.Group>
       </div>
       <hr />
       {/* Birthdate */}
@@ -82,7 +88,10 @@ const EditBasicInfo = ({register, basicInfo}) => {
       <hr />
       <div className='section'>
         <p className='header'>CITIZEN ID</p>
-        <Form.Control {...register("citizenId")} type="text" defaultValue={citizenId} />
+        <Form.Group className="form-group">
+          <Form.Control {...register("citizenId", {required: true, minLength: 13, maxLength: 13})} type="text" defaultValue={citizenId} />
+          <p className="error">{errors.citizenId && "Invalid citizen ID"}</p>
+        </Form.Group>
       </div>
     </div>
   )

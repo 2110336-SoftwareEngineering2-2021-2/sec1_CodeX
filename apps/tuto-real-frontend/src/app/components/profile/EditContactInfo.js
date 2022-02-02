@@ -3,7 +3,7 @@ import {Form} from 'react-bootstrap'
 
 import "./profile.css"
 
-const EditContactInfo = ({register, contactInfo}) => {
+const EditContactInfo = ({register, errors, contactInfo}) => {
   const {email, telephone, address} = contactInfo
 
   return (
@@ -17,12 +17,19 @@ const EditContactInfo = ({register, contactInfo}) => {
       <hr />
       <div className='section'>
         <p className='header'>TELEPHONE</p>
-        <Form.Control {...register("telephone")} type="text" defaultValue={telephone} />
+        <Form.Group className="form-group">
+          <Form.Control {...register("telephone", {required: true, pattern: /^([0-9])+$/, minLength:10, maxLength:10})} type="text" defaultValue={telephone} />
+          <p className="error">{errors.telephone && "Invalid phone number"}</p>
+        </Form.Group>
       </div>
       <hr />
       <div className='section'>
         <p className='header'>ADDRESS</p>
-        <Form.Control {...register("address")} type="text" defaultValue={address} />
+        <Form.Group className="form-group">
+          <Form.Control {...register("address", {required: true, maxLength: 100})} type="text" defaultValue={address} />
+          <p className="error">{errors.address?.type === 'required' && "Address is required"}</p>
+          <p className="error">{errors.address?.type === 'maxLength' && "Adress can't exceed 100 characters"}</p>
+        </Form.Group>
       </div>
     </div>
   )

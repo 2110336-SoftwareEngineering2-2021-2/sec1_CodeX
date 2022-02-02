@@ -81,8 +81,8 @@ const ProfileInfo = () => {
   const renderEditForm = () => {
     return (
       <Form className='form'>
-        <EditBasicInfo register={register} basicInfo={basicInfo} />
-        <EditContactInfo register={register} contactInfo={contactInfo} />
+        <EditBasicInfo register={register} errors={errors} basicInfo={basicInfo} />
+        <EditContactInfo register={register} errors={errors} contactInfo={contactInfo} />
       </Form>
     )
   }
