@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import { imgSchema } from '../image.schema';
+import { imgSchema } from '../util/image.schema';
 
 
 export const TutorReqSchema = new mongoose.Schema({

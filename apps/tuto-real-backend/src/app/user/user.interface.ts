@@ -11,7 +11,7 @@ export interface User extends Document {
     readonly lastName : String,
     readonly phoneNumber : String,
     readonly email : String,
-    readonly birthDate : Date,
+    birthDate : Date,
     readonly address : String,
     readonly citizenID : String,
     role : String,
