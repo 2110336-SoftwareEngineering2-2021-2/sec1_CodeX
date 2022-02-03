@@ -23,12 +23,45 @@ const RegistrationPage = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [validated, setValidated] = useState(false);
 
-  // const handleSubmit = () => {
+  const handleSubmit = () => {
 
-  //   if (firstName.length == 0) {
-  //     setErrorMessage("");
+    console.log("Validateing...");
 
-  // };
+    if (firstName.length == 0) 
+      setErrorMessage("ํYour first name can't be empty.");
+    
+    else if (lastName.length == 0) 
+      setErrorMessage("ํYour last name can't be empty.");
+
+    else if (mobilePhone.length == 0) 
+      setErrorMessage("ํYour mobile phone can't be empty.");
+    else if (isNaN(mobilePhone) || mobilePhone.length != 8) 
+      setErrorMessage("The mobile phone must be 8 numeric characters long.");
+
+    else if (emailAddress.length == 0) 
+      setErrorMessage("ํYour email address can't be empty.");
+    
+    else if (password.length == 0) 
+      setErrorMessage("ํYour password can't be empty.");
+    else if (password.length < 8) 
+      setErrorMessage("Your password must long than 8 charectors.");
+
+    else if (confirmPassword.length == 0) 
+      setErrorMessage("Please confirm your password.");
+    else if (confirmPassword != password) 
+      setErrorMessage("Your password and confirm password is not match.");
+
+    else if (citizenId.length == 0) 
+      setErrorMessage("ํYour citizen id can't be empty.");
+    else if (isNaN(mobilePhone) || mobilePhone.length != 13) 
+      setErrorMessage("The citizen id must be 13 numeric characters long.");
+
+    else {
+      setErrorMessage("Everything OK");
+    }
+    
+    console.log("Error message : ",errorMessage);
+  };
 
 
   const birthDayChoice = Array.from({length: 31}, (_, i) => i + 1);
@@ -61,7 +94,12 @@ const RegistrationPage = () => {
     </div>
 
     <div className='regispage-right-side'>
-      <Form>
+      <Form 
+        // noValidate 
+        // validated={validated} 
+        // onSubmit={handleSubmit}
+      >
+        <p>{errorMessage}</p>
         <Row style={{margin: '0px', marginBottom: '0.65vh'}}>
           <Col style={{padding: '0px'}}>
             <Form.Control 
@@ -208,9 +246,9 @@ const RegistrationPage = () => {
         <Button 
           className='signup-button-regis' 
           variant="secondary" 
-          type="submit"
+          type="button"
           onClick={() =>{
-            //handleSubmit()
+            handleSubmit();
           }}
         >
           Sign up
