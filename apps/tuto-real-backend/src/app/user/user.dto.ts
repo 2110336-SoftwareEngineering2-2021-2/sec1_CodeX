@@ -2,8 +2,8 @@
 
 export class UserDto {
 
-    readonly subjects: [String];
-    readonly description : String;
+    //readonly subjects: [String];
+    //readonly description : String;
     readonly firstName : String;
     readonly lastName : String;
     readonly phoneNumber : String;
@@ -12,5 +12,8 @@ export class UserDto {
     readonly address : String;
     readonly citizenID : String;
     role : String;
-    profileImg : {data : Buffer , name : String , type : String}
+    profileImg :  {
+        fileName : String , 
+        url : String
+    };
 }

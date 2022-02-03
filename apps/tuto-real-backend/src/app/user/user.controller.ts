@@ -16,17 +16,18 @@ export class UserController {
         return this.service.GetProfileByID(id); 
     }
 
-    /*@Post()
+    @Post('/create')
     @UseInterceptors(FileInterceptor('img'))
-    UploadImage(@UploadedFile() file , @Body() dto:UserDto) {
-        //if (typeof (dto.subjects) == "string")
-           // dto.subjects = 
-        console.log(dto, file)
-        //const fileB64 = file.buffer.toString('base64')
-        dto.profileImg = { "name" : file.originalname , "data" : file.buffer , "type" : file.mimetype}
-        return this.service.UploadImage(dto);
+    Create(@UploadedFile() file , @Body() dto:UserDto) {
+
+        dto.role = "Student"
+        dto.profileImg = {
+            fileName :"default.jpg",
+            url : "https://storage.cloud.google.com/code_x/ProfileImg/default.jpg"
+        }
+        return this.service.Create(dto);
       
-    }*/
+    }
     
 
 

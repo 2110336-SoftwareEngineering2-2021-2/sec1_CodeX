@@ -4,8 +4,8 @@ import { Document } from 'mongoose';
 
 export interface User extends Document {
 
-    readonly subjects: [String],
-    readonly description : String
+    //readonly subjects: [String],
+    //readonly description : String
 
     readonly firstName : String,
     readonly lastName : String,
@@ -15,5 +15,8 @@ export interface User extends Document {
     readonly address : String,
     readonly citizenID : String,
     role : String,
-    profileImg : {data : Buffer , name : String , type : String}
+    profileImg : {
+        fileName : String , 
+        url : String
+    }
 }

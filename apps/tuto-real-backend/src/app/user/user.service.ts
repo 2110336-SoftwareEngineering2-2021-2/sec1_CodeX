@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { uploadImage } from '../util/google';
 import { UserDto } from './user.dto';
 import { User } from './user.interface';
 
@@ -16,7 +17,8 @@ export class UserService {
   
     }
 
-    /*UploadImage(dto : UserDto){
-        return this.tutorModel.create(dto);
-    }*/
+    async Create(dto : UserDto){
+
+        return this.userModel.create(dto);
+    }
 }
