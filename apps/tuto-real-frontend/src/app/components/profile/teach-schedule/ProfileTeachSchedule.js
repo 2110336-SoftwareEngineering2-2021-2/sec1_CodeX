@@ -11,8 +11,8 @@ const ProfileTeachSchedule = ({viewType}) => {
 
     const [isEditing,setEditing] = useState(false);
     const [teachingInfo, setTeachingInfo] = useState({
-        subject: ["SubjectA", "SubjectB", "SubjectC"],
-        description: "Veerin",
+        subjectList: ["SubjectA", "SubjectB", "SubjectC", "SubjectD", "SubjectE", "SubjectF"],
+        description: "Let's fun with math to the end of the life \n 123",
       })
 
     const renderViewForm = () => {

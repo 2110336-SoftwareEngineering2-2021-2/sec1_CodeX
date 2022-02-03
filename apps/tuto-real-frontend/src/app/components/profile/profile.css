@@ -66,3 +66,8 @@ img {
   width: 25%;
   margin-right: 2%;
 }
+
+.Badge {
+  padding: 8px;
+  margin-right: 8px;
+}
