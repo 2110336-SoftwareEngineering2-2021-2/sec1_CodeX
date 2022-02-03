@@ -47,8 +47,8 @@ const ChangeAccountTypePage = () => {
           <p className='header' style={{width: '100%'}}>Please submit your  copy of citizen id card and transcription</p>
           <hr/>
           
-          <div className='section'>
-            <p className='header'>COPY OF CITIZEN ID CARD</p>
+          <div className='section' style={{alignItems: 'flex-start'}}>
+            <p className='header' style={{width: '30%'}}>COPY OF CITIZEN ID CARD</p>
             <UploadButton 
                 id='cidUpload' 
                 image={citizenID} 
@@ -60,8 +60,8 @@ const ChangeAccountTypePage = () => {
           </div>
           <hr/>
           
-          <div className='section'>
-            <p className='header'>TRANSCRIPTION</p>
+          <div className='section' style={{alignItems: 'flex-start'}}>
+            <p className='header' style={{width: '30%'}}>TRANSCRIPTION</p>
             <UploadButton 
               id='transUpload' 
               image={transcription} 
