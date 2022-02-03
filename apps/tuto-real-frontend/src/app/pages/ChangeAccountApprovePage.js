@@ -1,13 +1,15 @@
 import React, { useState} from 'react';
 import { Link } from 'react-router-dom';
 
-const ChangeAccountTypePage = () => {
+const ChangeAccountTypePage = (props) => {
 
     const back = '< Back'
     const [showModalApprove,setShowModalApprove] = useState(false)
     const [showModalReject,setShowModalReject] = useState(false)
 
     const title = 'Veerin Jurek'
+    const imageCid = '../../assets/test_cid.jpg'
+    const imageTrans = '../../assets/test_trans.jpg'
 
     const handleApprove = () => {
         setShowModalApprove(true)
@@ -30,12 +32,14 @@ const ChangeAccountTypePage = () => {
           <hr/>
           
           <div className='section'>
-            <p className='header'>COPY OF CITIZEN ID CARD</p>
+            <p className='header' style={{width: '30%'}}>COPY OF CITIZEN ID CARD</p>
+            <img src={imageCid} className='upload-image' style={{width: '62%', margin: '1%'}} alt='imageCid'/>
           </div>
           <hr/>
           
           <div className='section'>
-            <p className='header'>TRANSCRIPTION</p>
+            <p className='header' style={{width: '30%'}}>TRANSCRIPTION</p>
+            <img src={imageTrans} className='upload-image' style={{width: '62%', margin: '1%'}} alt='imageTrans' />
           </div>
         </div>
 
