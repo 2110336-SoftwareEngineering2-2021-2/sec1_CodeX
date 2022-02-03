@@ -19,7 +19,7 @@ const ProfileInfo = () => {
   // const [uid, setUid] = useState()
   const [isEditing, setEditing] = useState(false)
   const [basicInfo, setBasicInfo] = useState({
-    picture: "",
+    picture: undefined,
     firstName: "Veerin",
     lastName: "Phana-ngam",
     birthDate: new Date(),
@@ -34,11 +34,12 @@ const ProfileInfo = () => {
     userType: "User",
     password: ""
   })
+  const [tempProfile, setTempProfile] = useState() // use for preview new upload profile image
 
   const {register, handleSubmit, reset, formState: { errors }} = useForm()
 
-  const fetchData = useCallback(() => {
-    client({
+  const fetchData = useCallback(async () => {
+    await client({
       method: "GET",
       url: "/tutor/:uid"
     })
@@ -54,13 +55,45 @@ const ProfileInfo = () => {
     fetchData()
   },[fetchData])
 
+  const sendData = async () => {
+    console.log("sending data...")
+    // const formData = new FormData()
+    // formData.append("Profile Picture", tempProfile, tempProfile?.name)
+    // await client({
+    //   method: "POST",
+    //   url: "/tutor/:uid"
+    // })
+    // .then(({data}) => {
+    //   console.log(data)
+    // })
+    // .catch((res) => {
+    //   console.log(res)
+    // })
+  }
+
   const onSubmit = (data) => {
     console.log(data)
+    console.log(tempProfile)
+    setBasicInfo({
+      picture: tempProfile ?? basicInfo.picture,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      birthDate: new Date(data.year, data.month, data.date),
+      citizenId: data.citizenId
+    })
+    setContactInfo({
+      ...contactInfo,
+      telephone: data.telephone,
+      address: data.address
+    })
+    // sendData()
+    setEditing(false)
   }
 
   const onCancel = () => {
-    setEditing(false)
     reset()
+    setTempProfile(basicInfo.picture)
+    setEditing(false)
   }
 
   const renderViewForm = () => {
@@ -81,7 +114,7 @@ const ProfileInfo = () => {
   const renderEditForm = () => {
     return (
       <Form className='form'>
-        <EditBasicInfo register={register} errors={errors} basicInfo={basicInfo} />
+        <EditBasicInfo register={register} errors={errors} basicInfo={basicInfo} tempProfile={tempProfile} setTempProfile={setTempProfile} />
         <EditContactInfo register={register} errors={errors} contactInfo={contactInfo} />
       </Form>
     )

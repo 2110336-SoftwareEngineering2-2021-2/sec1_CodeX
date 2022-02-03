@@ -7,7 +7,7 @@ hr {
 p.header {
   color: var(--darkgray);
   font-size: medium;
-  width: 30%;
+  min-width: 25%;
   text-align: left;
 }
 
@@ -19,6 +19,10 @@ p.title {
 
 p {
   margin: 1% 0%;
+}
+
+img {
+  color: transparent;
 }
 
 .bar {
@@ -56,4 +60,9 @@ p {
   flex-direction: row;
   align-items: center;
   width: 100%;
+}
+
+.profile-image {
+  width: 25%;
+  margin-right: 2%;
 }

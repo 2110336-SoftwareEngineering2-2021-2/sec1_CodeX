@@ -3,8 +3,8 @@ import {Form, Col, Row} from 'react-bootstrap'
 
 import "./profile.css"
 
-const EditBasicInfo = ({register, errors, basicInfo}) => {
-  const {firstName, lastName, birthDate, citizenId} = basicInfo
+const EditBasicInfo = ({register, errors, basicInfo, tempProfile, setTempProfile}) => {
+  const {picture, firstName, lastName, birthDate, citizenId} = basicInfo
   const birthDayChoice = Array.from({length: 31}, (_, i) => i + 1);
   const birthMonthChoice = 
                 ['January', 
@@ -21,6 +21,11 @@ const EditBasicInfo = ({register, errors, basicInfo}) => {
                 'December']
   const birthYearChoice = Array.from({length: 123}, (_, i) => i + 1900);
 
+  const changePicture = (e) => {
+    //console.log(e.target?.files[0])
+    setTempProfile(e.target?.files[0])
+  }
+
   return (
     <div className='info-card shadow'>
       <p className='title'>Basic Information</p>
@@ -29,6 +34,8 @@ const EditBasicInfo = ({register, errors, basicInfo}) => {
       {/* Picture */}
       <div className='section'>
         <p className='header'>PICTURE</p>
+        <img className='profile-image' src={tempProfile? URL.createObjectURL(tempProfile) : picture} alt="profile" />
+        <Form.Control onChange={(e) => changePicture(e)} type="file" accept=".png,.jpg,.jpeg" />
       </div>
       <hr />
       {/* First Name */}
@@ -60,7 +67,7 @@ const EditBasicInfo = ({register, errors, basicInfo}) => {
                 {...register("date")}
                 defaultValue={birthDate.getDate()}
               >
-                {birthDayChoice.map(e => (<option key={e} value={e}>{e}</option>))}
+                {birthDayChoice.map(date => (<option key={date} value={date}>{date}</option>))}
               </Form.Select>
             </Col>
             {/* Month */}
@@ -69,7 +76,7 @@ const EditBasicInfo = ({register, errors, basicInfo}) => {
                 {...register("month")}
                 defaultValue={birthDate.getMonth()}
                 >
-                {birthMonthChoice.map(e => (<option key={e} value={e}>{e}</option>))}
+                {birthMonthChoice.map((month, idx) => (<option key={month} value={idx}>{month}</option>))}
               </Form.Select>
             </Col>
             {/* Year */}
@@ -78,7 +85,7 @@ const EditBasicInfo = ({register, errors, basicInfo}) => {
                 {...register("year")}
                 defaultValue={birthDate.getFullYear()}
               >
-                {birthYearChoice.map(e => (<option key={e} value={e}>{e}</option>))}
+                {birthYearChoice.map(year => (<option key={year} value={year}>{year}</option>))}
               </Form.Select>
             </Col>
           </Row>

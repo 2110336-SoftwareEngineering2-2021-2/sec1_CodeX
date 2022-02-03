@@ -3,7 +3,7 @@ import React from 'react'
 import "./profile.css"
 
 const ViewBasicInfo = ({viewType, basicInfo}) => {
-  const {firstName, lastName, birthDate, citizenId} = basicInfo
+  const {picture, firstName, lastName, birthDate, citizenId} = basicInfo
 
   return (
     <div className='info-card shadow'>
@@ -12,6 +12,7 @@ const ViewBasicInfo = ({viewType, basicInfo}) => {
       <hr />
       <div className='section'>
         <p className='header'>PICTURE</p>
+        <img className='profile-image' src={picture? URL.createObjectURL(picture): undefined} alt="profile" />
       </div>
       <hr />
       <div className='section'>
