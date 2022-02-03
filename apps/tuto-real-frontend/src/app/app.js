@@ -8,6 +8,7 @@ import HomePage from './pages/HomePage';
 import LogInPage from './pages/LogInPage';
 import ProfilePage from './pages/ProfilePage';
 import RegistrationPage from './pages/RegistrationPage';
+import ChangeAccountApprovePage from './pages/ChangeAccountApprovePage'
 
 
 export function App() {
@@ -21,6 +22,7 @@ export function App() {
         <Route exact path="/register" element={<RegistrationPage />} />
         <Route exact path="/profile" element={<ProfilePage />} />
         <Route exact path="/changeacctype" element={<ChangeAccountTypePage />} />
+        <Route exact path="/changeaccapprove" element={<ChangeAccountApprovePage />} />
       </Routes>
 
       {/* <NxWelcome title="tuto-real-frontend" /> */}
