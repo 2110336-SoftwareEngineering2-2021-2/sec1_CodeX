@@ -23,7 +23,7 @@ export function App() {
         <Route exact path="/register" element={<RegistrationPage />} />
         <Route exact path="/profile" element={<ProfilePage />} />
         <Route exact path="/changeacctype" element={<ChangeAccountTypePage />} />
-        <Route exact path="/changeaccapprove" element={<ChangeAccountApprovePage />} />
+        <Route exact path="/changeaccapprove/:_id" element={<ChangeAccountApprovePage />} />
         <Route exact path="/request-list" element={<ChangeAccountRequestListPage />} />
       </Routes>
 
