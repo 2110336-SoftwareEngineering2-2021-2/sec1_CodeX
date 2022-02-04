@@ -9,11 +9,10 @@ import RegistrationPage from './pages/RegistrationPage';
 import ChangeAccountApprovePage from './pages/ChangeAccountApprovePage'
 import ChangeAccountRequestListPage from './pages/ChangeAccountRequestListPage';
 
-
 export function App() {
-
   return (
     <>
+      <AuthProvider>
       <NavBar />
       <Routes>
         <Route exact path="/" element={<HomePage />} />
