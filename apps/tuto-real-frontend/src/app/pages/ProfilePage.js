@@ -9,16 +9,16 @@ const ProfilePage = () => {
   const [viewType, setViewType] = useState("TutorSelf") // "TutorSelf" | "StudentSelf" | "TutorOther"
 
   const fetchData = useCallback(() => {
-    client({
-      method: "GET",
-      url: "/tutor/:uid"
-    })
-    .then(({data}) => {
-      console.log(data)
-    })
-    .catch((res) => {
-      console.log(res)
-    })
+  //   client({
+  //     method: "GET",
+  //     url: `/tutor/${}`
+  //   })
+  //   .then(({data}) => {
+  //     console.log(data)
+  //   })
+  //   .catch((res) => {
+  //     console.log(res)
+  //   })
   },[])
 
   useEffect(() => {

@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { Col, Button, Form, Row } from 'react-bootstrap'
-import { from, range, reduce } from 'rxjs';
 import './RegistrationPage.css'
 
 

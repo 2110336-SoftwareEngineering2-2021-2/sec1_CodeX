@@ -95,10 +95,7 @@ const EditBasicInfo = ({register, errors, basicInfo, tempProfile, setTempProfile
       <hr />
       <div className='section'>
         <p className='header'>CITIZEN ID</p>
-        <Form.Group className="form-group">
-          <Form.Control {...register("citizenId", {required: true, minLength: 13, maxLength: 13})} type="text" defaultValue={citizenId} />
-          <p className="error">{errors.citizenId && "Invalid citizen ID"}</p>
-        </Form.Group>
+        <p>{citizenId}</p>
       </div>
     </div>
   )
