@@ -16,7 +16,6 @@ import COLORS from '../../constants/color'
  
 const ProfileInfo = () => {
   const [viewType, setViewType] = useState("TutorSelf") // "TutorSelf" | "StudentSelf" | "TutorOther"
-  // const [uid, setUid] = useState()
   const [isEditing, setEditing] = useState(false)
   const [basicInfo, setBasicInfo] = useState({
     picture: undefined,
@@ -26,7 +25,7 @@ const ProfileInfo = () => {
     citizenId: "1-2345-67891-11-1"
   })
   const [contactInfo, setContactInfo] = useState({
-    email: "",
+    email: "sorasit@gmail.com",
     telephone: "",
     address: ""
   })
@@ -41,13 +40,30 @@ const ProfileInfo = () => {
   const fetchData = useCallback(async () => {
     await client({
       method: "GET",
-      url: "/tutor/:uid"
+      // url: `/user/${contactInfo.email}`
+      url: "/user/sorasit@gmail.com"
     })
     .then(({data}) => {
       console.log(data)
+      setBasicInfo({
+        picture: data.profileImg,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        birthDate: Date(data.birthDate),
+        citizenId: data.citizenID
+      })
+      setContactInfo({
+        email: data.email,
+        telephone: data.phoneNumber,
+        address: data.address
+      })
+      setAdvance({
+        userType: data.role === "",
+        password: ""
+      })
     })
-    .catch((res) => {
-      console.log(res)
+    .catch(({response}) => {
+      console.log(response)
     })
   },[])
 
@@ -75,11 +91,11 @@ const ProfileInfo = () => {
     console.log(data)
     console.log(tempProfile)
     setBasicInfo({
+      ...basicInfo,
       picture: tempProfile ?? basicInfo.picture,
       firstName: data.firstName,
       lastName: data.lastName,
       birthDate: new Date(data.year, data.month, data.date),
-      citizenId: data.citizenId
     })
     setContactInfo({
       ...contactInfo,
