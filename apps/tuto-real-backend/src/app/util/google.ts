@@ -29,7 +29,7 @@ export const uploadImage = async (type,file) => {
     var fileName = uuid.v4()+"."+mimetype.split("/")[1]
 
     const blob = bucket.file(type+"/"+fileName)
-
+    console.log(`https://storage.googleapis.com/${bucket.name}/${type}/${fileName}`)
     // Uploads the file.
     return blob.save(buffer)
     .then(() => {

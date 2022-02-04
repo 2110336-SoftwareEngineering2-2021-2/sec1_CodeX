@@ -1,11 +1,11 @@
 import * as mongoose from 'mongoose';
-import { imgSchema } from '../util/image.schema';
+import { ImgSchema } from '../util/image.schema';
 
 
 export const TutorReqSchema = new mongoose.Schema({
   email: String,
    evidenceImg: {
-    type : [imgSchema],
+    type : [ImgSchema],
     default : [] 
    },
    status: {

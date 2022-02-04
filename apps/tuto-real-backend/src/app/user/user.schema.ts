@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import { imgSchema } from '../util/image.schema';
+import { ImgSchema } from '../util/image.schema';
 
 
 
@@ -16,7 +16,7 @@ export const UserSchema = new mongoose.Schema({
     citizenID : String,
     role: String,
     profileImg :{
-        type: imgSchema,
+        type: ImgSchema,
         default: {}
       } 
 });

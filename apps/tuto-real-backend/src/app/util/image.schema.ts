@@ -1,7 +1,7 @@
 import * as mongoose from 'mongoose';
 
 
-export const imgSchema = new mongoose.Schema({
+export const ImgSchema = new mongoose.Schema({
         fileName : String , 
         url : String
       });

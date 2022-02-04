@@ -19,11 +19,11 @@ export class UserController {
 
     @Post('/create')
     Create(@Body() dto:UserDto) {
-
+        //console.log(dto)
         dto.role = "Student"
         dto.profileImg = {
             fileName :"default.jpg",
-            url : "https://storage.cloud.google.com/code_x/ProfileImg/default.jpg"
+            url : "https://storage.googleapis.com/code_x/ProfileImg/default.jpg"
         }
         return this.service.Create(dto);
       
