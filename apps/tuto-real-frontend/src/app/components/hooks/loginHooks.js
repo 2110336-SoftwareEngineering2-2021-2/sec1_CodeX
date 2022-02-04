@@ -1,11 +1,10 @@
 import {useState} from 'react'
 import { client } from '../../axiosConfig'
-import Cookies from 'universal-cookie'
+import { getCookieData, removeCookieData, setCookieData } from '../util/cookieHandler'
 
-const useLogin = (setError) => {
+export const useLogin = ({setError, onSuccessLogin}) => {
   const [isLoading, setLoading] = useState(false)
-  const cookie = new Cookies()
-
+  
   const onLogin = (email, password) => {
     setLoading(true)
 
@@ -17,33 +16,35 @@ const useLogin = (setError) => {
         password
       }
     }).then(({data}) => {
-
-      const cookieExpireDate = new Date()
-      cookieExpireDate.setDate(cookieExpireDate.getDate() + 3)
-      cookie.set('email', data.email, {path: "/", expires: cookieExpireDate})
-      cookie.set('role',  data.role, {path: "/", expires: cookieExpireDate})
-
+      setCookieData(data.email, data.role)
+      if(onSuccessLogin) onSuccessLogin()
       setLoading(false)
-      
     }).catch(({response}) => {
       console.log(response)
-      setError(true)
+      if(setError) setError(true)
       setLoading(false)
     })
   }
 
-  const onLogout = () => {
-    setLoading(true)
-    try {
-      cookie.remove('email')
-      cookie.remove('role')
-    } catch {
-      setError(true)
-    }
-    setLoading(false)
-  }
-
-  return {isLoading, onLogin, onLogout}
+  return {isLoading, onLogin}
 }
 
-export default useLogin
+export const onLogout = ({setError, onSuccessLogout}) => {
+  try {
+    removeCookieData()
+  } catch {
+    if(setError) setError(true)
+  }
+  if(onSuccessLogout) onSuccessLogout()
+}
+
+export const isLoggedIn = () => {
+  try {
+    const {email, role} = getCookieData()
+    console.log(email, role)
+    if(email && role) return true
+  } catch {
+    return false
+  }
+  return false
+}

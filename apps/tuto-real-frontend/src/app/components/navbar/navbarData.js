@@ -55,7 +55,7 @@ const adminData = [
 export const getNavbarData = (userType) => {
   switch(userType) {
     case 'Guest': return guestData
-    case 'User': return userData
+    case 'Student': return userData
     case 'Tutor': return tutorData
     case 'Admin': return adminData
     default: return guestData
