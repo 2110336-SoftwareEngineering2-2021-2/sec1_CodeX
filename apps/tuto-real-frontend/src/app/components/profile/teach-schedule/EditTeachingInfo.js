@@ -3,9 +3,21 @@ import { Form } from "react-bootstrap";
 import "../profile.css"
 import Tag from "./Tag";
 
-const EditTeachingInfo = ({teachingInfo}) => {
-    const [tagColor, setTagColor] = useState(["red", "blue", "green", "purple", "orange", "gray"]);
-    const {subjectList,description} = teachingInfo;
+const EditTeachingInfo = ({tempTeachingInfo, setTempTeachingInfo}) => {
+    const [tagColor] = useState(["red", "blue", "green", "purple", "orange", "gray"]);
+    const {subjectList, description} = tempTeachingInfo;
+    const [newTagText, setNewTagText] = useState("");
+
+    const addNewSubjectHandle = () => {
+        // subjectList.push(newTagText);
+        setTempTeachingInfo({
+            subjectList: [...subjectList, newTagText],
+            description
+        })
+        // console.log(newTagText);
+        setNewTagText("");
+    }
+
     return (
         <div className='info-card shadow' style={{}}>
             <p className='title'>Teaching information</p>
@@ -16,7 +28,8 @@ const EditTeachingInfo = ({teachingInfo}) => {
                 <div>
                     <div style={{display:"flex", flexWrap: "wrap"}}>
                         {subjectList.map((e,i) => (
-                            <Tag 
+                            <Tag
+                                key={e}
                                 text={e} 
                                 textColor="white" 
                                 bgColor={tagColor[i % 6]}
@@ -27,13 +40,20 @@ const EditTeachingInfo = ({teachingInfo}) => {
                     <div style={{display:"flex", flexDirection:"row", alignItems:"center", marginTop:"8px"}}>
                         <Form.Control 
                             className='form-control-regis' 
-                            type="text" 
+                            type="text"
+                            value={newTagText}
                             placeholder="Key to add your new subject"
                             style={{margin:"0px", marginRight:"8px"}}
+                            onChange={e => {
+                                setNewTagText(e.target.value);
+                            }}
                         />
                         <button 
                             className="secondary-button" 
-                            style={{width:"45%",}}>
+                            style={{width:"45%",}}
+                            type="button"
+                            onClick={addNewSubjectHandle}
+                        >
                             Add new subject
                         </button>
                     </div>
