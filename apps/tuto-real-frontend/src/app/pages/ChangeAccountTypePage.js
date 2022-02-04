@@ -1,5 +1,6 @@
 import React, { useState} from 'react';
 import { Link } from 'react-router-dom';
+import { client } from '../axiosConfig';
 import ModalRequestButton from '../components/changeacc/ModalRequestButton';
 import UploadButton from '../components/changeacc/UploadButton';
 import './ChangeAccountTypePage.css'
@@ -10,12 +11,21 @@ const ChangeAccountTypePage = () => {
     const [citizenID, setCitizenID] = useState({preview: "", raw : ""})
     const [transcription, setTranscription] = useState({preview: "", raw : ""})
     const [showModal,setShowModal] = useState(false)
+    const [sendImage, setSendImage] = useState({
+      email: 'sorasit@gmail.com',
+      evidenceimage: [citizenID.raw, transcription.raw]
+    })
 
     const handleSelectCid = (e) => {
       if(e.target.files.length){
         setCitizenID({
           preview: URL.createObjectURL(e.target.files[0]),
           raw : e.target.files[0]
+        })
+
+        setSendImage({
+          ...sendImage,
+          evidenceimage : [e.target.files[0], sendImage.evidenceimage[1]]
         })
       }
     }
@@ -26,13 +36,28 @@ const ChangeAccountTypePage = () => {
           preview: URL.createObjectURL(e.target.files[0]),
           raw : e.target.files[0]
         })
+
+        setSendImage({
+          ...sendImage,
+          evidenceimage : [sendImage.evidenceimage[0], e.target.files[0]]
+        })
       }
     }
 
     const handleUploadFile = (event) => {
-        console.log(citizenID)
-        console.log(transcription)
-        setShowModal(true)
+        // console.log(citizenID.raw)
+        // console.log(transcription.raw)
+        console.log(sendImage)
+        client({
+          url: '/tutorReq/create',
+          method: 'POST',
+          body: sendImage
+        }).then( ({data}) => {
+          console.log(data)
+          setShowModal(true)
+        }).catch( (res) => {
+          console.log(res)
+        })
     }
 
   return (
