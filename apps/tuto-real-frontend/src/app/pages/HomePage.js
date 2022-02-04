@@ -14,7 +14,6 @@ const HomePage = () => {
   const password = '000000';
   return (
     <>
-      {console.log(currentUser)}
       <h5>User: {currentUser?.email}</h5>
       {currentUser ? (
         <span>
