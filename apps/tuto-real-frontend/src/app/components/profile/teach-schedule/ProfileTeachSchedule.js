@@ -19,7 +19,6 @@ const ProfileTeachSchedule = ({viewType}) => {
         return (
             <Form className="form">
                 <ViewTeachingInfo 
-                    viewType={viewType} 
                     teachingInfo={teachingInfo}
                 />
             </Form>
@@ -45,7 +44,10 @@ const ProfileTeachSchedule = ({viewType}) => {
                 </div>
             ): (
                 <div style={{width: "45%", textAlign: "right", marginBottom: "5%"}}>
-                    <NormalButton title={"Edit"} whenClick={() => setEditing(true)} size={"l"} bgColor={COLORS.third}/>
+                    {viewType=="TutorSelf" ?
+                        <NormalButton title={"Edit"} whenClick={() => setEditing(true)} size={"l"} bgColor={COLORS.third}/>
+                        : null
+                    }
                 </div>
             )}
         </>

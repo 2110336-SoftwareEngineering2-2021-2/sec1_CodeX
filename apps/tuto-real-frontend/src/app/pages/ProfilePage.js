@@ -38,7 +38,7 @@ const ProfilePage = () => {
 
   return (
     <>
-      <ProfileMenuBar viewType={viewType} />
+      <ProfileMenuBar viewType={viewType} setSelecting={setSelecting} selecting={selecting}/>
       {renderContent()}
     </>
   )

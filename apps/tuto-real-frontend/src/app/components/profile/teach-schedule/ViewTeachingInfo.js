@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { Badge } from "react-bootstrap";
+import COLORS from "../../../constants/color";
 import "../profile.css"
+import Tag from "./Tag";
 
-const ViewTeachingInfo = ({viewType, teachingInfo}) => {
-    const [badgeColor, setBadgeColor] = useState(["primary", "secondary", "success", "danger", "warning", "info"]);
+
+const ViewTeachingInfo = ({teachingInfo}) => {
+    const [tagColor, setTagColor] = useState(["red", "blue", "green", "purple", "orange", "gray"]);
     const {subjectList,description} = teachingInfo;
     return (
         <div className='info-card shadow'>
@@ -12,15 +15,18 @@ const ViewTeachingInfo = ({viewType, teachingInfo}) => {
             <hr />
             <div className='section'>
                 <p className='header'>SUBJECT</p>
-                {subjectList.map((e,i) => (
-                    <Badge 
-                        pill 
-                        bg={badgeColor[i]}
-                        className="Badge"
-                    >
-                        {e}
-                    </Badge>
-                ))}
+                <div style={{display:"flex", flexWrap: "wrap"}}>
+                    {subjectList.map((e,i) => (
+                        // <Badge 
+                        //     pill 
+                        //     bg={badgeColor[i]}
+                        //     className="Badge"
+                        // >
+                        //     {e}
+                        // </Badge>
+                        <Tag text={e} textColor="white" bgColor={tagColor[i % 6]}/>
+                    ))}
+                </div>
             </div>
             <hr />
             <div className='section'>
