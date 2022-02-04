@@ -11,6 +11,7 @@
   },
   "private": true,
   "dependencies": {
+    "@google-cloud/storage": "^5.18.1",
     "@nestjs/common": "^8.0.0",
     "@nestjs/core": "^8.0.0",
     "@nestjs/mongoose": "^9.0.2",
@@ -27,7 +28,8 @@
     "reflect-metadata": "^0.1.13",
     "regenerator-runtime": "0.13.7",
     "rxjs": "^7.0.0",
-    "tslib": "^2.0.0"
+    "tslib": "^2.0.0",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@nestjs/schematics": "^8.0.0",
@@ -37,7 +39,7 @@
     "@nrwl/eslint-plugin-nx": "13.4.6",
     "@nrwl/jest": "^13.4.6",
     "@nrwl/linter": "13.4.6",
-    "@nrwl/nest": "13.4.6",
+    "@nrwl/nest": "^13.4.6",
     "@nrwl/node": "13.4.6",
     "@nrwl/react": "13.4.6",
     "@nrwl/tao": "13.4.6",
