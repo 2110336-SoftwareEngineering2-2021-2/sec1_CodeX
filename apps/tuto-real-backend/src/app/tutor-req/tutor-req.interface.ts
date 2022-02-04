@@ -2,7 +2,7 @@ import { Document } from 'mongoose';
 
 
 export interface TutorReq extends Document {
-    readonly  uid: String,
+    readonly  email: String,
     readonly evidenceImg: {
         fileName : String , 
         url : String

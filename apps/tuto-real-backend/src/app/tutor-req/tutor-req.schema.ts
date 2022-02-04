@@ -3,7 +3,7 @@ import { imgSchema } from '../util/image.schema';
 
 
 export const TutorReqSchema = new mongoose.Schema({
-  uid: String,
+  email: String,
    evidenceImg: {
     type : [imgSchema],
     default : [] 

@@ -27,8 +27,7 @@ export class TutorReqService {
        }
    
        dto.evidenceImg = urls
-        console.log(dto.evidenceImg)
-        return await this.reqModel.updateOne({ "uid" : dto.uid} , dto , {upsert :true}) ;
+        return await this.reqModel.updateOne({ "email" : dto.email} , dto , {upsert :true}) ;
         
       }
     

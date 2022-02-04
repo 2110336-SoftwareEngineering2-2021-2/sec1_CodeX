@@ -1,6 +1,6 @@
 
 export class TutorReqDto {
-    readonly  uid: String;
+    readonly  email: String;
     evidenceImg: {
         fileName : String , 
         url : String
