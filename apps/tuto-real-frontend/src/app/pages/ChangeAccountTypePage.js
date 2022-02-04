@@ -13,7 +13,7 @@ const ChangeAccountTypePage = () => {
     const [showModal,setShowModal] = useState(false)
     const [sendImage, setSendImage] = useState({
       email: 'sorasit@gmail.com',
-      evidenceimage: [citizenID.raw, transcription.raw]
+      evidenceImg: [citizenID.raw, transcription.raw]
     })
 
     const handleSelectCid = (e) => {
@@ -25,7 +25,7 @@ const ChangeAccountTypePage = () => {
 
         setSendImage({
           ...sendImage,
-          evidenceimage : [e.target.files[0], sendImage.evidenceimage[1]]
+          evidenceImg : [e.target.files[0], sendImage.evidenceImg[1]]
         })
       }
     }
@@ -39,7 +39,7 @@ const ChangeAccountTypePage = () => {
 
         setSendImage({
           ...sendImage,
-          evidenceimage : [sendImage.evidenceimage[0], e.target.files[0]]
+          evidenceImg : [sendImage.evidenceImg[0], e.target.files[0]]
         })
       }
     }
@@ -48,15 +48,36 @@ const ChangeAccountTypePage = () => {
         // console.log(citizenID.raw)
         // console.log(transcription.raw)
         console.log(sendImage)
+
+        const formData1 = new FormData();
+        formData1.append(
+          "myFile1",
+          citizenID.raw,
+          citizenID.raw.name
+        );
+
+        const formData2 = new FormData();
+        formData2.append(
+          "myFile2",
+          transcription.raw,
+          transcription.raw.name
+        );
+
         client({
           url: '/tutorReq/create',
           method: 'POST',
-          body: sendImage
+          body: {
+            email: 'sorasit@gmail.com',
+            evidenceImg: [formData1,formData2]
+          }
         }).then( ({data}) => {
+
           console.log(data)
           setShowModal(true)
-        }).catch( (res) => {
-          console.log(res)
+        }).catch( ({response}) => {
+
+          console.log(response)
+
         })
     }
 
