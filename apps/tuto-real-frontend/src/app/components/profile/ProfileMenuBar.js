@@ -3,8 +3,8 @@ import React, { useState } from 'react'
 import BarButton from '../ui/BarButton'
 import "./profile.css"
 
-const ProfileMenuBar = ({viewType}) => {
-  const [selecting, setSelecting] = useState("Info") // "Info" | "Learn" | "Teach" | "Review"
+const ProfileMenuBar = ({viewType, selecting, setSelecting}) => {
+  // const [selecting, setSelecting] = useState("Info") // "Info" | "Learn" | "Teach" | "Review"
   const [widthStyle] = useState(() => {
     switch(viewType) {
       case "TutorSelf": return "25%"
