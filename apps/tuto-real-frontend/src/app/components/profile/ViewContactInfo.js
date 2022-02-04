@@ -1,6 +1,8 @@
 import React from 'react'
 
-const ContactInfo = ({viewType, contactInfo}) => {
+import "./profile.css"
+
+const ViewContactInfo = ({viewType, contactInfo}) => {
   const {email, telephone, address} = contactInfo
 
   return (
@@ -29,4 +31,4 @@ const ContactInfo = ({viewType, contactInfo}) => {
   )
 }
 
-export default ContactInfo
+export default ViewContactInfo

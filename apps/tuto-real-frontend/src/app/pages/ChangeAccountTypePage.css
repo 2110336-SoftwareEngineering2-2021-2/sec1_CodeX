@@ -29,13 +29,13 @@
 .upload-text{
     color: var(--third);
     font-size: larger;
-    margin: 2.6% 2%;
+    margin: 1.334% 2%;
 }
 
 .upload-image{
     width: 93%;
     height: auto;
-    margin: 2.6% 2%;
+    margin: 1.334% 2%;
 }
 
 .submit-open{

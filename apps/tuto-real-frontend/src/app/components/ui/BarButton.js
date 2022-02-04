@@ -8,10 +8,10 @@ const BarButton = ({title, onSelect, isActive, widthStyle}) => { // widthStyle i
       onClick={onSelect} 
       style={{
         fontWeight: "bold",
-        padding: "2% 4%",
         borderColor: "transparent",
         borderRadius: "30px",
         minWidth: widthStyle? widthStyle:"fit-content",
+        minHeight: "6vh",
         backgroundColor: isActive? COLORS.third: COLORS.white,
         color: isActive? COLORS.white: COLORS.primary,
       }}>
