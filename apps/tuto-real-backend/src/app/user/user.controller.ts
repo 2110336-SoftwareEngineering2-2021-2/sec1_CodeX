@@ -11,14 +11,14 @@ export class UserController {
 
    
 
-    @Get(':id')
-    GetProfileByID(@Param('id') id: String) {
-        return this.service.GetProfileByID(id); 
+    @Get(':email')
+    GetProfileByMail(@Param('email') mail : String) {
+
+        return this.service.GetProfileByMail(mail); 
     }
 
     @Post('/create')
-    @UseInterceptors(FileInterceptor('img'))
-    Create(@UploadedFile() file , @Body() dto:UserDto) {
+    Create(@Body() dto:UserDto) {
 
         dto.role = "Student"
         dto.profileImg = {

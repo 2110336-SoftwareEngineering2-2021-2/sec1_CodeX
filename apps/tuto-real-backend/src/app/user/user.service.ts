@@ -11,9 +11,8 @@ export class UserService {
 
     constructor(@InjectModel('User') private userModel: Model<User>){}
 
-    GetProfileByID(id : String)  {
-   
-        return this.userModel.find({_id: mongoose.Types.ObjectId(id)}).exec()
+    GetProfileByMail(mail: String)  {
+        return this.userModel.find({email: mail}).exec()
   
     }
 
