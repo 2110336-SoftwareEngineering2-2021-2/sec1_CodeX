@@ -18,9 +18,7 @@ const ProfileTeachSchedule = ({viewType}) => {
     const renderViewForm = () => {
         return (
             <Form className="form">
-                <ViewTeachingInfo 
-                    teachingInfo={teachingInfo}
-                />
+                <ViewTeachingInfo teachingInfo={teachingInfo}/>
             </Form>
         )
     }
@@ -28,8 +26,8 @@ const ProfileTeachSchedule = ({viewType}) => {
 
     const renderEditForm = () => {
         return (
-            <Form>
-                <EditTeachingInfo />
+            <Form className="form">
+                <EditTeachingInfo teachingInfo={teachingInfo}/>
             </Form>
         )
     }
