@@ -6,7 +6,7 @@ export class updateUserDto {
     readonly birthDate : Date;
     readonly address : String;
     profileImg :  {
-        fileName : String , 
+        fileName : String, 
         url : String
-    };
+    }[];
 }

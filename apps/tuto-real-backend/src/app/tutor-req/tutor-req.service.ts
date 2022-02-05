@@ -5,6 +5,7 @@ import { User } from '../user/user.interface';
 import { uploadImage, uploadImageBy64 } from '../util/google';
 import { TutorReqDto } from './tutor-req.dto';
 import { TutorReq } from './tutor-req.interface';
+import { updateStatusDto } from './updateStatus.dto';
 
 @Injectable()
 export class TutorReqService {
@@ -74,4 +75,4 @@ export class TutorReqService {
 
 
 
-}
+

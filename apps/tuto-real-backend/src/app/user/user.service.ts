@@ -27,5 +27,6 @@ export class UserService {
             { firstName: dto.firstName, lastName: dto.lastName, address: dto.address, birthDate: dto.birthDate, profileImg: dto.profileImg},
             { upsert: true },
         ).exec();
+        return this.userModel.find({email: mail}, {firstName: 1, lastName: 1, _id:0});
     }
 }
