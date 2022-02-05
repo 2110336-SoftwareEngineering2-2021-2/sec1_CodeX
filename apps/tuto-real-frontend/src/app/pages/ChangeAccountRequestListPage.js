@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
 import RequestBox from '../components/requestlist/RequestBox';
 import { useState } from 'react';
+import { client } from '../axiosConfig';
 
 const ChangeAccountRequestListPage = () => {
   const [dummyRequestList, setDummyRequestList] = useState([
@@ -24,6 +25,32 @@ const ChangeAccountRequestListPage = () => {
     }
   ]);  
 
+  const [dummy,setDummy] = useState(null)
+
+  const fetchData = useCallback( () => {
+    client({
+      method: "GET",
+      url: '/tutorReq'
+    })
+    .then(({data}) => {
+      console.log(data)
+      setDummyRequestList(data)
+    },[])
+    .catch((res) => {
+      console.log(res)
+    },)
+  })
+
+  useEffect( () => {
+    fetchData()
+  },[])
+
+  const check = () => {
+    dummy.map( (e) => {
+      return console.log(e)
+    })
+  }
+
   return (
     <div 
       style={{
@@ -38,9 +65,11 @@ const ChangeAccountRequestListPage = () => {
         {dummyRequestList.map(e => (
           <RequestBox 
             name={e.firstName + "  " + e.lastName} 
-            date={e.date + "  " + e.time} 
+            // date={e.date + "  " + e.time} 
+            // date={e.timeStamp.substr(8,2)}
           />
         ))}
+        <button onClick={check}>check</button>
     </div>
   );
 };
