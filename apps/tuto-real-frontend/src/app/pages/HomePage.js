@@ -5,22 +5,29 @@ const HomePage = () => {
     currentUser,
     signUp,
     signInWithGoogle,
-    signIn,
-    signOut,
+    logIn,
+    logOut,
     updatePassword,
+    sendOTP,
+    verifyOTP,
     resetPassword,
   } = useAuth();
   const email = 'venel94370@mannawo.com';
   const password = '000000';
+  const phoneNumber = '+10958612142';
+  const code = '123456';
   return (
     <>
       <h5>User: {currentUser?.email}</h5>
+      <div id="recaptcha"></div>
       {currentUser ? (
         <span>
           <button onClick={() => updatePassword(password, '000000')}>
             Update Password
           </button>
-          <button onClick={() => signOut()}>Sign Out</button>
+          <button onClick={() => sendOTP(phoneNumber)}>Send OTP</button>
+          <button onClick={() => verifyOTP(code)}>Verify OTP</button>
+          <button onClick={() => logOut()}>Sign Out</button>
         </span>
       ) : (
         <span>
@@ -28,7 +35,8 @@ const HomePage = () => {
           <button onClick={() => signInWithGoogle()}>
             Sign In with Google
           </button>
-          <button onClick={() => signIn(email, password)}>Sign In</button>
+
+          <button onClick={() => logIn(email, password)}>Sign In</button>
           <button onClick={() => resetPassword(email)}>Reset Password</button>
         </span>
       )}

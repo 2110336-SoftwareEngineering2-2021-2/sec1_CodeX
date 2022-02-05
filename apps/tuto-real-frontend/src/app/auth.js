@@ -1,6 +1,20 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { auth } from './firebase';
-import * as authentication from 'firebase/auth';
+// import { auth } from './firebase';
+import {
+  onAuthStateChanged,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+  sendEmailVerification,
+  signInWithRedirect,
+  sendPasswordResetEmail,
+  RecaptchaVerifier,
+  GoogleAuthProvider,
+  PhoneAuthProvider,
+  PhoneMultiFactorGenerator,
+  multiFactor,
+} from 'firebase/auth';
+import { app, auth } from './firebase';
 
 const AuthContext = React.createContext();
 
@@ -13,7 +27,7 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    authentication.onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
       if (user) {
         user.getIdToken().then((token) => {
@@ -21,19 +35,31 @@ export function AuthProvider({ children }) {
         });
       }
     });
-    return;
   }, []);
+
+  // const setUpRecaptcha = () => {
+  //   window.recaptchaVerifier = new RecaptchaVerifier(
+  //     'recaptcha',
+  //     {
+  //       size: 'normal',
+  //       callback: (res) => {
+  //         console.log('captcha solved!');
+  //         sendOTP();
+  //       },
+  //     },
+  //     // auth
+  //   );
+  // };
 
   const signUp = async (email, password) => {
     console.log('Sign up');
     setLoading(true);
-    await authentication
-      .createUserWithEmailAndPassword(auth, email, password)
+    await createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        console.log(userCredential.user.getIdToken);
+        sendEmailVerification(userCredential.user);
       })
       .then(() => {
-        authentication.sendEmailVerification(auth.currentUser);
+        sendOTP('+10958612142');
       })
       .catch((err) => {
         alert(err.message);
@@ -44,13 +70,10 @@ export function AuthProvider({ children }) {
 
   const signInWithGoogle = async () => {
     setLoading(true);
-    await authentication
-      .signInWithRedirect(auth, new authentication.GoogleAuthProvider())
+    await signInWithRedirect(auth, new GoogleAuthProvider())
       .then((result) => {
-        const credential =
-          authentication.GoogleAuthProvider.credentialFromResult(result);
+        const credential = GoogleAuthProvider.credentialFromResult(result);
         const token = credential.accessToken;
-        const user = result.user;
         console.log(token);
       })
       .catch((err) => {
@@ -60,11 +83,10 @@ export function AuthProvider({ children }) {
     setLoading(false);
   };
 
-  const signIn = async (email, password) => {
+  const logIn = async (email, password) => {
     console.log('Sign in');
     setLoading(true);
-    await authentication
-      .signInWithEmailAndPassword(auth, email, password)
+    await signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         if (!userCredential.user.emailVerified) {
           alert('Email verification failed');
@@ -78,21 +100,20 @@ export function AuthProvider({ children }) {
     setLoading(false);
   };
 
-  const signOut = async () => {
+  const logOut = async () => {
     console.log('Sign out');
     setLoading(true);
-    await authentication.signOut(auth);
+    await signOut(auth);
     setLoading(false);
   };
 
-  const updatePassword = async (password, newPassword) => {
+  const updatePassword = (password, newPassword) => {
     if (!currentUser) return;
     console.log('Update password');
     setLoading(true);
-    await authentication
-      .signInWithEmailAndPassword(auth, currentUser.email, password)
+    signInWithEmailAndPassword(auth, currentUser.email, password)
       .then((userCredential) => {
-        authentication.updatePassword(userCredential.user, newPassword);
+        updatePassword(userCredential.user, newPassword);
         console.log(`Change password from ${password} to ${newPassword}`);
       })
       .catch((err) => {
@@ -102,10 +123,41 @@ export function AuthProvider({ children }) {
     setLoading(false);
   };
 
+  const sendOTP = async (phoneNumber) => {
+    // setUpRecaptcha();
+    auth.settings.appVerificationDisabledForTesting = true;
+    const recaptchaVerifier = new RecaptchaVerifier('recaptcha');
+    multiFactor(currentUser)
+      .getSession()
+      .then((session) => {
+        const phoneOpts = {
+          phoneNumber,
+          session,
+        };
+        const phoneAuthProvider = new PhoneAuthProvider();
+        return phoneAuthProvider.verifyPhoneNumber(
+          phoneOpts,
+          recaptchaVerifier
+        );
+      });
+    alert('sms text sent!');
+  };
+
+  const verifyOTP = async (code) => {
+    const cred = new PhoneAuthProvider.credential(window.verificationId, code);
+
+    const multiFactorAssertion = PhoneMultiFactorGenerator.assertion(cred);
+
+    // const user = auth.currentUser;
+    await multiFactor(currentUser).enroll(multiFactorAssertion, 'phone number');
+
+    alert('enrolled in MFA');
+  };
+
   const resetPassword = async (email) => {
     console.log('Reset password');
     setLoading(true);
-    await authentication.sendPasswordResetEmail(auth, email);
+    await sendPasswordResetEmail(auth, email);
     setLoading(false);
   };
 
@@ -113,9 +165,11 @@ export function AuthProvider({ children }) {
     currentUser,
     signUp,
     signInWithGoogle,
-    signIn,
-    signOut,
+    logIn,
+    logOut,
     updatePassword,
+    sendOTP,
+    verifyOTP,
     resetPassword,
   };
 

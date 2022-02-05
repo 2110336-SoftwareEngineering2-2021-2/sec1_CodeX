@@ -1,5 +1,10 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
+import {
+  getAuth,
+  initializeAuth,
+  browserSessionPersistence,
+  browserPopupRedirectResolver,
+} from 'firebase/auth';
 import config from './firebase.config.json';
 
 const firebaseConfig = {
@@ -12,5 +17,10 @@ const firebaseConfig = {
   measurementId: config.measurementId,
 };
 
-const app = initializeApp(firebaseConfig);
+export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
+// export const auth = initializeAuth(app, {
+//   persistence: browserSessionPersistence,
+//   popupRedirectResolver: browserPopupRedirectResolver,
+// });
+// export const auth =  firebase.auth();
