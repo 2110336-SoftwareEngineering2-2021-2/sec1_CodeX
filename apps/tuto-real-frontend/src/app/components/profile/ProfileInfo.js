@@ -18,11 +18,15 @@ const ProfileInfo = () => {
   const [isEditing, setEditing] = useState(false);
   const [basicInfo, setBasicInfo] = useState({
     picture: undefined,
-    firstName: 'Veerin',
-    lastName: 'Phana-ngam',
-    birthDate: new Date(),
-    citizenId: '1-2345-67891-11-1',
-  });
+    firstName: "Veerin",
+    lastName: "Phana-ngam",
+    birthDate: {
+      day: 1,
+      month: 1,
+      year: 2020
+    },
+    citizenId: "1-2345-67891-11-1"
+  })
   const [contactInfo, setContactInfo] = useState({
     email: 'sorasit@gmail.com',
     telephone: '',
@@ -47,29 +51,35 @@ const ProfileInfo = () => {
       // url: `/user/${contactInfo.email}`
       url: '/user/sorasit@gmail.com',
     })
-      .then(({ data }) => {
-        console.log(data);
-        setBasicInfo({
-          picture: data.profileImg,
-          firstName: data.firstName,
-          lastName: data.lastName,
-          birthDate: Date(data.birthDate),
-          citizenId: data.citizenID,
-        });
-        setContactInfo({
-          email: data.email,
-          telephone: data.phoneNumber,
-          address: data.address,
-        });
-        setAdvance({
-          userType: data.role === '',
-          password: '',
-        });
+    .then(({data}) => {
+      console.log(data[0])
+      console.log(Date(data[0].birthDate))
+      console.log(new Date())
+      setBasicInfo({
+        picture: "",//data[0].profileImg.fileName,
+        firstName: data[0].firstName,
+        lastName: data[0].lastName,
+        birthDate: {
+          day: parseInt(data[0].birthDate.substr(8,2)),
+          month: parseInt(data[0].birthDate.substr(5,2)),
+          year: parseInt(data[0].birthDate.substr(0,4))
+        },
+        citizenId: data[0].citizenID
       })
-      .catch(({ response }) => {
-        console.log(response);
-      });
-  }, []);
+      setContactInfo({
+        email: data[0].email,
+        telephone: data[0].phoneNumber,
+        address: data[0].address
+      })
+      setAdvance({
+        userType: data[0].role,
+        password: ""
+      })
+    })
+    .catch(({response}) => {
+      console.log(response)
+    })
+  },[])
 
   useEffect(() => {
     fetchData();
