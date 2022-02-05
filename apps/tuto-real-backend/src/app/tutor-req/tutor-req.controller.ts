@@ -14,11 +14,12 @@ export class TutorReqController {
     constructor(private readonly service: TutorReqService){}
 
     @Post('create')
-    @UseInterceptors(FilesInterceptor('evidenceImg'))
-    create(@UploadedFiles() files , @Body() dto:TutorReqDto){
- 
-        dto.timeStamp = new Date();
-        return this.service.create(files,dto);
+    @UseInterceptors(FileFieldsInterceptor([
+        { name: 'citizenID', maxCount: 1 },
+        { name: 'transcription', maxCount: 1 },
+      ]))
+    create(@UploadedFiles() files, @Body() dto:TutorReqDto){
+        return this.service.create(files.citizenID,files.transcription,dto);
 
     }
 

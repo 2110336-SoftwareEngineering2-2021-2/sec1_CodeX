@@ -1,9 +1,15 @@
 
 export class TutorReqDto {
+    firstName : String;
+    lastName : String;
     readonly  email: String;
-    evidenceImg: {
+    citizenID: {
         fileName : String , 
         url : String
-    }[];
+    };
+    transcription : {
+        fileName : String , 
+        url : String
+    };
     timeStamp : Date;
 }
