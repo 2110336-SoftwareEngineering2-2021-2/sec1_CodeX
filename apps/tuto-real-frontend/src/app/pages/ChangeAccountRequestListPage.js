@@ -3,31 +3,13 @@ import RequestBox from '../components/requestlist/RequestBox';
 import { useState } from 'react';
 import { client } from '../axiosConfig';
 
-const ChangeAccountRequestListPage = () => {
-  // const [dummyRequestList, setDummyRequestList] = useState([
-  //   {
-  //     firstName: "kharit1",
-  //     lastName: "123",
-  //     date: "1/1/2022",
-  //     time: "16:03"
-  //   },
-  //   {
-  //     firstName: "kharit2",
-  //     lastName: "1234",
-  //     date: "1/2/2022",
-  //     time: "16:04"
-  //   },
-  //   {
-  //     firstName: "kharit3",
-  //     lastName: "1235",
-  //     date: "1/3/2022",
-  //     time: "16:05"
-  //   }
-  // ]);  
+const ChangeAccountRequestListPage = () => { 
 
+  //data
   const [dataList,setDataList] = useState(null)
   const [isPending,setIsPending] = useState(true)
 
+  //get func
   const fetchData = useCallback( () => {
     client({
       method: "GET",
@@ -47,12 +29,6 @@ const ChangeAccountRequestListPage = () => {
     fetchData()
   },[])
 
-  // const check = () => {
-  //   dummy.map( (e) => {
-  //     return console.log(e)
-  //   })
-  // }
-
   return (
     <div 
       style={{
@@ -60,11 +36,14 @@ const ChangeAccountRequestListPage = () => {
         flexDirection: 'column',
         alignItems: 'center' , 
         width: '150%'}
-    }>
+      }>
+
+        {/* title */}
         <div style={{display: 'flex', width: '45%'}}>
           <p className='title left' style={{width: '100%',fontSize: 'xx-large'}}>Promote Submission List</p>
         </div>
-        {isPending && <p>Loading...</p>}
+
+        {/* request box */}
         {!isPending && dataList.map(e => (
           <RequestBox 
             key={e.email}
@@ -80,7 +59,7 @@ const ChangeAccountRequestListPage = () => {
             transcription={e.transcription}
           />
         ))}
-        {/* <button onClick={check}>check</button> */}
+        
     </div>
   );
 };

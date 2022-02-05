@@ -32,6 +32,7 @@ const ChangeAccountTypePage = () => {
       reader.onerror = error => reject(error);
     });
 
+    //handle citizenid upload
     const handleSelectCid = async(e) => {
       if(e.target.files.length){
         setCitizenID({
@@ -44,7 +45,6 @@ const ChangeAccountTypePage = () => {
           //jpeg case
           setSendImage({
             ...sendImage,
-            // citizenID64: (await toBase64(e.target.files[0])).slice(24)
             citizenID64: (await toBase64(e.target.files[0])).substr(23)
           })
         }else{
@@ -52,7 +52,6 @@ const ChangeAccountTypePage = () => {
           //png case
           setSendImage({
             ...sendImage,
-            // citizenID64: (await toBase64(e.target.files[0])).slice(23)
             citizenID64: (await toBase64(e.target.files[0])).substr(22)
           })
 
@@ -60,6 +59,7 @@ const ChangeAccountTypePage = () => {
       }
     }
 
+    //handle transcription upload
     const handleSelectTrans = async (e) => {
       if(e.target.files.length){
         setTranscription({
@@ -72,7 +72,6 @@ const ChangeAccountTypePage = () => {
           //jpeg case
           setSendImage({
             ...sendImage,
-            // transcription64: (await toBase64(e.target.files[0])).slice(24)
             transcription64: (await toBase64(e.target.files[0])).substr(23)
           })
         }else{
@@ -80,7 +79,6 @@ const ChangeAccountTypePage = () => {
           //png case
           setSendImage({
             ...sendImage,
-            // transcription64: (await toBase64(e.target.files[0])).slice(23)
             transcription64: (await toBase64(e.target.files[0])).substr(22)
           })
         }
@@ -88,12 +86,14 @@ const ChangeAccountTypePage = () => {
       }
     }
 
+    //send file to DB
     const handleUploadFile = (event) => {
 
         console.log(sendImage)
         setIsPending(true)
 
         client({
+
           url: '/tutorReq/create',
           method: 'POST',
           data: sendImage
@@ -102,26 +102,28 @@ const ChangeAccountTypePage = () => {
           console.log(data)
           setIsPending(false)
           setShowModal(true)
-
         }).catch( ({response}) => {
 
           console.log(response)
-
         })
     }
 
   return (
     <div style={{display: 'flex',flexDirection: 'column',alignItems: 'center' , width: '100%'}}>
+
+        {/* back button */}
         <div style={{display: 'flex', width: '45%'}}>
           <Link className='backtoprofile shadow' to='/profile'>{back}</Link>
         </div>
         
-
         <div className='info-card shadow' >
+
+          {/* title */}
           <p className='title left' style={{width: '100%'}}>upgrade user's type form</p>
           <p className='header' style={{width: '100%'}}>Please submit your  copy of citizen id card and transcription</p>
           <hr/>
           
+          {/* upload citizenID section */}
           <div className='section' style={{alignItems: 'flex-start'}}>
             <p className='header' style={{width: '30%'}}>COPY OF CITIZEN ID CARD</p>
             <UploadButton 
@@ -135,6 +137,7 @@ const ChangeAccountTypePage = () => {
           </div>
           <hr/>
           
+          {/* upload transcription section */}
           <div className='section' style={{alignItems: 'flex-start'}}>
             <p className='header' style={{width: '30%'}}>TRANSCRIPTION</p>
             <UploadButton 
@@ -148,6 +151,7 @@ const ChangeAccountTypePage = () => {
           </div>
         </div>
 
+        {/* submit with disabled */}
         <div style={{display: 'flex',flexDirection: 'row-reverse', width: '45%'}}>
           {
             (!transcription.preview || 
@@ -156,6 +160,8 @@ const ChangeAccountTypePage = () => {
           }
         </div>
 
+
+        {/* submit without disabled */}
         <div style={{display: 'flex',flexDirection: 'row-reverse', width: '45%'}}>
           {
             !isPending &&
@@ -165,6 +171,7 @@ const ChangeAccountTypePage = () => {
           }
         </div>
 
+        {/* submit is pending */}
         <div style={{display: 'flex',flexDirection: 'row-reverse', width: '45%'}}>
           {
             isPending && 
@@ -172,6 +179,7 @@ const ChangeAccountTypePage = () => {
           }
         </div>
         
+        {/* change account type page modal */}
         <ModalRequestButton setshow={setShowModal} show={showModal}/>
     </div>
   );
