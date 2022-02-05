@@ -8,94 +8,74 @@ import './ChangeAccountTypePage.css'
 const ChangeAccountTypePage = () => {
 
     const back = '< Back'
+
+    //use for display
     const [citizenID, setCitizenID] = useState({preview: "", raw : ""})
     const [transcription, setTranscription] = useState({preview: "", raw : ""})
+    const [isPending, setIsPending] = useState(false)
+
+    //modal
     const [showModal,setShowModal] = useState(false)
+
+    //send to DB
     const [sendImage, setSendImage] = useState({
       email: 'sorasit@gmail.com',
-      evidenceImg: [citizenID.raw, transcription.raw]
+      citizenID64: '',
+      transcription64: ''
     })
 
-    const handleSelectCid = (e) => {
+
+    const toBase64 = file => new Promise((resolve, reject) => {
+      const formData = new FormData()
+      formData.append("", file, file.name)
+      return formData
+  });
+
+    const handleSelectCid = async(e) => {
       if(e.target.files.length){
         setCitizenID({
           preview: URL.createObjectURL(e.target.files[0]),
           raw : e.target.files[0]
         })
 
+        // getBase64_Cid(e.target.files[0])
         setSendImage({
           ...sendImage,
-          evidenceImg : [e.target.files[0], sendImage.evidenceImg[1]]
+          citizenID64: (await toBase64(e.target.files[0])).slice(23),
         })
-
-        // const formData1 = new FormData();
-        // formData1.append(
-        //   "myFile1",
-        //   e.target.files[0],
-        //   e.target.files[0].name
-        // );
-
-        // console.log(e.target.files[0])
-        // console.log(formData1.get('myFile1'))
-
       }
     }
 
-    const handleSelectTrans = (e) => {
+    const handleSelectTrans = async (e) => {
       if(e.target.files.length){
         setTranscription({
           preview: URL.createObjectURL(e.target.files[0]),
           raw : e.target.files[0]
         })
 
+        // getBase64_Trans(e.target.files[0])
         setSendImage({
           ...sendImage,
-          evidenceImg : [sendImage.evidenceImg[0], e.target.files[0]]
+          transcription64: (await toBase64(e.target.files[0])).slice(23),
         })
       }
     }
 
     const handleUploadFile = (event) => {
-        // console.log(citizenID.raw)
-        // console.log(transcription.raw)
-        // console.log(JSON.stringify(sendImage))
 
-        const formData1 = new FormData();
-        const imgValue = [JSON.stringify(citizenID.raw),JSON.stringify(transcription.raw)]
-
-        formData1.append(
-          "email",
-          'sorasit@gmail.com'
-        );
-
-        formData1.append(
-          "evidenceImg",
-          citizenID.raw
-        );
-
-        formData1.append(
-          "evidenceImg",
-          transcription.raw
-        );
-
-        console.log(formData1.getAll("evidenceImg"))
-
-        const formData2 = new FormData();
-        formData2.append(
-          "myFile2",
-          transcription.raw,
-          transcription.raw.name
-        );
+        console.log(sendImage)
+        setIsPending(true)
 
         client({
           url: '/tutorReq/create',
           method: 'POST',
-          headers: {'Content-Type': 'multipart/form-data'},
-          body: formData1
+          data: sendImage
         }).then( ({data}) => {
 
           console.log(data)
+          setIsPending(false)
           setShowModal(true)
+
         }).catch( ({response}) => {
 
           console.log(response)
@@ -151,9 +131,17 @@ const ChangeAccountTypePage = () => {
 
         <div style={{display: 'flex',flexDirection: 'row-reverse', width: '45%'}}>
           {
+            !isPending &&
             transcription.preview && 
             citizenID.preview && 
             <button onClick={handleUploadFile} className='submit-open shadow' data-toggle='modal'>Submit</button>
+          }
+        </div>
+
+        <div style={{display: 'flex',flexDirection: 'row-reverse', width: '45%'}}>
+          {
+            isPending && 
+            <button className='submit-close shadow' disabled>Sending...</button>
           }
         </div>
         
