@@ -1,7 +1,6 @@
 .backtoprofile {
     text-decoration: none;
     color: white;
-    cursor: default;
     background-color: var(--third);
     padding: 5px 0px;
     font-size: larger;
@@ -41,7 +40,6 @@
 .submit-open{
     text-decoration: none;
     color: white;
-    cursor: default;
     background-color: var(--third);
     padding: 5px 0px;
     font-size: larger;
@@ -54,14 +52,9 @@
     justify-content: center;
 }
 
-.submit-open:hover{
-    cursor: default;
-}
-
 .submit-close{
     text-decoration: none;
     color: white;
-    cursor: default;
     background-color: var(--lightgray);
     padding: 5px 0px;
     font-size: larger;
