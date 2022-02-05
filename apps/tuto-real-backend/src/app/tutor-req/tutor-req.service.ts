@@ -13,7 +13,7 @@ export class TutorReqService {
     constructor(@InjectModel('TutorRequest') private reqModel: Model<TutorReq>,
     @InjectModel('User') private userModel: Model<User>){}
 
-    findAll(){
+    findAll() {
         return this.reqModel.find({ status: "Pending" }).sort({timeStamp: 'asc'}).exec()
     }
 
@@ -33,17 +33,14 @@ export class TutorReqService {
                        url:url}
         })
         
-        
-
-       return await this.userModel.find({email:dto.email}).exec()
+        return await this.userModel.find({email:dto.email}).exec()
        .then(async(name) =>{
            dto.firstName = name[0].firstName
            dto.lastName = name[0].lastName
             return await this.reqModel.updateOne({ "email" : dto.email} , dto , {upsert :true}) ;
        })
        
-        
-      }
+    }
 
     async create1(dto){
         dto.timeStamp = new Date();
@@ -69,6 +66,25 @@ export class TutorReqService {
        
         
     }
+    async updateStatus(mail: string, dto: updateStatusDto){
+        if(dto.status == 'Reject') {
+            await this.reqModel.deleteOne({email: mail})
+        } 
+        else if(dto.status == 'Approved') {
+            await this.reqModel.updateOne(
+                {email: mail},
+                {status: 'Approved'},
+                {upsert: true},
+            ).exec();
+            await this.userModel.updateOne(
+                {email: mail},
+                {role: 'Tutor'},
+                {upsert: true},
+            ).exec();
+        }
+        return this.userModel.find({email: mail}, {firstName: 1, lastName: 1, _id:0})
+    }
+}
     
     
 

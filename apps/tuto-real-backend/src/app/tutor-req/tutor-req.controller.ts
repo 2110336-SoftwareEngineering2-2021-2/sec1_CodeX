@@ -7,8 +7,6 @@ import { TutorReqService } from './tutor-req.service';
 import { updateStatusDto } from './updateStatus.dto';
 
 
-
-
 @Controller('tutorReq')
 export class TutorReqController {
 
@@ -35,4 +33,9 @@ export class TutorReqController {
         return this.service.findAll();
     }
 
+    @Patch(":email")
+    update(@Param('email') email: string,
+    @Body() dto: updateStatusDto) {
+        return this.service.updateStatus(email, dto);
+    }
 }
