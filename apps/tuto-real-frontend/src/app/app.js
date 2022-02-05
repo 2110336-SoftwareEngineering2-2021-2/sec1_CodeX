@@ -8,11 +8,13 @@ import LogInPage from './pages/LogInPage';
 import RegistrationPage from './pages/RegistrationPage';
 import ChangeAccountApprovePage from './pages/ChangeAccountApprovePage'
 import ChangeAccountRequestListPage from './pages/ChangeAccountRequestListPage';
+import ProfilePage from './pages/ProfilePage';
+import ChangeAccountTypePage from './pages/ChangeAccountTypePage';
 
 export function App() {
   return (
     <>
-      <AuthProvider>
+      
       <NavBar />
       <Routes>
         <Route exact path="/" element={<HomePage />} />
