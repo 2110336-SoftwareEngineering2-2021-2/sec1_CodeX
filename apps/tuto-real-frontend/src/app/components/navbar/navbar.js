@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate} from 'react-router-dom'
 import {MdSearch} from 'react-icons/md'
-import {isLoggedIn} from '../hooks/loginHooks'
+import {isLoggedIn, onLogout} from '../hooks/loginHooks'
 
 import './navbar.css'
 import { getNavbarData } from './navbarData'
@@ -10,11 +10,14 @@ import { getCookieData } from '../util/cookieHandler'
 
 const NavBar = () => {
   // User have type => "Guest" | "Student" | "Admin" | "Tutor" //
-  const [userType, setUserType] = useState("Guest")
+  const [userType, setUserType] = useState("Student")
   const navigate = useNavigate()
   const navbarDataList = getNavbarData(userType).map(item => (
-    <button className={item.style} style={{marginRight: "3%"}} onClick={()=> navigate(item.path)}>
-      {item.name}
+    <button key={item.id} 
+      className={item.style} 
+      style={{marginRight: "3%"}} 
+      onClick={() => handleButton(item.name, item.path)}>
+        {item.name}
     </button>     
   ))
 
@@ -25,6 +28,13 @@ const NavBar = () => {
       setUserType(role)
     }
   },[])
+
+  const handleButton = (name, path) => {
+    if(name === "Sign out") 
+      onLogout({onSuccessLogout: () => {setUserType("Guest"); navigate(path);}})
+    else
+      navigate(path)
+  }
 
   return (
     <div className='navbar'>

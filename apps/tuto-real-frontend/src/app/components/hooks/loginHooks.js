@@ -4,7 +4,7 @@ import { getCookieData, removeCookieData, setCookieData } from '../util/cookieHa
 
 export const useLogin = ({setError, onSuccessLogin}) => {
   const [isLoading, setLoading] = useState(false)
-  
+
   const onLogin = (email, password) => {
     setLoading(true)
 
@@ -30,12 +30,13 @@ export const useLogin = ({setError, onSuccessLogin}) => {
 }
 
 export const onLogout = ({setError, onSuccessLogout}) => {
+  console.log("Logging out...")
   try {
     removeCookieData()
+    if(onSuccessLogout) onSuccessLogout()
   } catch {
     if(setError) setError(true)
   }
-  if(onSuccessLogout) onSuccessLogout()
 }
 
 export const isLoggedIn = () => {
