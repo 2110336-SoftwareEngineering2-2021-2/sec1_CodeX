@@ -7,6 +7,7 @@ const EditTeachingInfo = ({tempTeachingInfo, setTempTeachingInfo}) => {
     const [tagColor] = useState(["red", "blue", "green", "purple", "orange", "gray"]);
     const {subjectList, description} = tempTeachingInfo;
     const [newTagText, setNewTagText] = useState("");
+    const [updateToken, forceUpdate] = useState(0);
 
     const addNewSubjectHandle = () => {
         // subjectList.push(newTagText);
@@ -18,6 +19,14 @@ const EditTeachingInfo = ({tempTeachingInfo, setTempTeachingInfo}) => {
         setNewTagText("");
     }
 
+    const deleteSubjectHandle = (subjectName) => {
+        setTempTeachingInfo({
+            subjectList: tempTeachingInfo.subjectList.filter((item) => item !== subjectName), 
+            ...description
+        });
+        console.log("deleteSubjectHandle was called ",subjectList.filter((item) => item == subjectName))
+    }
+
     return (
         <div className='info-card shadow' style={{}}>
             <p className='title'>Teaching information</p>
@@ -25,17 +34,27 @@ const EditTeachingInfo = ({tempTeachingInfo, setTempTeachingInfo}) => {
             <hr />
             <div className='section'>
                 <p className='header'>SUBJECT</p>
-                <div>
+                <div style={{width:"100%"}}>
                     <div style={{display:"flex", flexWrap: "wrap"}}>
-                        {subjectList.map((e,i) => (
+                        {subjectList.map((subjectName,i) => 
                             <Tag
-                                key={e}
-                                text={e} 
+                                key={subjectName}
+                                text={subjectName} 
                                 textColor="white" 
                                 bgColor={tagColor[i % 6]}
                                 canEdit
+                                // onClick={() =>
+                                //     deleteSubjectHandle(subjectName)
+                                // }
+                                whenClickBin={() =>
+                                    deleteSubjectHandle(subjectName)
+                                    //deleteSubjectHandle("aaa")
+                                    //addNewSubjectHandle()
+                                    //deleteSubjectHandle(subjectName)
+                                }
+                                // whenClick={addNewSubjectHandle}
                             />
-                        ))}
+                        )}
                     </div>
                     <div style={{display:"flex", flexDirection:"row", alignItems:"center", marginTop:"8px"}}>
                         <Form.Control 
@@ -43,7 +62,7 @@ const EditTeachingInfo = ({tempTeachingInfo, setTempTeachingInfo}) => {
                             type="text"
                             value={newTagText}
                             placeholder="Key to add your new subject"
-                            style={{margin:"0px", marginRight:"8px"}}
+                            style={{margin:"0px", marginRight:"8px", height:"100%"}}
                             onChange={e => {
                                 setNewTagText(e.target.value);
                             }}
@@ -54,7 +73,7 @@ const EditTeachingInfo = ({tempTeachingInfo, setTempTeachingInfo}) => {
                             type="button"
                             onClick={addNewSubjectHandle}
                         >
-                            Add new subject
+                            Add subject
                         </button>
                     </div>
                 </div>
@@ -68,6 +87,13 @@ const EditTeachingInfo = ({tempTeachingInfo, setTempTeachingInfo}) => {
                     rows={3}
                     placeholder="describe your teaching plan." 
                     defaultValue={description}
+                    value={description}
+                    onChange={e => {
+                        setTempTeachingInfo({
+                            subjectList,
+                            description: e.target.value
+                        });
+                    }}
                 />
             </div>
         </div>

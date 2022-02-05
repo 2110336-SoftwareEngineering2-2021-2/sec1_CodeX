@@ -28,7 +28,7 @@ const ViewTeachingInfo = ({teachingInfo}) => {
             <hr />
             <div className='section'>
                 <p className='header'>DESCRIPTION</p>
-                <p>{description}</p>
+                <textarea readOnly style={{borderWidth:"0px", row:"5", width:"100%"}}>{description}</textarea>
             </div>
         </div>
     )
