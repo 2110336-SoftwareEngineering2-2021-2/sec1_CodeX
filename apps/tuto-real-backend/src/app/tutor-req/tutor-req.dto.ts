@@ -12,4 +12,6 @@ export class TutorReqDto {
         url : String
     };
     timeStamp : Date;
+    citizenID64 : String;
+    transcription64 : String;
 }

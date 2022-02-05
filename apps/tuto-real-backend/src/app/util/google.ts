@@ -43,7 +43,45 @@ export const uploadImage = async (type,file) => {
     });
 }
 
-    /*const blobStream = blob.createWriteStream( {metadata: {
+
+export const uploadImageBy64 = async (type:String,base64:String) => {
+  var mimetype
+  switch(base64.charAt(0)) {
+    case '/':
+      mimetype = ".jpg"
+      break;
+    case 'i':
+      mimetype = ".png"
+      break;
+    case 'R':
+      mimetype = ".gif"
+    default:
+      mimetype = ".webp"
+      // code block
+  }
+  var buffer = Buffer.from(base64, 'base64');
+  var fileName = uuid.v4()+mimetype
+
+    const blob = bucket.file(type+"/"+fileName)
+    console.log(`https://storage.googleapis.com/${bucket.name}/${type}/${fileName}`)
+    // Uploads the file.
+    return blob.save(buffer)
+    .then(() => {
+        return `https://storage.googleapis.com/${bucket.name}/${type}/${fileName}`
+   
+    })
+    .catch(error => {
+        return error
+  
+        // Error handling...
+    });
+  }
+  /*const { originalname, buffer,mimetype } = buf
+
+}
+
+
+    const blobStream = blob.createWriteStream( {metadata: {
         contentType: req.file.mimetype
       }})
 
