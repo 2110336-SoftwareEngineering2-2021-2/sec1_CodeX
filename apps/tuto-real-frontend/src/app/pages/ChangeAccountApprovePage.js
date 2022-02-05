@@ -1,16 +1,20 @@
 import React, { useState} from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import ModalTwoButton from '../components/modal/ModalTwoButton';
 
-const ChangeAccountApprovePage = (props) => {
+const ChangeAccountApprovePage = () => {
+    const location = useLocation()
+    const {name, citizenID, transcription} = location.state
+
+    // console.log(citizenID.citizenID.url, transcription)
 
     const back = '< Back'
     const [showModalApprove,setShowModalApprove] = useState(false)
     const [showModalReject,setShowModalReject] = useState(false)
 
-    const title = 'Veerin Jurek'
-    const imageCid = '../../assets/test_cid.jpg'
-    const imageTrans = '../../assets/test_trans.jpg'
+    const title = name.name
+    const imageCid = citizenID.citizenID.url
+    const imageTrans = transcription.transcription.url
 
     const handleApprove = () => {
         setShowModalApprove(true)
@@ -23,7 +27,7 @@ const ChangeAccountApprovePage = (props) => {
   return (
     <div style={{display: 'flex',flexDirection: 'column',alignItems: 'center' , width: '100%'}}>
         <div style={{display: 'flex', width: '45%'}}>
-          <Link className='backtoprofile shadow' to='/'>{back}</Link>
+          <Link className='backtoprofile shadow' to='/request-list'>{back}</Link>
         </div>
         
 
