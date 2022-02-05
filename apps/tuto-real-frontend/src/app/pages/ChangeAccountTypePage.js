@@ -24,12 +24,13 @@ const ChangeAccountTypePage = () => {
       transcription64: ''
     })
 
-
+    //change to base64 function
     const toBase64 = file => new Promise((resolve, reject) => {
-      const formData = new FormData()
-      formData.append("", file, file.name)
-      return formData
-  });
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = error => reject(error);
+    });
 
     const handleSelectCid = async(e) => {
       if(e.target.files.length){
@@ -38,11 +39,24 @@ const ChangeAccountTypePage = () => {
           raw : e.target.files[0]
         })
 
-        // getBase64_Cid(e.target.files[0])
-        setSendImage({
-          ...sendImage,
-          citizenID64: (await toBase64(e.target.files[0])).slice(23),
-        })
+        if((await toBase64(e.target.files[0])).substr(11,4) === 'jpeg'){
+
+          //jpeg case
+          setSendImage({
+            ...sendImage,
+            // citizenID64: (await toBase64(e.target.files[0])).slice(24)
+            citizenID64: (await toBase64(e.target.files[0])).substr(23)
+          })
+        }else{
+
+          //png case
+          setSendImage({
+            ...sendImage,
+            // citizenID64: (await toBase64(e.target.files[0])).slice(23)
+            citizenID64: (await toBase64(e.target.files[0])).substr(22)
+          })
+
+        }
       }
     }
 
@@ -53,11 +67,24 @@ const ChangeAccountTypePage = () => {
           raw : e.target.files[0]
         })
 
-        // getBase64_Trans(e.target.files[0])
-        setSendImage({
-          ...sendImage,
-          transcription64: (await toBase64(e.target.files[0])).slice(23),
-        })
+        if((await toBase64(e.target.files[0])).substr(11,4) === 'jpeg'){
+
+          //jpeg case
+          setSendImage({
+            ...sendImage,
+            // transcription64: (await toBase64(e.target.files[0])).slice(24)
+            transcription64: (await toBase64(e.target.files[0])).substr(23)
+          })
+        }else{
+
+          //png case
+          setSendImage({
+            ...sendImage,
+            // transcription64: (await toBase64(e.target.files[0])).slice(23)
+            transcription64: (await toBase64(e.target.files[0])).substr(22)
+          })
+        }
+  
       }
     }
 

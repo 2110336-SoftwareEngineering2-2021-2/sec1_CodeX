@@ -28,7 +28,7 @@ const ModalRequestButton = (props) => {
             <Modal.Footer style={{border: 'none', paddingTop: '0px', flexDirection: 'column'}}>
                 <Link style={{textDecoration: 'none', width: '45%'}} to='/profile'>
                     <button className='submit-open' style={{width: '100%', marginBottom: '0px', padding: '5px 5px'}} onClick={handleclose}>
-                        OK, back to home page
+                        OK, back to profile page
                     </button>
                 </Link>
             </Modal.Footer>
