@@ -8,11 +8,11 @@ import {
   sendEmailVerification,
   signInWithRedirect,
   sendPasswordResetEmail,
+  multiFactor,
   RecaptchaVerifier,
   GoogleAuthProvider,
   PhoneAuthProvider,
   PhoneMultiFactorGenerator,
-  multiFactor,
 } from 'firebase/auth';
 import { app, auth } from './firebase';
 
@@ -38,17 +38,18 @@ export function AuthProvider({ children }) {
   }, []);
 
   // const setUpRecaptcha = () => {
-  //   window.recaptchaVerifier = new RecaptchaVerifier(
-  //     'recaptcha',
-  //     {
-  //       size: 'normal',
-  //       callback: (res) => {
-  //         console.log('captcha solved!');
-  //         sendOTP();
-  //       },
+  // window.recaptchaVerifier = new RecaptchaVerifier(
+  //   'recaptcha'
+  //   {
+  //     size: 'normal',
+  //     callback: (res) => {
+  //       console.log('captcha solved!');
+  //       sendOTP();
   //     },
-  //     // auth
-  //   );
+  //     defaultCountry: 'TH',
+  //   }
+  //   auth
+  // );
   // };
 
   const signUp = async (email, password) => {
@@ -59,7 +60,8 @@ export function AuthProvider({ children }) {
         sendEmailVerification(userCredential.user);
       })
       .then(() => {
-        sendOTP('+10958612142');
+        alert('Email verification failed');
+        logOut();
       })
       .catch((err) => {
         alert(err.message);
@@ -90,7 +92,7 @@ export function AuthProvider({ children }) {
       .then((userCredential) => {
         if (!userCredential.user.emailVerified) {
           alert('Email verification failed');
-          signOut();
+          logOut();
         }
       })
       .catch((err) => {
