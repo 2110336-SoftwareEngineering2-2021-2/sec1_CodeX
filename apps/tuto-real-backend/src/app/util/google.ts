@@ -1,5 +1,5 @@
 import {Storage} from '@google-cloud/storage'
-import uuid from 'uuid';
+const uuid = require('uuid');
 const gc = require('./config');
 
 const BUCKETNAME = "vimsbin"
