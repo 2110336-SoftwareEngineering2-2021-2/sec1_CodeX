@@ -34,8 +34,10 @@ const EditBasicInfo = ({register, errors, basicInfo, tempProfile, setTempProfile
       {/* Picture */}
       <div className='section'>
         <p className='header'>PICTURE</p>
-        <img className='profile-image' src={tempProfile? URL.createObjectURL(tempProfile) : picture} alt="profile" />
-        <Form.Control onChange={(e) => changePicture(e)} type="file" accept=".png,.jpg,.jpeg" />
+        {/* <div style={{width:"100%", display:"flex",flexDirection:"column", justifyContent:"flex-start"}}> */}
+          <img className='profile-image' src={tempProfile? URL.createObjectURL(tempProfile) : picture} alt="profile" />
+          <Form.Control onChange={(e) => changePicture(e)} type="file" accept=".png,.jpg,.jpeg" style={{marginBottom:"0px"}} />
+        {/* </div> */}
       </div>
       <hr />
       {/* First Name */}
@@ -65,7 +67,7 @@ const EditBasicInfo = ({register, errors, basicInfo, tempProfile, setTempProfile
             <Col>
               <Form.Select
                 {...register("date")}
-                defaultValue={birthDate.getDate()}
+                defaultValue={birthDate.day}
               >
                 {birthDayChoice.map(date => (<option key={date} value={date}>{date}</option>))}
               </Form.Select>
@@ -74,7 +76,7 @@ const EditBasicInfo = ({register, errors, basicInfo, tempProfile, setTempProfile
             <Col>
               <Form.Select 
                 {...register("month")}
-                defaultValue={birthDate.getMonth()}
+                defaultValue={birthDate.month-1}
                 >
                 {birthMonthChoice.map((month, idx) => (<option key={month} value={idx}>{month}</option>))}
               </Form.Select>
@@ -83,7 +85,7 @@ const EditBasicInfo = ({register, errors, basicInfo, tempProfile, setTempProfile
             <Col>
               <Form.Select 
                 {...register("year")}
-                defaultValue={birthDate.getFullYear()}
+                defaultValue={birthDate.year}
               >
                 {birthYearChoice.map(year => (<option key={year} value={year}>{year}</option>))}
               </Form.Select>

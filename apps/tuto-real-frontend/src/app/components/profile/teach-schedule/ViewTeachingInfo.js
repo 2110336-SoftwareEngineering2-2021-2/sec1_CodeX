@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Badge } from "react-bootstrap";
-import COLORS from "../../../constants/color";
+// import { Badge } from "react-bootstrap";
+// import COLORS from "../../../constants/color";
 import "../profile.css"
 import Tag from "./Tag";
 
@@ -28,7 +28,7 @@ const ViewTeachingInfo = ({teachingInfo}) => {
             <hr />
             <div className='section'>
                 <p className='header'>DESCRIPTION</p>
-                <p>{description}</p>
+                <textarea readOnly value={description} style={{borderWidth:"0px", row:"5", width:"100%"}} />
             </div>
         </div>
     )

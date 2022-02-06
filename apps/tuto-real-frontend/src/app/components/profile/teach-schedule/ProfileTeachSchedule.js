@@ -3,54 +3,95 @@ import { Form } from "react-bootstrap";
 import NormalButton from "../../ui/NormalButton";
 import EditTeachingInfo from "./EditTeachingInfo";
 import ViewTeachingInfo from "./ViewTeachingInfo";
+
+
 import "../profile.css"
 import COLORS from "../../../constants/color";
+import { client } from "../../../axiosConfig";
 
 
 const ProfileTeachSchedule = ({viewType}) => {
 
     const [isEditing,setEditing] = useState(false);
     const [teachingInfo, setTeachingInfo] = useState({
-        subjectList: ["SubjectA", "SubjectB", "SubjectC", "SubjectD", "SubjectE", "SubjectF"],
-        description: "Let's fun with math to the end of the life \n 123",
+        subjectList: [],
+        description: "description",
     })
     const [tempTeachingInfo, setTempTeachingInfo] = useState({
-        subjectList: ["SubjectA", "SubjectB", "SubjectC", "SubjectD", "SubjectE", "SubjectF"],
-        description: "Let's fun with math to the end of the life \n 123",
+        subjectList: [],
+        description: "description",
     })
 
-    const fetchData = useCallback(() => {
-        client({
+    const fetchData = useCallback(async () => {
+        await client({
             method: "GET",
-            url: "/.....",
-        }).then(({data}) => {
-            console.log(data)
-            // setTempTeachingInfo({
-            //     subjectList: data.
-            //     description: data.
-            // })
-            // setTeachingInfo({
-            //     subjectList: data.
-            //     description: data.
-            // })
+            url: "/user/nifon@gmail.com"
+        })
+        .then(({data}) => {
+            console.log(data[0])
+            setTempTeachingInfo({
+                subjectList: data[0].subjects,
+                description: data[0].description
+            })
+            setTeachingInfo({
+                subjectList: data[0].subjects,
+                description: data[0].description
+            })
         }).catch(({response}) => {
             console.log(response)
         })
     },[])
 
+    // const fetchData = useCallback(async () => {
+    //     await client({
+    //       method: "GET",
+    //       // url: `/user/${contactInfo.email}`
+    //       url: "/user/nifon@gmail.com"
+    //     })
+    //     .then(({data}) => {
+    //       console.log(data[0])
+    //       // console.log(Date(data[0].birthDate))
+    //       // console.log(new Date())
+    //     //   setBasicInfo({
+    //     //     picture: "",//data[0].profileImg.fileName,
+    //     //     firstName: data[0].firstName,
+    //     //     lastName: data[0].lastName,
+    //     //     birthDate: {
+    //     //       day: parseInt(data[0].birthDate.substr(8,2)),
+    //     //       month: parseInt(data[0].birthDate.substr(5,2)),
+    //     //       year: parseInt(data[0].birthDate.substr(0,4))
+    //     //     },
+    //     //     citizenId: data[0].citizenID
+    //     //   })
+    //     //   setContactInfo({
+    //     //     email: data[0].email,
+    //     //     telephone: data[0].phoneNumber,
+    //     //     address: data[0].address
+    //     //   })
+    //     //   setAdvance({
+    //     //     userType: data[0].role,
+    //     //     password: ""
+    //     //   })
+    //     })
+    //     .catch(({response}) => {
+    //       console.log(response)
+    //     })
+    //   },[])
+
+
     useEffect(() => {
-        fetchData
+        fetchData()
     }, [fetchData])
     
-    useEffect(() => {
-        console.log("This is real: ")
-        console.log(teachingInfo.subjectList)
-    }, [teachingInfo])
+    // useEffect(() => {
+    //     console.log("This is real: ")
+    //     console.log(teachingInfo.subjectList)
+    // }, [teachingInfo])
     
-    useEffect(() => {
-        console.log("This is temp: ")
-        console.log(tempTeachingInfo.subjectList)
-    }, [tempTeachingInfo])
+    // useEffect(() => {
+    //     console.log("This is temp: ")
+    //     console.log(tempTeachingInfo.subjectList)
+    // }, [tempTeachingInfo])
 
     const sendData = () => {
         setTeachingInfo(tempTeachingInfo)
