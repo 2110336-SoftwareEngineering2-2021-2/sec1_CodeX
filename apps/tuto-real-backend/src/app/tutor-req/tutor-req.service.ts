@@ -68,6 +68,19 @@ export class TutorReqService {
     }
     async updateStatus(mail: string, dto: updateStatusDto){
         if(dto.status == 'Reject') {
+            // const cit_img = await this.reqModel.find({email: mail},{"citizenID.fileName": 1, _id:0})
+            // const tran_img = await this.reqModel.find({email: mail},{"transcription.fileName": 1, _id:0})
+            // const bucketName = 'Evidence'
+
+            // const {Storage} = require('@google-cloud/storage');
+            // const storage = new Storage();
+
+            // // await storage.bucket(bucketName).file(cit_img).delete();
+            // // await storage.bucket(bucketName).file(tran_img).delete();
+
+            // console.log(`gs://${bucketName}/${cit_img} deleted`);
+            // console.log(`gs://${bucketName}/${tran_img} deleted`);
+            
             await this.reqModel.deleteOne({email: mail})
         } 
         else if(dto.status == 'Approved') {
