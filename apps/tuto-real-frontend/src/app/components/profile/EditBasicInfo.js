@@ -23,7 +23,7 @@ const EditBasicInfo = ({register, errors, basicInfo, tempProfile, setTempProfile
 
   const changePicture = (e) => {
     //console.log(e.target?.files[0])
-    setTempProfile(e.target?.files[0])
+    setTempProfile(URL.createObjectURL(e.target?.files[0]))
   }
 
   return (
@@ -35,7 +35,8 @@ const EditBasicInfo = ({register, errors, basicInfo, tempProfile, setTempProfile
       <div className='section'>
         <p className='header'>PICTURE</p>
         {/* <div style={{width:"100%", display:"flex",flexDirection:"column", justifyContent:"flex-start"}}> */}
-          <img className='profile-image' src={tempProfile? URL.createObjectURL(tempProfile) : picture} alt="profile" />
+          <img className='profile-image' src={tempProfile} alt="profile" />
+          {/* <img className='profile-image' src={tempProfile? URL.createObjectURL(tempProfile) : picture} alt="profile" /> */}
           <Form.Control onChange={(e) => changePicture(e)} type="file" accept=".png,.jpg,.jpeg" style={{marginBottom:"0px"}} />
         {/* </div> */}
       </div>
@@ -67,7 +68,7 @@ const EditBasicInfo = ({register, errors, basicInfo, tempProfile, setTempProfile
             <Col>
               <Form.Select
                 {...register("date")}
-                defaultValue={birthDate.day}
+                defaultValue={birthDate.date}
               >
                 {birthDayChoice.map(date => (<option key={date} value={date}>{date}</option>))}
               </Form.Select>

@@ -21,7 +21,7 @@ const ProfileInfo = () => {
     firstName: "",
     lastName: "",
     birthDate: {
-      day: 1,
+      date: 1,
       month: 1,
       year: 2020
     },
@@ -36,7 +36,7 @@ const ProfileInfo = () => {
     userType: 'User',
     password: '',
   });
-  const [tempProfile, setTempProfile] = useState(); // use for preview new upload profile image
+  const [tempProfile, setTempProfile] = useState(""); // use for preview new upload profile image
 
   const {
     register,
@@ -53,14 +53,16 @@ const ProfileInfo = () => {
     })
     .then(({data}) => {
       console.log(data[0])
+      console.log("fetch profile image @ ",data[0].profileImg.url)
       // console.log(Date(data[0].birthDate))
       // console.log(new Date())
+      setTempProfile(data[0].profileImg.url)
       setBasicInfo({
-        picture: "",//data[0].profileImg.fileName,
+        picture: data[0].profileImg.url,
         firstName: data[0].firstName,
         lastName: data[0].lastName,
         birthDate: {
-          day: parseInt(data[0].birthDate.substr(8,2)),
+          date: parseInt(data[0].birthDate.substr(8,2)),
           month: parseInt(data[0].birthDate.substr(5,2)),
           year: parseInt(data[0].birthDate.substr(0,4))
         },
@@ -91,7 +93,14 @@ const ProfileInfo = () => {
     // formData.append("Profile Picture", tempProfile, tempProfile?.name)
     await client({
       method: "PATCH",
-      url: "/user/nifon@gmail.com"
+      url: "/user/nifon@gmail.com",
+      body: {
+        // picture: 
+        firstName: basicInfo.firstName,
+        lastName: basicInfo.lastName,
+        //birthDate:
+        address: basicInfo.address,
+      }
     })
     .then(({data}) => {
       console.log(data)
@@ -106,7 +115,8 @@ const ProfileInfo = () => {
     console.log(tempProfile);
     setBasicInfo({
       ...basicInfo,
-      picture: tempProfile ?? basicInfo.picture,
+      picture: tempProfile,
+      // picture: tempProfile ?? basicInfo.picture,
       firstName: data.firstName,
       lastName: data.lastName,
       birthDate: new Date(data.year, data.month, data.date),
@@ -116,7 +126,7 @@ const ProfileInfo = () => {
       telephone: data.telephone,
       address: data.address,
     });
-    // sendData()
+    //sendData();
     setEditing(false);
   };
 
@@ -124,6 +134,7 @@ const ProfileInfo = () => {
     reset();
     setTempProfile(basicInfo.picture);
     setEditing(false);
+    console.log(translateDateForSendToBack(1,1,2022));
   };
 
   const renderViewForm = () => {
@@ -134,6 +145,11 @@ const ProfileInfo = () => {
       </>
     );
   };
+
+  function translateDateForSendToBack(date, month, year) {
+    var temp = (year % 100).toString();
+    return temp;
+  }
 
   const renderEditForm = () => {
     return (

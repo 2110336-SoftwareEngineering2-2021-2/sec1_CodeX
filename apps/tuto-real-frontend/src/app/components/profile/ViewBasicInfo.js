@@ -18,7 +18,7 @@ const ViewBasicInfo = ({viewType, basicInfo}) => {
             'October', 
             'November', 
             'December']
-    return monthName[date.month-1].toString() + " " + date.day.toString() + ", " + date.year.toString()
+    return monthName[date.month-1].toString() + " " + date.date.toString() + ", " + date.year.toString()
   }
 
   function translateCitizenIdToShow(citizenId) {
@@ -39,7 +39,9 @@ const ViewBasicInfo = ({viewType, basicInfo}) => {
       <hr />
       <div className='section'>
         <p className='header'>PICTURE</p>
-        <img className='profile-image' src={picture? URL.createObjectURL(picture): undefined} alt="profile" />
+        {/* <img className='profile-image' src={picture? URL.createObjectURL(picture): undefined} alt="profile" /> */}
+        {/* <img className='profile-image' src={picture} alt="profile" /> */}
+        <img className='profile-image' src={picture} alt="profile" />
       </div>
       <hr />
       <div className='section'>
