@@ -18,20 +18,20 @@ const ProfileInfo = () => {
   const [isEditing, setEditing] = useState(false);
   const [basicInfo, setBasicInfo] = useState({
     picture: undefined,
-    firstName: "Veerin",
-    lastName: "Phana-ngam",
+    firstName: "",
+    lastName: "",
     birthDate: {
       day: 1,
       month: 1,
       year: 2020
     },
-    citizenId: "1-2345-67891-11-1"
+    citizenId: ""
   })
   const [contactInfo, setContactInfo] = useState({
-    email: 'sorasit@gmail.com',
-    telephone: '',
-    address: '',
-  });
+    email: "",
+    telephone: "",
+    address: ""
+  })
   const [advance, setAdvance] = useState({
     userType: 'User',
     password: '',
@@ -49,12 +49,12 @@ const ProfileInfo = () => {
     await client({
       method: 'GET',
       // url: `/user/${contactInfo.email}`
-      url: '/user/sorasit@gmail.com',
+      url: "/user/nifon@gmail.com"
     })
     .then(({data}) => {
       console.log(data[0])
-      console.log(Date(data[0].birthDate))
-      console.log(new Date())
+      // console.log(Date(data[0].birthDate))
+      // console.log(new Date())
       setBasicInfo({
         picture: "",//data[0].profileImg.fileName,
         firstName: data[0].firstName,

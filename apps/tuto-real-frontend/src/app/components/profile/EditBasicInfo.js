@@ -34,8 +34,10 @@ const EditBasicInfo = ({register, errors, basicInfo, tempProfile, setTempProfile
       {/* Picture */}
       <div className='section'>
         <p className='header'>PICTURE</p>
-        <img className='profile-image' src={tempProfile? URL.createObjectURL(tempProfile) : picture} alt="profile" />
-        <Form.Control onChange={(e) => changePicture(e)} type="file" accept=".png,.jpg,.jpeg" />
+        {/* <div style={{width:"100%", display:"flex",flexDirection:"column", justifyContent:"flex-start"}}> */}
+          <img className='profile-image' src={tempProfile? URL.createObjectURL(tempProfile) : picture} alt="profile" />
+          <Form.Control onChange={(e) => changePicture(e)} type="file" accept=".png,.jpg,.jpeg" style={{marginBottom:"0px"}} />
+        {/* </div> */}
       </div>
       <hr />
       {/* First Name */}

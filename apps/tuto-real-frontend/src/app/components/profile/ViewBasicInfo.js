@@ -22,11 +22,13 @@ const ViewBasicInfo = ({viewType, basicInfo}) => {
   }
 
   function translateCitizenIdToShow(citizenId) {
-    let tmp = citizenId;
-    if (citizenId.lenght < 13) {
-      let temp = citizenId + 'xxxxxxxxxxxxxxxx';
-      return temp[0] + "-" + temp.substr(1,4) + "-" + temp.substr(5,5) + "-" + temp.substr(10,2) + "-" + temp[12]
-    } 
+    const tmp = citizenId;
+    // console.log("tmp lenght:", tmp.concat("xxxxxxxxxxxxxxxx").lenght)
+    // if (tmp.lenght < 13) {
+    //   let temp = citizenId.concat("xxxxxxxxxxxxxxxx");
+    //   return temp
+    //   // return temp[0] + "-" + temp.substr(1,4) + "-" + temp.substr(5,5) + "-" + temp.substr(10,2) + "-" + temp[12]
+    // } else {}
     return tmp[0] + "-" + tmp.substr(1,4) + "-" + tmp.substr(5,5) + "-" + tmp.substr(10,2) + "-" + tmp[12]
   }
 
