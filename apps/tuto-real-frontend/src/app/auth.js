@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
-// import { auth } from './firebase';
+import { app, auth } from './firebase';
+import { client } from './axiosConfig';
 import {
   onAuthStateChanged,
   createUserWithEmailAndPassword,
@@ -14,7 +15,6 @@ import {
   PhoneAuthProvider,
   PhoneMultiFactorGenerator,
 } from 'firebase/auth';
-import { app, auth } from './firebase';
 
 const AuthContext = React.createContext();
 
@@ -24,7 +24,6 @@ export function useAuth() {
 
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -52,12 +51,25 @@ export function AuthProvider({ children }) {
   // );
   // };
 
-  const signUp = async (email, password) => {
-    console.log('Sign up');
-    setLoading(true);
-    await createUserWithEmailAndPassword(auth, email, password)
+  const signUp = async (data) => {
+    await createUserWithEmailAndPassword(auth, data.email, data.password)
       .then((userCredential) => {
         sendEmailVerification(userCredential.user);
+      })
+      .then(() => {
+        client({
+          method: 'POST',
+          url: '/user/create',
+          data: {
+            firstName: data.firstName,
+            lastName: data.lastName,
+            phoneNumber: data.phoneNumber,
+            email: data.email,
+            birthDate: data.birthDate,
+            address: data.address,
+            citizenID: data.citizenID,
+          },
+        });
       })
       .then(() => {
         alert('Email verification failed');
@@ -67,11 +79,9 @@ export function AuthProvider({ children }) {
         alert(err.message);
         console.log(err.message);
       });
-    setLoading(false);
   };
 
   const signInWithGoogle = async () => {
-    setLoading(true);
     await signInWithRedirect(auth, new GoogleAuthProvider())
       .then((result) => {
         const credential = GoogleAuthProvider.credentialFromResult(result);
@@ -82,37 +92,42 @@ export function AuthProvider({ children }) {
         alert(err.message);
         console.log(err.message);
       });
-    setLoading(false);
   };
 
   const logIn = async (email, password) => {
-    console.log('Sign in');
-    setLoading(true);
-    await signInWithEmailAndPassword(auth, email, password)
+    return await signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         if (!userCredential.user.emailVerified) {
           alert('Email verification failed');
           logOut();
         }
       })
+      .then(() => {
+        return client({
+          method: 'GET',
+          url: `/user/${email}`,
+        });
+      })
+      .then((data) => {
+        const res = data.data[0];
+        return res;
+        // return {
+        //   firstName: res.firstName,
+        //   lastName: res.lastName,
+        //   role: res.role,
+        // };
+      })
       .catch((err) => {
         alert(err.message);
         console.log(err.message);
       });
-    setLoading(false);
   };
 
-  const logOut = async () => {
-    console.log('Sign out');
-    setLoading(true);
-    await signOut(auth);
-    setLoading(false);
+  const logOut = () => {
+    signOut(auth);
   };
 
   const updatePassword = (password, newPassword) => {
-    if (!currentUser) return;
-    console.log('Update password');
-    setLoading(true);
     signInWithEmailAndPassword(auth, currentUser.email, password)
       .then((userCredential) => {
         updatePassword(userCredential.user, newPassword);
@@ -122,7 +137,6 @@ export function AuthProvider({ children }) {
         alert(err.message);
         console.log(err.message);
       });
-    setLoading(false);
   };
 
   const sendOTP = async (phoneNumber) => {
@@ -157,10 +171,7 @@ export function AuthProvider({ children }) {
   };
 
   const resetPassword = async (email) => {
-    console.log('Reset password');
-    setLoading(true);
     await sendPasswordResetEmail(auth, email);
-    setLoading(false);
   };
 
   const value = {
@@ -175,9 +186,5 @@ export function AuthProvider({ children }) {
     resetPassword,
   };
 
-  return (
-    <AuthContext.Provider value={value}>
-      {!loading && children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
