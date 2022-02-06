@@ -1,11 +1,10 @@
-import { Body, Controller, Get, Post, UploadedFile, UploadedFiles, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, UploadedFile, UploadedFiles, UseInterceptors } from '@nestjs/common';
 import { FileFieldsInterceptor, FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { uploadImage } from '../util/google';
 //import { ExpressAdapter, FileInterceptor  } from '@nestjs/platform-express';
 import { TutorReqDto } from './tutor-req.dto';
 import { TutorReqService } from './tutor-req.service';
-
-
+import { updateStatusDto } from './updateStatus.dto';
 
 
 @Controller('tutorReq')
@@ -32,5 +31,11 @@ export class TutorReqController {
     @Get()
     findAll(){
         return this.service.findAll();
+    }
+
+    @Patch(":email")
+    update(@Param('email') email: string,
+    @Body() dto: updateStatusDto) {
+        return this.service.updateStatus(email, dto);
     }
 }
