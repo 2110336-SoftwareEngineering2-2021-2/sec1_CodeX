@@ -1,0 +1,23 @@
+
+
+
+
+
+
+
+
+
+.regispage-right-side {
+    background-color:white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 50px;
+    width: 440px;
+}
+
+.signin-button-regis {
+    margin-top: 3vh;
+    font-family: Roboto;
+    color: var(--third);
+}
