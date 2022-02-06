@@ -14,12 +14,12 @@ const ProfileTeachSchedule = ({viewType}) => {
 
     const [isEditing,setEditing] = useState(false);
     const [teachingInfo, setTeachingInfo] = useState({
-        subjectList: ["SubjectA", "SubjectB", "SubjectC", "SubjectD", "SubjectE", "SubjectF"],
-        description: "Let's fun with math to the end of the life \n 123",
+        subjectList: [],
+        description: "description",
     })
     const [tempTeachingInfo, setTempTeachingInfo] = useState({
-        subjectList: ["SubjectA", "SubjectB", "SubjectC", "SubjectD", "SubjectE", "SubjectF"],
-        description: "Let's fun with math to the end of the life \n 123",
+        subjectList: [],
+        description: "description",
     })
 
     const fetchData = useCallback(async () => {

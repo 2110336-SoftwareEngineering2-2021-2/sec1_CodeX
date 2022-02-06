@@ -89,17 +89,17 @@ const ProfileInfo = () => {
     console.log('sending data...');
     // const formData = new FormData()
     // formData.append("Profile Picture", tempProfile, tempProfile?.name)
-    // await client({
-    //   method: "POST",
-    //   url: "/tutor/:uid"
-    // })
-    // .then(({data}) => {
-    //   console.log(data)
-    // })
-    // .catch((res) => {
-    //   console.log(res)
-    // })
-  };
+    await client({
+      method: "PATCH",
+      url: "/user/nifon@gmail.com"
+    })
+    .then(({data}) => {
+      console.log(data)
+    })
+    .catch((res) => {
+      console.log(res)
+    })
+  }
 
   const onSubmit = (data) => {
     console.log(data);

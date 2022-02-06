@@ -6,7 +6,7 @@ import ProfileMenuBar from '../components/profile/ProfileMenuBar'
 import ProfileTeachSchedule from '../components/profile/teach-schedule/ProfileTeachSchedule'
 
 const ProfilePage = () => {
-  const [selecting, setSelecting] = useState("Teach") // "Info" | "Learn" | "Teach" | "Review"
+  const [selecting, setSelecting] = useState("Info") // "Info" | "Learn" | "Teach" | "Review"
   const [viewType, setViewType] = useState("TutorSelf") // "TutorSelf" | "StudentSelf" | "TutorOther"
 
   const fetchData = useCallback(() => {
