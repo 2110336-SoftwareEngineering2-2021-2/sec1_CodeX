@@ -1,12 +1,10 @@
 import {Storage} from '@google-cloud/storage'
-import * as fs from 'fs';
-import { format } from 'util';
-const uuid = require('uuid');
-const gc = require('./config')
+import uuid from 'uuid';
+const gc = require('./config');
 
 const BUCKETNAME = "vimsbin"
 
-const bucket = gc.bucket('code_x') 
+const bucket = gc.bucket('codex_img') 
 
 class GoogleStorage {
    
@@ -25,7 +23,7 @@ class GoogleStorage {
 
 export const uploadImage = async (type,file) => {
     const { originalname, buffer,mimetype } = file
-    //type : 'ProfileImg , Evidence'
+    //type : 'Profile , Evidence'
     var fileName = uuid.v4()+"."+mimetype.split("/")[1]
 
     const blob = bucket.file(type+"/"+fileName)
