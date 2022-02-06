@@ -8,16 +8,13 @@ import { User } from './user.interface';
 const mongoose = require('mongoose');
 @Injectable()
 export class UserService {
+  constructor(@InjectModel('User') private userModel: Model<User>) {}
 
-    constructor(@InjectModel('User') private userModel: Model<User>){}
+  GetProfileByMail(mail: String) {
+    return this.userModel.find({ email: mail }).exec();
+  }
 
-    GetProfileByMail(mail: String)  {
-        return this.userModel.find({email: mail}).exec()
-  
-    }
-
-    async Create(dto : UserDto){
-
-        return this.userModel.create(dto);
-    }
+  async Create(dto: UserDto) {
+    return this.userModel.create(dto);
+  }
 }

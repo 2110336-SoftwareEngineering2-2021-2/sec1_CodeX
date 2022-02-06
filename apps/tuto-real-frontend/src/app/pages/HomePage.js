@@ -12,6 +12,17 @@ const HomePage = () => {
     verifyOTP,
     resetPassword,
   } = useAuth();
+
+  const data = {
+    firstName: 'A',
+    lastName: 'B',
+    phoneNumber: '0123456789',
+    email: 'venel94370@mannawo.com',
+    password: '000000',
+    birthDate: '01/01/2001',
+    address: 'TH',
+    citizenID: '123456789',
+  };
   const email = 'venel94370@mannawo.com';
   const password = '000000';
   const phoneNumber = '+10958612142';
@@ -25,13 +36,13 @@ const HomePage = () => {
           <button onClick={() => updatePassword(password, '000000')}>
             Update Password
           </button>
-          <button onClick={() => sendOTP(phoneNumber)}>Send OTP</button>
-          <button onClick={() => verifyOTP(code)}>Verify OTP</button>
+          {/* <button onClick={() => sendOTP(phoneNumber)}>Send OTP</button>
+          <button onClick={() => verifyOTP(code)}>Verify OTP</button> */}
           <button onClick={() => logOut()}>Sign Out</button>
         </span>
       ) : (
         <span>
-          <button onClick={() => signUp(email, password)}>Sign Up</button>
+          <button onClick={() => signUp(data)}>Sign Up</button>
           <button onClick={() => signInWithGoogle()}>
             Sign In with Google
           </button>
@@ -52,3 +63,19 @@ const HomePage = () => {
 };
 
 export default HomePage;
+
+// .then(() => {
+//   client({
+//     method: 'POST',
+//     url: '/user/create',
+//     body: {
+//       firstName: data.firstName,
+//       lastName: data.lastName,
+//       phoneNumber: data.phoneNumber,
+//       email: data.email,
+//       birthDate: data.birthDate,
+//       address: data.address,
+//       citizenID: data.citizenID,
+//     },
+//   });
+// })

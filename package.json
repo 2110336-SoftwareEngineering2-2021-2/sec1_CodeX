@@ -20,6 +20,7 @@
     "axios": "^0.25.0",
     "class-transformer": "^0.5.1",
     "core-js": "^3.6.5",
+    "dotenv": "^16.0.0",
     "firebase": "^9.6.6",
     "firebase-admin": "^10.0.2",
     "mongoose": "^6.1.8",
