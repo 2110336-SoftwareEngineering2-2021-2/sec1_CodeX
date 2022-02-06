@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
   UploadedFile,
   UseInterceptors,
@@ -23,13 +24,7 @@ export class UserController {
     return this.service.GetProfileByMail(mail);
   }
 
-   
-
-    @Get(':email')
-    GetProfileByMail(@Param('email') mail : String) {
-
-        return this.service.GetProfileByMail(mail); 
-    }
+  
 
     @Post('/create')
     Create(@Body() dto:UserDto) {
