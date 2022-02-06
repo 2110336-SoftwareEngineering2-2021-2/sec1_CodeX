@@ -77,9 +77,9 @@ const EditBasicInfo = ({register, errors, basicInfo, tempProfile, setTempProfile
             <Col>
               <Form.Select 
                 {...register("month")}
-                defaultValue={birthDate.month-1}
+                defaultValue={birthDate.month}
                 >
-                {birthMonthChoice.map((month, idx) => (<option key={month} value={idx}>{month}</option>))}
+                {birthMonthChoice.map((month, idx) => (<option key={month} value={idx + 1}>{month}</option>))}
               </Form.Select>
             </Col>
             {/* Year */}

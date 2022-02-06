@@ -87,19 +87,20 @@ const ProfileInfo = () => {
     fetchData();
   }, [fetchData]);
 
-  const sendData = async () => {
+  const sendData = async (data) => {
     console.log('sending data...');
     // const formData = new FormData()
     // formData.append("Profile Picture", tempProfile, tempProfile?.name)
     await client({
       method: "PATCH",
       url: "/user/nifon@gmail.com",
-      body: {
+      data: {
         // picture: 
-        firstName: basicInfo.firstName,
-        lastName: basicInfo.lastName,
-        //birthDate:
-        address: basicInfo.address,
+        firstName: data.firstName,
+        // firstName: basicInfo.firstName,
+        lastName: data.lastName,
+        birthDate: translateDateForSendToBack(data.date, data.month, data.year),
+        address: data.address,
       }
     })
     .then(({data}) => {
@@ -119,14 +120,19 @@ const ProfileInfo = () => {
       // picture: tempProfile ?? basicInfo.picture,
       firstName: data.firstName,
       lastName: data.lastName,
-      birthDate: new Date(data.year, data.month, data.date),
+      // birthDate: new Date(data.year, data.month, data.date),
+      birthDate: {
+        date: data.date,
+        month: data.month,
+        year: data.year
+      }
     });
     setContactInfo({
       ...contactInfo,
       telephone: data.telephone,
       address: data.address,
     });
-    //sendData();
+    sendData(data);
     setEditing(false);
   };
 
@@ -134,7 +140,7 @@ const ProfileInfo = () => {
     reset();
     setTempProfile(basicInfo.picture);
     setEditing(false);
-    console.log(translateDateForSendToBack(1,1,2022));
+    //console.log(translateDateForSendToBack(1,1,2022));
   };
 
   const renderViewForm = () => {
@@ -147,7 +153,20 @@ const ProfileInfo = () => {
   };
 
   function translateDateForSendToBack(date, month, year) {
-    var temp = (year % 100).toString();
+    var temp = "";
+
+    if (month < 10) {
+      temp += "0";
+    }
+    temp += month.toString() + "/";
+
+    if (date < 10) {
+      temp += "0";
+    }
+    temp += date.toString() + "/";
+
+    temp += (year % 100).toString();
+
     return temp;
   }
 
