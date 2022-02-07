@@ -1,6 +1,8 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import COLORS from '../../constants/color';
 
-const AdvanceInfo = ({ viewType, advance }) => {
+const AdvanceInfo = ({ viewType, advance, targetEmail}) => {
   const { userType, password } = advance;
 
   return (
@@ -9,12 +11,20 @@ const AdvanceInfo = ({ viewType, advance }) => {
       <hr />
       <div className="section">
         <p className="header">USER TYPE</p>
-        <p>{userType}</p>
+        <p className="header">{userType}</p>
+        <Link 
+          style={{textDecoration:'none', color: COLORS.third}} 
+          to={`/changeacctype`}
+          state={{
+            ownerRequestEmail : targetEmail
+          }}
+        >[ upgrade to tutor]</Link>
       </div>
       <hr />
       <div className="section">
         <p className="header">PASSWORD</p>
         <p>{password}</p>
+        <input type="password" readOnly defaultValue="12345678" style={{margin:"0px"}}></input>
       </div>
     </div>
   );

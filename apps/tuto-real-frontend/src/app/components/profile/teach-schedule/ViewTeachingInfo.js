@@ -8,6 +8,7 @@ import Tag from "./Tag";
 const ViewTeachingInfo = ({teachingInfo}) => {
     const [tagColor, setTagColor] = useState(["red", "blue", "green", "purple", "orange", "gray"]);
     const {subjectList,description} = teachingInfo;
+    const doNothing = () => {}
     return (
         <div className='info-card shadow'>
             <p className='title'>Teaching information</p>
@@ -28,7 +29,7 @@ const ViewTeachingInfo = ({teachingInfo}) => {
             <hr />
             <div className='section'>
                 <p className='header'>DESCRIPTION</p>
-                <textarea readOnly value={description} style={{borderWidth:"0px", row:"5", width:"100%"}} />
+                <textarea readOnly disabled value={description} onClick={() => doNothing()} style={{borderWidth:"0px", row:"5", width:"100%", backgroundColor:"white"}} />
             </div>
         </div>
     )

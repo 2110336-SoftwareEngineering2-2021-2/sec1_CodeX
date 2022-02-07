@@ -209,7 +209,7 @@ const ProfileInfo = ({targetEmail, viewType}) => {
       {isEditing ? renderEditForm() : renderViewForm()}
       {viewType !== 'TutorOther' ? (
         <>
-          <AdvanceInfo advance={advance} />
+          <AdvanceInfo advance={advance} targetEmail={targetEmail}/>
           {isEditing ? (
             <div
               style={{ width: '45%', textAlign: 'right', marginBottom: '5%' }}

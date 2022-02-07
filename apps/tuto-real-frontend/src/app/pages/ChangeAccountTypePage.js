@@ -1,5 +1,5 @@
 import React, { useState} from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { client } from '../axiosConfig';
 import ModalRequestButton from '../components/changeacc/ModalRequestButton';
 import UploadButton from '../components/changeacc/UploadButton';
@@ -8,6 +8,9 @@ import './ChangeAccountTypePage.css'
 const ChangeAccountTypePage = () => {
 
     const back = '< Back'
+
+    const location = useLocation()
+    const {ownerRequestEmail} = location.state
 
     //use for display
     const [citizenID, setCitizenID] = useState({preview: "", raw : ""})
@@ -113,7 +116,16 @@ const ChangeAccountTypePage = () => {
 
         {/* back button */}
         <div style={{display: 'flex', width: '45%'}}>
-          <Link className='backtoprofile shadow' to='/profile'>{back}</Link>
+          <Link 
+            className='backtoprofile shadow' 
+            to='/profile'
+            state={{
+              // targetEmail: "nifon@gmail.com"
+              targetEmail: ownerRequestEmail
+            }}
+          >
+            {back}
+          </Link>
         </div>
         
         <div className='info-card shadow' >

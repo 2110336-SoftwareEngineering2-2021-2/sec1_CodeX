@@ -7,6 +7,7 @@ import ProfileTeachSchedule from '../components/profile/teach-schedule/ProfileTe
 import { getCookieData } from '../components/util/cookieHandler'
 
 import { useAuth } from '../auth'
+import { useLocation } from 'react-router-dom'
 
 const ProfilePage = () => {
   const [selecting, setSelecting] = useState("Info") // "Info" | "Learn" | "Teach" | "Review"
@@ -16,15 +17,22 @@ const ProfilePage = () => {
     type: "Tutor"
   })
 
-  const [targetEmail] = useState("nifon@gmail.com")
+  const location = useLocation()
+  const {targetEmail} = location.state ?? {targetEmail:"nifon@gmail.com"}
+  // const {targetEmail} = location.state
+
+  // const [dummyTargetEmail] = useState("nifon@gmail.com")
+
 
   const fetchData = useCallback(async () => {
     await client({
       method: "GET",
       url: `/user/${targetEmail}`
+      // url: `/user/${targetEmail ?? dummyTargetEmail}`
     })
     .then(({data}) => {
       console.log(data)
+      console.log("targetEmail: ",targetEmail)
       setViewType(calculateViewType(data[0].role))
     })
     .catch((res) => {
@@ -34,6 +42,7 @@ const ProfilePage = () => {
 
   function calculateViewType(targetProfileUserType) {
     if (targetEmail === currentUser.email) {
+    // if ((targetEmail ?? dummyTargetEmail) === currentUser.email) {
       if (targetProfileUserType === "Tutor"){
         return "TutorSelf"
       }
@@ -55,12 +64,14 @@ const ProfilePage = () => {
       case "Info": return (
         <ProfileInfo 
           targetEmail={targetEmail} 
+          // targetEmail={targetEmail ?? dummyTargetEmail} 
           viewType={viewType}
         />)
       case "Learn": return null // Replace null with Student Schedule page...
       case "Teach": return (
         <ProfileTeachSchedule 
           targetEmail={targetEmail} 
+          // targetEmail={targetEmail ?? dummyTargetEmail} 
           viewType={viewType}
         />) // Replace null with Tutor Schedule page...
       case "Review": return null // Replace null with Review page...
