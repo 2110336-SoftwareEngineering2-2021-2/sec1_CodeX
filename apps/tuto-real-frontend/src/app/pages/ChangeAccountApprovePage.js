@@ -2,15 +2,16 @@ import React, { useState} from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { client } from '../axiosConfig';
 import ModalTwoButton from '../components/modal/ModalTwoButton';
+import NormalButton from '../components/ui/NormalButton';
 
 const ChangeAccountApprovePage = () => {
 
     //props from Link
     const location = useLocation()
     const {name, citizenID, transcription, email} = location.state
+    console.log(location.state)
 
     //other initial
-    const back = '< Back'
     const [isPending,setIsPending] = useState(false)
     const navigate = useNavigate()
 
@@ -19,9 +20,9 @@ const ChangeAccountApprovePage = () => {
     const [showModalReject,setShowModalReject] = useState(false)
 
     //show value
-    const title = name.name
-    const imageCid = citizenID.citizenID.url
-    const imageTrans = transcription.transcription.url
+    const title = name
+    const imageCid = citizenID.url
+    const imageTrans = transcription.url
 
     //handle modal show
     const handleApproveShow = () => {
@@ -32,12 +33,17 @@ const ChangeAccountApprovePage = () => {
         setShowModalReject(true)
     }
 
+    //handle back button
+    const handleBack = () => {
+      navigate('/request-list')
+    }
+
     // handle approve click
     const handleApprove = () => {
       setIsPending(true)
 
       client({
-        url: `/tutorReq/${email.email}`,
+        url: `/tutorReq/${email}`,
         method: 'PATCH',
         data: {status: 'approve'}
 
@@ -60,7 +66,7 @@ const ChangeAccountApprovePage = () => {
       setIsPending(true)
 
       client({
-        url: `/tutorReq/${email.email}`,
+        url: `/tutorReq/${email}`,
         method: 'PATCH',
         data: {status: 'reject'}
 
@@ -81,11 +87,16 @@ const ChangeAccountApprovePage = () => {
   return (
     <div style={{display: 'flex',flexDirection: 'column',alignItems: 'center' , width: '100%'}}>
 
-        {/* back button */}
         <div style={{display: 'flex', width: '45%'}}>
-          <Link className='backtoprofile shadow' to='/request-list'>{back}</Link>
+          <NormalButton 
+            title='< Back' 
+            whenClick={handleBack}
+            size='l'
+            bgColor='var(--third)'
+            fontSize='larger'
+            marginLeft='0vw'
+          />
         </div>
-        
 
         <div className='info-card shadow' >
 
@@ -110,8 +121,23 @@ const ChangeAccountApprovePage = () => {
 
         {/*approve reject button */}
         <div style={{display: 'flex',flexDirection: 'row-reverse', width: '45%'}}>
-            <button className='submit-open shadow' onClick={handleRejectShow} style={{marginLeft: '2%', backgroundColor: 'red'}}>Reject</button>
-            <button className='submit-open shadow' onClick={handleApproveShow} style={{marginLeft: '2%'}}>Approve</button>
+
+            <NormalButton 
+              title='Reject' 
+              whenClick={handleRejectShow}
+              size='l'
+              bgColor='red'
+              fontSize='larger'
+            />
+
+            <NormalButton 
+              title='Approve' 
+              whenClick={handleApproveShow}
+              size='l'
+              bgColor='var(--third)'
+              fontSize='larger'
+            />
+
         </div>
 
         {/* modal component */}
