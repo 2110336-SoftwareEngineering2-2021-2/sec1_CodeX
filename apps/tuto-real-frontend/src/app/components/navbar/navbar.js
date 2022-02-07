@@ -40,7 +40,7 @@ const NavBar = () => {
   return (
     <div className='navbar'>
       <div className='left-side'>
-        <button className='main-icon'>TutoReal</button>
+        <button className='main-icon' onClick={() => navigate('/')}>TutoReal</button>
         <div className='search-bar'>
           <MdSearch size="5%" color='gray' style={{marginLeft: "2%"}} />
           <input type='text' placeholder='Search to find your interested tutor.'></input>

@@ -44,7 +44,6 @@ input {
   background-color: var(--gray);
   border-color: transparent;
   border-radius: 20px;
-  /* padding: 2%; */
   margin-left: 3%;
   width: 100%;
   display: flex;

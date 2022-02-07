@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import { Col, Button, Form, Row } from 'react-bootstrap'
+import {Link} from 'react-router-dom'
+
 import './RegistrationPage.css'
 
 
@@ -26,33 +28,33 @@ const RegistrationPage = () => {
 
     console.log("Validateing...");
 
-    if (firstName.length == 0) 
+    if (firstName.length === 0) 
       setErrorMessage("Your first name can't be empty.");
     
-    else if (lastName.length == 0) 
+    else if (lastName.length === 0) 
       setErrorMessage("Your last name can't be empty.");
 
-    else if (mobilePhone.length == 0) 
+    else if (mobilePhone.length === 0) 
       setErrorMessage("Your mobile phone can't be empty.");
-    else if (isNaN(mobilePhone) || mobilePhone.length != 8) 
+    else if (isNaN(mobilePhone) || mobilePhone.length !== 8) 
       setErrorMessage("The mobile phone must be 8 numeric characters long.");
 
-    else if (emailAddress.length == 0) 
+    else if (emailAddress.length === 0) 
       setErrorMessage("Your email address can't be empty.");
     
-    else if (password.length == 0) 
+    else if (password.length === 0) 
       setErrorMessage("Your password can't be empty.");
     else if (password.length < 8) 
       setErrorMessage("Your password must long than 8 charectors.");
 
-    else if (confirmPassword.length == 0) 
+    else if (confirmPassword.length === 0) 
       setErrorMessage("Please confirm your password.");
-    else if (confirmPassword != password) 
+    else if (confirmPassword !== password) 
       setErrorMessage("Your password and confirm password is not match.");
 
-    else if (citizenId.length == 0) 
+    else if (citizenId.length === 0) 
       setErrorMessage("Your citizen id can't be empty.");
-    else if (isNaN(mobilePhone) || mobilePhone.length != 13) 
+    else if (isNaN(mobilePhone) || mobilePhone.length !== 13) 
       setErrorMessage("The citizen id must be 13 numeric characters long.");
 
     else {
@@ -93,12 +95,8 @@ const RegistrationPage = () => {
     </div>
 
     <div className='regispage-right-side'>
-      <Form 
-        // noValidate 
-        // validated={validated} 
-        // onSubmit={handleSubmit}
-      >
-        {errorMessage.length != 0 ?
+      <Form style={{width: "inherit"}}>
+        {errorMessage.length !== 0 ?
           <p style={{color:'red', fontFamily:'roboto', fontWeight:'bold', marginBottom:'1vh'}}>
             {errorMessage}
           </p>
@@ -258,9 +256,11 @@ const RegistrationPage = () => {
           Sign up
         </Button>
 
-        <p className='signin-button-regis'>
-          If you already have account, sign in
-        </p>
+        <div style={{marginTop: "3vh"}}>
+          <Link to="/login" className='signin-button-regis'>
+            If you already have account, sign in
+          </Link>
+        </div>
       </Form>
     </div>
   </div>
