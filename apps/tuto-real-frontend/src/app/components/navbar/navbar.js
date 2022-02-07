@@ -1,39 +1,40 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate} from 'react-router-dom'
 import {MdSearch} from 'react-icons/md'
-import {isLoggedIn, onLogout} from '../hooks/loginHooks'
 
-import './navbar.css'
 import { getNavbarData } from './navbarData'
-import { getCookieData } from '../util/cookieHandler'
+import { useAuth } from '../../auth'
+import './navbar.css'
 
 
 const NavBar = () => {
   // User have type => "Guest" | "Student" | "Admin" | "Tutor" //
-  const [userType, setUserType] = useState("Student")
+  const [userType, setUserType] = useState("Guest")
   const navigate = useNavigate()
+  
+  const { logOut, role, firstName, lastName} = useAuth()
   const navbarDataList = getNavbarData(userType).map(item => (
-    <button key={item.id} 
+    <button 
+      key={item.id} 
       className={item.style} 
-      style={{marginRight: "3%"}} 
+      style={{marginRight: "2%"}} 
       onClick={() => handleButton(item.name, item.path)}>
-        {item.name}
+        {item.icon}
+        <p style={{width: "-webkit-fill-available"}}>{item.name !== "User Name"? item.name: `${firstName} ${lastName}`}</p>
     </button>     
   ))
 
   useEffect(() => {
-    console.log(isLoggedIn())
-    if(isLoggedIn()) {
-      const {role} = getCookieData()
-      setUserType(role)
-    }
-  },[])
+    if(role) setUserType(role)
+    else setUserType("Guest")
+  },[role])
 
   const handleButton = (name, path) => {
-    if(name === "Sign out") 
-      onLogout({onSuccessLogout: () => {setUserType("Guest"); navigate(path);}})
-    else
-      navigate(path)
+    if(name === "Sign out") {
+      console.log("Logging out....")
+      logOut()
+    }
+    navigate(path)
   }
 
   return (

@@ -46,7 +46,6 @@ const HomePage = () => {
           <button onClick={() => signInWithGoogle()}>
             Sign In with Google
           </button>
-
           <button onClick={() => logIn(email, password)}>Sign In</button>
           <button onClick={() => resetPassword(email)}>Reset Password</button>
         </span>
