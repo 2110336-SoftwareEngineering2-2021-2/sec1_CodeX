@@ -93,21 +93,22 @@ const ProfileTeachSchedule = ({viewType}) => {
     //     console.log(tempTeachingInfo.subjectList)
     // }, [tempTeachingInfo])
 
-    const sendData = () => {
-        setTeachingInfo(tempTeachingInfo)
-        setEditing(false)
-    //     client({
-    //         method: "...",
-    //         url: "/.....",
-    //         body: {
-    //             tempTeachingInfo
-    //         }
-    //     }).then(({data}) => {
-    //         // console.log(data)
-    //         // setEditing(false)
-    //     }).catch(({response}) => {
-    //         console.log(response)
-    //     })
+    const sendData =async () => {
+        setTeachingInfo(tempTeachingInfo);
+        setEditing(false);
+        // await client({
+        //     method: "PATCH",
+        //     url: "/user/nifon@gmail.com",
+        //     data: {
+        //         subjects: tempTeachingInfo.subjectList,
+        //         description: tempTeachingInfo.subjectList
+        //     }
+        // }).then(({data}) => {
+        //     console.log(data)
+        //     setEditing(false)
+        // }).catch(({response}) => {
+        //     console.log(response)
+        // })
     }
 
     const onCancel = () => {

@@ -36,7 +36,10 @@ const ProfileInfo = () => {
     userType: 'User',
     password: '',
   });
-  const [tempProfile, setTempProfile] = useState(""); // use for preview new upload profile image
+  const [tempProfile, setTempProfile] = useState({
+    preview: "",
+    raw: ""
+  }); // use for preview new upload profile image
 
   const {
     register,
@@ -56,7 +59,10 @@ const ProfileInfo = () => {
       console.log("fetch profile image @ ",data[0].profileImg.url)
       // console.log(Date(data[0].birthDate))
       // console.log(new Date())
-      setTempProfile(data[0].profileImg.url)
+      setTempProfile({
+        ...tempProfile,
+        preview: data[0].profileImg.url
+      })
       setBasicInfo({
         picture: data[0].profileImg.url,
         firstName: data[0].firstName,
@@ -87,6 +93,11 @@ const ProfileInfo = () => {
     fetchData();
   }, [fetchData]);
 
+  useEffect(() => {
+    console.log("tempProfile.preview set to: ",tempProfile.preview);
+    console.log("tempProfile.raw set to: ",tempProfile.raw);
+  }, [tempProfile]);
+
   const sendData = async (data) => {
     console.log('sending data...');
     // const formData = new FormData()
@@ -116,7 +127,7 @@ const ProfileInfo = () => {
     console.log(tempProfile);
     setBasicInfo({
       ...basicInfo,
-      picture: tempProfile,
+      picture: tempProfile.preview,
       // picture: tempProfile ?? basicInfo.picture,
       firstName: data.firstName,
       lastName: data.lastName,
@@ -138,7 +149,10 @@ const ProfileInfo = () => {
 
   const onCancel = () => {
     reset();
-    setTempProfile(basicInfo.picture);
+    setTempProfile({
+      ...tempProfile,
+      preview: basicInfo.picture
+    });
     setEditing(false);
     //console.log(translateDateForSendToBack(1,1,2022));
   };
@@ -218,7 +232,13 @@ const ProfileInfo = () => {
             >
               <NormalButton
                 title={'Edit'}
-                whenClick={() => setEditing(true)}
+                whenClick={() => {
+                  setEditing(true);
+                  setTempProfile({
+                    ...tempProfile,
+                    raw: ""
+                  })
+                }}
                 size={'l'}
                 bgColor={COLORS.third}
               />

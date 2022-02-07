@@ -21,10 +21,26 @@ const EditBasicInfo = ({register, errors, basicInfo, tempProfile, setTempProfile
                 'December']
   const birthYearChoice = Array.from({length: 123}, (_, i) => i + 1900);
 
-  const changePicture = (e) => {
+  const changePicture = async (e) => {
     //console.log(e.target?.files[0])
-    setTempProfile(URL.createObjectURL(e.target?.files[0]))
+    await setTempProfile({
+      preview: URL.createObjectURL(e.target?.files[0]),
+      raw: await toBase64(e.target?.files[0])
+    });
+    // selectProfileImgHandler();
   }
+
+  const toBase64 = file => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+  });
+
+  // const selectProfileImgHandler = (e) => {
+  //   console.log("tempProfile.preview : ", tempProfile.preview);
+  //   console.log("tempProfile.raw :  ", tempProfile.raw);
+  // }
 
   return (
     <div className='info-card shadow'>
@@ -35,7 +51,7 @@ const EditBasicInfo = ({register, errors, basicInfo, tempProfile, setTempProfile
       <div className='section'>
         <p className='header'>PICTURE</p>
         {/* <div style={{width:"100%", display:"flex",flexDirection:"column", justifyContent:"flex-start"}}> */}
-          <img className='profile-image' src={tempProfile} alt="profile" />
+          <img className='profile-image' src={tempProfile.preview} alt="profile" />
           {/* <img className='profile-image' src={tempProfile? URL.createObjectURL(tempProfile) : picture} alt="profile" /> */}
           <Form.Control onChange={(e) => changePicture(e)} type="file" accept=".png,.jpg,.jpeg" style={{marginBottom:"0px"}} />
         {/* </div> */}
