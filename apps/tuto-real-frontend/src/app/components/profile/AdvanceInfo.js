@@ -15,7 +15,7 @@ const AdvanceInfo = ({ viewType, advance, targetEmail}) => {
         {viewType === "StudentSelf" ?
           <Link 
             style={{textDecoration:'none', color: COLORS.third}} 
-            to={`/changeacctype`}
+            to={`/changAaccType`}
             state={{
               ownerRequestEmail : targetEmail
             }}
