@@ -56,7 +56,7 @@ const EditBasicInfo = ({register, errors, basicInfo, tempProfile, setTempProfile
       <p className='header' style={{width: "100%"}}>Some of your information may be seen by other users.</p>
       <hr />
       {/* Picture */}
-      <div className='section'>
+      <div className='section' style={{alignItems: "flex-start"}}>
         <p className='header'>PICTURE</p>
         {/* <div style={{width:"100%", display:"flex",flexDirection:"column", justifyContent:"flex-start"}}> */}
           <img className='profile-image' src={tempProfile.preview} alt="profile" />

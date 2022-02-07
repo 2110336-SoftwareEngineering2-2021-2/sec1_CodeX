@@ -13,8 +13,8 @@ import './profile.css';
 
 import COLORS from '../../constants/color';
 
-const ProfileInfo = ({targetEmail}) => {
-  const [viewType, setViewType] = useState('TutorSelf'); // "TutorSelf" | "StudentSelf" | "TutorOther"
+const ProfileInfo = ({targetEmail, viewType}) => {
+  // const [viewType, setViewType] = useState('TutorSelf'); // "TutorSelf" | "StudentSelf" | "TutorOther"
   const [isEditing, setEditing] = useState(false);
   const [basicInfo, setBasicInfo] = useState({
     picture: undefined,
@@ -142,7 +142,6 @@ const ProfileInfo = ({targetEmail}) => {
     });
     setContactInfo({
       ...contactInfo,
-      telephone: data.telephone,
       address: data.address,
     });
     sendData(data);

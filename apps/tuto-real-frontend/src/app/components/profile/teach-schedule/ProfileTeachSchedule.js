@@ -10,7 +10,7 @@ import COLORS from "../../../constants/color";
 import { client } from "../../../axiosConfig";
 
 
-const ProfileTeachSchedule = ({viewType}) => {
+const ProfileTeachSchedule = ({targetEmail,viewType}) => {
 
     const [isEditing,setEditing] = useState(false);
     const [teachingInfo, setTeachingInfo] = useState({
@@ -25,73 +25,27 @@ const ProfileTeachSchedule = ({viewType}) => {
     const fetchData = useCallback(async () => {
         await client({
             method: "GET",
-            url: "/user/nifon@gmail.com"
+            url: `/user/${targetEmail}`
         })
         .then(({data}) => {
             console.log(data[0])
             setTempTeachingInfo({
-                subjectList: data[0].subjects,
-                description: data[0].description
+                subjectList: data[0].subjects ?? ["ERROR: this owner profile isn't Tutor"],
+                description: data[0].description ?? "ERROR: this owner profile isn't Tutor"
             })
             setTeachingInfo({
-                subjectList: data[0].subjects,
-                description: data[0].description
+                subjectList: data[0].subjects ?? ["ERROR: this owner profile isn't Tutor"],
+                description: data[0].description ?? "ERROR: this owner profile isn't Tutor"
             })
         }).catch(({response}) => {
             console.log(response)
         })
     },[])
 
-    // const fetchData = useCallback(async () => {
-    //     await client({
-    //       method: "GET",
-    //       // url: `/user/${contactInfo.email}`
-    //       url: "/user/nifon@gmail.com"
-    //     })
-    //     .then(({data}) => {
-    //       console.log(data[0])
-    //       // console.log(Date(data[0].birthDate))
-    //       // console.log(new Date())
-    //     //   setBasicInfo({
-    //     //     picture: "",//data[0].profileImg.fileName,
-    //     //     firstName: data[0].firstName,
-    //     //     lastName: data[0].lastName,
-    //     //     birthDate: {
-    //     //       day: parseInt(data[0].birthDate.substr(8,2)),
-    //     //       month: parseInt(data[0].birthDate.substr(5,2)),
-    //     //       year: parseInt(data[0].birthDate.substr(0,4))
-    //     //     },
-    //     //     citizenId: data[0].citizenID
-    //     //   })
-    //     //   setContactInfo({
-    //     //     email: data[0].email,
-    //     //     telephone: data[0].phoneNumber,
-    //     //     address: data[0].address
-    //     //   })
-    //     //   setAdvance({
-    //     //     userType: data[0].role,
-    //     //     password: ""
-    //     //   })
-    //     })
-    //     .catch(({response}) => {
-    //       console.log(response)
-    //     })
-    //   },[])
-
-
     useEffect(() => {
         fetchData()
+        console.log("viewType: ", viewType)
     }, [fetchData])
-    
-    // useEffect(() => {
-    //     console.log("This is real: ")
-    //     console.log(teachingInfo.subjectList)
-    // }, [teachingInfo])
-    
-    // useEffect(() => {
-    //     console.log("This is temp: ")
-    //     console.log(tempTeachingInfo.subjectList)
-    // }, [tempTeachingInfo])
 
     const sendData =async () => {
         setTeachingInfo(tempTeachingInfo);
@@ -124,7 +78,6 @@ const ProfileTeachSchedule = ({viewType}) => {
         )
     }
 
-
     const renderEditForm = () => {
         return (
             <Form className="form">
@@ -138,13 +91,28 @@ const ProfileTeachSchedule = ({viewType}) => {
             {isEditing ? renderEditForm() : renderViewForm()}
             {isEditing? (
                 <div style={{width: "45%", textAlign: "right", marginBottom: "5%"}}>
-                    <NormalButton title={"Submit"} whenClick={sendData} size={"l"} bgColor={COLORS.third} />
-                    <NormalButton title={"Cancel"} whenClick={onCancel} size={"l"} bgColor={COLORS.yellow} />
+                    <NormalButton 
+                        title={"Submit"} 
+                        whenClick={sendData} 
+                        size={"l"} 
+                        bgColor={COLORS.third} 
+                    />
+                    <NormalButton 
+                        title={"Cancel"} 
+                        whenClick={onCancel} 
+                        size={"l"} 
+                        bgColor={COLORS.yellow} 
+                    />
                 </div>
             ): (
                 <div style={{width: "45%", textAlign: "right", marginBottom: "5%"}}>
                     {viewType=="TutorSelf" ?
-                        <NormalButton title={"Edit"} whenClick={() => setEditing(true)} size={"l"} bgColor={COLORS.third}/>
+                        <NormalButton 
+                            title={"Edit"} 
+                            whenClick={() => setEditing(true)} 
+                            size={"l"} 
+                            bgColor={COLORS.third}
+                        />
                         : null
                     }
                 </div>

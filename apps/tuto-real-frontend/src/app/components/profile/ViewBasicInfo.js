@@ -27,8 +27,6 @@ const ViewBasicInfo = ({viewType, basicInfo}) => {
     // console.log("tmp lenght:", tmp.concat("xxxxxxxxxxxxxxxx").lenght)
     if (tmp.length < 13) {
       tmp = tmp + "xxxxxxxxxxxxx";
-      // return temp
-      return tmp[0] + "-" + tmp.substr(1,4) + "-" + tmp.substr(5,5) + "-" + tmp.substr(10,2) + "-" + tmp[12];
     }
     return tmp[0] + "-" + tmp.substr(1,4) + "-" + tmp.substr(5,5) + "-" + tmp.substr(10,2) + "-" + tmp[12];
   }
@@ -38,7 +36,7 @@ const ViewBasicInfo = ({viewType, basicInfo}) => {
       <p className='title'>Basic Information</p>
       <p className='header' style={{width: "100%"}}>Some of your information may be seen by other users.</p>
       <hr />
-      <div className='section'>
+      <div className='section' style={{alignItems: "flex-start"}}>
         <p className='header'>PICTURE</p>
         {/* <img className='profile-image' src={picture? URL.createObjectURL(picture): undefined} alt="profile" /> */}
         {/* <img className='profile-image' src={picture} alt="profile" /> */}
