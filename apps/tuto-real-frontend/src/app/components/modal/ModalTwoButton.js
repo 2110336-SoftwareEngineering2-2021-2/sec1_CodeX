@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 
 const ModalTwoButton = (props) => {
 
@@ -28,11 +28,15 @@ const ModalTwoButton = (props) => {
                 <button className='submit-open' style={{width: '22%', margin: '0.25rem', padding: '5px 5px', backgroundColor: props.rightColor}} onClick={handleclose}>
                     {props.rightMessage}
                 </button>
-                <Link style={{textDecoration: 'none', width: '22%'}} to={props.leftTo}>
-                    <button className='submit-open' style={{width: '100%', marginBottom: '0px', padding: '5px 10px', backgroundColor: props.leftColor}} onClick={handleclose}>
-                        {props.leftMessage}
-                    </button>
-                </Link>
+
+                {!props.isPending && <button className='submit-open' style={{width: '22%', margin: '0.25rem', padding: '5px 10px', backgroundColor: props.leftColor}} onClick={() => props.leftFunc()}>
+                    {props.leftMessage}
+                </button>}
+
+                {props.isPending && <button className='submit-open' style={{width: '22%', margin: '0.25rem', padding: '5px 10px', backgroundColor: 'var(--lightgray)'}} onClick={() => props.leftFunc()}>
+                    {props.leftPending}
+                </button>}
+
                 
             </Modal.Footer>
         </Modal>
