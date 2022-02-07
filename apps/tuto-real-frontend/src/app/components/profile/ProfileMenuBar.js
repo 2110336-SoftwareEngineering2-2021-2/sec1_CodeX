@@ -19,9 +19,15 @@ const ProfileMenuBar = ({viewType, selecting, setSelecting}) => {
       {/* Button Bar Section */}
       <div className="bar">
         <BarButton title="Information" onSelect={() => setSelecting("Info")} isActive={(selecting === "Info")} widthStyle={widthStyle} />
-        <BarButton title="Learn Schedule" onSelect={() => setSelecting("Learn")} isActive={(selecting === "Learn")} widthStyle={widthStyle} />
-        <BarButton title="Teach Schedule" onSelect={() => setSelecting("Teach")} isActive={(selecting === "Teach")} widthStyle={widthStyle} />
-        <BarButton title="Reviews" onSelect={() => setSelecting("Review")} isActive={(selecting === "Review")} widthStyle={widthStyle} />
+        {viewType !== "TutorOther" ?
+          <BarButton title="Learn Schedule" onSelect={() => setSelecting("Learn")} isActive={(selecting === "Learn")} widthStyle={widthStyle} />
+        :null}
+        {viewType !== "StudentSelf" ?
+          <BarButton title="Teach Schedule" onSelect={() => setSelecting("Teach")} isActive={(selecting === "Teach")} widthStyle={widthStyle} />
+        :null}
+        {viewType !== "StudentSelf" ?
+          <BarButton title="Reviews" onSelect={() => setSelecting("Review")} isActive={(selecting === "Review")} widthStyle={widthStyle} />
+        :null}
       </div>
     </>
   )

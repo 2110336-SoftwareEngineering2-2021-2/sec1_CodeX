@@ -21,10 +21,34 @@ const EditBasicInfo = ({register, errors, basicInfo, tempProfile, setTempProfile
                 'December']
   const birthYearChoice = Array.from({length: 123}, (_, i) => i + 1900);
 
-  const changePicture = (e) => {
+  const changePicture = async (e) => {
     //console.log(e.target?.files[0])
-    setTempProfile(e.target?.files[0])
+    await setTempProfile({
+      preview: URL.createObjectURL(e.target?.files[0]),
+      raw: await deleteFrontTagBase64(await toBase64(e.target?.files[0]))
+    });
+    // selectProfileImgHandler();
   }
+
+  function deleteFrontTagBase64(base64Str) { //only support for "jpeg", "png", "jpg"
+    var tmp = base64Str
+    if (tmp.substr(11,4) === 'jpeg') {
+      return tmp.substr(23)
+    } else {
+      return tmp.substr(22)
+    }
+  }
+  const toBase64 = file => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+  });
+
+  // const selectProfileImgHandler = (e) => {
+  //   console.log("tempProfile.preview : ", tempProfile.preview);
+  //   console.log("tempProfile.raw :  ", tempProfile.raw);
+  // }
 
   return (
     <div className='info-card shadow'>
@@ -32,10 +56,11 @@ const EditBasicInfo = ({register, errors, basicInfo, tempProfile, setTempProfile
       <p className='header' style={{width: "100%"}}>Some of your information may be seen by other users.</p>
       <hr />
       {/* Picture */}
-      <div className='section'>
+      <div className='section' style={{alignItems: "flex-start"}}>
         <p className='header'>PICTURE</p>
         {/* <div style={{width:"100%", display:"flex",flexDirection:"column", justifyContent:"flex-start"}}> */}
-          <img className='profile-image' src={tempProfile? URL.createObjectURL(tempProfile) : picture} alt="profile" />
+          <img className='profile-image' src={tempProfile.preview} alt="profile" />
+          {/* <img className='profile-image' src={tempProfile? URL.createObjectURL(tempProfile) : picture} alt="profile" /> */}
           <Form.Control onChange={(e) => changePicture(e)} type="file" accept=".png,.jpg,.jpeg" style={{marginBottom:"0px"}} />
         {/* </div> */}
       </div>
@@ -67,7 +92,7 @@ const EditBasicInfo = ({register, errors, basicInfo, tempProfile, setTempProfile
             <Col>
               <Form.Select
                 {...register("date")}
-                defaultValue={birthDate.day}
+                defaultValue={birthDate.date}
               >
                 {birthDayChoice.map(date => (<option key={date} value={date}>{date}</option>))}
               </Form.Select>
@@ -76,9 +101,9 @@ const EditBasicInfo = ({register, errors, basicInfo, tempProfile, setTempProfile
             <Col>
               <Form.Select 
                 {...register("month")}
-                defaultValue={birthDate.month-1}
+                defaultValue={birthDate.month}
                 >
-                {birthMonthChoice.map((month, idx) => (<option key={month} value={idx}>{month}</option>))}
+                {birthMonthChoice.map((month, idx) => (<option key={month} value={idx + 1}>{month}</option>))}
               </Form.Select>
             </Col>
             {/* Year */}

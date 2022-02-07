@@ -1,5 +1,5 @@
 import React, { useState} from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { client } from '../axiosConfig';
 import ModalRequestButton from '../components/changeacc/ModalRequestButton';
 import UploadButton from '../components/changeacc/UploadButton';
@@ -9,6 +9,9 @@ const ChangeAccountTypePage = () => {
 
     const back = '< Back'
 
+    const location = useLocation()
+    const {ownerRequestEmail} = location.state
+
     //use for display
     const [citizenID, setCitizenID] = useState({preview: "", raw : ""})
     const [transcription, setTranscription] = useState({preview: "", raw : ""})
@@ -16,6 +19,8 @@ const ChangeAccountTypePage = () => {
 
     //modal
     const [showModal,setShowModal] = useState(false)
+
+    const navigate = useNavigate()
 
     //send to DB
     const [sendImage, setSendImage] = useState({
@@ -108,12 +113,26 @@ const ChangeAccountTypePage = () => {
         })
     }
 
+    const backToOwnerProfileHandle = () => {
+      setShowModal(false)
+      navigate("/profile", {targetEmail: ownerRequestEmail})
+    }
+
   return (
     <div style={{display: 'flex',flexDirection: 'column',alignItems: 'center' , width: '100%'}}>
 
         {/* back button */}
         <div style={{display: 'flex', width: '45%'}}>
-          <Link className='backtoprofile shadow' to='/profile'>{back}</Link>
+          <Link 
+            className='backtoprofile shadow' 
+            to='/profile'
+            state={{
+              // targetEmail: "nifon@gmail.com"
+              targetEmail: ownerRequestEmail
+            }}
+          >
+            {back}
+          </Link>
         </div>
         
         <div className='info-card shadow' >
@@ -180,7 +199,7 @@ const ChangeAccountTypePage = () => {
         </div>
         
         {/* change account type page modal */}
-        <ModalRequestButton setshow={setShowModal} show={showModal}/>
+        <ModalRequestButton setshow={setShowModal} show={showModal} whenClickButton={backToOwnerProfileHandle}/>
     </div>
   );
 };

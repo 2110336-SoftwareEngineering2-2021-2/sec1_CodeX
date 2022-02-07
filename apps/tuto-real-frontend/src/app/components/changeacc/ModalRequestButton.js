@@ -2,6 +2,8 @@ import React from 'react';
 import { Modal } from 'react-bootstrap';
 import './ModalRequestButton.css'
 import { Link } from 'react-router-dom';
+import NormalButton from '../ui/NormalButton';
+import COLORS from '../../constants/color';
 
 const ModalRequestButton = (props) => {
 
@@ -26,11 +28,16 @@ const ModalRequestButton = (props) => {
                 <hr/>
             </Modal.Header>
             <Modal.Footer style={{border: 'none', paddingTop: '0px', flexDirection: 'column'}}>
-                <Link style={{textDecoration: 'none', width: '45%'}} to='/profile'>
+                {/* <Link style={{textDecoration: 'none', width: '45%'}} to='/profile'>
                     <button className='submit-open' style={{width: '100%', marginBottom: '0px', padding: '5px 5px'}} onClick={handleclose}>
                         OK, back to profile page
                     </button>
-                </Link>
+                </Link> */}
+                <NormalButton 
+                    title="OK, back to profile page" 
+                    bgColor={COLORS.third} 
+                    whenClick={props.whenClickButton ?? undefined} 
+                />
             </Modal.Footer>
         </Modal>
       </div>

@@ -18,18 +18,17 @@ const ViewBasicInfo = ({viewType, basicInfo}) => {
             'October', 
             'November', 
             'December']
-    return monthName[date.month-1].toString() + " " + date.day.toString() + ", " + date.year.toString()
+    return monthName[date.month-1].toString() + " " + date.date.toString() + ", " + date.year.toString()
   }
 
   function translateCitizenIdToShow(citizenId) {
-    const tmp = citizenId;
+    // var tmp = "1234";
+    var tmp = citizenId.toString();
     // console.log("tmp lenght:", tmp.concat("xxxxxxxxxxxxxxxx").lenght)
-    // if (tmp.lenght < 13) {
-    //   let temp = citizenId.concat("xxxxxxxxxxxxxxxx");
-    //   return temp
-    //   // return temp[0] + "-" + temp.substr(1,4) + "-" + temp.substr(5,5) + "-" + temp.substr(10,2) + "-" + temp[12]
-    // } else {}
-    return tmp[0] + "-" + tmp.substr(1,4) + "-" + tmp.substr(5,5) + "-" + tmp.substr(10,2) + "-" + tmp[12]
+    if (tmp.length < 13) {
+      tmp = tmp + "xxxxxxxxxxxxx";
+    }
+    return tmp[0] + "-" + tmp.substr(1,4) + "-" + tmp.substr(5,5) + "-" + tmp.substr(10,2) + "-" + tmp[12];
   }
 
   return (
@@ -37,9 +36,11 @@ const ViewBasicInfo = ({viewType, basicInfo}) => {
       <p className='title'>Basic Information</p>
       <p className='header' style={{width: "100%"}}>Some of your information may be seen by other users.</p>
       <hr />
-      <div className='section'>
+      <div className='section' style={{alignItems: "flex-start"}}>
         <p className='header'>PICTURE</p>
-        <img className='profile-image' src={picture? URL.createObjectURL(picture): undefined} alt="profile" />
+        {/* <img className='profile-image' src={picture? URL.createObjectURL(picture): undefined} alt="profile" /> */}
+        {/* <img className='profile-image' src={picture} alt="profile" /> */}
+        <img className='profile-image' src={picture} alt="profile" />
       </div>
       <hr />
       <div className='section'>

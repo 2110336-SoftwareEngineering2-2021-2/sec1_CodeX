@@ -13,15 +13,15 @@ import './profile.css';
 
 import COLORS from '../../constants/color';
 
-const ProfileInfo = () => {
-  const [viewType, setViewType] = useState('TutorSelf'); // "TutorSelf" | "StudentSelf" | "TutorOther"
+const ProfileInfo = ({targetEmail, viewType}) => {
+  // const [viewType, setViewType] = useState('TutorSelf'); // "TutorSelf" | "StudentSelf" | "TutorOther"
   const [isEditing, setEditing] = useState(false);
   const [basicInfo, setBasicInfo] = useState({
     picture: undefined,
     firstName: "",
     lastName: "",
     birthDate: {
-      day: 1,
+      date: 1,
       month: 1,
       year: 2020
     },
@@ -36,7 +36,10 @@ const ProfileInfo = () => {
     userType: 'User',
     password: '',
   });
-  const [tempProfile, setTempProfile] = useState(); // use for preview new upload profile image
+  const [tempProfile, setTempProfile] = useState({
+    preview: "",
+    raw: ""
+  }); // use for preview new upload profile image
 
   const {
     register,
@@ -44,23 +47,30 @@ const ProfileInfo = () => {
     reset,
     formState: { errors },
   } = useForm();
+  // const [targetEmail] = useState("nifon@gmail.com")
 
   const fetchData = useCallback(async () => {
     await client({
       method: 'GET',
       // url: `/user/${contactInfo.email}`
-      url: "/user/nifon@gmail.com"
+      url: `/user/${targetEmail}`
+      // url: `/user/nifon@gmail.com`
     })
     .then(({data}) => {
-      console.log(data[0])
+      console.log("profile in fetch: ", data)
+      console.log("fetch profile image @ ",data[0].profileImg.url)
       // console.log(Date(data[0].birthDate))
       // console.log(new Date())
+      setTempProfile({
+        ...tempProfile,
+        preview: data[0].profileImg.url
+      })
       setBasicInfo({
-        picture: "",//data[0].profileImg.fileName,
+        picture: data[0].profileImg.url,
         firstName: data[0].firstName,
         lastName: data[0].lastName,
         birthDate: {
-          day: parseInt(data[0].birthDate.substr(8,2)),
+          date: parseInt(data[0].birthDate.substr(8,2)),
           month: parseInt(data[0].birthDate.substr(5,2)),
           year: parseInt(data[0].birthDate.substr(0,4))
         },
@@ -85,13 +95,26 @@ const ProfileInfo = () => {
     fetchData();
   }, [fetchData]);
 
-  const sendData = async () => {
+  useEffect(() => {
+    console.log("tempProfile.preview set to: ",tempProfile.preview);
+    console.log("tempProfile.raw set to: ",tempProfile.raw);
+  }, [tempProfile]);
+
+  const sendData = async (data) => {
     console.log('sending data...');
     // const formData = new FormData()
     // formData.append("Profile Picture", tempProfile, tempProfile?.name)
     await client({
       method: "PATCH",
-      url: "/user/nifon@gmail.com"
+      url: "/user/nifon@gmail.com",
+      data: {
+        // picture: 
+        firstName: data.firstName,
+        // firstName: basicInfo.firstName,
+        lastName: data.lastName,
+        birthDate: translateDateForSendToBack(data.date, data.month, data.year),
+        address: data.address,
+      }
     })
     .then(({data}) => {
       console.log(data)
@@ -106,24 +129,33 @@ const ProfileInfo = () => {
     console.log(tempProfile);
     setBasicInfo({
       ...basicInfo,
-      picture: tempProfile ?? basicInfo.picture,
+      picture: tempProfile.preview,
+      // picture: tempProfile ?? basicInfo.picture,
       firstName: data.firstName,
       lastName: data.lastName,
-      birthDate: new Date(data.year, data.month, data.date),
+      // birthDate: new Date(data.year, data.month, data.date),
+      birthDate: {
+        date: data.date,
+        month: data.month,
+        year: data.year
+      }
     });
     setContactInfo({
       ...contactInfo,
-      telephone: data.telephone,
       address: data.address,
     });
-    // sendData()
+    sendData(data);
     setEditing(false);
   };
 
   const onCancel = () => {
     reset();
-    setTempProfile(basicInfo.picture);
+    setTempProfile({
+      ...tempProfile,
+      preview: basicInfo.picture
+    });
     setEditing(false);
+    //console.log(translateDateForSendToBack(1,1,2022));
   };
 
   const renderViewForm = () => {
@@ -134,6 +166,24 @@ const ProfileInfo = () => {
       </>
     );
   };
+
+  function translateDateForSendToBack(date, month, year) {
+    var temp = "";
+
+    if (month < 10) {
+      temp += "0";
+    }
+    temp += month.toString() + "/";
+
+    if (date < 10) {
+      temp += "0";
+    }
+    temp += date.toString() + "/";
+
+    temp += (year % 100).toString();
+
+    return temp;
+  }
 
   const renderEditForm = () => {
     return (
@@ -159,7 +209,7 @@ const ProfileInfo = () => {
       {isEditing ? renderEditForm() : renderViewForm()}
       {viewType !== 'TutorOther' ? (
         <>
-          <AdvanceInfo advance={advance} />
+          <AdvanceInfo advance={advance} targetEmail={targetEmail} viewType={viewType}/>
           {isEditing ? (
             <div
               style={{ width: '45%', textAlign: 'right', marginBottom: '5%' }}
@@ -183,7 +233,13 @@ const ProfileInfo = () => {
             >
               <NormalButton
                 title={'Edit'}
-                whenClick={() => setEditing(true)}
+                whenClick={() => {
+                  setEditing(true);
+                  setTempProfile({
+                    ...tempProfile,
+                    raw: ""
+                  })
+                }}
                 size={'l'}
                 bgColor={COLORS.third}
               />
