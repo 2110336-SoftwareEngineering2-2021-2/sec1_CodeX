@@ -13,12 +13,12 @@ const ProfilePage = () => {
   const [selecting, setSelecting] = useState("Info") // "Info" | "Learn" | "Teach" | "Review"
   const [viewType, setViewType] = useState("StudentSelf") // "TutorSelf" | "StudentSelf" | "TutorOther"
   const [currentUser] = useState({
-    email: "nifon@gmail.com",
+    email: "sorasit@gmail.com",
     type: "Tutor"
   })
 
   const location = useLocation()
-  const {targetEmail} = location.state ?? {targetEmail:"nifon@gmail.com"}
+  const {targetEmail} = location.state ?? {targetEmail:"sorasit@gmail.com"}
   // const {targetEmail} = location.state
 
   // const [dummyTargetEmail] = useState("nifon@gmail.com")

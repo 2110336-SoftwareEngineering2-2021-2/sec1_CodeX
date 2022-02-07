@@ -1,5 +1,5 @@
 import React, { useState} from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { client } from '../axiosConfig';
 import ModalRequestButton from '../components/changeacc/ModalRequestButton';
 import UploadButton from '../components/changeacc/UploadButton';
@@ -19,6 +19,8 @@ const ChangeAccountTypePage = () => {
 
     //modal
     const [showModal,setShowModal] = useState(false)
+
+    const navigate = useNavigate()
 
     //send to DB
     const [sendImage, setSendImage] = useState({
@@ -111,6 +113,11 @@ const ChangeAccountTypePage = () => {
         })
     }
 
+    const backToOwnerProfileHandle = () => {
+      setShowModal(false)
+      navigate("/profile", {targetEmail: ownerRequestEmail})
+    }
+
   return (
     <div style={{display: 'flex',flexDirection: 'column',alignItems: 'center' , width: '100%'}}>
 
@@ -192,7 +199,7 @@ const ChangeAccountTypePage = () => {
         </div>
         
         {/* change account type page modal */}
-        <ModalRequestButton setshow={setShowModal} show={showModal}/>
+        <ModalRequestButton setshow={setShowModal} show={showModal} whenClickButton={backToOwnerProfileHandle}/>
     </div>
   );
 };

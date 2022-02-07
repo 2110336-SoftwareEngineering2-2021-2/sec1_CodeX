@@ -12,13 +12,17 @@ const AdvanceInfo = ({ viewType, advance, targetEmail}) => {
       <div className="section">
         <p className="header">USER TYPE</p>
         <p className="header">{userType}</p>
-        <Link 
-          style={{textDecoration:'none', color: COLORS.third}} 
-          to={`/changeacctype`}
-          state={{
-            ownerRequestEmail : targetEmail
-          }}
-        >[ upgrade to tutor]</Link>
+        {viewType === "StudentSelf" ?
+          <Link 
+            style={{textDecoration:'none', color: COLORS.third}} 
+            to={`/changeacctype`}
+            state={{
+              ownerRequestEmail : targetEmail
+            }}
+          >
+            [ upgrade to tutor]
+          </Link>
+        :null}
       </div>
       <hr />
       <div className="section">
