@@ -10,13 +10,13 @@ import { useAuth } from '../auth'
 
 const ProfilePage = () => {
   const [selecting, setSelecting] = useState("Info") // "Info" | "Learn" | "Teach" | "Review"
-  const [viewType, setViewType] = useState("TutorSelf") // "TutorSelf" | "StudentSelf" | "TutorOther"
+  const [viewType, setViewType] = useState("StudentSelf") // "TutorSelf" | "StudentSelf" | "TutorOther"
   const [currentUser] = useState({
-    email: "sora@gmail.com",
+    email: "nifon@gmail.com",
     type: "Tutor"
   })
 
-  const [targetEmail] = useState("sora@gmail.com")
+  const [targetEmail] = useState("nifon@gmail.com")
 
   const fetchData = useCallback(async () => {
     await client({

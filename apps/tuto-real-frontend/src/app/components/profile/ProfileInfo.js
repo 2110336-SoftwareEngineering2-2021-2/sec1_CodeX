@@ -57,7 +57,7 @@ const ProfileInfo = ({targetEmail, viewType}) => {
       // url: `/user/nifon@gmail.com`
     })
     .then(({data}) => {
-      console.log(data)
+      console.log("profile in fetch: ", data)
       console.log("fetch profile image @ ",data[0].profileImg.url)
       // console.log(Date(data[0].birthDate))
       // console.log(new Date())
