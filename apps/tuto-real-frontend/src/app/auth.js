@@ -48,7 +48,6 @@ export function AuthProvider({ children }) {
         url: `/user/${currentUser.email}`
       })
       .then(({data}) => {
-        console.log(data)
         setRole(data[0].role)
         setFirstName(data[0].firstName)
         setLastName(data[0].lastName)
@@ -100,7 +99,7 @@ export function AuthProvider({ children }) {
         });
       })
       .then(() => {
-        alert('Email verification failed');
+        alert('Next step. Please verify your email.')
         logOut();
       })
       .catch((err) => {
@@ -130,30 +129,15 @@ export function AuthProvider({ children }) {
           logOut();
         }
       })
-      .then(() => {
-        console.log("Logged in...")
-        // return client({
-        //   method: 'GET',
-        //   url: `/user/${email}`,
-        // });
-      })
-      // .then((data) => {
-      //   const res = data.data[0];
-      //   return res;
-      //   // return {
-      //   //   firstName: res.firstName,
-      //   //   lastName: res.lastName,
-      //   //   role: res.role,
-      //   // };
-      // })
       .catch((err) => {
-        // alert(err.message);
+        alert(err.message);
         console.log(err);
       });
   };
 
   const logOut = () => {
     signOut(auth);
+    setRole(null)
   };
 
   const updatePassword = (password, newPassword) => {

@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Col, Button, Form, Row } from 'react-bootstrap'
-import {Link} from 'react-router-dom'
+import { Link, useNavigate} from 'react-router-dom'
 
+import { useAuth } from '../auth'
 import './RegistrationPage.css'
 
 
@@ -14,17 +15,20 @@ const RegistrationPage = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   
-  const [birthDay, setBirthDay] = useState('');
-  const [birthMonth, setBirthMonth] = useState('');
-  const [birthYear, setBirthYear] = useState('');
+  const [birthDay, setBirthDay] = useState(1);
+  const [birthMonth, setBirthMonth] = useState(0);
+  const [birthYear, setBirthYear] = useState(1900);
 
   const [address, setAddress] = useState('');
   const [citizenId, setCitizenId] = useState('');
 
   const [errorMessage, setErrorMessage] = useState('');
-  const [validated, setValidated] = useState(false);
+  // const [validated, setValidated] = useState(false);
 
-  const handleSubmit = () => {
+  const { signUp } = useAuth()
+  const navigate = useNavigate()
+
+  const onSubmit = async () => {
 
     console.log("Validateing...");
 
@@ -36,11 +40,13 @@ const RegistrationPage = () => {
 
     else if (mobilePhone.length === 0) 
       setErrorMessage("Your mobile phone can't be empty.");
-    else if (isNaN(mobilePhone) || mobilePhone.length !== 8) 
-      setErrorMessage("The mobile phone must be 8 numeric characters long.");
+    else if (isNaN(mobilePhone) || mobilePhone.length !== 10) 
+      setErrorMessage("The mobile phone must be 10 numeric characters long.");
 
-    else if (emailAddress.length === 0) 
-      setErrorMessage("Your email address can't be empty.");
+    else if (emailAddress.length === 0 || !emailAddress.toLowerCase().match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      )
+    ) setErrorMessage("Invalid email address.")
     
     else if (password.length === 0) 
       setErrorMessage("Your password can't be empty.");
@@ -52,16 +58,28 @@ const RegistrationPage = () => {
     else if (confirmPassword !== password) 
       setErrorMessage("Your password and confirm password is not match.");
 
+    else if (address.length === 0) 
+      setErrorMessage("Your address can't be empty.");
+
     else if (citizenId.length === 0) 
       setErrorMessage("Your citizen id can't be empty.");
-    else if (isNaN(mobilePhone) || mobilePhone.length !== 13) 
+    else if (isNaN(citizenId) || citizenId.length !== 13) 
       setErrorMessage("The citizen id must be 13 numeric characters long.");
 
     else {
-      setErrorMessage("Everything OK");
+      setErrorMessage("");
+      await signUp({
+        email: emailAddress,
+        password: password,
+        firstName: firstName,
+        lastName: lastName,
+        phoneNumber: mobilePhone,
+        birthDate: new Date(birthYear, birthMonth, birthDay+1, 0, 0, 0),
+        address: address,
+        citizenID: citizenId,
+      })
+      navigate("/login")
     }
-    
-    console.log("Error message : ",errorMessage);
   };
 
 
@@ -110,10 +128,7 @@ const RegistrationPage = () => {
               placeholder="First name" 
               required 
               style={{width: '98%', margin: '0px'}}
-              onChange={e => {
-                setFirstName(e.target.value); 
-                console.log('Edit first name to ',e.target.value)
-              }}
+              onChange={e => setFirstName(e.target.value)}
             />
           </Col>
           <Col style={{padding: '0px', display: 'flex', justifyContent: 'flex-end'}}>
@@ -123,10 +138,7 @@ const RegistrationPage = () => {
               placeholder="Last name" 
               required
               style={{width: '98%',  margin: '0px'}}
-              onChange={e => {
-                setLastName(e.target.value); 
-                console.log('Edit last name to ',e.target.value)
-              }}
+              onChange={e => setLastName(e.target.value)}
             />
           </Col>
         </Row>
@@ -136,10 +148,7 @@ const RegistrationPage = () => {
           type="text" 
           placeholder="Mobile phone" 
           required
-          onChange={e => {
-            setMobilePhone(e.target.value); 
-            console.log('Edit mobile phone to ',e.target.value)
-          }}
+          onChange={e => setMobilePhone(e.target.value)}
         />
 
         <Form.Control 
@@ -147,10 +156,7 @@ const RegistrationPage = () => {
           type="text" 
           placeholder="Email address" 
           required
-          onChange={e => {
-            setEmailAddress(e.target.value); 
-            console.log('Edit email address to ',e.target.value)
-          }}
+          onChange={e => setEmailAddress(e.target.value)}
         />
 
         <Form.Control 
@@ -158,10 +164,7 @@ const RegistrationPage = () => {
           type="password" 
           placeholder="New password" 
           required
-          onChange={e => {
-            setPassword(e.target.value); 
-            console.log('Edit password')
-          }}
+          onChange={e => setPassword(e.target.value)}
         />
 
         <Form.Control 
@@ -169,10 +172,7 @@ const RegistrationPage = () => {
           type="password" 
           placeholder="Confirm password" 
           required
-          onChange={e => {
-            setConfirmPassword(e.target.value); 
-            console.log('Edit confirm password')
-          }}
+          onChange={e => setConfirmPassword(e.target.value)}
         />
 
         <Form.Group className='form-group-regis'>
@@ -182,13 +182,10 @@ const RegistrationPage = () => {
               <Form.Select 
                 aria-label="Default select example" 
                 style={{width: '95%'}}
-                onChange={e => {
-                  setBirthDay(e.target.value);
-                  console.log('Set day of birth to ', e.target.value)
-                }}
+                onChange={e => setBirthDay(parseInt(e.target.value))}
               >
                 <option disabled>Date</option>
-                {birthDayChoice.map(e => (<option value={e}>{e}</option>))}
+                {birthDayChoice.map(date => (<option key={date} value={date}>{date}</option>))}
               </Form.Select>
             </Col>
 
@@ -196,13 +193,10 @@ const RegistrationPage = () => {
               <Form.Select 
                 aria-label="Default select example" 
                 style={{width: '95%'}}
-                onChange={e => {
-                  setBirthMonth(e.target.value);
-                  console.log('Set month of birth to ', e.target.value)
-                }}
+                onChange={e => setBirthMonth(parseInt(e.target.value))}
               >
                 <option disabled>Month</option>
-                {birthMonthChoice.map(e => (<option value={e}>{e}</option>))}
+                {birthMonthChoice.map((month, idx) => (<option key={month} value={idx}>{month}</option>))}
               </Form.Select>
             </Col>
 
@@ -210,13 +204,10 @@ const RegistrationPage = () => {
               <Form.Select 
                 aria-label="Default select example" 
                 style={{width: '95%'}}
-                onChange={e => {
-                  setBirthYear(e.target.value);
-                  console.log('Set year of birth to ', e.target.value)
-                }}
+                onChange={e => setBirthYear(parseInt(e.target.value))}
               >
                 <option disabled>Year</option>
-                {birthYearChoice.map(e => (<option value={e}>{e}</option>))}
+                {birthYearChoice.map(year => (<option key={year} value={year}>{year}</option>))}
               </Form.Select>
             </Col>
           </Row>
@@ -227,10 +218,7 @@ const RegistrationPage = () => {
           <Form.Control 
             as="textarea" 
             rows={3}
-            onChange={e => {
-              setAddress(e.target.value); 
-              console.log('Edit address to ',e.target.value)
-            }}
+            onChange={e => setAddress(e.target.value)}
           />
         </Form.Group>
         
@@ -239,19 +227,14 @@ const RegistrationPage = () => {
           type="text" 
           placeholder="Citizen Id" 
           required
-          onChange={e => {
-            setCitizenId(e.target.value); 
-            console.log('Edit citizen id to ',e.target.value)
-          }}
+          onChange={e => setCitizenId(e.target.value)}
         />
 
         <Button 
           className='signup-button-regis' 
           variant="secondary" 
           type="button"
-          onClick={() =>{
-            handleSubmit();
-          }}
+          onClick={onSubmit}
         >
           Sign up
         </Button>
