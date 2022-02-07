@@ -1,7 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router-dom'
 
-const RequestBox = ({name, date, _id, citizenID, transcription}) => {
+const RequestBox = ({name, date, _id, citizenID, transcription, email}) => {
 
   return (
       <div className='info-card shadow' style={{marginBottom:"1.5vh", paddingLeft:"1.5%"}}>
@@ -11,7 +11,8 @@ const RequestBox = ({name, date, _id, citizenID, transcription}) => {
           state={{
             name : {name},
             citizenID: {citizenID},
-            transcription: {transcription}
+            transcription: {transcription},
+            email: {email}
           }}
         >
           <p className='title left' style={{width: '100%', marginTop: '0%'}}>{name}</p>

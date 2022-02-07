@@ -57,6 +57,7 @@ const ChangeAccountRequestListPage = () => {
             _id={e._id}
             citizenID={e.citizenID}
             transcription={e.transcription}
+            email={e.email}
           />
         ))}
         
