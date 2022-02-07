@@ -13,7 +13,7 @@ import './profile.css';
 
 import COLORS from '../../constants/color';
 
-const ProfileInfo = () => {
+const ProfileInfo = ({targetEmail}) => {
   const [viewType, setViewType] = useState('TutorSelf'); // "TutorSelf" | "StudentSelf" | "TutorOther"
   const [isEditing, setEditing] = useState(false);
   const [basicInfo, setBasicInfo] = useState({
@@ -47,15 +47,17 @@ const ProfileInfo = () => {
     reset,
     formState: { errors },
   } = useForm();
+  // const [targetEmail] = useState("nifon@gmail.com")
 
   const fetchData = useCallback(async () => {
     await client({
       method: 'GET',
       // url: `/user/${contactInfo.email}`
-      url: "/user/nifon@gmail.com"
+      url: `/user/${targetEmail}`
+      // url: `/user/nifon@gmail.com`
     })
     .then(({data}) => {
-      console.log(data[0])
+      console.log(data)
       console.log("fetch profile image @ ",data[0].profileImg.url)
       // console.log(Date(data[0].birthDate))
       // console.log(new Date())

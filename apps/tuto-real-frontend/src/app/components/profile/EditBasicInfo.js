@@ -25,11 +25,19 @@ const EditBasicInfo = ({register, errors, basicInfo, tempProfile, setTempProfile
     //console.log(e.target?.files[0])
     await setTempProfile({
       preview: URL.createObjectURL(e.target?.files[0]),
-      raw: await toBase64(e.target?.files[0])
+      raw: await deleteFrontTagBase64(await toBase64(e.target?.files[0]))
     });
     // selectProfileImgHandler();
   }
 
+  function deleteFrontTagBase64(base64Str) { //only support for "jpeg", "png", "jpg"
+    var tmp = base64Str
+    if (tmp.substr(11,4) === 'jpeg') {
+      return tmp.substr(23)
+    } else {
+      return tmp.substr(22)
+    }
+  }
   const toBase64 = file => new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
