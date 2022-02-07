@@ -37,7 +37,7 @@ const ChangeAccountApprovePage = () => {
       setIsPending(true)
 
       client({
-        url: `/tutorReq/${email}`,
+        url: `/tutorReq/${email.email}`,
         method: 'PATCH',
         data: {status: 'approve'}
 
@@ -60,7 +60,7 @@ const ChangeAccountApprovePage = () => {
       setIsPending(true)
 
       client({
-        url: `/tutorReq/${email}`,
+        url: `/tutorReq/${email.email}`,
         method: 'PATCH',
         data: {status: 'reject'}
 

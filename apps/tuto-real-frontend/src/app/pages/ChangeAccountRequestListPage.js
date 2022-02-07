@@ -14,14 +14,17 @@ const ChangeAccountRequestListPage = () => {
     client({
       method: "GET",
       url: '/tutorReq'
+      
     })
     .then(({data}) => {
       console.log(data)
       setDataList(data)
       setIsPending(false)
+
     },[])
     .catch((res) => {
       console.log(res)
+
     },)
   })
 
