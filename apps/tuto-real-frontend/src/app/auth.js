@@ -24,6 +24,10 @@ export function useAuth() {
 
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
+  // Personal Info
+  const [role, setRole] = useState(null)
+  const [firstName, setFirstName] = useState("")
+  const [lastName, setLastName] = useState("")
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -35,6 +39,29 @@ export function AuthProvider({ children }) {
       }
     });
   }, []);
+
+  useEffect(() => {
+    console.log("User status has been changed...")
+    if(currentUser) {
+      client({
+        method: "GET",
+        url: `/user/${currentUser.email}`
+      })
+      .then(({data}) => {
+        setRole(data[0].role)
+        setFirstName(data[0].firstName)
+        setLastName(data[0].lastName)
+      })
+      .catch((err) => {
+        // alert(err.message);
+        console.log(err);
+      });
+    } else {
+      setRole(null)
+      setFirstName("")
+      setLastName("")
+    }
+  },[currentUser])
 
   // const setUpRecaptcha = () => {
   // window.recaptchaVerifier = new RecaptchaVerifier(
@@ -72,7 +99,7 @@ export function AuthProvider({ children }) {
         });
       })
       .then(() => {
-        alert('Email verification failed');
+        alert('Next step. Please verify your email.')
         logOut();
       })
       .catch((err) => {
@@ -102,29 +129,15 @@ export function AuthProvider({ children }) {
           logOut();
         }
       })
-      .then(() => {
-        return client({
-          method: 'GET',
-          url: `/user/${email}`,
-        });
-      })
-      .then((data) => {
-        const res = data.data[0];
-        return res;
-        // return {
-        //   firstName: res.firstName,
-        //   lastName: res.lastName,
-        //   role: res.role,
-        // };
-      })
       .catch((err) => {
         alert(err.message);
-        console.log(err.message);
+        console.log(err);
       });
   };
 
   const logOut = () => {
     signOut(auth);
+    setRole(null)
   };
 
   const updatePassword = (password, newPassword) => {
@@ -184,6 +197,9 @@ export function AuthProvider({ children }) {
     sendOTP,
     verifyOTP,
     resetPassword,
+    role,
+    firstName,
+    lastName
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

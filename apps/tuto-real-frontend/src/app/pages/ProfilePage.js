@@ -4,22 +4,25 @@ import { client } from '../axiosConfig'
 import ProfileInfo from '../components/profile/ProfileInfo'
 import ProfileMenuBar from '../components/profile/ProfileMenuBar'
 import ProfileTeachSchedule from '../components/profile/teach-schedule/ProfileTeachSchedule'
+import { getCookieData } from '../components/util/cookieHandler'
 
 const ProfilePage = () => {
   const [selecting, setSelecting] = useState("Info") // "Info" | "Learn" | "Teach" | "Review"
   const [viewType, setViewType] = useState("TutorSelf") // "TutorSelf" | "StudentSelf" | "TutorOther"
+  // const {email, role} = getCookieData()
 
   const fetchData = useCallback(() => {
-  //   client({
-  //     method: "GET",
-  //     url: `/tutor/${}`
-  //   })
-  //   .then(({data}) => {
-  //     console.log(data)
-  //   })
-  //   .catch((res) => {
-  //     console.log(res)
-  //   })
+    // client({
+    //   method: "GET",
+    //   url: `/tutor/${email}`
+    // })
+    // .then(({data}) => {
+    //   console.log(data)
+    //   if(role === "...") setViewType
+    // })
+    // .catch((res) => {
+    //   console.log(res)
+    // })
   },[])
 
   useEffect(() => {

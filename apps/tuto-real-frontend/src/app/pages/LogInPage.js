@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import {Form, Button} from "react-bootstrap";
 import { useNavigate } from 'react-router-dom'
+
+import { useAuth } from '../auth'
 import "./RegistrationPage.css"
 
 
@@ -9,28 +11,11 @@ import "./RegistrationPage.css"
   const [password, setPassword] = useState();
 
   const navigate = useNavigate()
+  const { logIn } = useAuth()
 
   const handleSubmit = async e => {
-    console.log(email)
-    console.log(password)
-    /*e.preventDefault();
-    const response = await loginUser({
-      username,
-      password
-    });
-    if ('accessToken' in response) {
-      swal("Success", response.message, "success", {
-        buttons: false,
-        timer: 2000,
-      })
-      .then((value) => {
-        localStorage.setItem('accessToken', response['accessToken']);
-        localStorage.setItem('user', JSON.stringify(response['user']));
-        window.location.href = "/profile";
-      });
-    } else {
-      swal("Failed", response.message, "error");
-    }*/
+    await logIn(email, password)
+    navigate('/')
   }
 
   return (
@@ -47,17 +32,7 @@ import "./RegistrationPage.css"
       </div>
   
       <div className='regispage-right-side'>
-        <Form 
-          // noValidate 
-          // validated={validated} 
-          // onSubmit={handleSubmit}
-        >
-          {/* {errorMessage.length != 0 ?
-            <p style={{color:'red', fontFamily:'roboto', fontWeight:'bold', marginBottom:'1vh'}}>
-              {errorMessage}
-            </p>
-            : null
-          } */}
+        <Form style={{width: "inherit"}}>
 
           <Form.Control 
             className='form-control-regis' 
@@ -84,9 +59,7 @@ import "./RegistrationPage.css"
             className='signup-button-regis' 
             variant="secondary"
             type="button"
-            onClick={() =>{
-              handleSubmit();
-            }}
+            onClick={handleSubmit}
           >
           Sign in
           </Button>
