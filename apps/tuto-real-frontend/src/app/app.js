@@ -27,7 +27,7 @@ export function App() {
         />
         <Route
           exact
-          path="/changeAccApprove/:_id"
+          path="/changeAccApprove"
           element={<ChangeAccountApprovePage />}
         />
         <Route

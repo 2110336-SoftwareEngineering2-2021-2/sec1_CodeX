@@ -7,7 +7,7 @@ const RequestBox = ({name, date, _id, citizenID, transcription, email}) => {
       <div className='info-card shadow' style={{marginBottom:"1.5vh", paddingLeft:"1.5%"}}>
         <Link 
           style={{textDecoration:'none', width: '100%'}} 
-          to={`/changeaccapprove`}
+          to={`/changeAccApprove`}
           state={{
             name,
             citizenID,

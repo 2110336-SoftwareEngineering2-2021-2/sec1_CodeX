@@ -35,7 +35,7 @@ const ChangeAccountApprovePage = () => {
 
     //handle back button
     const handleBack = () => {
-      navigate('/request-list')
+      navigate('/requestList')
     }
 
     // handle approve click
@@ -54,7 +54,7 @@ const ChangeAccountApprovePage = () => {
 
       }).then( (response) => {
         console.log(response)
-        navigate('/request-list')
+        navigate('/requestList')
 
       }).catch( (response) => {
         console.log(response)
@@ -77,7 +77,7 @@ const ChangeAccountApprovePage = () => {
 
       }).then( (response) => {
         console.log(response)
-        navigate('/request-list')
+        navigate('/requestList')
 
       }).catch( (response) => {
         console.log(response)
