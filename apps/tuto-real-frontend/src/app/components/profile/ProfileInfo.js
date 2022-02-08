@@ -103,7 +103,10 @@ const ProfileInfo = ({targetEmail, viewType}) => {
       method: "PATCH",
       url: `/user/${targetEmail}`,
       data: {
-        // picture: 
+        profileImg: {
+          fileName: `${targetEmail}-profile-picture`,
+          url: tempProfile.raw
+        }, 
         firstName: data.firstName,
         // firstName: basicInfo.firstName,
         lastName: data.lastName,
@@ -162,23 +165,42 @@ const ProfileInfo = ({targetEmail, viewType}) => {
     );
   };
 
+  // function translateDateForSendToBack(date, month, year) {
+  //   var temp = "";
+
+  //   if (month < 10) {
+  //     temp += "0";
+  //   }
+  //   temp += month.toString() + "/";
+
+  //   if (date < 10) {
+  //     temp += "0";
+  //   }
+  //   temp += date.toString() + "/";
+
+  //   temp += (year % 100).toString();
+
+  //   return temp;
+  // }
+
   function translateDateForSendToBack(date, month, year) {
     var temp = "";
+    temp += year + "-"; 
 
     if (month < 10) {
       temp += "0";
     }
-    temp += month.toString() + "/";
+    temp += month.toString() + "-";
 
     if (date < 10) {
       temp += "0";
     }
-    temp += date.toString() + "/";
-
-    temp += (year % 100).toString();
+    temp += date.toString() + "T17:00:00.000+00:00";
 
     return temp;
+    // 2001-03-12T17:00:00.000+00:00
   }
+
 
   const renderEditForm = () => {
     return (

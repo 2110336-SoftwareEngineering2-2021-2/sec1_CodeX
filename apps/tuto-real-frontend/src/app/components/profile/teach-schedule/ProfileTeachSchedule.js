@@ -50,19 +50,19 @@ const ProfileTeachSchedule = ({targetEmail,viewType}) => {
     const sendData =async () => {
         setTeachingInfo(tempTeachingInfo);
         setEditing(false);
-        // await client({
-        //     method: "PATCH",
-        //     url: "/user/nifon@gmail.com",
-        //     data: {
-        //         subjects: tempTeachingInfo.subjectList,
-        //         description: tempTeachingInfo.subjectList
-        //     }
-        // }).then(({data}) => {
-        //     console.log(data)
-        //     setEditing(false)
-        // }).catch(({response}) => {
-        //     console.log(response)
-        // })
+        await client({
+            method: "PATCH",
+            url: `/user/${targetEmail}`,
+            data: {
+                subjects: tempTeachingInfo.subjectList,
+                description: tempTeachingInfo.subjectList
+            }
+        }).then(({data}) => {
+            console.log(data)
+            setEditing(false)
+        }).catch(({response}) => {
+            console.log(response)
+        })
     }
 
     const onCancel = () => {
