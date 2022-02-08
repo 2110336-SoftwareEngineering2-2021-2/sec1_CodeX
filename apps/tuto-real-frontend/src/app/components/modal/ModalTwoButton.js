@@ -1,17 +1,19 @@
 import React from 'react';
 import { Modal } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import NormalButton from '../ui/NormalButton';
 
 const ModalTwoButton = (props) => {
 
+    const {show, setShow, title, header, leftFunc, leftMessage, rightMessage, leftColor, rightColor, isPending, leftPending, leftPendingColor } = props
+
     const handleclose = () => {
-        props.setShow(!props.show)
+        setShow(!show)
     }
 
   return (
       <div>
         <Modal 
-            show={props.show} 
+            show={show} 
             onHide={handleclose} 
             backdrop='static' 
             keyboard={false} 
@@ -20,20 +22,39 @@ const ModalTwoButton = (props) => {
             style={{width: '35%', left: '32.5%'}}
         >
             <Modal.Header style={{flexDirection: 'column', alignItems: 'flex-start', border: 'none', paddingBottom: '0px'}}>
-                <Modal.Title className='request-title'>{props.title}</Modal.Title>
-                <Modal.Title className='request-header'>{props.header}</Modal.Title>
+                
+                <Modal.Title className='request-title'>{title}</Modal.Title>
+                <Modal.Title className='request-header'>{header}</Modal.Title>
+                
                 <hr/>
             </Modal.Header>
+
             <Modal.Footer style={{border: 'none', paddingTop: '0px', flexDirection: 'row-reverse', justifyContent: 'flex-start'}}>
-                <button className='submit-open' style={{width: '22%', margin: '0.25rem', padding: '5px 5px', backgroundColor: props.rightColor}} onClick={handleclose}>
-                    {props.rightMessage}
-                </button>
-                <Link style={{textDecoration: 'none', width: '22%'}} to={props.leftTo}>
-                    <button className='submit-open' style={{width: '100%', marginBottom: '0px', padding: '5px 10px', backgroundColor: props.leftColor}} onClick={handleclose}>
-                        {props.leftMessage}
-                    </button>
-                </Link>
-                
+
+                <NormalButton 
+                    title={rightMessage}
+                    whenClick={handleclose}
+                    size='s'
+                    bgColor={rightColor}
+                    fontSize='larger'
+                />
+
+                {(!isPending ?? true) && <NormalButton 
+                    title={leftMessage}
+                    whenClick={() => leftFunc()}
+                    size='s'
+                    bgColor={leftColor}
+                    fontSize='larger'
+                />}
+
+
+                {(isPending ?? false) && <NormalButton 
+                    title={leftPending}
+                    size='s'
+                    bgColor={leftPendingColor}
+                    fontSize='larger'
+                />}
+
             </Modal.Footer>
         </Modal>
       </div>

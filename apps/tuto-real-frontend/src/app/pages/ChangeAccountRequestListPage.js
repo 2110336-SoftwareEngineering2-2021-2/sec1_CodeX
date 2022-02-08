@@ -14,14 +14,17 @@ const ChangeAccountRequestListPage = () => {
     client({
       method: "GET",
       url: '/tutorReq'
+      
     })
     .then(({data}) => {
       console.log(data)
       setDataList(data)
       setIsPending(false)
+
     },[])
     .catch((res) => {
       console.log(res)
+
     },)
   })
 
@@ -57,6 +60,7 @@ const ChangeAccountRequestListPage = () => {
             _id={e._id}
             citizenID={e.citizenID}
             transcription={e.transcription}
+            email={e.email}
           />
         ))}
         

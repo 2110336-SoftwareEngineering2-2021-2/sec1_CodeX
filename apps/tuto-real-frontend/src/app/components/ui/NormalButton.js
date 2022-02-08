@@ -10,9 +10,11 @@ const NormalButton = (props) => {
       onClick={whenClick ?? undefined} 
       className='shadow'
       style={{
+        fontSize: props.fontSize ?? '16px',
         fontWeight: "bold",
         padding: `0.5vh ${size === "s"? 2: 4.5}vw`,
-        marginLeft: "2vw",
+        marginLeft: props.marginLeft ?? "2vw",
+        marginBottom: `${size === "s"? 0.5: 1}vw`,
         borderColor: "transparent",
         borderRadius: "30px",
         backgroundColor: bgColor,
