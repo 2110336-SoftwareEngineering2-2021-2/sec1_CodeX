@@ -29,4 +29,12 @@ export class UserService {
         ).exec();
         return this.userModel.find({email: mail}, {firstName: 1, lastName: 1, _id:0});
     }
+
+    async checkUnique(ssid:string){
+      return await this.userModel.find({citizenID:ssid})
+      .then(result=>{
+        if (result.length==0) return { result : true}
+        return { result :false}
+      })
+    }
 }
