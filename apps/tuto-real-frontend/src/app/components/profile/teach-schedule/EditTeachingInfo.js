@@ -86,7 +86,7 @@ const EditTeachingInfo = ({tempTeachingInfo, setTempTeachingInfo}) => {
                     as="textarea" 
                     rows={3}
                     placeholder="describe your teaching plan." 
-                    defaultValue={description}
+                    // defaultValue={description}
                     value={description}
                     onChange={e => {
                         setTempTeachingInfo({
