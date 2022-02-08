@@ -10,7 +10,6 @@ export class UserDto {
   readonly citizenID: String;
   role: String;
   profileImg: {
-    fileName: String;
     url: String;
   };
 }
