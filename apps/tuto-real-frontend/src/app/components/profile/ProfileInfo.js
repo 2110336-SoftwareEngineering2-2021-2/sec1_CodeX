@@ -47,20 +47,15 @@ const ProfileInfo = ({targetEmail, viewType}) => {
     reset,
     formState: { errors },
   } = useForm();
-  // const [targetEmail] = useState("nifon@gmail.com")
 
   const fetchData = useCallback(async () => {
     await client({
       method: 'GET',
-      // url: `/user/${contactInfo.email}`
       url: `/user/${targetEmail}`
-      // url: `/user/nifon@gmail.com`
     })
     .then(({data}) => {
       console.log("profile in fetch: ", data)
       console.log("fetch profile image @ ",data[0].profileImg.url)
-      // console.log(Date(data[0].birthDate))
-      // console.log(new Date())
       setTempProfile({
         ...tempProfile,
         preview: data[0].profileImg.url
@@ -106,7 +101,7 @@ const ProfileInfo = ({targetEmail, viewType}) => {
     // formData.append("Profile Picture", tempProfile, tempProfile?.name)
     await client({
       method: "PATCH",
-      url: "/user/nifon@gmail.com",
+      url: `/user/${targetEmail}`,
       data: {
         // picture: 
         firstName: data.firstName,
