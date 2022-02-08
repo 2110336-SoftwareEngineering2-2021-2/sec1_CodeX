@@ -31,8 +31,7 @@ export class UserController {
 
         dto.role = "Student"
         dto.profileImg = {
-            fileName :"default.jpg",
-            url : "https://storage.cloud.google.com/code_x/ProfileImg/default.jpg"
+            url : "https://storage.googleapis.com/codex_img/Profile/default.jpg"
         }
         return this.service.Create(dto);
     }
