@@ -47,7 +47,11 @@ const ProfileTeachSchedule = ({targetEmail,viewType}) => {
         console.log("viewType: ", viewType)
     }, [fetchData])
 
-    const sendData =async () => {
+    // useEffect(() => {
+    //     console.log("setTempTeachingInfo: ", tempTeachingInfo)
+    // }, [tempTeachingInfo])
+
+    const sendData = async () => {
         setTeachingInfo(tempTeachingInfo);
         setEditing(false);
         await client({
@@ -55,7 +59,7 @@ const ProfileTeachSchedule = ({targetEmail,viewType}) => {
             url: `/user/${targetEmail}`,
             data: {
                 subjects: tempTeachingInfo.subjectList,
-                description: tempTeachingInfo.subjectList
+                description: tempTeachingInfo.description
             }
         }).then(({data}) => {
             console.log(data)
