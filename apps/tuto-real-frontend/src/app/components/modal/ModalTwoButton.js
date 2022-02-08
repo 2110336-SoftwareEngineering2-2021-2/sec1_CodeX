@@ -4,14 +4,16 @@ import NormalButton from '../ui/NormalButton';
 
 const ModalTwoButton = (props) => {
 
+    const {show, setShow, title, header, leftFunc, leftMessage, rightMessage, leftColor, rightColor, isPending, leftPending, leftPendingColor } = props
+
     const handleclose = () => {
-        props.setShow(!props.show)
+        setShow(!show)
     }
 
   return (
       <div>
         <Modal 
-            show={props.show} 
+            show={show} 
             onHide={handleclose} 
             backdrop='static' 
             keyboard={false} 
@@ -21,8 +23,8 @@ const ModalTwoButton = (props) => {
         >
             <Modal.Header style={{flexDirection: 'column', alignItems: 'flex-start', border: 'none', paddingBottom: '0px'}}>
                 
-                <Modal.Title className='request-title'>{props.title}</Modal.Title>
-                <Modal.Title className='request-header'>{props.header}</Modal.Title>
+                <Modal.Title className='request-title'>{title}</Modal.Title>
+                <Modal.Title className='request-header'>{header}</Modal.Title>
                 
                 <hr/>
             </Modal.Header>
@@ -30,26 +32,26 @@ const ModalTwoButton = (props) => {
             <Modal.Footer style={{border: 'none', paddingTop: '0px', flexDirection: 'row-reverse', justifyContent: 'flex-start'}}>
 
                 <NormalButton 
-                    title={props.rightMessage}
+                    title={rightMessage}
                     whenClick={handleclose}
                     size='s'
-                    bgColor={props.rightColor}
+                    bgColor={rightColor}
                     fontSize='larger'
                 />
 
-                {!props.isPending && <NormalButton 
-                    title={props.leftMessage}
-                    whenClick={() => props.leftFunc()}
+                {(!isPending ?? true) && <NormalButton 
+                    title={leftMessage}
+                    whenClick={() => leftFunc()}
                     size='s'
-                    bgColor={props.leftColor}
+                    bgColor={leftColor}
                     fontSize='larger'
                 />}
 
 
-                {props.isPending && <NormalButton 
-                    title={props.leftPending}
+                {(isPending ?? false) && <NormalButton 
+                    title={leftPending}
                     size='s'
-                    bgColor={props.leftPending}
+                    bgColor={leftPendingColor}
                     fontSize='larger'
                 />}
 

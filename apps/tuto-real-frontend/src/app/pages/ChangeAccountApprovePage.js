@@ -9,7 +9,7 @@ const ChangeAccountApprovePage = () => {
     //props from Link
     const location = useLocation()
     const {name, citizenID, transcription, email} = location.state
-    console.log(location.state)
+    // console.log(location.state)
 
     //other initial
     const [isPending,setIsPending] = useState(false)
@@ -153,6 +153,7 @@ const ChangeAccountApprovePage = () => {
             rightColor='var(--yellow)'
             isPending={isPending}
             leftPending='Approving...'
+            leftPendingColor='var(--lightgray)'
         />
 
         <ModalTwoButton 
@@ -167,6 +168,7 @@ const ChangeAccountApprovePage = () => {
             rightColor='var(--yellow)'
             isPending={isPending}
             leftPending='Rejecting...'
+            leftPendingColor='var(--lightgray)'
         />
     </div>
   );
