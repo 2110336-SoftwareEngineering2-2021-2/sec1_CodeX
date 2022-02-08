@@ -7,47 +7,55 @@ const HomePage = () => {
     signInWithGoogle,
     logIn,
     logOut,
-    updatePassword,
-    sendOTP,
-    verifyOTP,
+    updateUserPassword,
     resetPassword,
   } = useAuth();
 
-  const data = {
+  const data1 = {
     firstName: 'A',
     lastName: 'B',
     phoneNumber: '0123456789',
     email: 'venel94370@mannawo.com',
-    password: '000000',
+    password: 888888,
     birthDate: '01/01/2001',
     address: 'TH',
-    citizenID: '123456789',
+    citizenID: '0123456789',
   };
-  const email = 'venel94370@mannawo.com';
-  const password = '000000';
-  const phoneNumber = '+10958612142';
-  const code = '123456';
+
+  const data2 = {
+    firstName: 'X',
+    lastName: 'Y',
+    phoneNumber: '0123456789',
+    email: 'miuluqidf@sinaite.net',
+    password: 123456,
+    birthDate: '01/01/2001',
+    address: 'TH',
+    citizenID: '9876543210',
+  };
+
   return (
     <>
       <h5>User: {currentUser?.email}</h5>
       <div id="recaptcha"></div>
       {currentUser ? (
         <span>
-          <button onClick={() => updatePassword(password, '000000')}>
+          <button onClick={() => updateUserPassword(data1.password, 555555)}>
             Update Password
           </button>
-          {/* <button onClick={() => sendOTP(phoneNumber)}>Send OTP</button>
-          <button onClick={() => verifyOTP(code)}>Verify OTP</button> */}
+          <button onClick={() => resetPassword(data1.email)}>
+            Reset Password
+          </button>
           <button onClick={() => logOut()}>Sign Out</button>
         </span>
       ) : (
         <span>
-          <button onClick={() => signUp(data)}>Sign Up</button>
+          <button onClick={() => signUp(data1)}>Sign Up</button>
           <button onClick={() => signInWithGoogle()}>
             Sign In with Google
           </button>
-          <button onClick={() => logIn(email, password)}>Sign In</button>
-          <button onClick={() => resetPassword(email)}>Reset Password</button>
+          <button onClick={() => logIn(data1.email, data1.password)}>
+            Sign In
+          </button>
         </span>
       )}
 
@@ -62,19 +70,3 @@ const HomePage = () => {
 };
 
 export default HomePage;
-
-// .then(() => {
-//   client({
-//     method: 'POST',
-//     url: '/user/create',
-//     body: {
-//       firstName: data.firstName,
-//       lastName: data.lastName,
-//       phoneNumber: data.phoneNumber,
-//       email: data.email,
-//       birthDate: data.birthDate,
-//       address: data.address,
-//       citizenID: data.citizenID,
-//     },
-//   });
-// })
