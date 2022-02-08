@@ -44,7 +44,7 @@ const ChangeAccountApprovePage = () => {
     client({
       url: `/tutorReq/${email}`,
       method: 'PATCH',
-      data: { status: 'approve' },
+      data: { status: 'Approved' },
     })
       .then(({ data }) => {
         console.log(data);
@@ -67,7 +67,7 @@ const ChangeAccountApprovePage = () => {
     client({
       url: `/tutorReq/${email}`,
       method: 'PATCH',
-      data: { status: 'reject' },
+      data: { status: 'Reject' },
     })
       .then(({ data }) => {
         console.log(data);
