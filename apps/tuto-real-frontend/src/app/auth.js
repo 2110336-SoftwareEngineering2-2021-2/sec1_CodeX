@@ -137,6 +137,8 @@ export function AuthProvider({ children }) {
 
   const logOut = () => {
     signOut(auth);
+    setFirstName("")
+    setLastName("")
     setRole(null)
   };
 

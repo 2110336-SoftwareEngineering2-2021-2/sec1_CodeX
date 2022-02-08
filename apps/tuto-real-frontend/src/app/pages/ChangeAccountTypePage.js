@@ -115,7 +115,8 @@ const ChangeAccountTypePage = () => {
 
     const backToOwnerProfileHandle = () => {
       setShowModal(false)
-      navigate("/profile", {targetEmail: ownerRequestEmail})
+      // navigate("/profile", {state:{targetEmail: "poneiei@mail.com"}})
+      navigate("/profile", {state: {targetEmail: ownerRequestEmail}})
     }
 
   return (
