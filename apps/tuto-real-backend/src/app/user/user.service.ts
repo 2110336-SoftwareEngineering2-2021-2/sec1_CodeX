@@ -24,7 +24,8 @@ export class UserService {
         const userList = await this.userModel.find({ email: mail }).exec();
         await this.userModel.updateOne(
             { email: mail },
-            { firstName: dto.firstName, lastName: dto.lastName, address: dto.address, birthDate: dto.birthDate, profileImg: dto.profileImg},
+            { subjects: dto.subjects, description: dto.description, firstName: dto.firstName, 
+              lastName: dto.lastName, address: dto.address, birthDate: dto.birthDate, profileImg: dto.profileImg},
             { upsert: true },
         ).exec();
         return this.userModel.find({email: mail}, {firstName: 1, lastName: 1, _id:0});
