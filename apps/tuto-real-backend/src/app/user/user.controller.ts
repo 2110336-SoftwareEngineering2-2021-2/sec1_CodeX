@@ -42,6 +42,11 @@ export class UserController {
         return this.service.updateProfile(email, dto);
     }
 
+    @Get('/unique/:id')
+    checkUnique(@Param('id') ssid: string) {
+        return this.service.checkUnique(ssid);
+    }
+
 
 
 }

@@ -1,6 +1,6 @@
 export class UserDto {
-  //readonly subjects: [String];
-  //readonly description : String;
+  readonly subjects: [String];
+  readonly description : String;
   readonly firstName: String;
   readonly lastName: String;
   readonly phoneNumber: String;

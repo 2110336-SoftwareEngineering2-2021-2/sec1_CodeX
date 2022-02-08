@@ -2,8 +2,8 @@ import * as mongoose from 'mongoose';
 import { ImgSchema } from '../util/image.schema';
 
 export const UserSchema = new mongoose.Schema({
-  //subjects: [String],
-  //description : String,
+  subjects: {type : [String], default : undefined},
+  description : { type : String , default : undefined},
   firstName: String,
   lastName: String,
   phoneNumber: String,
