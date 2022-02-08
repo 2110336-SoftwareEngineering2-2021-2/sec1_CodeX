@@ -24,29 +24,22 @@ export class UserController {
     return this.service.GetProfileByMail(mail);
   }
 
-  
+  @Post('/create')
+  Create(@Body() dto: UserDto) {
+    dto.role = 'Student';
+    dto.profileImg = {
+      url: 'https://storage.googleapis.com/codex_img/Profile/default.jpg',
+    };
+    return this.service.Create(dto);
+  }
 
-    @Post('/create')
-    Create(@Body() dto:UserDto) {
+  @Patch(':email')
+  update(@Param('email') email: string, @Body() dto: updateUserDto) {
+    return this.service.updateProfile(email, dto);
+  }
 
-        dto.role = "Student"
-        dto.profileImg = {
-            url : "https://storage.googleapis.com/codex_img/Profile/default.jpg"
-        }
-        return this.service.Create(dto);
-    }
-    
-    @Patch(':email')
-    update(@Param('email') email: string,
-    @Body() dto: updateUserDto) {
-        return this.service.updateProfile(email, dto);
-    }
-
-    @Get('/unique/:id')
-    checkUnique(@Param('id') ssid: string) {
-        return this.service.checkUnique(ssid);
-    }
-
-
-
+  @Post('/unique')
+  checkUnique(@Body('citizenID') ssid: string) {
+    return this.service.checkUnique(ssid);
+  }
 }

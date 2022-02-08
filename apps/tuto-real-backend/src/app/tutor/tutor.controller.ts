@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UserDto } from '../user/user.dto';
 import { User } from '../user/user.interface';
@@ -6,17 +15,14 @@ import { TutorService } from './tutor.service';
 
 @Controller('tutor')
 export class TutorController {
+  constructor(private readonly service: TutorService) {}
 
-    constructor(private readonly service: TutorService){}
-
-   
-
-    /*@Get(':id')
+  /*@Get(':id')
     GetProfileByID(@Param('id') id: String) {
         return this.service.GetProfileByID(id); 
     }*/
 
-    /*@Post()
+  /*@Post()
     @UseInterceptors(FileInterceptor('img'))
     UploadImage(@UploadedFile() file , @Body() dto:UserDto) {
         //if (typeof (dto.subjects) == "string")
@@ -27,8 +33,4 @@ export class TutorController {
         return this.service.UploadImage(dto);
       
     }*/
-    
-
-
-
 }

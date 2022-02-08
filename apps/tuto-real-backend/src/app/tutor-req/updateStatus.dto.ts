@@ -1,4 +1,3 @@
 export class updateStatusDto {
-
-    readonly status : String
+  readonly status: String;
 }

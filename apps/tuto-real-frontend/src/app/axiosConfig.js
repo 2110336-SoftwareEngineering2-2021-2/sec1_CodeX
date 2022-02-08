@@ -1,13 +1,11 @@
-import Axios from 'axios'
+import Axios from 'axios';
 // import Cookies from 'universal-cookie'
 
-
-const APP_API_URL = "http://localhost:3333/api"
-
+const APP_API_URL = 'http://localhost:3333/api';
 
 export const client = Axios.create({
   baseURL: APP_API_URL,
-})
+});
 
 // client.interceptors.request.use(
 //   (req) => {

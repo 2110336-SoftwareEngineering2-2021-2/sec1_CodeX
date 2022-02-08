@@ -1,72 +1,72 @@
 .backtoprofile {
-    text-decoration: none;
-    color: white;
-    background-color: var(--third);
-    padding: 5px 0px;
-    font-size: larger;
-    border-radius: 50px;
-    font-weight: bold;
-    width: 13.5vw;
-    margin-bottom: 2vw;
-    display: flex;
-    justify-content: center;
+  text-decoration: none;
+  color: white;
+  background-color: var(--third);
+  padding: 5px 0px;
+  font-size: larger;
+  border-radius: 50px;
+  font-weight: bold;
+  width: 13.5vw;
+  margin-bottom: 2vw;
+  display: flex;
+  justify-content: center;
 }
 
-.backtoprofile:hover{
-    color: white;
+.backtoprofile:hover {
+  color: white;
 }
 
-.left{
-    text-align: left;
+.left {
+  text-align: left;
 }
 
-.upload{
-    display: flex;
-    width: 100%;
+.upload {
+  display: flex;
+  width: 100%;
 }
 
-.upload-text{
-    color: var(--third);
-    font-size: larger;
-    margin: 1.334% 2%;
+.upload-text {
+  color: var(--third);
+  font-size: larger;
+  margin: 1.334% 2%;
 }
 
-.upload-image{
-    width: 93%;
-    height: auto;
-    margin: 1.334% 2%;
+.upload-image {
+  width: 93%;
+  height: auto;
+  margin: 1.334% 2%;
 }
 
-.submit-open{
-    text-decoration: none;
-    color: white;
-    background-color: var(--third);
-    padding: 5px 0px;
-    font-size: larger;
-    border-radius: 50px;
-    font-weight: bold;
-    display: flex;
-    width: 13.5vw;
-    margin-bottom: 20px;
-    border: none;
-    justify-content: center;
+.submit-open {
+  text-decoration: none;
+  color: white;
+  background-color: var(--third);
+  padding: 5px 0px;
+  font-size: larger;
+  border-radius: 50px;
+  font-weight: bold;
+  display: flex;
+  width: 13.5vw;
+  margin-bottom: 20px;
+  border: none;
+  justify-content: center;
 }
 
-.submit-close{
-    text-decoration: none;
-    color: white;
-    background-color: var(--lightgray);
-    padding: 5px 0px;
-    font-size: larger;
-    border-radius: 50px;
-    font-weight: bold;
-    display: flex;
-    width: 13.5vw;
-    margin-bottom: 20px;
-    border: none;
-    justify-content: center;
+.submit-close {
+  text-decoration: none;
+  color: white;
+  background-color: var(--lightgray);
+  padding: 5px 0px;
+  font-size: larger;
+  border-radius: 50px;
+  font-weight: bold;
+  display: flex;
+  width: 13.5vw;
+  margin-bottom: 20px;
+  border: none;
+  justify-content: center;
 }
 
-.submit-close:hover{
-    cursor: default;
+.submit-close:hover {
+  cursor: default;
 }

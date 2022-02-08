@@ -3,59 +3,64 @@ import RequestBox from '../components/requestlist/RequestBox';
 import { useState } from 'react';
 import { client } from '../axiosConfig';
 
-const ChangeAccountRequestListPage = () => { 
-
+const ChangeAccountRequestListPage = () => {
   //data
-  const [dataList,setDataList] = useState(null)
-  const [isPending,setIsPending] = useState(true)
+  const [dataList, setDataList] = useState(null);
+  const [isPending, setIsPending] = useState(true);
 
   //get func
-  const fetchData = useCallback( () => {
+  const fetchData = useCallback(() => {
     client({
-      method: "GET",
-      url: '/tutorReq'
-      
+      method: 'GET',
+      url: '/tutorReq',
     })
-    .then(({data}) => {
-      console.log(data)
-      setDataList(data)
-      setIsPending(false)
+      .then(({ data }) => {
+        console.log(data);
+        setDataList(data);
+        setIsPending(false);
+      }, [])
+      .catch((res) => {
+        console.log(res);
+      });
+  });
 
-    },[])
-    .catch((res) => {
-      console.log(res)
-
-    },)
-  })
-
-  useEffect( () => {
-    fetchData()
-  },[])
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
-    <div 
+    <div
       style={{
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center' , 
-        width: '150%'}
-      }>
+        alignItems: 'center',
+        width: '150%',
+      }}
+    >
+      {/* title */}
+      <div style={{ display: 'flex', width: '45%' }}>
+        <p
+          className="title left"
+          style={{ width: '100%', fontSize: 'xx-large' }}
+        >
+          Promote Submission List
+        </p>
+      </div>
 
-        {/* title */}
-        <div style={{display: 'flex', width: '45%'}}>
-          <p className='title left' style={{width: '100%',fontSize: 'xx-large'}}>Promote Submission List</p>
-        </div>
-
-        {/* request box */}
-        {!isPending && dataList.map(e => (
-          <RequestBox 
+      {/* request box */}
+      {!isPending &&
+        dataList.map((e) => (
+          <RequestBox
             key={e.email}
-            name={e.firstName + " " + e.lastName}  
+            name={e.firstName + ' ' + e.lastName}
             date={
-              e.timeStamp.substr(8,2)+"/"
-              +e.timeStamp.substr(5,2)+"/"
-              +e.timeStamp.substr(0,4)+" "
-              +e.timeStamp.substr(11,5)
+              e.timeStamp.substr(8, 2) +
+              '/' +
+              e.timeStamp.substr(5, 2) +
+              '/' +
+              e.timeStamp.substr(0, 4) +
+              ' ' +
+              e.timeStamp.substr(11, 5)
             }
             _id={e._id}
             citizenID={e.citizenID}
@@ -63,7 +68,6 @@ const ChangeAccountRequestListPage = () => {
             email={e.email}
           />
         ))}
-        
     </div>
   );
 };
