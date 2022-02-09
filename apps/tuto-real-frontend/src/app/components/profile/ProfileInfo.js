@@ -99,27 +99,43 @@ const ProfileInfo = ({targetEmail, viewType}) => {
     console.log('sending data...');
     // const formData = new FormData()
     // formData.append("Profile Picture", tempProfile, tempProfile?.name)
-    await client({
-      method: "PATCH",
-      url: `/user/${targetEmail}`,
-      data: {
-        profileImg: {
-          fileName: `${targetEmail}-profile-picture`,
-          url: tempProfile.raw
-        }, 
-        firstName: data.firstName,
-        // firstName: basicInfo.firstName,
-        lastName: data.lastName,
-        birthDate: translateDateForSendToBack(data.date, data.month, data.year),
-        address: data.address,
-      }
-    })
-    .then(({data}) => {
-      console.log(data)
-    })
-    .catch((res) => {
-      console.log(res)
-    })
+    if (tempProfile.raw) {
+      await client({
+        method: "PATCH",
+        url: `/user/${targetEmail}`,
+        data: {
+          profile64: tempProfile.raw,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          birthDate: translateDateForSendToBack(data.date, data.month, data.year),
+          address: data.address,
+        }
+      })
+      .then(({data}) => {
+        console.log(data)
+      })
+      .catch((res) => {
+        console.log(res)
+      })
+    }
+    else {
+      await client({
+        method: "PATCH",
+        url: `/user/${targetEmail}`,
+        data: { 
+          firstName: data.firstName,
+          lastName: data.lastName,
+          birthDate: translateDateForSendToBack(data.date, data.month, data.year),
+          address: data.address,
+        }
+      })
+      .then(({data}) => {
+        console.log(data)
+      })
+      .catch((res) => {
+        console.log(res)
+      })
+    }
   }
 
   const onSubmit = (data) => {
@@ -254,7 +270,7 @@ const ProfileInfo = ({targetEmail, viewType}) => {
                   setEditing(true);
                   setTempProfile({
                     ...tempProfile,
-                    raw: ""
+                    raw: undefined
                   })
                 }}
                 size={'l'}
