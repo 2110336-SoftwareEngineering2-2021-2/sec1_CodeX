@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { uploadImage, uploadImageBy64 } from '../util/google';
+import { deleteImg, uploadImage, uploadImageBy64 } from '../util/google';
 import { updateUserDto } from './updateUser.dto';
 import { UserDto } from './user.dto';
 import { User } from './user.interface';
@@ -21,10 +21,18 @@ export class UserService {
 
   async updateProfile(mail: string, dto: updateUserDto) {
         if(dto.profile64 != null){
-          await uploadImageBy64("Profile",dto.profile64)
-        .then((url)=>{
-          dto.profileImg = {url: url}
-        });
+          await this.userModel.find({ email: mail }).exec()
+          .then(async (result)=>{
+            //if prev img is not default, delete it
+            console.log(result[0].profileImg.url.split("Profile/")[1])
+            if (result[0].profileImg.url.split("Profile/")[1] != "default.jpg"){
+              await deleteImg(result[0].profileImg.url.split("Profile/")[1],"Profile")
+            }
+            await uploadImageBy64("Profile",dto.profile64)
+            .then((url)=>{
+              dto.profileImg = {url: url}
+            });
+          })
         }
         
         const userList = await this.userModel.find({ email: mail }).exec();
