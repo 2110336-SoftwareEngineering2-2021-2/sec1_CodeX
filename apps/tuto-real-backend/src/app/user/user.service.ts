@@ -20,10 +20,13 @@ export class UserService {
   }
 
   async updateProfile(mail: string, dto: updateUserDto) {
-        await uploadImageBy64("Profile",dto.profile64)
+        if(dto.profile64 != null){
+          await uploadImageBy64("Profile",dto.profile64)
         .then((url)=>{
           dto.profileImg = {url: url}
-        })
+        });
+        }
+        
         const userList = await this.userModel.find({ email: mail }).exec();
         await this.userModel.updateOne(
             { email: mail },
