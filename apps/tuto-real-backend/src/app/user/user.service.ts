@@ -48,8 +48,8 @@ export class UserService {
     async checkUnique(ssid:string){
       return await this.userModel.find({citizenID:ssid})
       .then(result=>{
-        if (result.length==0) return { result : true}
-        return { result :false}
+        if (result.length==0) return true
+        return false
       })
     }
 }
