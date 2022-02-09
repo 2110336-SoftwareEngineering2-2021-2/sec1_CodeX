@@ -63,85 +63,19 @@ export const uploadImageBy64 = async (type:String,base64:String) => {
     const blob = bucket.file(type+"/"+fileName)
     console.log(`https://storage.googleapis.com/${bucket.name}/${type}/${fileName}`)
     // Uploads the file.
-    return blob.save(buffer)
+    return blob.save(buffer,{metadata: {
+      cacheControl: "public, max-age=60" // 1 minute caching
+   }})
     .then(() => {
         return `https://storage.googleapis.com/${bucket.name}/${type}/${fileName}`
    
     })
     .catch(error => {
         return error
-  
-        // Error handling...
     });
   }
-  /*const { originalname, buffer,mimetype } = buf
 
-}
-
-
-    const blobStream = blob.createWriteStream( {metadata: {
-        contentType: req.file.mimetype
-      }})
-
-    console.log( `https://storage.googleapis.com/${bucket.name}/${blob.name}`)
-
-    blobStream.on('finish', () => {
-        
-      const publicUrl = format(
-        `https://storage.googleapis.com/${bucket.name}/${blob.name}`
-      )
-      resolve(publicUrl)
-    })
-    .on('error', () => {
-      reject(`Unable to upload image, something went wrong`)
-    })
-    .end(buffer)
+  export const deleteImg = async (fileName,type)=>{
+    return await gc.bucket(bucket.name).file(`${type}/${fileName}`).delete();
+  }
   
-
-  
-
-   uploadFileToGCSPromise = (file) => new Promise((resolve, reject) => {
-    const { originalname, buffer } = file
-    
-    const blob = bucket.file(originalname.replace(/ /g, "_"))
-    const blobStream = blob.createWriteStream({
-      resumable: false
-    })
-    console.log(`https://storage.googleapis.com/${bucket.name}/${blob.name}`)
-    blobStream.on('finish', () => {
-        
-      const publicUrl = format(
-        `https://storage.googleapis.com/${bucket.name}/${blob.name}`
-      )
-      resolve(publicUrl)
-    })
-    .on('error', () => {
-      reject(`Unable to upload image, something went wrong`)
-    })
-    .end(buffer)
-  })
-}
-
-
-export const uploadFiles = async (files) => {
-    console.log(gc)
-    const googleStorage = new GoogleStorage(BUCKETNAME)
-    console.log(files)
-    let promises = []
-    files.forEach(file => {
-        promises.push(googleStorage.uploadFileToGCSPromise(file))
-    })
-    console.log("promise",promises)
-    Promise.all(promises)
-        .then(result => {
-            console.log("result" ,result)
-        return result
-        })
-        .catch(error => {
-        return error
-        })
-
-
-}
-
-*/

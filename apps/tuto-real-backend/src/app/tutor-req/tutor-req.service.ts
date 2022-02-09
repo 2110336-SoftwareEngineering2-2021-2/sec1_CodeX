@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from '../user/user.interface';
-import { uploadImage, uploadImageBy64 } from '../util/google';
+import { deleteImg, uploadImage, uploadImageBy64 } from '../util/google';
 import { TutorReqDto } from './tutor-req.dto';
 import { TutorReq } from './tutor-req.interface';
 import { updateStatusDto } from './updateStatus.dto';
@@ -74,25 +74,12 @@ export class TutorReqService {
   }
   async updateStatus(mail: string, dto: updateStatusDto) {
     if (dto.status == 'Reject') {
-      // const cit_img = await this.reqModel.find({email: mail},{"citizenID.fileName": 1, _id:0})
-      // const tran_img = await this.reqModel.find({email: mail},{"transcription.fileName": 1, _id:0})
-      // const bucketName = 'Evidence'
-
-            // const bucketName = 'codex_img'
-            // const {Storage} = require('@google-cloud/storage');
-            // const storage = new Storage();
-
-            // const cit_img = await (await this.reqModel.find({email: mail},{"citizenID.url": 1, _id:0})).toString();
-            // const tran_img = await this.reqModel.find({email: mail},{"transcription.url": 1, _id:0});
-        
-            // console.log(`gs://${bucketName}/${cit_img} deleted`);
-            // await storage.bucket(bucketName).file("Evidence/317b2a57-5220-4b79-87b1-36f3c94623b7.jpg").delete();
-            //await storage.bucket(bucketName).file(tran_img).delete();
-
-      // console.log(`gs://${bucketName}/${cit_img} deleted`);
-      // console.log(`gs://${bucketName}/${tran_img} deleted`);
+       const cit_img = await this.reqModel.find({email: mail},{"citizenID.url": 1, _id:0})
+       const tran_img = await this.reqModel.find({email: mail},{"transcription.url": 1, _id:0})
 
       await this.reqModel.deleteOne({ email: mail });
+      await deleteImg(cit_img[0].citizenID.url.split("Evidence/")[1],"Evidence");
+      await deleteImg(tran_img[0].transcription.url.split("Evidence/")[1],"Evidence");
     } else if (dto.status == 'Approved') {
       await this.reqModel
         .updateOne({ email: mail }, { status: 'Approved' }, { upsert: true })

@@ -47,6 +47,7 @@ export class TutorReqController {
 
   @Patch(':email')
   update(@Param('email') email: string, @Body() dto: updateStatusDto) {
+    //console.log(dto,email)
     return this.service.updateStatus(email, dto);
   }
 }
