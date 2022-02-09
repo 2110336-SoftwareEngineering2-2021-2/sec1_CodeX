@@ -24,8 +24,9 @@ export class UserService {
           await this.userModel.find({ email: mail }).exec()
           .then(async (result)=>{
             //if prev img is not default, delete it
-            if (result[0].profileImg.url.split("Profile/")[0] != "default.jpg"){
-              await deleteImg(result[0].profileImg.url.split("Profile/")[0],"Profile")
+            console.log(result[0].profileImg.url.split("Profile/")[1])
+            if (result[0].profileImg.url.split("Profile/")[1] != "default.jpg"){
+              await deleteImg(result[0].profileImg.url.split("Profile/")[1],"Profile")
             }
             await uploadImageBy64("Profile",dto.profile64)
             .then((url)=>{
