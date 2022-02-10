@@ -1,5 +1,8 @@
-
-import { Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { deleteImg, uploadImage, uploadImageBy64 } from '../util/google';
@@ -10,53 +13,68 @@ import { User } from './user.interface';
 const mongoose = require('mongoose');
 @Injectable()
 export class UserService {
-  constructor(@InjectModel('User') private userModel: Model<User>) {}
+  constructor(@InjectModel('User') private readonly userModel: Model<User>) {}
 
-  GetProfileByMail(mail: String) {
-    return this.userModel.find({ email: mail }).exec();
+  public async getProfileByMail(email: String): Promise<UserDto> {
+    try {
+      const profile = this.userModel.findOne({ email }).exec();
+      return profile;
+    } catch (err) {
+      throw new HttpException(err.message, 404);
+    }
   }
 
-  async Create(dto: UserDto) {
-    var id = 0 , mail = 0;
-    await this.userModel.find({citizenID:dto.citizenID})
-      .then(result=>{
-        if (result.length!=0) id = 1
-      })
-
-      await this.userModel.find({email:dto.email})
-      .then(result=>{
-        if (result.length!=0) mail = 1
-      })
-    if (id+mail==2) return "Email and CitizenID already in use"
-    else if (id==1) return "CitizenID already in use"
-    else if (mail==1) return "Email already in use"
-    else await this.userModel.create(dto);
+  public async createProfile(dto: UserDto): Promise<UserDto> {
+    try {
+      const profile = await this.userModel.create(dto);
+      return profile;
+    } catch (err) {
+      throw new HttpException(err.message, 401);
+    }
   }
 
-  async updateProfile(mail: string, dto: updateUserDto) {
-        if(dto.profile64 != null){
-          await this.userModel.find({ email: mail }).exec()
-          .then(async (result)=>{
-            //if prev img is not default, delete it
-            console.log(result[0].profileImg.url.split("Profile/")[1])
-            if (result[0].profileImg.url.split("Profile/")[1] != "default.jpg"){
-              await deleteImg(result[0].profileImg.url.split("Profile/")[1],"Profile")
-            }
-            await uploadImageBy64("Profile",dto.profile64)
-            .then((url)=>{
-              dto.profileImg = {url: url}
-            });
-          })
-        }
-        
-        const userList = await this.userModel.find({ email: mail }).exec();
-        await this.userModel.updateOne(
-            { email: mail },
-            { subjects: dto.subjects, description: dto.description, firstName: dto.firstName, 
-              lastName: dto.lastName, address: dto.address, birthDate: dto.birthDate, profileImg: dto.profileImg},
-            { upsert: true },
-        ).exec();
-        return this.userModel.find({email: mail}, {firstName: 1, lastName: 1, _id:0});
+  public async updateProfile(
+    email: string,
+    dto: updateUserDto
+  ): Promise<UserDto> {
+    if (dto.profile64 != null) {
+      await this.userModel
+        .find({ email })
+        .exec()
+        .then(async (result) => {
+          //if prev img is not default, delete it
+          console.log(result[0].profileImg.url.split('Profile/')[1]);
+          if (result[0].profileImg.url.split('Profile/')[1] != 'default.jpg') {
+            await deleteImg(
+              result[0].profileImg.url.split('Profile/')[1],
+              'Profile'
+            );
+          }
+          await uploadImageBy64('Profile', dto.profile64).then((url) => {
+            dto.profileImg = { url: url };
+          });
+        });
     }
 
+    try {
+      const profile = await this.userModel
+        .findOneAndUpdate(
+          { email },
+          {
+            subjects: dto.subjects,
+            description: dto.description,
+            firstName: dto.firstName,
+            lastName: dto.lastName,
+            address: dto.address,
+            birthDate: dto.birthDate,
+            profileImg: dto.profileImg,
+          },
+          { upsert: true }
+        )
+        .exec();
+      return profile;
+    } catch (err) {
+      throw new HttpException(err.message, 404);
+    }
+  }
 }

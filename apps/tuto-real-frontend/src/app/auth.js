@@ -45,9 +45,10 @@ export function AuthProvider({ children }) {
         url: `/user/${currentUser.email}`,
       })
         .then(({ data }) => {
-          setRole(data[0].role);
-          setFirstName(data[0].firstName);
-          setLastName(data[0].lastName);
+          console.log(data);
+          setRole(data.role);
+          setFirstName(data.firstName);
+          setLastName(data.lastName);
         })
         .catch((err) => {
           console.log(err.message);
@@ -62,48 +63,26 @@ export function AuthProvider({ children }) {
   const signUp = (data) => {
     client({
       method: 'POST',
-      url: '/user/unique',
-      data: {
-        citizenID: data.citizenID,
-      },
+      url: '/user/create',
+      data: data,
     })
-      .then(async (result) => {
-        if (!result.data) throw new Error('Duplicate citizenID');
-        try {
-          return await createUserWithEmailAndPassword(
-            auth,
-            data.email,
-            data.password
-          );
-        } catch (err) {
-          throw new Error('Email already in use');
-        }
+      .then(async (res) => {
+        console.log(res.data);
+        return await createUserWithEmailAndPassword(
+          auth,
+          data.email,
+          data.password
+        );
       })
       .then((userCredential) => {
         sendEmailVerification(userCredential.user);
-      })
-      .then(() => {
-        client({
-          method: 'POST',
-          url: '/user/create',
-          data: {
-            firstName: data.firstName,
-            lastName: data.lastName,
-            phoneNumber: data.phoneNumber,
-            email: data.email,
-            birthDate: data.birthDate,
-            address: data.address,
-            citizenID: data.citizenID,
-          },
-        });
       })
       .then(() => {
         alert('Next step. Please verify your email.');
         logOut();
       })
       .catch((err) => {
-        alert(err.message);
-        console.log(err.message);
+        alert('Email and/or citizenID already exists.');
       });
   };
 
@@ -129,7 +108,7 @@ export function AuthProvider({ children }) {
         }
       })
       .catch((err) => {
-        alert('User not found');
+        alert('User not found.');
       });
   };
 
