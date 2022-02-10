@@ -44,7 +44,7 @@ export function AuthProvider({ children }) {
         method: 'GET',
         url: `/user/${currentUser.email}`,
       })
-        .then(({ data }) => {
+        .then(({ data: {data} }) => {
           console.log(data);
           setRole(data.role);
           setFirstName(data.firstName);

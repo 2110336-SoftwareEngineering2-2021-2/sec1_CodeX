@@ -22,17 +22,6 @@ const HomePage = () => {
     password: 888888,
   };
 
-  const data2 = {
-    firstName: 'X',
-    lastName: 'Y',
-    phoneNumber: '0123456789',
-    email: 'miuluqidf@sinaite.net',
-    password: 123456,
-    birthDate: '01/01/2001',
-    address: 'TH',
-    citizenID: '9876543210',
-  };
-
   return (
     <>
       <h5>User: {currentUser?.email}</h5>
