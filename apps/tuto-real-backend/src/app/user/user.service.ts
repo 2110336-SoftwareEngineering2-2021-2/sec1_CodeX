@@ -1,3 +1,4 @@
+
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -16,7 +17,20 @@ export class UserService {
   }
 
   async Create(dto: UserDto) {
-    return this.userModel.create(dto);
+    var id = 0 , mail = 0;
+    await this.userModel.find({citizenID:dto.citizenID})
+      .then(result=>{
+        if (result.length!=0) id = 1
+      })
+
+      await this.userModel.find({email:dto.email})
+      .then(result=>{
+        if (result.length!=0) mail = 1
+      })
+    if (id+mail==2) return "Email and CitizenID already in use"
+    else if (id==1) return "CitizenID already in use"
+    else if (mail==1) return "Email already in use"
+    else await this.userModel.create(dto);
   }
 
   async updateProfile(mail: string, dto: updateUserDto) {
@@ -45,11 +59,4 @@ export class UserService {
         return this.userModel.find({email: mail}, {firstName: 1, lastName: 1, _id:0});
     }
 
-    async checkUnique(ssid:string){
-      return await this.userModel.find({citizenID:ssid})
-      .then(result=>{
-        if (result.length==0) return true
-        return false
-      })
-    }
 }
