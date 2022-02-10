@@ -38,8 +38,5 @@ export class UserController {
     return this.service.updateProfile(email, dto);
   }
 
-  @Post('/unique')
-  checkUnique(@Body('citizenID') ssid: string) {
-    return this.service.checkUnique(ssid);
-  }
+ 
 }
