@@ -15,7 +15,12 @@ import { TutorService } from './tutor.service';
 
 @Controller('tutor')
 export class TutorController {
-  constructor(private readonly service: TutorService) {}
+  constructor(private readonly tutorService: TutorService) {}
+
+  @Get()
+  getTutor() {
+    return this.tutorService.getTutor();
+  }
 
   /*@Get(':id')
     GetProfileByID(@Param('id') id: String) {

@@ -67,7 +67,7 @@ export function AuthProvider({ children }) {
       data: data,
     })
       .then(async (res) => {
-        console.log(res.data);
+        if (!res.data.success) throw new Error(res.data.data);
         return await createUserWithEmailAndPassword(
           auth,
           data.email,
@@ -82,7 +82,12 @@ export function AuthProvider({ children }) {
         logOut();
       })
       .catch((err) => {
-        alert('Email and/or citizenID already exists.');
+        console.log(err.message);
+        let msg = 'Please complete the information.';
+        if (err.message.includes('email')) msg = 'Email already existed.';
+        else if (err.message.includes('citizenID'))
+          msg = 'CitizenID already existed.';
+        alert(msg);
       });
   };
 

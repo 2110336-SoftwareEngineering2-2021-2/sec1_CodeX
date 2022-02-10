@@ -15,28 +15,22 @@ const mongoose = require('mongoose');
 export class UserService {
   constructor(@InjectModel('User') private readonly userModel: Model<User>) {}
 
-  public async getProfileByMail(email: String): Promise<UserDto> {
-    try {
-      const profile = this.userModel.findOne({ email }).exec();
-      return profile;
-    } catch (err) {
-      throw new HttpException(err.message, 404);
-    }
+  public async getProfileByMail(email: String): Promise<any> {
+    const profile = await this.userModel.findOne({ email }).exec();
+    if (!profile) return { success: false, data: 'User not found!' };
+    return { success: true, data: profile };
   }
 
-  public async createProfile(dto: UserDto): Promise<UserDto> {
+  public async createProfile(dto: UserDto): Promise<any> {
     try {
       const profile = await this.userModel.create(dto);
-      return profile;
+      return { success: true, data: profile };
     } catch (err) {
-      throw new HttpException(err.message, 401);
+      return { success: false, data: err.message };
     }
   }
 
-  public async updateProfile(
-    email: string,
-    dto: updateUserDto
-  ): Promise<UserDto> {
+  public async updateProfile(email: string, dto: updateUserDto): Promise<any> {
     if (dto.profile64 != null) {
       await this.userModel
         .find({ email })
@@ -51,7 +45,7 @@ export class UserService {
             );
           }
           await uploadImageBy64('Profile', dto.profile64).then((url) => {
-            dto.profileImg = { url: url };
+            dto.profileImg = { url };
           });
         });
     }
@@ -72,9 +66,9 @@ export class UserService {
           { upsert: true }
         )
         .exec();
-      return profile;
+      return { success: true, data: profile };
     } catch (err) {
-      throw new HttpException(err.message, 404);
+      return { success: false, data: err.message };
     }
   }
 }
