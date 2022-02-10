@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { client } from '../axiosConfig';
 import ModalRequestButton from '../components/changeacc/ModalRequestButton';
@@ -37,6 +37,11 @@ const ChangeAccountTypePage = () => {
       reader.onerror = (error) => reject(error);
     });
 
+  useEffect(() => {
+    console.log(sendImage)
+  }, [sendImage])
+
+
   //handle citizenid upload
   const handleSelectCid = async (e) => {
     if (e.target.files.length) {
@@ -49,12 +54,14 @@ const ChangeAccountTypePage = () => {
         //jpeg case
         setSendImage({
           ...sendImage,
+          email:ownerRequestEmail,
           citizenID64: (await toBase64(e.target.files[0])).substr(23),
         });
       } else {
         //png case
         setSendImage({
           ...sendImage,
+          email:ownerRequestEmail,
           citizenID64: (await toBase64(e.target.files[0])).substr(22),
         });
       }
@@ -69,16 +76,23 @@ const ChangeAccountTypePage = () => {
         raw: e.target.files[0],
       });
 
+      setSendImage({
+        ...sendImage,
+        email:ownerRequestEmail
+      })
+
       if ((await toBase64(e.target.files[0])).substr(11, 4) === 'jpeg') {
         //jpeg case
         setSendImage({
           ...sendImage,
+          email:ownerRequestEmail,
           transcription64: (await toBase64(e.target.files[0])).substr(23),
         });
       } else {
         //png case
         setSendImage({
           ...sendImage,
+          email:ownerRequestEmail,
           transcription64: (await toBase64(e.target.files[0])).substr(22),
         });
       }
