@@ -17,7 +17,7 @@ export class UserController {
 
   @Get()
   getProfile(@Query() query: any) {
-    return this.service.getProfile(query.id, query.email);
+    return this.service.getProfile(query._id, query.email);
   }
 
   @Post('/create')
@@ -29,7 +29,7 @@ export class UserController {
   }
 
   @Patch()
-  updateProfile(@Query('id') id: string, @Body() dto: updateUserDto) {
+  updateProfile(@Query('_id') id: string, @Body() dto: updateUserDto) {
     return this.service.updateProfile(id, dto);
   }
 }

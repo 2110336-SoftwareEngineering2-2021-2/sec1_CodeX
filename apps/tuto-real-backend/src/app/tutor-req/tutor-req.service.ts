@@ -72,25 +72,28 @@ export class TutorReqService {
         });
       });
   }
-  async updateStatus(mail: string, dto: updateStatusDto) {
+  async updateStatus(id: string, dto: updateStatusDto) {
+    const mail = await this.reqModel.find({_id: id},{"email": 1})
     if (dto.status == 'Reject') {
-       const cit_img = await this.reqModel.find({email: mail},{"citizenID.url": 1, _id:0})
-       const tran_img = await this.reqModel.find({email: mail},{"transcription.url": 1, _id:0})
+       const cit_img = await this.reqModel.find({_id: id},{"citizenID.url": 1, _id:0})
+       const tran_img = await this.reqModel.find({_id: id},{"transcription.url": 1, _id:0})
 
-      await this.reqModel.deleteOne({ email: mail });
+      await this.reqModel.deleteOne({ _id: id });
       await deleteImg(cit_img[0].citizenID.url.split("Evidence/")[1],"Evidence");
       await deleteImg(tran_img[0].transcription.url.split("Evidence/")[1],"Evidence");
     } else if (dto.status == 'Approved') {
+
+     
       await this.reqModel
-        .updateOne({ email: mail }, { status: 'Approved' }, { upsert: true })
+        .updateOne({ _id:id }, { status: 'Approved' }, { upsert: true })
         .exec();
       await this.userModel
-        .updateOne({ email: mail }, { role: 'Tutor' }, { upsert: true })
+        .updateOne({ email: mail[0].email }, { role: 'Tutor' }, { upsert: true })
         .exec();
     }
     return this.userModel.find(
-      { email: mail },
-      { firstName: 1, lastName: 1, _id: 0 }
+      { email: mail[0].email },
+      { firstName: 1, lastName: 1, _id: 1 }
     );
   }
 }
