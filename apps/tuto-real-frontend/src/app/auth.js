@@ -33,7 +33,7 @@ export function AuthProvider({ children }) {
       if (user) {
         client({
           method: 'GET',
-          url: `/user/${user.email}`,
+          url: `/user?email=${user.email}`,
         })
           .then(({ data: { data } }) => {
             setRole(data.role);
