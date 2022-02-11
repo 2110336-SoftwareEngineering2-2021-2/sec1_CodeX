@@ -1,6 +1,7 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+
+import AdminGuard from '../components/guards/adminGuard';
 import RequestBox from '../components/requestlist/RequestBox';
-import { useState } from 'react';
 import { client } from '../axiosConfig';
 
 const ChangeAccountRequestListPage = () => {
@@ -72,4 +73,4 @@ const ChangeAccountRequestListPage = () => {
   );
 };
 
-export default ChangeAccountRequestListPage;
+export default AdminGuard(ChangeAccountRequestListPage)
