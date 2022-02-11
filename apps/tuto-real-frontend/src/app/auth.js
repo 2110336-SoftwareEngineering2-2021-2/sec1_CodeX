@@ -27,38 +27,52 @@ export function AuthProvider({ children }) {
   const [lastName, setLastName] = useState('');
 
   useEffect(() => {
+    console.log('User status has been changed...');
     onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
       if (user) {
-        user.getIdToken().then((token) => {
-          console.log(token);
-        });
+        client({
+          method: 'GET',
+          url: `/user/${user.email}`,
+        })
+          .then(({ data: { data } }) => {
+            setRole(data.role);
+            setFirstName(data.firstName);
+            setLastName(data.lastName);
+          })
+          .catch((err) => {
+            console.log(err.message);
+          });
+      } else {
+        setRole(null);
+        setFirstName('');
+        setLastName('');
       }
     });
   }, []);
 
-  useEffect(() => {
-    console.log('User status has been changed...');
-    if (currentUser) {
-      client({
-        method: 'GET',
-        url: `/user/${currentUser.email}`,
-      })
-        .then(({ data: {data} }) => {
-          console.log(data);
-          setRole(data.role);
-          setFirstName(data.firstName);
-          setLastName(data.lastName);
-        })
-        .catch((err) => {
-          console.log(err.message);
-        });
-    } else {
-      setRole(null);
-      setFirstName('');
-      setLastName('');
-    }
-  }, [currentUser]);
+  // useEffect(() => {
+  //   console.log('User status has been changed...');
+  //   if (currentUser) {
+  //     client({
+  //       method: 'GET',
+  //       url: `/user/${currentUser.email}`,
+  //     })
+  //       .then(({ data: { data } }) => {
+  //         console.log(data);
+  //         setRole(data.role);
+  //         setFirstName(data.firstName);
+  //         setLastName(data.lastName);
+  //       })
+  //       .catch((err) => {
+  //         console.log(err.message);
+  //       });
+  //   } else {
+  //     setRole(null);
+  //     setFirstName('');
+  //     setLastName('');
+  //   }
+  // }, [currentUser]);
 
   const signUp = (data) => {
     client({
