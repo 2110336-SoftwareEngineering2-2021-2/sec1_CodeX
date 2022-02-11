@@ -12,19 +12,19 @@ import { useLocation } from 'react-router-dom';
 
 const ProfilePage = () => {
   const [selecting, setSelecting] = useState('Info'); // "Info" | "Learn" | "Teach" | "Review"
-  const [viewType, setViewType] = useState('TutorOther'); // "TutorSelf" | "StudentSelf" | "TutorOther" | "StudentOther"
+  const [viewType, setViewType] = useState('StudentSelf'); // "TutorSelf" | "StudentSelf" | "TutorOther" | "StudentOther"
 
   const { currentUser } = useAuth();
   // todo: uncomment this 
   // const { currentUser, _id } = useAuth();
   // const currentId = useState(_id);
-  const currentId = useState("1234");
+  const [currentId] = useState("6204f93965936f2c15855c89");
 
   const params = useParams();
 
   const navigate = useNavigate();
-  const location = useLocation();
-  const [targetEmail] = useState(location.state?.targetEmail);
+  // const location = useLocation();
+  // const [targetEmail] = useState(location.state?.targetEmail);
   const [targetId] = useState(params?._id);
   const [targetRole, setTargetRole] = useState('');
 
@@ -32,13 +32,13 @@ const ProfilePage = () => {
     console.log('Fetching.........');
     await client({
       method: 'GET',
-      url: `/user/${targetEmail}`,
+      // url: `/user/${targetEmail}`,
 
       // todo: uncomment this
-      // url: `/user`,
-      // params: {
-      //   _id: targetId
-      // }
+      url: `/user`,
+      params: {
+        _id: targetId
+      }
     })
       .then(({ data: {data} }) => {
         console.log(data);
@@ -64,8 +64,9 @@ const ProfilePage = () => {
   }, []);
 
   useEffect(() => {
-    if (targetEmail === currentUser?.email) {
-    // if (targetId === currentId) {
+    // if (targetEmail === currentUser?.email) {
+    console.log(targetId , currentId)
+    if (targetId === currentId) {
     // if (false) {
       if (targetRole === 'Tutor') setViewType('TutorSelf');
       if (targetRole === 'Student') setViewType('StudentSelf');
@@ -99,12 +100,12 @@ const ProfilePage = () => {
     console.log(viewType)
     switch (selecting) {
       case 'Info':
-        return <ProfileInfo targetEmail={targetEmail} viewType={viewType} targetId={currentId}/>;
+        return <ProfileInfo viewType={viewType} targetId={targetId}/>;
       case 'Learn':
         return null; // Replace null with Student Schedule page...
       case 'Teach':
         return (
-          <ProfileTeachSchedule targetEmail={targetEmail} viewType={viewType} targetId={currentId}/>
+          <ProfileTeachSchedule viewType={viewType} targetId={targetId}/>
         );
       case 'Review':
         return null; // Replace null with Review page...

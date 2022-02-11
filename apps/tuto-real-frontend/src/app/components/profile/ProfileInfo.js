@@ -13,7 +13,7 @@ import './profile.css';
 
 import COLORS from '../../constants/color';
 
-const ProfileInfo = ({targetEmail, viewType}) => {
+const ProfileInfo = ({targetId, targetEmail, viewType}) => {
   // const [viewType, setViewType] = useState('TutorSelf'); // "TutorSelf" | "StudentSelf" | "TutorOther"
   const [isEditing, setEditing] = useState(false);
   const [basicInfo, setBasicInfo] = useState({
@@ -49,9 +49,14 @@ const ProfileInfo = ({targetEmail, viewType}) => {
   } = useForm();
 
   const fetchData = useCallback(async () => {
+    console.log(targetId)
     await client({
       method: 'GET',
-      url: `/user/${targetEmail}`
+      // url: `/user/${targetEmail}`
+      url: `/user`,
+      params: {
+        _id: targetId
+      }
     })
     .then(({ data: {data} }) => {
       console.log("profile in fetch: ", data)
@@ -102,7 +107,11 @@ const ProfileInfo = ({targetEmail, viewType}) => {
     if (tempProfile.raw) {
       await client({
         method: "PATCH",
-        url: `/user/${targetEmail}`,
+        // url: `/user/${targetEmail}`,
+        url: `/user`,
+        params: {
+          _id: targetId
+        },
         data: {
           profile64: tempProfile.raw,
           firstName: data.firstName,
@@ -121,7 +130,11 @@ const ProfileInfo = ({targetEmail, viewType}) => {
     else {
       await client({
         method: "PATCH",
-        url: `/user/${targetEmail}`,
+        // url: `/user/${targetEmail}`,
+        url: `/user`,
+        params: {
+          _id: targetId
+        },
         data: { 
           firstName: data.firstName,
           lastName: data.lastName,
@@ -242,7 +255,7 @@ const ProfileInfo = ({targetEmail, viewType}) => {
       {isEditing ? renderEditForm() : renderViewForm()}
       {viewType !== 'TutorOther' ? (
         <>
-          <AdvanceInfo advance={advance} targetEmail={targetEmail} viewType={viewType}/>
+          <AdvanceInfo advance={advance} targetEmail={targetEmail} targetId={targetId} viewType={viewType}/>
           {isEditing ? (
             <div
               style={{ width: '45%', textAlign: 'right', marginBottom: '5%' }}
