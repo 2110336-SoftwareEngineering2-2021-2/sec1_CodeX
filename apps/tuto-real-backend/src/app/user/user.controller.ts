@@ -16,13 +16,8 @@ export class UserController {
   constructor(private readonly service: UserService) {}
 
   @Get()
-  getProfileByMail(@Query('email') email: String) {
-    return this.service.getProfileByMail(email);
-  }
-
-  @Get()
-  getProfileByID(@Query('id') id: String) {
-    return this.service.getProfileByID(id);
+  getProfile(@Query() query: any) {
+    return this.service.getProfile(query.id, query.email);
   }
 
   @Post('/create')
