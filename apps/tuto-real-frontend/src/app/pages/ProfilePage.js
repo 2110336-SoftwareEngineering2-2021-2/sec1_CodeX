@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { client } from '../axiosConfig';
 import ProfileInfo from '../components/profile/ProfileInfo';
@@ -12,20 +12,33 @@ import { useLocation } from 'react-router-dom';
 
 const ProfilePage = () => {
   const [selecting, setSelecting] = useState('Info'); // "Info" | "Learn" | "Teach" | "Review"
-  const [viewType, setViewType] = useState('StudentSelf'); // "TutorSelf" | "StudentSelf" | "TutorOther"
+  const [viewType, setViewType] = useState('StudentSelf'); // "TutorSelf" | "StudentSelf" | "TutorOther" | "StudentOther"
 
-  const { currentUser } = useAuth();
+  // const { currentUser } = useAuth();
+  // todo: uncomment this 
+  const { currentUser, _id } = useAuth();
+  // const [currentId] = useState(_id);
+  // const [currentId] = useState("6204f93965936f2c15855c89");
+
+  const params = useParams();
 
   const navigate = useNavigate();
-  const location = useLocation();
-  const [targetEmail] = useState(location.state?.targetEmail);
+  // const location = useLocation();
+  // const [targetEmail] = useState(location.state?.targetEmail);
+  // const [targetId] = useState(params?._id);
   const [targetRole, setTargetRole] = useState('');
 
   const fetchData = useCallback(async () => {
     console.log('Fetching.........');
     await client({
       method: 'GET',
-      url: `/user/${targetEmail}`,
+      // url: `/user/${targetEmail}`,
+
+      // todo: uncomment this
+      url: `/user`,
+      params: {
+        _id: params?._id
+      }
     })
       .then(({ data: {data} }) => {
         console.log(data);
@@ -40,18 +53,27 @@ const ProfilePage = () => {
 
   useEffect(() => {
     fetchData();
+    // console.log(params);
   }, [fetchData]);
 
+  // useEffect(() => {
+  //   if (!location.state) navigate('/');
+  // }, []);
   useEffect(() => {
-    if (!location.state) navigate('/');
+    if (!params._id) navigate('/');
   }, []);
 
   useEffect(() => {
-    if (targetEmail === currentUser?.email) {
+    // if (targetEmail === currentUser?.email) {
+    // console.log(params?._id , currentId)
+    if (params?._id === _id) {
+    // if (false) {
       if (targetRole === 'Tutor') setViewType('TutorSelf');
       if (targetRole === 'Student') setViewType('StudentSelf');
-    } else setViewType('TutorOther');
-  }, [currentUser, targetRole]);
+    } 
+    else if (targetRole === 'Tutor') setViewType('TutorOther'); 
+    else setViewType('StudentOther');
+  }, [currentUser, targetRole, _id]);
 
   // useEffect(() => {
   //   console.log("Current User Updated!!!!")
@@ -75,14 +97,15 @@ const ProfilePage = () => {
   // }
 
   const renderContent = () => {
+    // console.log(viewType)
     switch (selecting) {
       case 'Info':
-        return <ProfileInfo targetEmail={targetEmail} viewType={viewType} />;
+        return <ProfileInfo viewType={viewType} targetId={params?._id}/>;
       case 'Learn':
         return null; // Replace null with Student Schedule page...
       case 'Teach':
         return (
-          <ProfileTeachSchedule targetEmail={targetEmail} viewType={viewType} />
+          <ProfileTeachSchedule viewType={viewType} targetId={params?._id}/>
         );
       case 'Review':
         return null; // Replace null with Review page...
@@ -98,7 +121,8 @@ const ProfilePage = () => {
         setSelecting={setSelecting}
         selecting={selecting}
       />
-      {renderContent()}
+      {viewType !== "StudentOther" ? renderContent() : null}
+      {/* {renderContent()} */}
     </>
   );
 };

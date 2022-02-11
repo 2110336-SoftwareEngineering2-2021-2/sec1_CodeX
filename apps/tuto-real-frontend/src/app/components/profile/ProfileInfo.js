@@ -13,7 +13,7 @@ import './profile.css';
 
 import COLORS from '../../constants/color';
 
-const ProfileInfo = ({targetEmail, viewType}) => {
+const ProfileInfo = ({targetId, viewType}) => {
   // const [viewType, setViewType] = useState('TutorSelf'); // "TutorSelf" | "StudentSelf" | "TutorOther"
   const [isEditing, setEditing] = useState(false);
   const [basicInfo, setBasicInfo] = useState({
@@ -49,13 +49,17 @@ const ProfileInfo = ({targetEmail, viewType}) => {
   } = useForm();
 
   const fetchData = useCallback(async () => {
+    // console.log(targetId)
     await client({
       method: 'GET',
-      url: `/user/${targetEmail}`
+      url: `/user`,
+      params: {
+        _id: targetId
+      }
     })
     .then(({ data: {data} }) => {
-      console.log("profile in fetch: ", data)
-      console.log("fetch profile image @ ",data.profileImg.url)
+      // console.log("profile in fetch: ", data)
+      // console.log("fetch profile image @ ",data.profileImg.url)
       setTempProfile({
         ...tempProfile,
         preview: data.profileImg.url
@@ -102,7 +106,10 @@ const ProfileInfo = ({targetEmail, viewType}) => {
     if (tempProfile.raw) {
       await client({
         method: "PATCH",
-        url: `/user/${targetEmail}`,
+        url: `/user`,
+        params: {
+          _id: targetId
+        },
         data: {
           profile64: tempProfile.raw,
           firstName: data.firstName,
@@ -121,7 +128,10 @@ const ProfileInfo = ({targetEmail, viewType}) => {
     else {
       await client({
         method: "PATCH",
-        url: `/user/${targetEmail}`,
+        url: `/user`,
+        params: {
+          _id: targetId
+        },
         data: { 
           firstName: data.firstName,
           lastName: data.lastName,
@@ -139,8 +149,8 @@ const ProfileInfo = ({targetEmail, viewType}) => {
   }
 
   const onSubmit = (data) => {
-    console.log(data);
-    console.log(tempProfile);
+    // console.log(data);
+    // console.log(tempProfile);
     setBasicInfo({
       ...basicInfo,
       picture: tempProfile.preview,
@@ -180,24 +190,6 @@ const ProfileInfo = ({targetEmail, viewType}) => {
       </>
     );
   };
-
-  // function translateDateForSendToBack(date, month, year) {
-  //   var temp = "";
-
-  //   if (month < 10) {
-  //     temp += "0";
-  //   }
-  //   temp += month.toString() + "/";
-
-  //   if (date < 10) {
-  //     temp += "0";
-  //   }
-  //   temp += date.toString() + "/";
-
-  //   temp += (year % 100).toString();
-
-  //   return temp;
-  // }
 
   function translateDateForSendToBack(date, month, year) {
     var temp = "";
@@ -242,7 +234,7 @@ const ProfileInfo = ({targetEmail, viewType}) => {
       {isEditing ? renderEditForm() : renderViewForm()}
       {viewType !== 'TutorOther' ? (
         <>
-          <AdvanceInfo advance={advance} targetEmail={targetEmail} viewType={viewType}/>
+          <AdvanceInfo advance={advance} viewType={viewType}/>
           {isEditing ? (
             <div
               style={{ width: '45%', textAlign: 'right', marginBottom: '5%' }}
