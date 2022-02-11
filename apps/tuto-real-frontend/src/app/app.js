@@ -19,7 +19,7 @@ export function App() {
         <Route exact path="/" element={<HomePage />} />
         <Route exact path="/login" element={<LogInPage />} />
         <Route exact path="/register" element={<RegistrationPage />} />
-        <Route exact path="/profile" element={<ProfilePage />} />
+        <Route exact path="/profile/:_id" element={<ProfilePage />} />
         <Route
           exact
           path="/changAaccType"

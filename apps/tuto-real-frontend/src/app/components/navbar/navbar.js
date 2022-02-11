@@ -12,13 +12,13 @@ const NavBar = () => {
   const [userType, setUserType] = useState("Guest")
   const navigate = useNavigate()
   
-  const { currentUser, logOut, role, firstName, lastName } = useAuth()
+  const { logOut, _id, role, firstName, lastName } = useAuth()
   const navbarDataList = getNavbarData(userType).map(item => (
     <button 
       key={item.id} 
       className={item.style} 
       style={{marginRight: "2%"}} 
-      onClick={() => handleButton(item.name, item.path, item.state)}>
+      onClick={() => handleButton(item.name, item.path, item.param)}>
         {item.icon}
         <p style={{width: "-webkit-fill-available"}}>{item.name !== "User Name"? item.name: `${firstName} ${lastName}`}</p>
     </button>     
@@ -29,17 +29,13 @@ const NavBar = () => {
     else setUserType("Guest")
   },[role])
 
-  const handleButton = (name, path, stateList) => {
+  const handleButton = (name, path, param) => {
     if(name === "Sign out") {
       console.log("Logging out....")
       logOut()
     }
-    if(stateList) {
-      var sendingState = {}
-      for (const state of stateList) {
-        if(state === "email") sendingState = {...sendingState, targetEmail: currentUser?.email}
-      }
-      navigate(path, {state: sendingState})
+    if(param) {
+      if(param === "_id") navigate(`${path}/${_id}`)
     } else navigate(path)
   }
 
