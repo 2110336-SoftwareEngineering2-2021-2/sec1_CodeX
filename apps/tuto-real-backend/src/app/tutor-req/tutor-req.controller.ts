@@ -5,6 +5,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UploadedFile,
   UploadedFiles,
   UseInterceptors,
@@ -45,9 +46,9 @@ export class TutorReqController {
     return this.service.findAll();
   }
 
-  @Patch(':email')
-  update(@Param('email') email: string, @Body() dto: updateStatusDto) {
+  @Patch()
+  update(@Query('_id') id: string, @Body() dto: updateStatusDto) {
     //console.log(dto,email)
-    return this.service.updateStatus(email, dto);
+    return this.service.updateStatus(id, dto);
   }
 }
