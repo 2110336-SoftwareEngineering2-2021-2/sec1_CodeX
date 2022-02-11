@@ -21,6 +21,14 @@ export class UserService {
     return { success: true, data: profile };
   }
 
+  public async getProfileByID(id: String): Promise<any> {
+    const profile = await this.userModel
+      .findOne({ _id: mongoose.Types.ObjectId(id) })
+      .exec();
+    if (!profile) return { success: false, data: 'User not found!' };
+    return { success: true, data: profile };
+  }
+
   public async createProfile(dto: UserDto): Promise<any> {
     try {
       const profile = await this.userModel.create(dto);
@@ -30,10 +38,10 @@ export class UserService {
     }
   }
 
-  public async updateProfile(email: string, dto: updateUserDto): Promise<any> {
+  public async updateProfile(id: string, dto: updateUserDto): Promise<any> {
     if (dto.profile64 != null) {
       await this.userModel
-        .find({ email })
+        .findOne({ _id: mongoose.Types.ObjectId(id) })
         .exec()
         .then(async (result) => {
           //if prev img is not default, delete it
@@ -53,7 +61,7 @@ export class UserService {
     try {
       const profile = await this.userModel
         .findOneAndUpdate(
-          { email },
+          { _id: mongoose.Types.ObjectId(id) },
           {
             subjects: dto.subjects,
             description: dto.description,

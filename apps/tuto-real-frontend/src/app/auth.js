@@ -51,29 +51,6 @@ export function AuthProvider({ children }) {
     });
   }, []);
 
-  // useEffect(() => {
-  //   console.log('User status has been changed...');
-  //   if (currentUser) {
-  //     client({
-  //       method: 'GET',
-  //       url: `/user/${currentUser.email}`,
-  //     })
-  //       .then(({ data: { data } }) => {
-  //         console.log(data);
-  //         setRole(data.role);
-  //         setFirstName(data.firstName);
-  //         setLastName(data.lastName);
-  //       })
-  //       .catch((err) => {
-  //         console.log(err.message);
-  //       });
-  //   } else {
-  //     setRole(null);
-  //     setFirstName('');
-  //     setLastName('');
-  //   }
-  // }, [currentUser]);
-
   const signUp = (data) => {
     client({
       method: 'POST',
