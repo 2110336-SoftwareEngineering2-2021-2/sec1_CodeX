@@ -10,7 +10,7 @@ import COLORS from "../../../constants/color";
 import { client } from "../../../axiosConfig";
 
 
-const ProfileTeachSchedule = ({targetEmail,viewType}) => {
+const ProfileTeachSchedule = ({targetId, targetEmail,viewType}) => {
 
     const [isEditing,setEditing] = useState(false);
     const [teachingInfo, setTeachingInfo] = useState({
@@ -25,7 +25,11 @@ const ProfileTeachSchedule = ({targetEmail,viewType}) => {
     const fetchData = useCallback(async () => {
         await client({
             method: "GET",
-            url: `/user/${targetEmail}`
+            // url: `/user/${targetEmail}`
+            url: `/user`,
+            params: {
+            _id: targetId
+            },
         })
         .then(({data :{data}}) => {
             console.log(data)
@@ -54,7 +58,11 @@ const ProfileTeachSchedule = ({targetEmail,viewType}) => {
     const sendData = async () => {
         await client({
             method: "PATCH",
-            url: `/user/${targetEmail}`,
+            // url: `/user/${targetEmail}`,
+            url: `/user`,
+            params: {
+                _id: targetId
+                },
             data: {
                 subjects: tempTeachingInfo.subjectList,
                 description: tempTeachingInfo.description

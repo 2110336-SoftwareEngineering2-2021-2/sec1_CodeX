@@ -13,7 +13,7 @@ import './profile.css';
 
 import COLORS from '../../constants/color';
 
-const ProfileInfo = ({targetId, targetEmail, viewType}) => {
+const ProfileInfo = ({targetId, viewType}) => {
   // const [viewType, setViewType] = useState('TutorSelf'); // "TutorSelf" | "StudentSelf" | "TutorOther"
   const [isEditing, setEditing] = useState(false);
   const [basicInfo, setBasicInfo] = useState({
@@ -52,7 +52,6 @@ const ProfileInfo = ({targetId, targetEmail, viewType}) => {
     console.log(targetId)
     await client({
       method: 'GET',
-      // url: `/user/${targetEmail}`
       url: `/user`,
       params: {
         _id: targetId
@@ -107,7 +106,6 @@ const ProfileInfo = ({targetId, targetEmail, viewType}) => {
     if (tempProfile.raw) {
       await client({
         method: "PATCH",
-        // url: `/user/${targetEmail}`,
         url: `/user`,
         params: {
           _id: targetId
@@ -130,7 +128,6 @@ const ProfileInfo = ({targetId, targetEmail, viewType}) => {
     else {
       await client({
         method: "PATCH",
-        // url: `/user/${targetEmail}`,
         url: `/user`,
         params: {
           _id: targetId
@@ -152,8 +149,8 @@ const ProfileInfo = ({targetId, targetEmail, viewType}) => {
   }
 
   const onSubmit = (data) => {
-    console.log(data);
-    console.log(tempProfile);
+    // console.log(data);
+    // console.log(tempProfile);
     setBasicInfo({
       ...basicInfo,
       picture: tempProfile.preview,
@@ -193,24 +190,6 @@ const ProfileInfo = ({targetId, targetEmail, viewType}) => {
       </>
     );
   };
-
-  // function translateDateForSendToBack(date, month, year) {
-  //   var temp = "";
-
-  //   if (month < 10) {
-  //     temp += "0";
-  //   }
-  //   temp += month.toString() + "/";
-
-  //   if (date < 10) {
-  //     temp += "0";
-  //   }
-  //   temp += date.toString() + "/";
-
-  //   temp += (year % 100).toString();
-
-  //   return temp;
-  // }
 
   function translateDateForSendToBack(date, month, year) {
     var temp = "";
@@ -255,7 +234,7 @@ const ProfileInfo = ({targetId, targetEmail, viewType}) => {
       {isEditing ? renderEditForm() : renderViewForm()}
       {viewType !== 'TutorOther' ? (
         <>
-          <AdvanceInfo advance={advance} targetEmail={targetEmail} targetId={targetId} viewType={viewType}/>
+          <AdvanceInfo advance={advance} targetId={targetId} viewType={viewType}/>
           {isEditing ? (
             <div
               style={{ width: '45%', textAlign: 'right', marginBottom: '5%' }}

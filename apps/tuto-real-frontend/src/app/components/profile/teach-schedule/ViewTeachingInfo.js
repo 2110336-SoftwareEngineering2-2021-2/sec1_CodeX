@@ -1,4 +1,5 @@
 import { useState } from "react";
+import COLORS from "../../../constants/color";
 // import { Badge } from "react-bootstrap";
 // import COLORS from "../../../constants/color";
 import "../profile.css"
@@ -27,9 +28,9 @@ const ViewTeachingInfo = ({teachingInfo}) => {
                             />
                         )):
                         <Tag 
-                            text="You are still not tutor"
+                            text="Please add your subject"
                             textColor="white" 
-                            bgColor="red"
+                            bgColor={COLORS.yellow}
                         />
                     }
                 </div>
@@ -37,7 +38,7 @@ const ViewTeachingInfo = ({teachingInfo}) => {
             <hr />
             <div className='section'>
                 <p className='header'>DESCRIPTION</p>
-                <textarea readOnly disabled value={(description && description?.length !== 0) ? description:"You are still not tutor right now...\nPlease enter your teaching information to become a tutor"} style={{borderWidth:"0px", row:"5", width:"100%", backgroundColor:"white"}} />
+                <textarea readOnly disabled value={(description && description?.length !== 0) ? description:"Please add your teaching infomation here..."} style={{borderWidth:"0px", row:"5", width:"100%", backgroundColor:"white"}} />
             </div>
         </div>
     )
