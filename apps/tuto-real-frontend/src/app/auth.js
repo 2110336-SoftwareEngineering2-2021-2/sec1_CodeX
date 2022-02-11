@@ -45,11 +45,12 @@ export function AuthProvider({ children }) {
           .catch((err) => {
             console.log(err.message);
           });
-      } else {
-        setRole(null);
-        setFirstName('');
-        setLastName('');
-      }
+        } else {
+          setId("")
+          setRole(null);
+          setFirstName('');
+          setLastName('');
+        }
     });
   }, []);
 

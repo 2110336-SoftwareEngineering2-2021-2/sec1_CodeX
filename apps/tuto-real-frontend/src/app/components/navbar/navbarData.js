@@ -51,7 +51,7 @@ const studentData = [
     icon: renderIcon(MdPersonOutline),
     name: "User Name", // Will be set to User's name in navbar
     path: "/profile",
-    state: ["email"],
+    param: "_id",
     style: "tertiary-button"
   },
   {
@@ -90,7 +90,7 @@ const tutorData = [
     icon: renderIcon(MdSchool),
     name: "User Name", // Will be set to User's name in navbar
     path: "/profile",
-    state: ["email"],
+    param: "_id",
     style: "tertiary-button"
   },
   {
