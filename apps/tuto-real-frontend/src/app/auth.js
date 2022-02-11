@@ -22,6 +22,7 @@ export function useAuth() {
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
   // Personal Info
+  const [_id, setId] = useState("")
   const [role, setRole] = useState(null);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -36,6 +37,7 @@ export function AuthProvider({ children }) {
           url: `/user?email=${user.email}`,
         })
           .then(({ data: { data } }) => {
+            setId(data._id)
             setRole(data.role);
             setFirstName(data.firstName);
             setLastName(data.lastName);
@@ -148,6 +150,7 @@ export function AuthProvider({ children }) {
     logOut,
     updateUserPassword,
     resetPassword,
+    _id,
     role,
     firstName,
     lastName,
