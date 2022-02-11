@@ -5,6 +5,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { updateUserDto } from './updateUser.dto';
 import { UserDto } from './user.dto';
@@ -14,9 +15,14 @@ import { UserService } from './user.service';
 export class UserController {
   constructor(private readonly service: UserService) {}
 
-  @Get(':email')
-  getProfileByMail(@Param('email') email: String) {
+  @Get()
+  getProfileByMail(@Query('email') email: String) {
     return this.service.getProfileByMail(email);
+  }
+
+  @Get()
+  getProfileByID(@Query('id') id: String) {
+    return this.service.getProfileByID(id);
   }
 
   @Post('/create')
@@ -27,8 +33,8 @@ export class UserController {
     return this.service.createProfile(dto);
   }
 
-  @Patch(':email')
-  updateProfile(@Param('email') email: string, @Body() dto: updateUserDto) {
-    return this.service.updateProfile(email, dto);
+  @Patch()
+  updateProfile(@Query('id') id: string, @Body() dto: updateUserDto) {
+    return this.service.updateProfile(id, dto);
   }
 }

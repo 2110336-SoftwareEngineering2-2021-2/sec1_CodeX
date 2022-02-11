@@ -27,38 +27,29 @@ export function AuthProvider({ children }) {
   const [lastName, setLastName] = useState('');
 
   useEffect(() => {
+    console.log('User status has been changed...');
     onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
       if (user) {
-        user.getIdToken().then((token) => {
-          console.log(token);
-        });
+        client({
+          method: 'GET',
+          url: `/user?email=${user.email}`,
+        })
+          .then(({ data: { data } }) => {
+            setRole(data.role);
+            setFirstName(data.firstName);
+            setLastName(data.lastName);
+          })
+          .catch((err) => {
+            console.log(err.message);
+          });
+      } else {
+        setRole(null);
+        setFirstName('');
+        setLastName('');
       }
     });
   }, []);
-
-  useEffect(() => {
-    console.log('User status has been changed...');
-    if (currentUser) {
-      client({
-        method: 'GET',
-        url: `/user/${currentUser.email}`,
-      })
-        .then(({ data }) => {
-          console.log(data);
-          setRole(data.role);
-          setFirstName(data.firstName);
-          setLastName(data.lastName);
-        })
-        .catch((err) => {
-          console.log(err.message);
-        });
-    } else {
-      setRole(null);
-      setFirstName('');
-      setLastName('');
-    }
-  }, [currentUser]);
 
   const signUp = (data) => {
     client({
@@ -67,7 +58,7 @@ export function AuthProvider({ children }) {
       data: data,
     })
       .then(async (res) => {
-        console.log(res.data);
+        if (!res.data.success) throw new Error(res.data.data);
         return await createUserWithEmailAndPassword(
           auth,
           data.email,
@@ -82,7 +73,12 @@ export function AuthProvider({ children }) {
         logOut();
       })
       .catch((err) => {
-        alert('Email and/or citizenID already exists.');
+        console.log(err.message);
+        let msg = 'Please complete the information.';
+        if (err.message.includes('email')) msg = 'Email already existed.';
+        else if (err.message.includes('citizenID'))
+          msg = 'CitizenID already existed.';
+        alert(msg);
       });
   };
 

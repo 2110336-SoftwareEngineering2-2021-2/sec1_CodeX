@@ -53,31 +53,31 @@ const ProfileInfo = ({targetEmail, viewType}) => {
       method: 'GET',
       url: `/user/${targetEmail}`
     })
-    .then(({data}) => {
+    .then(({ data: {data} }) => {
       console.log("profile in fetch: ", data)
-      console.log("fetch profile image @ ",data[0].profileImg.url)
+      console.log("fetch profile image @ ",data.profileImg.url)
       setTempProfile({
         ...tempProfile,
-        preview: data[0].profileImg.url
+        preview: data.profileImg.url
       })
       setBasicInfo({
-        picture: data[0].profileImg.url,
-        firstName: data[0].firstName,
-        lastName: data[0].lastName,
+        picture: data.profileImg.url,
+        firstName: data.firstName,
+        lastName: data.lastName,
         birthDate: {
-          date: parseInt(data[0].birthDate.substr(8,2)),
-          month: parseInt(data[0].birthDate.substr(5,2)),
-          year: parseInt(data[0].birthDate.substr(0,4))
+          date: parseInt(data.birthDate.substr(8,2)),
+          month: parseInt(data.birthDate.substr(5,2)),
+          year: parseInt(data.birthDate.substr(0,4))
         },
-        citizenId: data[0].citizenID
+        citizenId: data.citizenID
       })
       setContactInfo({
-        email: data[0].email,
-        telephone: data[0].phoneNumber,
-        address: data[0].address
+        email: data.email,
+        telephone: data.phoneNumber,
+        address: data.address
       })
       setAdvance({
-        userType: data[0].role,
+        userType: data.role,
         password: ""
       })
     })
@@ -111,7 +111,7 @@ const ProfileInfo = ({targetEmail, viewType}) => {
           address: data.address,
         }
       })
-      .then(({data}) => {
+      .then(({ data: {data} }) => {
         console.log(data)
       })
       .catch((res) => {
@@ -129,7 +129,7 @@ const ProfileInfo = ({targetEmail, viewType}) => {
           address: data.address,
         }
       })
-      .then(({data}) => {
+      .then(({ data: {data} }) => {
         console.log(data)
       })
       .catch((res) => {

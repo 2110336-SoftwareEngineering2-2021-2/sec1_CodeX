@@ -15,11 +15,11 @@ const ProfileTeachSchedule = ({targetEmail,viewType}) => {
     const [isEditing,setEditing] = useState(false);
     const [teachingInfo, setTeachingInfo] = useState({
         subjectList: [],
-        description: "description",
+        description: "",
     })
     const [tempTeachingInfo, setTempTeachingInfo] = useState({
         subjectList: [],
-        description: "description",
+        description: "",
     })
 
     const fetchData = useCallback(async () => {
@@ -27,15 +27,15 @@ const ProfileTeachSchedule = ({targetEmail,viewType}) => {
             method: "GET",
             url: `/user/${targetEmail}`
         })
-        .then(({data}) => {
-            console.log(data[0])
+        .then(({data :{data}}) => {
+            console.log(data)
             setTempTeachingInfo({
-                subjectList: data[0].subjects ?? ["ERROR: this owner profile isn't Tutor"],
-                description: data[0].description ?? "ERROR: this owner profile isn't Tutor"
+                subjectList: data.subjects ?? [],
+                description: data.description ?? ""
             })
             setTeachingInfo({
-                subjectList: data[0].subjects ?? ["ERROR: this owner profile isn't Tutor"],
-                description: data[0].description ?? "ERROR: this owner profile isn't Tutor"
+                subjectList: data.subjects ?? [],
+                description: data.description ?? ""
             })
         }).catch(({response}) => {
             console.log(response)
@@ -52,8 +52,6 @@ const ProfileTeachSchedule = ({targetEmail,viewType}) => {
     // }, [tempTeachingInfo])
 
     const sendData = async () => {
-        setTeachingInfo(tempTeachingInfo);
-        setEditing(false);
         await client({
             method: "PATCH",
             url: `/user/${targetEmail}`,
@@ -63,9 +61,11 @@ const ProfileTeachSchedule = ({targetEmail,viewType}) => {
             }
         }).then(({data}) => {
             console.log(data)
+            setTeachingInfo(tempTeachingInfo);
             setEditing(false)
         }).catch(({response}) => {
             console.log(response)
+            setEditing(false);
         })
     }
 

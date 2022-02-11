@@ -27,11 +27,11 @@ const ProfilePage = () => {
       method: 'GET',
       url: `/user/${targetEmail}`,
     })
-      .then(({ data }) => {
+      .then(({ data: {data} }) => {
         console.log(data);
         // console.log("currentUser: ", firstName, " ", lastName, " ", currentUser)
         // setViewType(calculateViewType(data[0]?.role))
-        setTargetRole(data[0]?.role);
+        setTargetRole(data?.role);
       })
       .catch((res) => {
         console.log(res);

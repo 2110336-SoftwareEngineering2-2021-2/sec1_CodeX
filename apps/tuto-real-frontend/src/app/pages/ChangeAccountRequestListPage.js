@@ -5,7 +5,7 @@ import { client } from '../axiosConfig';
 
 const ChangeAccountRequestListPage = () => {
   //data
-  const [dataList, setDataList] = useState(null);
+  const [dataList, setDataList] = useState([]);
   const [isPending, setIsPending] = useState(true);
 
   //get func
@@ -16,7 +16,7 @@ const ChangeAccountRequestListPage = () => {
     })
       .then(({ data }) => {
         console.log(data);
-        setDataList(data);
+        if(data) setDataList(data);
         setIsPending(false);
       }, [])
       .catch((res) => {

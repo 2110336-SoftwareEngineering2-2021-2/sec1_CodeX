@@ -13,24 +13,13 @@ const HomePage = () => {
 
   const data1 = {
     firstName: 'A',
-    lastName: null,
+    lastName: 'B',
     phoneNumber: '0123456789',
-    email: 'vvenel94370@mannawo.com',
+    email: 'kadac52845@goonby.com',
     birthDate: '01/01/2001',
     address: 'TH',
-    citizenID: '1123456789',
+    citizenID: '123456789',
     password: 888888,
-  };
-
-  const data2 = {
-    firstName: 'X',
-    lastName: 'Y',
-    phoneNumber: '0123456789',
-    email: 'miuluqidf@sinaite.net',
-    password: 123456,
-    birthDate: '01/01/2001',
-    address: 'TH',
-    citizenID: '9876543210',
   };
 
   return (
