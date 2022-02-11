@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+
 import { client } from '../axiosConfig';
 import ModalTwoButton from '../components/modal/ModalTwoButton';
 import NormalButton from '../components/ui/NormalButton';
+import AdminGuard from '../components/guards/adminGuard';
 
 const ChangeAccountApprovePage = () => {
   //props from Link
@@ -197,4 +199,4 @@ const ChangeAccountApprovePage = () => {
   );
 };
 
-export default ChangeAccountApprovePage;
+export default AdminGuard(ChangeAccountApprovePage)
