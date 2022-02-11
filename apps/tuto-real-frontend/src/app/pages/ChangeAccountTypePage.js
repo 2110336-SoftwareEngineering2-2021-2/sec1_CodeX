@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '../auth';
 import { client } from '../axiosConfig';
 import ModalRequestButton from '../components/changeacc/ModalRequestButton';
 import UploadButton from '../components/changeacc/UploadButton';
@@ -10,6 +11,8 @@ const ChangeAccountTypePage = () => {
 
   const location = useLocation();
   const { ownerRequestEmail } = location.state;
+
+  const {currentUser, _id} = useAuth()
 
   //use for display
   const [citizenID, setCitizenID] = useState({ preview: '', raw: '' });
@@ -54,14 +57,14 @@ const ChangeAccountTypePage = () => {
         //jpeg case
         setSendImage({
           ...sendImage,
-          email:ownerRequestEmail,
+          email: currentUser.email,
           citizenID64: (await toBase64(e.target.files[0])).substr(23),
         });
       } else {
         //png case
         setSendImage({
           ...sendImage,
-          email:ownerRequestEmail,
+          email:currentUser.email,
           citizenID64: (await toBase64(e.target.files[0])).substr(22),
         });
       }
@@ -78,21 +81,21 @@ const ChangeAccountTypePage = () => {
 
       setSendImage({
         ...sendImage,
-        email:ownerRequestEmail
+        email:currentUser.email
       })
 
       if ((await toBase64(e.target.files[0])).substr(11, 4) === 'jpeg') {
         //jpeg case
         setSendImage({
           ...sendImage,
-          email:ownerRequestEmail,
+          email:currentUser.email,
           transcription64: (await toBase64(e.target.files[0])).substr(23),
         });
       } else {
         //png case
         setSendImage({
           ...sendImage,
-          email:ownerRequestEmail,
+          email:currentUser.email,
           transcription64: (await toBase64(e.target.files[0])).substr(22),
         });
       }
@@ -122,7 +125,8 @@ const ChangeAccountTypePage = () => {
   const backToOwnerProfileHandle = () => {
     setShowModal(false);
     // navigate("/profile", {state:{targetEmail: "poneiei@mail.com"}})
-    navigate('/profile', { state: { targetEmail: ownerRequestEmail } });
+    // navigate('/profile', { state: { targetEmail: ownerRequestEmail } });
+    navigate(`/profile/${_id}`);
   };
 
   return (
@@ -138,7 +142,7 @@ const ChangeAccountTypePage = () => {
       <div style={{ display: 'flex', width: '45%' }}>
         <Link
           className="backtoprofile shadow"
-          to="/profile"
+          to={`/profile/${_id}`}
           state={{
             // targetEmail: "nifon@gmail.com"
             targetEmail: ownerRequestEmail,

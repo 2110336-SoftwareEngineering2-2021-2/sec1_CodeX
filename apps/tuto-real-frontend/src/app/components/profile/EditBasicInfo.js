@@ -19,7 +19,7 @@ const EditBasicInfo = ({register, errors, basicInfo, tempProfile, setTempProfile
                 'October', 
                 'November', 
                 'December']
-  const birthYearChoice = Array.from({length: 123}, (_, i) => i + 1900);
+  const birthYearChoice = Array.from({length: (new Date()).getYear()+1}, (_, i) => i + 1900);
 
   const changePicture = async (e) => {
     //console.log(e.target?.files[0])

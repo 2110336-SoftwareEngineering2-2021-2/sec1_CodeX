@@ -17,7 +17,7 @@ const ProfilePage = () => {
   // const { currentUser } = useAuth();
   // todo: uncomment this 
   const { currentUser, _id } = useAuth();
-  const [currentId] = useState(_id);
+  // const [currentId] = useState(_id);
   // const [currentId] = useState("6204f93965936f2c15855c89");
 
   const params = useParams();
@@ -66,14 +66,14 @@ const ProfilePage = () => {
   useEffect(() => {
     // if (targetEmail === currentUser?.email) {
     // console.log(params?._id , currentId)
-    if (params?._id === currentId) {
+    if (params?._id === _id) {
     // if (false) {
       if (targetRole === 'Tutor') setViewType('TutorSelf');
       if (targetRole === 'Student') setViewType('StudentSelf');
     } 
     else if (targetRole === 'Tutor') setViewType('TutorOther'); 
     else setViewType('StudentOther');
-  }, [currentUser, targetRole]);
+  }, [currentUser, targetRole, _id]);
 
   // useEffect(() => {
   //   console.log("Current User Updated!!!!")

@@ -49,7 +49,7 @@ const ProfileInfo = ({targetId, viewType}) => {
   } = useForm();
 
   const fetchData = useCallback(async () => {
-    console.log(targetId)
+    // console.log(targetId)
     await client({
       method: 'GET',
       url: `/user`,
@@ -58,8 +58,8 @@ const ProfileInfo = ({targetId, viewType}) => {
       }
     })
     .then(({ data: {data} }) => {
-      console.log("profile in fetch: ", data)
-      console.log("fetch profile image @ ",data.profileImg.url)
+      // console.log("profile in fetch: ", data)
+      // console.log("fetch profile image @ ",data.profileImg.url)
       setTempProfile({
         ...tempProfile,
         preview: data.profileImg.url
@@ -234,7 +234,7 @@ const ProfileInfo = ({targetId, viewType}) => {
       {isEditing ? renderEditForm() : renderViewForm()}
       {viewType !== 'TutorOther' ? (
         <>
-          <AdvanceInfo advance={advance} targetId={targetId} viewType={viewType}/>
+          <AdvanceInfo advance={advance} viewType={viewType}/>
           {isEditing ? (
             <div
               style={{ width: '45%', textAlign: 'right', marginBottom: '5%' }}

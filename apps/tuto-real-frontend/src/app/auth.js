@@ -31,28 +31,37 @@ export function AuthProvider({ children }) {
     console.log('User status has been changed...');
     onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
-      if (user) {
-        client({
-          method: 'GET',
-          url: `/user?email=${user.email}`,
-        })
-          .then(({ data: { data } }) => {
-            setId(data._id)
-            setRole(data.role);
-            setFirstName(data.firstName);
-            setLastName(data.lastName);
-          })
-          .catch((err) => {
-            console.log(err.message);
-          });
-        } else {
-          setId("")
-          setRole(null);
-          setFirstName('');
-          setLastName('');
-        }
-    });
+      // console.log(user)
+      // setUserData(user)
+    })
   }, []);
+
+  useEffect(() => {
+    setUserData(currentUser)
+  },[currentUser]);
+
+  const setUserData = (user) => {
+    if (user) {
+      client({
+        method: 'GET',
+        url: `/user?email=${user.email}`,
+      })
+        .then(({ data: { data } }) => {
+          setId(data._id)
+          setRole(data.role);
+          setFirstName(data.firstName);
+          setLastName(data.lastName);
+        })
+        .catch((err) => {
+          console.log(err.message);
+        });
+    } else {
+      setId("")
+      setRole(null);
+      setFirstName('');
+      setLastName('');
+    }
+  }
 
   const signUp = (data) => {
     client({
