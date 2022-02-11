@@ -15,16 +15,13 @@ const mongoose = require('mongoose');
 export class UserService {
   constructor(@InjectModel('User') private readonly userModel: Model<User>) {}
 
-  public async getProfileByMail(email: String): Promise<any> {
-    const profile = await this.userModel.findOne({ email }).exec();
-    if (!profile) return { success: false, data: 'User not found!' };
-    return { success: true, data: profile };
-  }
-
-  public async getProfileByID(id: String): Promise<any> {
-    const profile = await this.userModel
-      .findOne({ _id: mongoose.Types.ObjectId(id) })
-      .exec();
+  public async getProfile(id: String, email: String): Promise<any> {
+    let profile;
+    if (!!id)
+      profile = await this.userModel
+        .findOne({ _id: mongoose.Types.ObjectId(id) })
+        .exec();
+    else profile = await this.userModel.findOne({ email }).exec();
     if (!profile) return { success: false, data: 'User not found!' };
     return { success: true, data: profile };
   }
