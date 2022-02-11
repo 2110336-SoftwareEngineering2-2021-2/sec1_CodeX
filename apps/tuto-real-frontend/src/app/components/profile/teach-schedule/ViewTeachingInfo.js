@@ -6,7 +6,7 @@ import "../profile.css"
 import Tag from "./Tag";
 
 
-const ViewTeachingInfo = ({teachingInfo}) => {
+const ViewTeachingInfo = ({teachingInfo, viewType}) => {
     const [tagColor, setTagColor] = useState(["red", "blue", "green", "purple", "orange", "gray"]);
     const {subjectList,description} = teachingInfo;
     // const doNothing = () => {}
@@ -28,7 +28,7 @@ const ViewTeachingInfo = ({teachingInfo}) => {
                             />
                         )):
                         <Tag 
-                            text="Please add your subject"
+                            text={viewType === "TutorSelf" ? "Please add your subject" : "The tutor didn't add his subjects yet"}
                             textColor="white" 
                             bgColor={COLORS.yellow}
                         />
@@ -38,7 +38,9 @@ const ViewTeachingInfo = ({teachingInfo}) => {
             <hr />
             <div className='section'>
                 <p className='header'>DESCRIPTION</p>
-                <textarea readOnly disabled value={(description && description?.length !== 0) ? description:"Please add your teaching infomation here..."} style={{borderWidth:"0px", row:"5", width:"100%", backgroundColor:"white"}} />
+                <textarea readOnly disabled 
+                    value={(description && description?.length !== 0) ? description: viewType === "TutorSelf" ? "Please add your teaching infomation here..." : "The tutor didn't add his description yet"}
+                    style={{borderWidth:"0px", row:"5", width:"100%", backgroundColor:"white"}} />
             </div>
         </div>
     )

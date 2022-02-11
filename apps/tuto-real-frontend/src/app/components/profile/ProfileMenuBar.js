@@ -33,7 +33,7 @@ const ProfileMenuBar = ({viewType, selecting, setSelecting}) => {
       :
         <div>
           <p style={{margin:"3vh", color:"red", fontWeight:"bold"}}>This site can't load: because you don't have permission to see this infomation of Student's user</p>
-          <img src="https://www.vhv.rs/dpng/d/415-4157925_transparent-pepe-frog-png-pepe-the-frog-punching.png" alt="frog punching" width={"60%"}/>
+          {/* <img src="https://www.vhv.rs/dpng/d/415-4157925_transparent-pepe-frog-png-pepe-the-frog-punching.png" alt="frog punching" width={"60%"}/> */}
         </div>
       }
     </>

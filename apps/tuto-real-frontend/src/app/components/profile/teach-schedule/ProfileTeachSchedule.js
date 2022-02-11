@@ -10,7 +10,7 @@ import COLORS from "../../../constants/color";
 import { client } from "../../../axiosConfig";
 
 
-const ProfileTeachSchedule = ({targetId, targetEmail,viewType}) => {
+const ProfileTeachSchedule = ({targetId, targetEmail, viewType}) => {
 
     const [isEditing,setEditing] = useState(false);
     const [teachingInfo, setTeachingInfo] = useState({
@@ -85,7 +85,7 @@ const ProfileTeachSchedule = ({targetId, targetEmail,viewType}) => {
     const renderViewForm = () => {
         return (
             <Form className="form">
-                <ViewTeachingInfo teachingInfo={teachingInfo}/>
+                <ViewTeachingInfo viewType={viewType} teachingInfo={teachingInfo}/>
             </Form>
         )
     }

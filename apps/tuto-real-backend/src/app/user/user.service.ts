@@ -45,10 +45,10 @@ export class UserService {
         .exec()
         .then(async (result) => {
           //if prev img is not default, delete it
-          console.log(result[0].profileImg.url.split('Profile/')[1]);
-          if (result[0].profileImg.url.split('Profile/')[1] != 'default.jpg') {
+          console.log(result.profileImg.url.split('Profile/')[1]);
+          if (result.profileImg.url.split('Profile/')[1] != 'default.jpg') {
             await deleteImg(
-              result[0].profileImg.url.split('Profile/')[1],
+              result.profileImg.url.split('Profile/')[1],
               'Profile'
             );
           }

@@ -14,18 +14,18 @@ const ProfilePage = () => {
   const [selecting, setSelecting] = useState('Info'); // "Info" | "Learn" | "Teach" | "Review"
   const [viewType, setViewType] = useState('StudentSelf'); // "TutorSelf" | "StudentSelf" | "TutorOther" | "StudentOther"
 
-  const { currentUser } = useAuth();
+  // const { currentUser } = useAuth();
   // todo: uncomment this 
-  // const { currentUser, _id } = useAuth();
-  // const currentId = useState(_id);
-  const [currentId] = useState("6204f93965936f2c15855c89");
+  const { currentUser, _id } = useAuth();
+  const [currentId] = useState(_id);
+  // const [currentId] = useState("6204f93965936f2c15855c89");
 
   const params = useParams();
 
   const navigate = useNavigate();
   // const location = useLocation();
   // const [targetEmail] = useState(location.state?.targetEmail);
-  const [targetId] = useState(params?._id);
+  // const [targetId] = useState(params?._id);
   const [targetRole, setTargetRole] = useState('');
 
   const fetchData = useCallback(async () => {
@@ -37,7 +37,7 @@ const ProfilePage = () => {
       // todo: uncomment this
       url: `/user`,
       params: {
-        _id: targetId
+        _id: params?._id
       }
     })
       .then(({ data: {data} }) => {
@@ -53,7 +53,7 @@ const ProfilePage = () => {
 
   useEffect(() => {
     fetchData();
-    console.log(params);
+    // console.log(params);
   }, [fetchData]);
 
   // useEffect(() => {
@@ -65,8 +65,8 @@ const ProfilePage = () => {
 
   useEffect(() => {
     // if (targetEmail === currentUser?.email) {
-    console.log(targetId , currentId)
-    if (targetId === currentId) {
+    // console.log(params?._id , currentId)
+    if (params?._id === currentId) {
     // if (false) {
       if (targetRole === 'Tutor') setViewType('TutorSelf');
       if (targetRole === 'Student') setViewType('StudentSelf');
@@ -97,15 +97,15 @@ const ProfilePage = () => {
   // }
 
   const renderContent = () => {
-    console.log(viewType)
+    // console.log(viewType)
     switch (selecting) {
       case 'Info':
-        return <ProfileInfo viewType={viewType} targetId={targetId}/>;
+        return <ProfileInfo viewType={viewType} targetId={params?._id}/>;
       case 'Learn':
         return null; // Replace null with Student Schedule page...
       case 'Teach':
         return (
-          <ProfileTeachSchedule viewType={viewType} targetId={targetId}/>
+          <ProfileTeachSchedule viewType={viewType} targetId={params?._id}/>
         );
       case 'Review':
         return null; // Replace null with Review page...
