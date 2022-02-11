@@ -12,7 +12,7 @@ const RequestBox = ({name, date, _id, citizenID, transcription, email}) => {
             name,
             citizenID,
             transcription,
-            email
+            _id
           }}
         >
           <p className='title left' style={{width: '100%', marginTop: '0%'}}>{name}</p>

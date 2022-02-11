@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { client } from '../axiosConfig';
 import ModalTwoButton from '../components/modal/ModalTwoButton';
 import NormalButton from '../components/ui/NormalButton';
@@ -7,8 +7,7 @@ import NormalButton from '../components/ui/NormalButton';
 const ChangeAccountApprovePage = () => {
   //props from Link
   const location = useLocation();
-  const { name, citizenID, transcription, email } = location.state;
-  // console.log(location.state)
+  const { name, citizenID, transcription, _id } = location.state;
 
   //other initial
   const [isPending, setIsPending] = useState(false);
@@ -42,8 +41,9 @@ const ChangeAccountApprovePage = () => {
     setIsPending(true);
 
     client({
-      url: `/tutorReq/${email}`,
+      url: `/tutorReq`,
       method: 'PATCH',
+      params: { _id: _id },
       data: { status: 'Approved' },
     })
       .then(({ data }) => {
@@ -65,8 +65,9 @@ const ChangeAccountApprovePage = () => {
     setIsPending(true);
 
     client({
-      url: `/tutorReq/${email}`,
+      url: `/tutorReq`,
       method: 'PATCH',
+      params: { _id: _id },
       data: { status: 'Reject' },
     })
       .then(({ data }) => {
