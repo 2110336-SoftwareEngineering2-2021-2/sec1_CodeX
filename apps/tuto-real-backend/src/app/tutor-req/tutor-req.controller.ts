@@ -48,7 +48,6 @@ export class TutorReqController {
 
   @Patch()
   update(@Query('_id') id: string, @Body() dto: updateStatusDto) {
-    //console.log(dto,email)
     return this.service.updateStatus(id, dto);
   }
 }

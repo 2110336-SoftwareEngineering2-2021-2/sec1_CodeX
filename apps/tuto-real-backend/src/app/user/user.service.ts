@@ -17,11 +17,14 @@ export class UserService {
 
   public async getProfile(id: String, email: String): Promise<any> {
     let profile;
-    if (!!id)
+    if (!!id){
+      if (id.length !=24) return { success: false, data: 'User not found!' }
       profile = await this.userModel
         .findOne({ _id: mongoose.Types.ObjectId(id) })
         .exec();
-    else profile = await this.userModel.findOne({ email }).exec();
+    }
+    else if(!!email) profile = await this.userModel.findOne({ email }).exec();
+    else return { success: false, data: 'User not found!' };
     if (!profile) return { success: false, data: 'User not found!' };
     return { success: true, data: profile };
   }
@@ -56,22 +59,14 @@ export class UserService {
     }
 
     try {
-      const profile = await this.userModel
-        .findOneAndUpdate(
-          { _id: mongoose.Types.ObjectId(id) },
-          {
-            subjects: dto.subjects,
-            description: dto.description,
-            firstName: dto.firstName,
-            lastName: dto.lastName,
-            address: dto.address,
-            birthDate: dto.birthDate,
-            profileImg: dto.profileImg,
-          },
-          { upsert: true }
-        )
-        .exec();
-      return { success: true, data: profile };
+      await this.userModel.updateOne(
+            { _id: mongoose.Types.ObjectId(id)  },
+            { subjects: dto.subjects, description: dto.description, firstName: dto.firstName, 
+              lastName: dto.lastName, address: dto.address, birthDate: dto.birthDate, profileImg: dto.profileImg},
+            { upsert: true },
+        ).exec();
+        const profile = await this.userModel.find({_id: mongoose.Types.ObjectId(id)})
+      return { success: true, data: profile[0] };
     } catch (err) {
       return { success: false, data: err.message };
     }
