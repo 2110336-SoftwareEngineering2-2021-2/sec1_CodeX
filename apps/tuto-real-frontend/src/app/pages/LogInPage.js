@@ -12,9 +12,8 @@ export default function Signin() {
   const navigate = useNavigate();
   const { logIn } = useAuth();
 
-  const handleSubmit = async (e) => {
-    await logIn(email, password);
-    navigate('/');
+  const handleSubmit = async () => {
+    await logIn(email, password, () => navigate('/'));
   };
 
   return (
