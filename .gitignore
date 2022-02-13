@@ -40,5 +40,4 @@ Thumbs.db
 
 #key
 ./apps/tuto-real-backend/src/app/util/key.json
-/key/CloudKey.json
-/key/MailKey.js
+/key

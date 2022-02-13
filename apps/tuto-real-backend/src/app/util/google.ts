@@ -101,7 +101,7 @@ export const uploadImageBy64 = async (type:String,base64:String) => {
       const mailOptions = {
         from: 'CodeX <thisisfinebackend@gmail.com>',
         to: 'sorasit789@gmail.com',
-        subject: 'Hello from gmail using API',
+        subject: 'Test',
         text: 'Hello from gmail email using API',
         html: '<h1>Hello from gmail email using API</h1>',
       };
