@@ -71,8 +71,7 @@ const RegistrationPage = () => {
         birthDate: new Date(birthYear, birthMonth, birthDay + 1, 0, 0, 0),
         address: address,
         citizenID: citizenId,
-      });
-      navigate('/login');
+      }, () => navigate('/login'));
     }
   };
 
