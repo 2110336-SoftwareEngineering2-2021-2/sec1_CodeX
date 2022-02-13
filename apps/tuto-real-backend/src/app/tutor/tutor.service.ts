@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { UserDto } from '../user/user.dto';
 import { User } from '../user/user.interface';
+import { CriteriaDto } from './cirteria.dto';
 
 @Injectable()
 export class TutorService {
@@ -13,6 +14,29 @@ export class TutorService {
     return tutors;
   }
 
+  public async searchTutor(dto : CriteriaDto) : Promise<any> {
+    var queryKeywords = []
+    console.log(dto)
+    if (!!dto.keyword){
+      dto.keyword.forEach((word)=>{
+        queryKeywords.push({$or : [{description : {$regex:word}},
+                                {firstName : {$regex:word}} ,
+                                {lastName : {$regex:word}}]})
+      })
+  }
+    return await this.tutorModel.find(
+      {
+        $and :[
+          (!!dto.keyword)? { $and :  queryKeywords} :{} ,
+          //{ ratePrice : (!!dto.ratePrice)? { $gt :  dto.ratePrice.min, $lt : dto.ratePrice.max}:{}} ,
+          (!!dto.subjects)? { subjects:  { $all: dto.subjects }} : {},
+          {role : "Tutor"}
+          //{ schedule: {}}
+        ]
+      }
+      )
+
+  }
   /*GetProfileByID(id : String)  {
 
         return this.tutorModel.find({uid:id}).exec()

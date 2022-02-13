@@ -5,12 +5,15 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Query,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { TutorReqDto } from '../tutor-req/tutor-req.dto';
 import { UserDto } from '../user/user.dto';
 import { User } from '../user/user.interface';
+import { CriteriaDto } from './cirteria.dto';
 import { TutorService } from './tutor.service';
 
 @Controller('tutor')
@@ -20,6 +23,20 @@ export class TutorController {
   @Get()
   getTutor() {
     return this.tutorService.getTutor();
+  }
+
+  @Get("/search")
+  searchTutor(@Query() q) {
+    var dto = new CriteriaDto()
+    console.log(q,dto)
+    dto.subjects = (!!q.subjects)? q.subjects.split(","):undefined
+    if (!!q.ratePrice){
+      var price = q.ratePrice.split(",")
+      dto.rate.min = parseInt(price[0])
+      dto.rate.max = parseInt(price[1])
+    }
+    dto.keyword = (!!q.keyword)? q.keyword.split(" "):undefined
+    return this.tutorService.searchTutor(dto);
   }
 
   /*@Get(':id')

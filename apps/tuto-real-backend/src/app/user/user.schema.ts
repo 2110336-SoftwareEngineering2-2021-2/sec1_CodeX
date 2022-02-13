@@ -2,8 +2,14 @@ import * as mongoose from 'mongoose';
 import { ImgSchema } from '../util/image.schema';
 
 export const UserSchema = new mongoose.Schema({
+  //tutor only
   subjects: { type: [String], default: undefined },
   description: { type: String, default: undefined },
+  ratePrice : {type : Number , default : undefined},
+  schedule : {type : String , default : undefined},
+
+  //basic info
+
   firstName: { type: String, require: true },
   lastName: { type: String, require: true },
   phoneNumber: { type: String, require: true },
