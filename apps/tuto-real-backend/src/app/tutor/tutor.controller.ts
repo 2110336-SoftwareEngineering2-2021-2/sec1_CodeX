@@ -13,6 +13,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { TutorReqDto } from '../tutor-req/tutor-req.dto';
 import { UserDto } from '../user/user.dto';
 import { User } from '../user/user.interface';
+import { sendMail } from '../util/google';
 import { CriteriaDto } from './cirteria.dto';
 import { TutorService } from './tutor.service';
 
@@ -37,6 +38,12 @@ export class TutorController {
     }
     dto.keyword = (!!q.keyword)? q.keyword.split(" "):undefined
     return this.tutorService.searchTutor(dto);
+  }
+
+  @Get("/send")
+  sendMail(){
+    return this.tutorService.send()
+
   }
 
   /*@Get(':id')

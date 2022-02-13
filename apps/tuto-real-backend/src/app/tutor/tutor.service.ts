@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { UserDto } from '../user/user.dto';
 import { User } from '../user/user.interface';
+import { sendMail } from '../util/google';
 import { CriteriaDto } from './cirteria.dto';
 
 @Injectable()
@@ -36,6 +37,12 @@ export class TutorService {
       }
       )
 
+  }
+
+  async send(){
+    return await sendMail()
+    .then((result) => console.log('Email sent...', result))
+    .catch((error) => console.log(error.message));
   }
   /*GetProfileByID(id : String)  {
 
