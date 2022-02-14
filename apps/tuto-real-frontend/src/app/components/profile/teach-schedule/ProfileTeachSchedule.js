@@ -1,13 +1,14 @@
 import { useState, useEffect, useCallback } from "react"
 import { Form } from "react-bootstrap";
+
+import { client } from "../../../axiosConfig";
 import NormalButton from "../../ui/NormalButton";
 import EditTeachingInfo from "./EditTeachingInfo";
 import ViewTeachingInfo from "./ViewTeachingInfo";
-
-
+import Schedule from "./Schedule";
 import "../profile.css"
+
 import COLORS from "../../../constants/color";
-import { client } from "../../../axiosConfig";
 
 
 const ProfileTeachSchedule = ({targetId, viewType}) => {
