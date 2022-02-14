@@ -5,7 +5,8 @@ export interface User extends Document {
   readonly description: { type: [String]; default: undefined };
 
   ratePrice : {type : Number , default : undefined};
-  schedule : {type : String , default : undefined};
+  schedule : {type : Object, default : undefined};
+
 
   readonly firstName: String;
   readonly lastName: String;

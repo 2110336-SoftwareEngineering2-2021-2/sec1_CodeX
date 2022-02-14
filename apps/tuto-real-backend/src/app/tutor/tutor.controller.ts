@@ -37,6 +37,7 @@ export class TutorController {
       dto.rate.max = parseInt(price[1])
     }
     dto.keyword = (!!q.keyword)? q.keyword.split(" "):undefined
+    dto.days = (!!q.days)? q.days.split(","):undefined
     return this.tutorService.searchTutor(dto);
   }
 

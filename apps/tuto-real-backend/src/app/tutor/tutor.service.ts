@@ -16,26 +16,38 @@ export class TutorService {
   }
 
   public async searchTutor(dto : CriteriaDto) : Promise<any> {
-    var queryKeywords = []
-    console.log(dto)
-    if (!!dto.keyword){
-      dto.keyword.forEach((word)=>{
-        queryKeywords.push({$or : [{description : {$regex:word}},
+  var queryKeyword = [] ,queryDays = []
+  console.log(dto)
+  if (!!dto.keyword){
+    dto.keyword.forEach((word)=>{
+        if (word.length>=3)
+        queryKeyword.push({$or : [{description : {$regex:word}},
                                 {firstName : {$regex:word}} ,
                                 {lastName : {$regex:word}}]})
-      })
+    })
   }
-    return await this.tutorModel.find(
-      {
-        $and :[
-          (!!dto.keyword)? { $and :  queryKeywords} :{} ,
-          //{ ratePrice : (!!dto.ratePrice)? { $gt :  dto.ratePrice.min, $lt : dto.ratePrice.max}:{}} ,
-          (!!dto.subjects)? { subjects:  { $all: dto.subjects }} : {},
-          {role : "Tutor"}
-          //{ schedule: {}}
-        ]
-      }
-      )
+  if (!!dto.days){
+    var tmp
+    dto.days.forEach((day)=>{
+      tmp = `schedule.${day}`
+        queryDays.push({ [tmp] :{$exists:true}})
+    })
+  }
+  console.log(queryDays)
+  var result = await this.tutorModel.find(
+    {
+      $and :[
+        (!!dto.keyword && queryKeyword.length!=0)? { $and :  queryKeyword} :{} ,
+        //{ ratePrice : (!!dto.ratePrice)? { $gt :  dto.ratePrice.min, $lt : dto.ratePrice.max}:{}} ,
+        (!!dto.subjects)? { subjects:  { $all: dto.subjects }} : {},
+        {role : "Tutor"},
+        (!!dto.days)? {$and : queryDays} : {} 
+        
+      ]
+    }
+    )
+  console.log(result)
+    return result
 
   }
 

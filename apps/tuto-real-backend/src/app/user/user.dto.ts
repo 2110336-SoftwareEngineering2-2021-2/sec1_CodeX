@@ -3,7 +3,7 @@ export class UserDto {
   readonly description: { type: [String]; default: undefined };
   
   readonly ratePrice : {type : Number , default : undefined};
-  readonly schedule : {type : String , default : undefined};
+  readonly schedule : {type : Object , default : undefined};
 
   readonly firstName: String;
   readonly lastName: String;

@@ -6,7 +6,7 @@ export const UserSchema = new mongoose.Schema({
   subjects: { type: [String], default: undefined },
   description: { type: String, default: undefined },
   ratePrice : {type : Number , default : undefined},
-  schedule : {type : String , default : undefined},
+  schedule : {type : Object , default : undefined},
 
   //basic info
 

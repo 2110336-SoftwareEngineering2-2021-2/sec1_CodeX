@@ -1,5 +1,5 @@
 import {Storage} from '@google-cloud/storage'
-import {mailKey} from '../../../../../key/mailKey'
+const  mailKey = require('../../../../../key/MailKey.json') 
 
 
 
