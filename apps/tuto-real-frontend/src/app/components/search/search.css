@@ -5,16 +5,9 @@
     border-style: solid;
     border-width: 1px ;
     padding: 10px;
-    margin: 12.5px 0px;
     box-shadow: 0px 2px 2px rgb(0, 0, 0, 0.25) !important;
     /* background-color: black; */
 }
-#search-page-hover-card:hover {
-    background-color: var(--gray);
-}
-/* .search-page-card:hover {
-
-} */
 .add-filter-button {
     width: 20%;
     border-width: 0px;
@@ -29,11 +22,4 @@
     /* border-color: ; */
     background-color: #4547f0;
     color: white;
-}
-
-img {
-    object-fit: cover;
-    width:140px;
-    height:140px;
-    border-radius: 5px;
 }
