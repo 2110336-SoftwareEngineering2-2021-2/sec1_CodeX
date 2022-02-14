@@ -10,6 +10,7 @@ import ChangeAccountApprovePage from './pages/ChangeAccountApprovePage';
 import ChangeAccountRequestListPage from './pages/ChangeAccountRequestListPage';
 import ProfilePage from './pages/ProfilePage';
 import ChangeAccountTypePage from './pages/ChangeAccountTypePage';
+import SearchPage from './pages/SearchPage';
 
 export function App() {
   return (
@@ -34,6 +35,11 @@ export function App() {
           exact
           path="/requestList"
           element={<ChangeAccountRequestListPage />}
+        />
+        <Route
+          exact
+          path="/search"
+          element={<SearchPage />}
         />
       </Routes>
     </>

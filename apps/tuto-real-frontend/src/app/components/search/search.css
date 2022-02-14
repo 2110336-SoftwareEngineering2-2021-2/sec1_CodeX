@@ -1,0 +1,25 @@
+.search-page-card {
+    width: 100%;
+    border-radius: 8px;
+    border-color: var(--lightgray);
+    border-style: solid;
+    border-width: 1px ;
+    padding: 10px;
+    box-shadow: 0px 2px 2px rgb(0, 0, 0, 0.25) !important;
+    /* background-color: black; */
+}
+.add-filter-button {
+    width: 20%;
+    border-width: 0px;
+    border-radius: 4px;
+    background-color: #5d5fef;
+    color: white;
+}
+.add-filter-button:hover {
+    width: 20%;
+    /* border-width: 1px; */
+    border-radius: 4px;
+    /* border-color: ; */
+    background-color: #4547f0;
+    color: white;
+}
