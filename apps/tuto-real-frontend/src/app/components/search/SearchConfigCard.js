@@ -5,7 +5,7 @@ import { Form } from 'react-bootstrap';
 
 const SearchConfigCard = () => {
     return (
-        <div className="search-page-card">
+        <div className="search-page-card" style={{marginBottom:"20px"}}>
             <div style={{width:"100%", display:"flex", flexDirection:"row"}}>
                 <div style={{width:"100%", 
                     backgroundColor:COLORS.gray, 
