@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import COLORS from '../../constants/color'
 import RatingTag from './RatingTag'
 import './search.css'
@@ -6,14 +7,25 @@ import SubjectTag from './SubjectTag'
 
 const TutorCard = (props) => {
     const {firstName, lastName, rating, imgUrl, subjectList, price, targetId} = props
-    const [dummySubjects] = useState(["Mathematic", "Science", "Programing", "Algorithm", "Society", "Yaranika"])
-    const [dummyColors] = useState(["red","orange","yellow","green","blue","darkblue","purple"])
+    // const [dummySubjects] = useState(["Mathematic", "Science", "Programing", "Algorithm", "Society", "Yaranika"])
+    const [dummyColors] = useState(["red","orange","#ded51b","green","blue","darkblue","purple"])
+
+    const navigate = useNavigate()
+
+    const toProfile = () => {
+        console.log("to profile" , firstName ?? "Unknownf", " " , lastName ?? "Unknownl")
+        navigate(`/profile/${targetId}`);
+    }
+
     return (
         <div className="search-page-card" 
-            onClick={() => (console.log("Hello"))}
+            id='search-page-hover-card'
+            onClick={toProfile}
             style={{padding:"8px", display:"flex", flexDirection:"row"}}
         >
-            <div style={{width:"140px", height:"140px", backgroundColor:"gray", borderRadius:"5px"}}/>
+            {/* <div style={{width:"140px", height:"140px", backgroundColor:"gray", borderRadius:"5px"}}/> */}
+            {/* <img src='https://www.techoffside.com/wp-content/uploads/2020/11/MiHoYo-Genshin-Impact-001.jpg'></img> */}
+            <img src={imgUrl ?? "https://www.saraswatiias.com/wp-content/uploads/2018/11/dummy-profile-pic-male1.jpg"}/>
             <div style={{display:"flex", flexDirection:"column", marginLeft:"15px", alignItems:"flex-start"}}>
                 <div style={{display:"flex", flexDirection:"row", alignItems:"center"}}>
                     <p style={{color:COLORS.primary, fontSize:"22px", marginRight:"10px", fontWeight:"bold"}}>
@@ -28,13 +40,13 @@ const TutorCard = (props) => {
                     <p style={{color:COLORS.darkgray, fontSize:"18px" , margin:"0px", marginRight:"5px"}}>SUBJECTS:</p>
                     <div style={{display:"flex", flexDirection:"row", flexWrap:"wrap"}}>
                         {(subjectList ?? []).map((e,i) => (
-                            <SubjectTag text={e} color={dummyColors[(i + 3) % dummyColors.length]}/>
+                            <SubjectTag 
+                                text={e} 
+                                color={dummyColors[Math.floor(Math.random() * dummyColors.length)]}
+                            />
                         ))}
                     </div>
                 </div>
-                    {/* <p style={{color:COLORS.darkgray, fontSize:"18px"}}>100 baht</p> */}
-                    {/* <RatingTag rating="4.8"/> */}
-
             </div>
         </div>
     )
