@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Placeholder } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 import COLORS from '../../constants/color'
 import RatingTag from './RatingTag'
@@ -28,8 +29,20 @@ const TutorCard = (props) => {
             <img src={imgUrl ?? "https://www.saraswatiias.com/wp-content/uploads/2018/11/dummy-profile-pic-male1.jpg"}/>
             <div style={{display:"flex", flexDirection:"column", marginLeft:"15px", alignItems:"flex-start"}}>
                 <div style={{display:"flex", flexDirection:"row", alignItems:"center"}}>
+                    {firstName ?
+                        <p style={{color:COLORS.primary, fontSize:"22px", marginRight:"10px", fontWeight:"bold"}}>
+                            {firstName}
+                        </p>
+                        :
+                        // <p>กล้วย</p>
+                        <Placeholder as="p" animation="glow">
+                            <Placeholder xs={12} />
+                        </Placeholder>
+                        // <Placeholder as="p" xs={6} bg="primary"  />
+                    }
+                    {" "}
                     <p style={{color:COLORS.primary, fontSize:"22px", marginRight:"10px", fontWeight:"bold"}}>
-                        {firstName ?? "First"}  {lastName ?? "Last"}
+                        {lastName ?? "Last"}
                     </p>
                     <RatingTag rating={rating ?? "0.0"}/>
                 </div>

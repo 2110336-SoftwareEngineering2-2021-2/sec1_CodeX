@@ -2,6 +2,7 @@ import { useState } from "react";
 import SearchConfigCard from "../components/search/SearchConfigCard";
 import TutorCard from "../components/search/TuturCard";
 
+import './RegistrationPage.css'
 
 const SearchPage = () => {
 
@@ -90,9 +91,29 @@ const SearchPage = () => {
         },
     ])
 
+    const [searchInfo,setSearchInfo] = useState({
+        searchText:"",
+        subjects:"",
+        minPrice:0,
+        maxPrice:1000000,
+        teachingDay:[
+            "Monday",
+            "Tuesday"
+        ],
+        searchType:"rating",
+        orderType:"ascending"
+    })
+
+    const [filterShow, setFilterShow] = useState(false)
+
     return (
-        <div style={{width:"45%"}}>
-            <SearchConfigCard/>
+        <div className="search-container-responsive">
+            <SearchConfigCard 
+                searchInfo={searchInfo} 
+                setSearchInfo={setSearchInfo}
+                filterShow={filterShow}
+                setFilterShow={setFilterShow}
+            />
             {dummyList.map((e) => (
                 <TutorCard 
                     targetId={e._id} 

@@ -37,3 +37,10 @@ img {
     height:140px;
     border-radius: 5px;
 }
+
+@media only screen and (max-width: 560px) {
+    img {
+        width:0px;
+        height:0px;
+    }
+}

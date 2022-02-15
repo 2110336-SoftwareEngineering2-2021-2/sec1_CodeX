@@ -3,7 +3,7 @@ import './search.css'
 import {MdSearch} from 'react-icons/md'
 import { Form } from 'react-bootstrap';
 
-const SearchConfigCard = () => {
+const SearchConfigCard = ({searchInfo, setSearchInfo, filterShow, setFilterShow}) => {
     return (
         <div className="search-page-card" style={{marginBottom:"20px"}}>
             <div style={{width:"100%", display:"flex", flexDirection:"row"}}>
