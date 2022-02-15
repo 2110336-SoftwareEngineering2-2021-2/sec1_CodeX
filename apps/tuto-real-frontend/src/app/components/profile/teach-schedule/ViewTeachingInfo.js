@@ -13,7 +13,7 @@ const ViewTeachingInfo = ({teachingInfo, viewType}) => {
     const [tagColor, setTagColor] = useState(["red", "blue", "green", "purple", "orange", "gray"]);
     const {subjectList,description} = teachingInfo;
 
-    const [slotDetail, setSlotDetail] = useState([
+    const [slotList, setSlotList] = useState([
         {number: 0, subject: "Mat", status: "available"},
         {number: 1, subject: "Mat", status: "disable"},
         {number: 2, subject: "Sci", status: "booked"},
@@ -26,7 +26,7 @@ const ViewTeachingInfo = ({teachingInfo, viewType}) => {
     ]) 
     // const doNothing = () => {}
     return (
-        <div className='info-card shadow' style={{width: "55%"}}>
+        <div className='table-card info-card shadow'>
             <p className='title'>Teaching Information</p>
             <p className='header' style={{width: "100%"}}>Some of your information may be seen by other users.</p>
             <hr />
@@ -60,10 +60,10 @@ const ViewTeachingInfo = ({teachingInfo, viewType}) => {
             <hr />
             <Tabs defaultActiveKey="morning" style={{width: "100%"}}>
                 <Tab eventKey="morning" title="Morning" style={{width: "100%"}}>
-                    <Schedule time="Morning" slotData={slotDetail} />
+                    <Schedule time="Morning" slotList={slotList} viewType={viewType} />
                 </Tab>
                 <Tab eventKey="evening" title="Evening" style={{width: "100%"}}>
-                    <Schedule time="Evening" slotData={slotDetail} />
+                    <Schedule time="Evening" slotList={slotList} viewType={viewType} />
                 </Tab>
             </Tabs>
         </div>

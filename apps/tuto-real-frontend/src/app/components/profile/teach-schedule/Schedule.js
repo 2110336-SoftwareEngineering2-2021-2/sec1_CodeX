@@ -1,6 +1,9 @@
 import React from 'react'
 
-const Schedule = ({time, slotData}) => { 
+import Slot from './Slot'
+import "./schedule.css"
+
+const Schedule = ({time, slotList, viewType}) => { 
   /* 
     time = "Morning" | "Evening"
     slotData = {
@@ -13,11 +16,17 @@ const Schedule = ({time, slotData}) => {
 
   const DAY = ["SUN", 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT']
 
+  const isClickable = (status) => {
+    // return True if that slot is clickable //
+    if(status === "available" || status === "tutorSelect" || status === "studentSelect") return true
+    else return false
+  }
+
   const renderHeader = (
     <tr>
       <th>Date/Time</th>
       {[...Array(10).keys()].map(t => (
-        <th key={t}>{t !== 0 ?
+        <th key={t} style={{textAlign: "left", paddingLeft: "1%"}}>{t !== 0 ?
           (time === "Morning"? 
             (t+8)
             :(t+14))
@@ -30,10 +39,16 @@ const Schedule = ({time, slotData}) => {
   const renderBody = (
     <>
       {[...Array(7).keys()].map((row) => (
-        <tr>
-          {[...Array(11).keys()].map(col => (
-            <td>{col !== 0? slotData[row*10 + col - 1]?.subject: DAY[row]}</td>
-          ))}
+        <tr key={row}>
+          {[...Array(11).keys()].map(col => {
+            const idx = row*10 + col - 1
+            if(col === 0) return <td key={idx} style={{fontWeight: "bold"}}><p>{DAY[row]}</p></td>
+            else return (
+              <td id={isClickable(slotList[idx]?.status)? "available": null} key={idx} style={{verticalAlign: "top"}}>
+                <Slot slotData={slotList[idx]} viewType={viewType} />
+              </td>
+            )
+          })}
         </tr>
       ))}
     </>
