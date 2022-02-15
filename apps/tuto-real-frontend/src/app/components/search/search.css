@@ -44,3 +44,27 @@ img {
         height:0px;
     }
 }
+
+hr {
+    border: transparent;
+    border-top: 1px solid var(--darkgray);
+    width: 100%;
+    margin: 0px
+}
+
+.form-check-input:checked {
+    background-color: var(--third);
+    border-color: var(--third);
+}
+
+.apply-filter-button {
+    padding: .375rem .75rem;
+    border-width: 0px;
+    border-radius: 4px;
+    background-color: var(--third);
+    color: white;
+}
+
+.apply-filter-button:hover {
+    background-color: var(--primary);
+}
