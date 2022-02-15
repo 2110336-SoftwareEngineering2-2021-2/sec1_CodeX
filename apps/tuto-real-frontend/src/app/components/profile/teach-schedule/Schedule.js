@@ -3,13 +3,13 @@ import React from 'react'
 import Slot from './Slot'
 import "./schedule.css"
 
-const Schedule = ({time, slotList, viewType}) => { 
+const Schedule = ({time, slotList, viewType, selected, setSelected}) => { 
   /* 
     time = "Morning" | "Evening"
     slotData = {
       number: number start from 0
       subject: string,
-      status: "available" | "disable" | "booked" | "pending" | "x" | "tutorSelect" | "studentSelect"
+      status: "available" | "disable" | "booked" | "pending" | "x"
       onViewInfo?: function
     }
   */
@@ -18,8 +18,13 @@ const Schedule = ({time, slotList, viewType}) => {
 
   const isClickable = (status) => {
     // return True if that slot is clickable //
-    if(status === "available" || status === "tutorSelect" || status === "studentSelect") return true
-    else return false
+    if(status === "available") return true
+    return false
+  }
+
+  const whenClickSlot = (idx) => {
+    if(!selected.includes(idx)) setSelected([...selected, idx])
+    else setSelected(selected.filter(i => (i !== idx)))
   }
 
   const renderHeader = (
@@ -45,7 +50,12 @@ const Schedule = ({time, slotList, viewType}) => {
             if(col === 0) return <td key={idx} style={{fontWeight: "bold"}}><p>{DAY[row]}</p></td>
             else return (
               <td id={isClickable(slotList[idx]?.status)? "available": null} key={idx} style={{verticalAlign: "top"}}>
-                <Slot slotData={slotList[idx]} viewType={viewType} />
+                <Slot 
+                  slotData={slotList[idx]} 
+                  viewType={viewType} 
+                  isSelected={selected.includes(idx)} 
+                  whenClick={() => whenClickSlot(idx)} 
+                />
               </td>
             )
           })}
