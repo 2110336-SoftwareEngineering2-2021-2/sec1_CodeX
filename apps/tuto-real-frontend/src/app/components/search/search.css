@@ -31,7 +31,7 @@
     color: white;
 }
 
-img {
+img.tutor-card-img {
     object-fit: cover;
     width:140px;
     height:140px;
@@ -39,7 +39,7 @@ img {
 }
 
 @media only screen and (max-width: 560px) {
-    img {
+    img.tutor-card-img {
         width:0px;
         height:0px;
     }

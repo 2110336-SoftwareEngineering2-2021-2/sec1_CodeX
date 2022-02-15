@@ -26,7 +26,7 @@ const TutorCard = (props) => {
         >
             {/* <div style={{width:"140px", height:"140px", backgroundColor:"gray", borderRadius:"5px"}}/> */}
             {/* <img src='https://www.techoffside.com/wp-content/uploads/2020/11/MiHoYo-Genshin-Impact-001.jpg'></img> */}
-            <img src={imgUrl ?? "https://www.saraswatiias.com/wp-content/uploads/2018/11/dummy-profile-pic-male1.jpg"}/>
+            <img className='tutor-card-img' src={imgUrl ?? "https://www.saraswatiias.com/wp-content/uploads/2018/11/dummy-profile-pic-male1.jpg"}/>
             <div style={{display:"flex", flexDirection:"column", marginLeft:"15px", alignItems:"flex-start"}}>
                 <div style={{display:"flex", flexDirection:"row", alignItems:"center"}}>
                     {firstName ?
