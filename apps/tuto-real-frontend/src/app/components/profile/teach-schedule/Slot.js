@@ -15,10 +15,16 @@ const Slot = ({slotData, viewType, isSelected, whenClick}) => { // viewType => "
     } else return null
   }
 
+  const onClick = () => {
+    if(viewType === "TutorSelf" || slotData?.status === "available") whenClick()
+  }
+
   return (
-    <div className={getSlotColor()} onClick={whenClick} style={{display: 'flex', flexDirection: 'column'}}>
+    <div className={getSlotColor()} onClick={onClick} style={{display: 'flex', flexDirection: 'column'}}>
       <div style={{textAlign: "right"}}>
-          <IoIosInformation size={24} className="hover-icon" />
+          {slotData.subject? (
+            <IoIosInformation size={24} className="hover-icon" />
+          ): null}
       </div>
       <p>{slotData?.subject}</p>
       {slotData?.status === "booked" || slotData?.status === "pending" ? (

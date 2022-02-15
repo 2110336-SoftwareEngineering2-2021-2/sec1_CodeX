@@ -1,9 +1,9 @@
 import { useState, useEffect, useCallback } from "react"
-import { Form, Tabs, Tab } from "react-bootstrap";
+import { Form, Tabs, Tab, Button } from "react-bootstrap";
 import { FiEdit } from 'react-icons/fi'
 
 import { client } from "../../../axiosConfig";
-import NormalButton from "../../ui/NormalButton";
+// import NormalButton from "../../ui/NormalButton";
 // import EditTeachingInfo from "./EditTeachingInfo";
 // import ViewTeachingInfo from "./ViewTeachingInfo";
 import Tag from "./Tag";
@@ -13,9 +13,12 @@ import "../profile.css"
 import COLORS from "../../../constants/color";
 
 
-const ProfileTeachSchedule = ({targetId, viewType}) => {
+// const ProfileTeachSchedule = ({targetId, viewType}) => {
+const ProfileTeachSchedule = ({targetId}) => {
+    const viewType = "TutorOther"
+    // const viewType = "TutorSelf"
 
-    // const [isEditing,setEditing] = useState(false);
+    const [isEditing,setEditing] = useState(false);
     const [subjectList, setSubjectList] = useState([])
     const [price, setPrice] = useState(0)
     const [slotList, setSlotList] = useState([
@@ -27,7 +30,7 @@ const ProfileTeachSchedule = ({targetId, viewType}) => {
         {number: 5, subject: "Art", status: "available"},
         {number: 6, subject: "Art", status: "x"},
         {number: 7, subject: "Art", status: "x"},
-        ...([...Array(62).keys()].map(i => ({number: i+8, subject: "Com", status: "disable"})))
+        ...([...Array(62).keys()].map(i => ({number: i+8, subject: "", status: "disable"})))
     ]) 
     const [selected, setSelected] = useState([])
     // const [teachingInfo, setTeachingInfo] = useState({
@@ -96,26 +99,38 @@ const ProfileTeachSchedule = ({targetId, viewType}) => {
         // })
     }
 
-    // const onCancel = () => {
-    //     setTempTeachingInfo(teachingInfo)
-    //     setEditing(false)
-    // }
-
-    // const renderViewForm = () => {
-    //     return (
-            // <Form className="form">
-            //     <ViewTeachingInfo viewType={viewType} teachingInfo={teachingInfo}/>
-            // </Form>
-    //     )
-    // }
-
-    // const renderEditForm = () => {
-    //     return (
-    //         <Form className="form">
-    //             <EditTeachingInfo tempTeachingInfo={tempTeachingInfo} setTempTeachingInfo={setTempTeachingInfo} />
-    //         </Form>
-    //     )
-    // }
+    const renderButton = () => {
+        if(selected.length === 0) return null
+        else if(viewType === "TutorSelf")
+            return (
+                <>
+                    <Button 
+                        variant="outline-secondary" 
+                        onClick={() => setSelected([])}
+                        > Discard All </Button>
+                    <Button 
+                        variant="warning" 
+                        style={{backgroundColor: COLORS.yellow, color: COLORS.white, marginLeft: "2%"}}
+                        onClick={() => setEditing(true)}
+                    > Edit </Button>
+                </>
+            )
+            else if(viewType === "TutorOther")
+                return (
+                    <>
+                        <Button 
+                            variant="outline-secondary" 
+                            onClick={() => setSelected([])}
+                            > Discard All </Button>
+                        <Button 
+                            variant="success" 
+                            style={{backgroundColor: COLORS.third, borderColor: "none", color: COLORS.white, marginLeft: "2%"}}
+                            onClick={() => setEditing(true)}
+                        > Book Selecting Slot </Button>
+                    </>
+                )
+            else return null
+    }
 
     return (
         <>
@@ -173,6 +188,9 @@ const ProfileTeachSchedule = ({targetId, viewType}) => {
                             />
                         </Tab>
                     </Tabs>
+                    <div style={{display: 'flex', justifyContent: "flex-end", width: "100%", padding: "0% 2% 2% 2%"}}>
+                        {renderButton()}
+                    </div>
                 </div>
             </Form>
             {/* {isEditing ? renderEditForm() : renderViewForm()} */}
@@ -192,17 +210,7 @@ const ProfileTeachSchedule = ({targetId, viewType}) => {
                     />
                 </div>
             ): ( */}
-                {/* <div style={{width: "45%", textAlign: "right", marginBottom: "5%"}}>
-                    {viewType=="TutorSelf" ?
-                        <NormalButton 
-                            title={"Edit"} 
-                            whenClick={() => setEditing(true)} 
-                            size={"l"} 
-                            bgColor={COLORS.third}
-                        />
-                        : null
-                    }
-                </div> */}
+            
             {/* )} */}
         </>
     )
