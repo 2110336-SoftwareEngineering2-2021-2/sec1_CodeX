@@ -22,11 +22,8 @@ const ModalTwoButton = (props) => {
             style={{width: '35%', left: '32.5%'}}
         >
             <Modal.Header style={{flexDirection: 'column', alignItems: 'flex-start', border: 'none', paddingBottom: '0px'}}>
-                
                 <Modal.Title className='request-title'>{title}</Modal.Title>
                 <Modal.Title className='request-header'>{header}</Modal.Title>
-                
-                <hr/>
             </Modal.Header>
 
             <Modal.Footer style={{border: 'none', paddingTop: '0px', flexDirection: 'row-reverse', justifyContent: 'flex-start'}}>

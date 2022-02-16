@@ -1,14 +1,22 @@
-import React from 'react';
-import { Modal, Form, Button } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Modal, Form, Button} from 'react-bootstrap';
 import './EditingSlotModal.css'
+import ModalTwoButton from './ModalTwoButton';
 
 const EditingSlotModal = (props) => {
 
     let show = true
     const subjectChoice = ['Math', 'Art', 'Programing']
+
+    const [showModal, setShowModal] = useState(false)
+    const [isPending, setIsPending] = useState(false)
     
     const handleClose = () => {
         show = false
+    }
+
+    const handleLeft = () => {
+        return
     }
 
     return (
@@ -52,16 +60,31 @@ const EditingSlotModal = (props) => {
                 {/* button part */}
                 <Modal.Footer>
 
+                    <Button style={{backgroundColor: 'var(--third)', borderColor: 'var(--third)'}} onClick={() => {setShowModal(true)}}>
+                        Save Changes
+                    </Button>
+
                     <Button id='cancelButton' variant='outline-dark'>
                         Cancel
-                    </Button>
-                    
-                    <Button style={{backgroundColor: 'var(--third)', borderColor: 'var(--third)'}}>
-                        Save Changes
                     </Button>
 
                 </Modal.Footer>
             </Modal>
+
+            <ModalTwoButton
+                show={showModal}
+                setShow={setShowModal}
+                title='Do you want to save these changes?'
+                header='If you click confirm button, the following change will be applied to the selected slots.'
+                leftFunc={handleLeft}
+                leftMessage='Confirm'
+                rightMessage='Cancel'
+                leftColor='var(--third)'
+                rightColor='Cancel'
+                isPending={isPending}
+                leftPending='Saving'
+                leftPendingColor='var(--lightgray)'
+            />
         </div>
     )
 }
