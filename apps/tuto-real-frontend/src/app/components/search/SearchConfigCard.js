@@ -8,7 +8,7 @@ import SearchFilter from './SearchFilter';
 
 const SearchConfigCard = ({searchInfo, setSearchInfo, onClickFilterButton}) => {
     return (
-        <>
+        <div style={{padding:"6px"}}>
             <div className="search-page-card" style={{marginBottom:"20px"}}>
                 <div style={{width:"100%", display:"flex", flexDirection:"row"}}>
                     <div style={{width:"100%", 
@@ -55,7 +55,7 @@ const SearchConfigCard = ({searchInfo, setSearchInfo, onClickFilterButton}) => {
                 show={filterShow}
                 setShow={setFilterShow}
             /> */}
-        </>
+        </div>
     )
 }
 

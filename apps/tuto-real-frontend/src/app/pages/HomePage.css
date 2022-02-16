@@ -1,0 +1,13 @@
+.carousel-image {
+    width: 100%;
+    height: 75vh; 
+    object-fit: cover;
+}
+#home-page.carousel-caption {
+    height: 100%; 
+    background-color:black; 
+    padding: 5%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start
+}

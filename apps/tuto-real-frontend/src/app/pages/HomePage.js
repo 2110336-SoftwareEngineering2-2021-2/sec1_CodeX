@@ -2,6 +2,7 @@ import React from 'react';
 import { Carousel } from 'react-bootstrap';
 import { useAuth } from '../auth';
 import COLORS from '../constants/color';
+import './HomePage.css'
 
 import {
   HOMEPAGE_WALLPAPER_1, 
@@ -29,12 +30,16 @@ const HomePage = () => {
         <Carousel>
           <Carousel.Item>
             <img
-              // className="d-block w-100"
+              className="carousel-image"
               src={HOMEPAGE_WALLPAPER_1}
-              style={{borderRadius:"0px", width:"100%", height:"100vh", objectFit:"cover"}}
+              // style={{borderRadius:"0px", width:"100%", height:"85vh", objectFit:"cover"}}
               alt="First slide"
             />
             <Carousel.Caption>
+              {/* <div className='carousel-caption' id='home-page'>
+                <h1 style={{fontSize:"10vh"}}>TutoReal</h1>
+              </div> */}
+
               <h3>First slide label</h3>
               <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
             </Carousel.Caption>
@@ -42,9 +47,9 @@ const HomePage = () => {
 
           <Carousel.Item>
             <img
-              // className="d-block w-100"
+              className="carousel-image"
               src={HOMEPAGE_WALLPAPER_4}
-              style={{borderRadius:"0px", width:"100%", height:"100vh", objectFit:"cover"}}
+              // style={{borderRadius:"0px", width:"100%", height:"85vh", objectFit:"cover"}}
               alt="Second slide"
             />
             <Carousel.Caption>
@@ -55,9 +60,9 @@ const HomePage = () => {
 
           <Carousel.Item>
             <img
-              // className="d-block w-100"
+              className="carousel-image"
               src={HOMEPAGE_WALLPAPER_5}
-              style={{borderRadius:"0px", width:"100%", height:"100vh", objectFit:"cover"}}
+              // style={{borderRadius:"0px", width:"100%", height:"85vh", objectFit:"cover"}}
               alt="Third slide"
             />
             <Carousel.Caption>
@@ -68,9 +73,9 @@ const HomePage = () => {
 
           <Carousel.Item>
             <img
-              // className="d-block w-100"
+              className="carousel-image"
               src={HOMEPAGE_WALLPAPER_6}
-              style={{borderRadius:"0px", width:"100%", height:"100vh", objectFit:"cover"}}
+              // style={{borderRadius:"0px", width:"100%", height:"85vh", objectFit:"cover"}}
               alt="Third slide"
             />
             <Carousel.Caption>
