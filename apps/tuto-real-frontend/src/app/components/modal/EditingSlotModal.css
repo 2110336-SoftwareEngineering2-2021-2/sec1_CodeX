@@ -1,0 +1,13 @@
+#description::placeholder{
+    color: var(--lightgray);
+}
+
+#cancelButton{
+    border-color: var(--darkgray);
+    color: var(--darkgray);
+}
+
+#cancelButton:hover{
+    background-color: var(--darkgray);
+    color: white;
+}
