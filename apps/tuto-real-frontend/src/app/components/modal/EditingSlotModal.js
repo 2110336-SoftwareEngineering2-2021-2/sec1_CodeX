@@ -55,7 +55,6 @@ const EditingSlotModal = (props) => {
         {/* subject select part */}
         <Modal.Body style={{ borderBottom: '1px solid #dee2e6' }}>
           <Form.Group>
-
             <Form.Label style={{ color: 'var(--darkgray)' }}>
               SUBJECTS
             </Form.Label>
@@ -77,14 +76,12 @@ const EditingSlotModal = (props) => {
                 </option>
               ))}
             </Form.Select>
-
           </Form.Group>
         </Modal.Body>
 
         {/* description part */}
         <Modal.Body>
           <Form.Group>
-
             <Form.Label style={{ color: 'var(--darkgray)' }}>
               DESCRIPTION
             </Form.Label>
@@ -99,7 +96,6 @@ const EditingSlotModal = (props) => {
               as="textarea"
               placeholder="Add your description here...."
             />
-
           </Form.Group>
         </Modal.Body>
 

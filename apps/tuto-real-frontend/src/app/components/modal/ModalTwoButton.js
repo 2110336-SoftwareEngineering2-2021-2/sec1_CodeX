@@ -59,7 +59,9 @@ const ModalTwoButton = (props) => {
 
           <Button
             id={rightColor}
-            variant={rightColor === 'cancel-button' ? 'outline-dark' : ''}
+            variant={
+              rightColor === 'cancel-button' ? 'outline-dark' : 'primary'
+            }
             style={{ backgroundColor: rightColor, borderColor: rightColor }}
             onClick={rightFunc}
           >

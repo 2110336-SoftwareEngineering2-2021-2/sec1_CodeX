@@ -1,18 +1,17 @@
 import React, { useState } from 'react';
 import { Modal, Tabs, Tab, Button } from 'react-bootstrap';
-import './ViewingSlotModal.css'
+import './ViewingSlotModal.css';
 
 const ViewingSlotModal = (props) => {
+  const { show, setShow, number, subject, description, studentList } = props;
 
-    const {show, setShow, number, subject, description, studentList} = props
+  const [tabValue, setTabValue] = useState('Information');
 
-    const [tabValue,setTabValue] = useState('Information')
+  const interpunct = ' · ';
 
-    const interpunct = ' · '
-
-    const handleClose = () => {
-        setShow(!show)
-    }
+  const handleClose = () => {
+    setShow(!show);
+  };
 
   return (
     <div>
@@ -24,88 +23,122 @@ const ViewingSlotModal = (props) => {
         animation={false}
         centered
       >
-        <Modal.Header closeButton style={{border: 'none'}}>
+        {/* header part */}
+        <Modal.Header closeButton style={{ border: 'none' }}>
 
-            <div style={{display: 'flex',flexDirection: 'column', alignItems: 'flex-start' }}>
-                <Modal.Title className="request-header" style={{ fontWeight: '600' }}>
-                    Friday, 13.00 - 14.00
-                </Modal.Title>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'flex-start',
+            }}
+          >
+            <Modal.Title
+              className="request-header"
+              style={{ fontWeight: '600' }}
+            >
+              Friday, 13.00 - 14.00
+            </Modal.Title>
+            <Modal.Title
+              className="request-header"
+              style={{ fontWeight: '500', fontSize: '16px' }}
+            >
+              Dr. Komsorn Sookkuay
+            </Modal.Title>
+          </div>
 
-                <Modal.Title className="request-header" style={{ fontWeight: '500', fontSize: '16px' }}>
-                    Dr. Komsorn Sookkuay
-                </Modal.Title>
-            </div>
-          
         </Modal.Header>
 
+        {/* body part */}
         <Tabs
-            className='viewingTabs'
-            activeKey={tabValue}
-            onSelect={ (e) => {setTabValue(e)}}
-            style={{paddingLeft: '1rem' }}
+          className="viewingTabs"
+          activeKey={tabValue}
+          onSelect={(e) => {
+            setTabValue(e);
+          }}
+          style={{ paddingLeft: '1rem' }}
         >
-            {/* information tab */}
-            <Tab eventKey='Information' title='Information'>
+          {/* information tab */}
+          <Tab eventKey="Information" title="Information">
 
-                {/* Subject part */}
-                <Modal.Body style={{ borderBottom: '1px solid #dee2e6' }}>
+            {/* Subject part */}
+            <Modal.Body style={{ borderBottom: '1px solid #dee2e6' }}>
+              <Modal.Title
+                className="request-header"
+                style={{ fontWeight: '500', fontSize: '16px' }}
+              >
+                SUBJECT
+              </Modal.Title>
+              <Modal.Title
+                className="request-header"
+                style={{
+                  fontWeight: '400',
+                  fontSize: '16px',
+                  paddingLeft: '1rem',
+                }}
+              >
+                {subject}
+              </Modal.Title>
+            </Modal.Body>
 
-                    <Modal.Title className="request-header" style={{ fontWeight: '500', fontSize: '16px' }}>
-                        SUBJECT
-                    </Modal.Title>
+            {/* Description part */}
+            <Modal.Body>
+              <Modal.Title
+                className="request-header"
+                style={{ fontWeight: '500', fontSize: '16px' }}
+              >
+                DESCRIPTION
+              </Modal.Title>
+              <Modal.Title
+                className="request-header"
+                style={{
+                  fontWeight: '400',
+                  fontSize: '16px',
+                  paddingLeft: '1rem',
+                }}
+              >
+                {description}
+              </Modal.Title>
+            </Modal.Body>
 
-                    <Modal.Title className="request-header" style={{ fontWeight: '400', fontSize: '16px', paddingLeft: '1rem' }}>
-                        {subject}
-                    </Modal.Title>
+            {/* button part */}
+            <Modal.Footer>
+              <Button
+                id="cancel-button"
+                variant="outline-dark"
+                onClick={handleClose}
+              >
+                Cancel
+              </Button>
+            </Modal.Footer>
+          </Tab>
 
-                </Modal.Body>
+            {/* member part */}
+          <Tab eventKey="Members" title={`Members (${number})`}>
 
-                {/* Description part */}
-                <Modal.Body>
+              {/* studentList part */}
+            <Modal.Body>
+              {studentList.map((student) => (
+                <Modal.Title
+                  className="request-header"
+                  style={{ fontWeight: '400', fontSize: '16px' }}
+                >
+                  {` · ${student}`}
+                </Modal.Title>
+              ))}
+            </Modal.Body>
 
-                    <Modal.Title className="request-header" style={{ fontWeight: '500', fontSize: '16px' }}>
-                        DESCRIPTION
-                    </Modal.Title>
-
-                    <Modal.Title className="request-header" style={{ fontWeight: '400', fontSize: '16px', paddingLeft: '1rem' }}>
-                        {description}
-                    </Modal.Title>
-
-                </Modal.Body>
-
-                <Modal.Footer>
-                    <Button
-                        id="cancel-button"
-                        variant="outline-dark"
-                        onClick={handleClose}
-                    >
-                        Cancel
-                    </Button>
-                </Modal.Footer>
-
-            </Tab>
-
-            <Tab eventKey='Members' title={`Members (${number})`}>
-
-                <Modal.Body>
-                    {studentList.map( (student) => (
-                        <Modal.Title className="request-header" style={{ fontWeight: '400', fontSize: '16px' }}>
-                            {` · ${student}`}
-                        </Modal.Title>
-                    ))}
-                </Modal.Body>
-
-                <Modal.Footer>
-                    <Button
-                        id="cancel-button"
-                        variant="outline-dark"
-                        onClick={handleClose}
-                    >
-                        Cancel
-                    </Button>
-                </Modal.Footer>
-                
-            </Tab>
+            {/* button part */}
+            <Modal.Footer>
+              <Button
+                id="cancel-button"
+                variant="outline-dark"
+                onClick={handleClose}
+              >
+                Cancel
+              </Button>
+            </Modal.Footer>
+          </Tab>
         </Tabs>
       </Modal>
     </div>

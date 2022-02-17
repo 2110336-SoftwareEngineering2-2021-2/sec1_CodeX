@@ -86,6 +86,11 @@ const ChangeAccountApprovePage = () => {
       });
   };
 
+  const handleCancel = () => {
+    setShowModalApprove(false)
+    setShowModalReject(false)
+  }
+
   return (
     <div
       style={{
@@ -168,14 +173,14 @@ const ChangeAccountApprovePage = () => {
       {/* modal component */}
       <ModalTwoButton
         show={showModalApprove}
-        setShow={setShowModalApprove}
         title="Please confirm the approvol"
         header="The user will become a tutor role. Are you sure?"
         leftFunc={handleApprove}
+        rightFunc={handleCancel}
         leftMessage="Approve"
         rightMessage="Cancel"
         leftColor="var(--third)"
-        rightColor="var(--yellow)"
+        rightColor="cancel-button"
         isPending={isPending}
         leftPending="Approving..."
         leftPendingColor="var(--lightgray)"
@@ -183,14 +188,14 @@ const ChangeAccountApprovePage = () => {
 
       <ModalTwoButton
         show={showModalReject}
-        setShow={setShowModalReject}
         title="Please confirm the reject"
         header="The request will be deleted. Are you sure?"
         leftFunc={handleReject}
+        rightFunc={handleCancel}
         leftMessage="Reject"
         rightMessage="Cancel"
         leftColor="red"
-        rightColor="var(--yellow)"
+        rightColor="cancel-button"
         isPending={isPending}
         leftPending="Rejecting..."
         leftPendingColor="var(--lightgray)"
