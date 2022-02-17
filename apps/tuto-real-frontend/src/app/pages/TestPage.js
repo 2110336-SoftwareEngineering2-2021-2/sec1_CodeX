@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import EditingSlotModal from '../components/modal/EditingSlotModal'
+import ViewingSlotModal from '../components/modal/ViewingSlotModal'
 
 const TestPage = () => {
 
@@ -10,11 +11,21 @@ const TestPage = () => {
         <button onClick={() => {setShow(true)}}>
           test
         </button>
-        <EditingSlotModal 
+
+
+        {/* <EditingSlotModal 
           show={show}
           setShow={setShow}
           subjectIn='Art'
           descriptionIn=''
+        /> */}
+
+        <ViewingSlotModal 
+          show={show}
+          setShow={setShow}
+          number='4' 
+          subject='Art'
+          description='眠い'
         />
     </div>
   )

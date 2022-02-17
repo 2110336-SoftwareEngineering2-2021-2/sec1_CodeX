@@ -47,7 +47,7 @@ const EditingSlotModal = (props) => {
       >
         {/* header part */}
         <Modal.Header closeButton>
-          <Modal.Title className="request-header" style={{ fontWeight: '550' }}>
+          <Modal.Title className="request-header" style={{ fontWeight: '600' }}>
             Edit all your selected slots
           </Modal.Title>
         </Modal.Header>
