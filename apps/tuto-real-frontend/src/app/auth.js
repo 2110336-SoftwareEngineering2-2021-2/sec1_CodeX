@@ -21,6 +21,7 @@ export function useAuth() {
 
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
+  const [reset, setReset] = useState(false)
   // Personal Info
   const [_id, setId] = useState("")
   const [role, setRole] = useState(null);
@@ -38,7 +39,8 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     setUserData(currentUser)
-  },[currentUser]);
+    setReset(false)
+  },[currentUser, reset]);
 
   const setUserData = (user) => {
     if (user) {
@@ -170,6 +172,7 @@ export function AuthProvider({ children }) {
     role,
     firstName,
     lastName,
+    setReset
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
