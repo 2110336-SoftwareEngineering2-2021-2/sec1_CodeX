@@ -11,6 +11,7 @@ import ChangeAccountRequestListPage from './pages/ChangeAccountRequestListPage';
 import ProfilePage from './pages/ProfilePage';
 import ChangeAccountTypePage from './pages/ChangeAccountTypePage';
 import SearchPage from './pages/SearchPage';
+import TestPage from './pages/TestPage';
 
 export function App() {
   return (
@@ -41,6 +42,7 @@ export function App() {
           path="/search"
           element={<SearchPage />}
         />
+        <Route exact path="/testPage" element={<TestPage />} />
       </Routes>
     </>
   );
