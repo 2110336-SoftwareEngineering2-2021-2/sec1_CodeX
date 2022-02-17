@@ -1,56 +1,73 @@
 import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
-import './ModalTwoButton.css'
-// import NormalButton from '../ui/NormalButton';
+import './ModalTwoButton.css';
 
 const ModalTwoButton = (props) => {
-
-    const {show, title, header, leftFunc, rightFunc, leftMessage, rightMessage, leftColor, rightColor, isPending, leftPending, leftPendingColor } = props
+  const {
+    show,
+    title,
+    header,
+    leftFunc,
+    rightFunc,
+    leftMessage,
+    rightMessage,
+    leftColor,
+    rightColor,
+    isPending,
+    leftPending,
+    leftPendingColor,
+  } = props;
 
   return (
-      <div>
-        <Modal 
-            show={show} 
-            backdrop='static' 
-            keyboard={false} 
-            animation={false}
-            centered
-        >
-            <Modal.Header>
-                <Modal.Title className='modal-two-title'>{title}</Modal.Title>
-            </Modal.Header>
-                
-            <Modal.Body>
-                <Modal.Title className='modal-two-header'>{header}</Modal.Title>
-            </Modal.Body>
+    <div>
+      <Modal
+        show={show}
+        backdrop="static"
+        onHide={rightFunc}
+        keyboard={false}
+        animation={false}
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title className="modal-two-title">{title}</Modal.Title>
+        </Modal.Header>
 
-            <Modal.Footer>
+        <Modal.Body>
+          <Modal.Title className="modal-two-header">{header}</Modal.Title>
+        </Modal.Body>
 
-                {isPending && <Button
-                    style={{backgroundColor: leftPendingColor, borderColor: leftPendingColor}}
-                >
-                    {leftPending}
-                </Button>}
+        <Modal.Footer>
+          {isPending && (
+            <Button
+              style={{
+                backgroundColor: leftPendingColor,
+                borderColor: leftPendingColor,
+              }}
+            >
+              {leftPending}
+            </Button>
+          )}
 
-                {!isPending && <Button 
-                    style={{backgroundColor: leftColor, borderColor: leftColor}} 
-                    onClick={leftFunc}
-                >
-                    {leftMessage}
-                </Button>}
+          {!isPending && (
+            <Button
+              style={{ backgroundColor: leftColor, borderColor: leftColor }}
+              onClick={leftFunc}
+            >
+              {leftMessage}
+            </Button>
+          )}
 
-                <Button
-                    id={rightColor}
-                    variant={rightColor === 'cancel-button' ? 'outline-dark':''}
-                    style={{backgroundColor: rightColor, borderColor: rightColor}}
-                    onClick={rightFunc}
-                >
-                    {rightMessage}
-                </Button>
-
-            </Modal.Footer>
-        </Modal>
-      </div>
+          <Button
+            id={rightColor}
+            variant={rightColor === 'cancel-button' ? 'outline-dark' : ''}
+            style={{ backgroundColor: rightColor, borderColor: rightColor }}
+            onClick={rightFunc}
+          >
+            {rightMessage}
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </div>
   );
 };
 
