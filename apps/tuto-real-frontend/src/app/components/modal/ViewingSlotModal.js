@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { Modal, Tabs, Tab, Button } from 'react-bootstrap';
+import './ViewingSlotModal.css'
 
 const ViewingSlotModal = (props) => {
 
-    const {show, setShow, number, subject, description} = props
+    const {show, setShow, number, subject, description, studentList} = props
 
     const [tabValue,setTabValue] = useState('Information')
+
+    const interpunct = ' · '
 
     const handleClose = () => {
         setShow(!show)
@@ -36,9 +39,10 @@ const ViewingSlotModal = (props) => {
         </Modal.Header>
 
         <Tabs
+            className='viewingTabs'
             activeKey={tabValue}
             onSelect={ (e) => {setTabValue(e)}}
-            style={{paddingLeft: '1rem'}}
+            style={{paddingLeft: '1rem' }}
         >
             {/* information tab */}
             <Tab eventKey='Information' title='Information'>
@@ -82,7 +86,25 @@ const ViewingSlotModal = (props) => {
             </Tab>
 
             <Tab eventKey='Members' title={`Members (${number})`}>
-                member
+
+                <Modal.Body>
+                    {studentList.map( (student) => (
+                        <Modal.Title className="request-header" style={{ fontWeight: '400', fontSize: '16px' }}>
+                            {` · ${student}`}
+                        </Modal.Title>
+                    ))}
+                </Modal.Body>
+
+                <Modal.Footer>
+                    <Button
+                        id="cancel-button"
+                        variant="outline-dark"
+                        onClick={handleClose}
+                    >
+                        Cancel
+                    </Button>
+                </Modal.Footer>
+                
             </Tab>
         </Tabs>
       </Modal>
