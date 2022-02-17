@@ -5,25 +5,41 @@ import ModalTwoButton from './ModalTwoButton';
 
 const EditingSlotModal = (props) => {
 
-    let show = true
+    const {show, setShow, subjectIn, descriptionIn} = props
+
+    const [subject, setSubject] = useState(subjectIn)
+    const [description, setDescription] = useState(descriptionIn)
     const subjectChoice = ['Math', 'Art', 'Programing']
 
     const [showModal, setShowModal] = useState(false)
     const [isPending, setIsPending] = useState(false)
+
+    const handleSaveChanges = () => {
+        setShow(!show)
+        setShowModal(!showModal)
+    }
     
     const handleClose = () => {
-        show = false
+        setShow(!show)
+        setSubject(subjectIn)
+        setDescription(descriptionIn)
     }
 
     const handleLeft = () => {
-        return
+        setIsPending(!isPending)
+        console.log(subject)
+        console.log(description)
+    }
+
+    const handleRight = () => {
+        setShow(!show)
+        setShowModal(!showModal)
     }
 
     return (
         <div>
             <Modal
                 show={show}
-                onhide={handleClose}
                 backdrop='static'
                 keyboard={false}
                 animation={false}
@@ -39,9 +55,9 @@ const EditingSlotModal = (props) => {
 
                 {/* subject select part */}
                 <Modal.Body style={{borderBottom:'1px solid #dee2e6'}}>
-                    <Form.Group controlId='subject'>
+                    <Form.Group>
                         <Form.Label style={{color: 'var(--darkgray)'}}>SUBJECTS</Form.Label>
-                        <Form.Select style={{color: 'var(--darkgray)', width: '50%', marginLeft: '1rem'}}>
+                        <Form.Select style={{color: 'var(--darkgray)', width: '40%', marginLeft: '1rem'}} value={subject} onChange={(e) => {setSubject(e.target.value)}}>
                             {subjectChoice.map( (subject) => (
                                 <option key={subject} style={{color: 'var(--darkgray)'}}>{subject}</option>
                             ))}
@@ -51,20 +67,27 @@ const EditingSlotModal = (props) => {
 
                 {/* description part */}
                 <Modal.Body>
-                    <Form.Group controlId='description'>
+                    <Form.Group>
                         <Form.Label style={{color: 'var(--darkgray)'}}>DESCRIPTION</Form.Label>
-                        <Form.Control id='description' as='textarea' placeholder='Add your description here....' style={{marginLeft: '1rem', width: '95%'}}></Form.Control>
+                        <Form.Control 
+                            id='description' 
+                            style={{marginLeft: '1rem', width: '95%'}} 
+                            value={description} 
+                            onChange={(e) => {setDescription(e.target.value)}} 
+                            as='textarea' 
+                            placeholder='Add your description here....'
+                        />
                     </Form.Group>
                 </Modal.Body>
 
                 {/* button part */}
                 <Modal.Footer>
 
-                    <Button style={{backgroundColor: 'var(--third)', borderColor: 'var(--third)'}} onClick={() => {setShowModal(true)}}>
+                    <Button style={{backgroundColor: 'var(--third)', borderColor: 'var(--third)'}} onClick={handleSaveChanges}>
                         Save Changes
                     </Button>
 
-                    <Button id='cancelButton' variant='outline-dark'>
+                    <Button id='cancel-button' variant='outline-dark' onClick={handleClose}>
                         Cancel
                     </Button>
 
@@ -73,16 +96,16 @@ const EditingSlotModal = (props) => {
 
             <ModalTwoButton
                 show={showModal}
-                setShow={setShowModal}
                 title='Do you want to save these changes?'
                 header='If you click confirm button, the following change will be applied to the selected slots.'
                 leftFunc={handleLeft}
+                rightFunc={handleRight}
                 leftMessage='Confirm'
                 rightMessage='Cancel'
                 leftColor='var(--third)'
-                rightColor='Cancel'
+                rightColor='cancel-button'
                 isPending={isPending}
-                leftPending='Saving'
+                leftPending='Saving...'
                 leftPendingColor='var(--lightgray)'
             />
         </div>
