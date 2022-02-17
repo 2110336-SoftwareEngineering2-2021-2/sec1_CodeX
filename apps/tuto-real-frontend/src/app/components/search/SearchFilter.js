@@ -4,14 +4,43 @@ import COLORS from "../../constants/color"
 import './search.css'
 
 
-const SearchFilter = ({show, setShow}) => {
+const SearchFilter = ({show, setShow, searchInfo, setSearchInfo, onSearch, backupSearchInfo}) => {
 
     const [dummySubjects] = useState(["All","Math","Phys","Bio","Chem","Sci","Society","His","PE"])
 
-
+    const priceRateRadioHandle = (minPrice,maxPrice,choice) => {
+        setSearchInfo({
+            ...searchInfo,
+            minPrice: minPrice,
+            maxPrice: maxPrice,
+            rangePriceChoice: choice,
+        })
+     }
+    const onCancelHandle = () => {
+        setSearchInfo({
+            ...searchInfo,
+            subject: backupSearchInfo.subject,
+            minPrice: backupSearchInfo.minPrice,
+            maxPrice: backupSearchInfo.maxPrice,
+            rangePriceChoice: backupSearchInfo.rangePriceChoice,
+            teachingDay: backupSearchInfo.teachingDay
+        })
+        setShow(false)
+    }
+    const setDefaultHandle = () => {
+        setSearchInfo({
+            ...searchInfo,
+            subject: "All",
+            minPrice: 0,
+            maxPrice: 1000000,
+            rangePriceChoice: 6,
+            teachingDay: []
+        })
+    }
     return (
         <Modal
             show={show}
+            className='search-filter'
             onHide={() => setShow(false)}
             // size="lg"
             aria-labelledby="contained-modal-title-vcenter"
@@ -27,8 +56,21 @@ const SearchFilter = ({show, setShow}) => {
                     SUBJECTS
                 </p>
                 <div style={{paddingLeft:"15px"}}>
-                    <Form.Select style={{width:"25%"}}>
-                        {dummySubjects.map(e => (<option value={e}>{e}</option>))}
+                    <Form.Select 
+                        value={searchInfo.subject} 
+                        tyle={{width:"25%"}}
+                        onChange={(e) => 
+                            setSearchInfo({
+                                ...searchInfo,
+                                subject: e.target.value
+                            })
+                        }
+                    >
+                        {dummySubjects.map((e,i) => (
+                            <option value={e} key={`subject-${i}`}>
+                                {e}
+                            </option>
+                        ))}
                     </Form.Select>
                 </div>
             </Modal.Body>
@@ -44,24 +86,32 @@ const SearchFilter = ({show, setShow}) => {
                             label="Less than 30 bath "
                             name="group1"
                             type="radio"
+                            defaultChecked={searchInfo.rangePriceChoice === 1}
+                            onClick={() => priceRateRadioHandle(0,30,1)}
                         />
                         <Form.Check
                             inline
                             label="60 - 100 bath"
                             name="group1"
                             type="radio"
+                            defaultChecked={searchInfo.rangePriceChoice === 3}
+                            onClick={() => priceRateRadioHandle(60,100,3)}
                         />
                         <Form.Check
                             inline
                             label="150 - 250 bath"
                             name="group1"
                             type="radio"
+                            defaultChecked={searchInfo.rangePriceChoice === 5}
+                            onClick={() => priceRateRadioHandle(150,250,5)}
                         />
                         <Form.Check
                             inline
                             label="All"
                             name="group1"
                             type="radio"
+                            defaultChecked={searchInfo.rangePriceChoice === 0}
+                            onClick={() => priceRateRadioHandle(0,1000000,0)}
                         />
                     </div>
                     <div className="mb-3" style={{display:"flex", flexDirection:"column", width:"100%"}}>
@@ -70,18 +120,24 @@ const SearchFilter = ({show, setShow}) => {
                             label="30 - 60 bath"
                             name="group1"
                             type="radio"
+                            defaultChecked={searchInfo.rangePriceChoice === 2}
+                            onClick={() => priceRateRadioHandle(30,60,2)}
                         />
                         <Form.Check
                             inline
                             label="100 - 150 bath"
                             name="group1"
                             type="radio"
+                            defaultChecked={searchInfo.rangePriceChoice === 4}
+                            onClick={() => priceRateRadioHandle(100,150,4)}
                         />
                         <Form.Check
                             inline
                             label="more than 250 bath"
                             name="group1"
                             type="radio"
+                            defaultChecked={searchInfo.rangePriceChoice === 6}
+                            onClick={() => priceRateRadioHandle(250,1000000,6)}
                         />
                     </div>
                 </div>
@@ -147,15 +203,26 @@ const SearchFilter = ({show, setShow}) => {
                 </div>
             </Modal.Body>
             <Modal.Footer>
-                <Button onClick={() => setShow(false)} variant="outline-secondary">
+                <Button 
+                    onClick={() => onCancelHandle()} 
+                    variant="outline-secondary"
+                    >
                     Cancel
                 </Button>{' '}
 
-                <Button variant="secondary">
+                <Button 
+                    onClick={() => setDefaultHandle()} 
+                    variant="secondary"
+                    >
                     Set Default
                 </Button>{' '}
 
-                <button className="apply-filter-button" onClick={() => setShow(false)}>
+                <button 
+                    className="apply-filter-button" 
+                    onClick={() => {
+                        setShow(false),
+                        onSearch()
+                    }}>
                     Apply Filter
                 </button>
                 {/* <Button onClick={() => setShow(false)}>Close</Button> */}

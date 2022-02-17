@@ -95,40 +95,69 @@ const SearchPage = () => {
 
     const [searchInfo,setSearchInfo] = useState({
         searchText:"",
-        subjects:"",
+        subject:"All",
         minPrice:0,
         maxPrice:1000000,
-        teachingDay:[
-            "Monday",
-            "Tuesday"
-        ],
+        rangePriceChoice:0,
+        teachingDay:[],
         searchType:"rating",
         orderType:"ascending"
     })
-
+    const [backupSearchInfo,setBackupSearchInfo] = useState({
+        subject: "",
+        minPrice: 0,
+        maxPrice: 1000000,
+        rangePriceChoice: 0,
+        teachingDay: []
+    })
     
+    // useEffect(() => {
+    //     console.log(searchInfo);
+    // }, [searchInfo]);
+
     useEffect(() => {
-        console.log(searchInfo);
-        // console.log("tempProfile.raw set to: ",tempProfile.raw);
-    }, [searchInfo]);
+        onSearch()
+    },[searchInfo.orderType, searchInfo.searchType])
     
     const [filterShow, setFilterShow] = useState(false)
-    const [modalShow, setModalShow] = useState(false);
+
+    const onSearch = () => {
+        fetchData()
+    }
+
+    const fetchData = () => {
+        console.log("Fetch data with", searchInfo)
+    }
 
     return (
         <div className="search-container-responsive">
             <SearchConfigCard 
                 searchInfo={searchInfo} 
                 setSearchInfo={setSearchInfo}
-                onClickFilterButton={() => setFilterShow(true)}
+                onSearch={onSearch}
+                onClickFilterButton={() => {
+                    setFilterShow(true)
+                    setBackupSearchInfo({
+                        subject: searchInfo.subject,
+                        minPrice: searchInfo.minPrice,
+                        maxPrice: searchInfo.maxPrice,
+                        rangePriceChoice: searchInfo.rangePriceChoice,
+                        teachingDay: searchInfo.teachingDay
+                    })
+                }}
             />
             <SearchFilter
                 show={filterShow}
                 setShow={setFilterShow}
+                searchInfo={searchInfo} 
+                setSearchInfo={setSearchInfo}
+                onSearch={fetchData}
+                backupSearchInfo={backupSearchInfo}
                 // onHide={() => setModalShow(false)}
             />
-            {dummyList.map((e) => (
+            {dummyList.map((e,i) => (
                 <TutorCard 
+                    key={`tutor-card-in-search-page-${i}`}
                     targetId={e._id} 
                     firstName={e.firstName}
                     lastName={e.lastName}
@@ -141,37 +170,5 @@ const SearchPage = () => {
         </div>
     )
 }
-
-const aaa = () => {
-
-}
-
-// function MyVerticallyCenteredModal(props) {
-//     return (
-//       <Modal
-//         {...props}
-//         size="lg"
-//         aria-labelledby="contained-modal-title-vcenter"
-//         centered
-//       >
-//         <Modal.Header closeButton>
-//           <Modal.Title id="contained-modal-title-vcenter">
-//             Modal heading
-//           </Modal.Title>
-//         </Modal.Header>
-//         <Modal.Body>
-//           <h4>Centered Modal</h4>
-//           <p>
-//             Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-//             dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac
-//             consectetur ac, vestibulum at eros.
-//           </p>
-//         </Modal.Body>
-//         <Modal.Footer>
-//           <Button onClick={props.onHide}>Close</Button>
-//         </Modal.Footer>
-//       </Modal>
-//     );
-//   }
 
 export default SearchPage;

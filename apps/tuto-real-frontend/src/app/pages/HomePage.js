@@ -9,8 +9,6 @@ import {
   HOMEPAGE_WALLPAPER_2, 
   HOMEPAGE_WALLPAPER_3,
   HOMEPAGE_WALLPAPER_4,
-  HOMEPAGE_WALLPAPER_5,
-  HOMEPAGE_WALLPAPER_6
 } from '../constants/image'
 
 const HomePage = () => {
@@ -32,7 +30,6 @@ const HomePage = () => {
             <img
               className="carousel-image"
               src={HOMEPAGE_WALLPAPER_1}
-              // style={{borderRadius:"0px", width:"100%", height:"85vh", objectFit:"cover"}}
               alt="First slide"
             />
             <Carousel.Caption>
@@ -48,8 +45,7 @@ const HomePage = () => {
           <Carousel.Item>
             <img
               className="carousel-image"
-              src={HOMEPAGE_WALLPAPER_4}
-              // style={{borderRadius:"0px", width:"100%", height:"85vh", objectFit:"cover"}}
+              src={HOMEPAGE_WALLPAPER_2}
               alt="Second slide"
             />
             <Carousel.Caption>
@@ -61,8 +57,7 @@ const HomePage = () => {
           <Carousel.Item>
             <img
               className="carousel-image"
-              src={HOMEPAGE_WALLPAPER_5}
-              // style={{borderRadius:"0px", width:"100%", height:"85vh", objectFit:"cover"}}
+              src={HOMEPAGE_WALLPAPER_3}
               alt="Third slide"
             />
             <Carousel.Caption>
@@ -74,8 +69,7 @@ const HomePage = () => {
           <Carousel.Item>
             <img
               className="carousel-image"
-              src={HOMEPAGE_WALLPAPER_6}
-              // style={{borderRadius:"0px", width:"100%", height:"85vh", objectFit:"cover"}}
+              src={HOMEPAGE_WALLPAPER_4}
               alt="Third slide"
             />
             <Carousel.Caption>
@@ -84,13 +78,6 @@ const HomePage = () => {
             </Carousel.Caption>
           </Carousel.Item>
         </Carousel>
-        {/* <img src={TESTFUCK} /> */}
-        {/* <img
-          // className="d-block w-100"
-          src={HOMEPAGE_WALLPAPER_5}
-          style={{borderRadius:"0px", width:"100%", height:"100vh", objectFit:"cover"}}
-          alt="Third slide"
-        /> */}
       </div>
       <div style={{margin:"50vh 0px"}}>
         <h2 style={{color:COLORS.third}}>

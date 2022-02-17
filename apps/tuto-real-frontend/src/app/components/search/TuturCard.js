@@ -55,8 +55,9 @@ const TutorCard = (props) => {
                         <div style={{display:"flex", flexDirection:"row", flexWrap:"wrap"}}>
                             {(subjectList ?? []).map((e,i) => (
                                 <SubjectTag 
-                                text={e} 
-                                color={dummyColors[Math.floor(Math.random() * dummyColors.length)]}
+                                    text={e} 
+                                    key={`subject-tag-${i}`}
+                                    color={dummyColors[Math.floor(Math.random() * dummyColors.length)]}
                                 />
                                 ))}
                         </div>
