@@ -33,7 +33,7 @@ const SearchFilter = ({show, setShow, searchInfo, setSearchInfo, onSearch, backu
             subject: "All",
             minPrice: 0,
             maxPrice: 1000000,
-            rangePriceChoice: 6,
+            rangePriceChoice: 0,
             teachingDay: []
         })
     }

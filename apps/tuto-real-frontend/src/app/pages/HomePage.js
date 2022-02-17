@@ -5,10 +5,11 @@ import COLORS from '../constants/color';
 import './HomePage.css'
 
 import {
-  HOMEPAGE_WALLPAPER_1, 
-  HOMEPAGE_WALLPAPER_2, 
-  HOMEPAGE_WALLPAPER_3,
-  HOMEPAGE_WALLPAPER_4,
+  HOMEPAGE_LANDSCAPE_1, 
+  HOMEPAGE_LANDSCAPE_2, 
+  HOMEPAGE_LANDSCAPE_3,
+  HOMEPAGE_LANDSCAPE_4,
+  HOMEPAGE_CAROUSEL_1
 } from '../constants/image'
 
 const HomePage = () => {
@@ -29,7 +30,7 @@ const HomePage = () => {
           <Carousel.Item>
             <img
               className="carousel-image"
-              src={HOMEPAGE_WALLPAPER_1}
+              src="https://wallpapercave.com/wp/wp2777161.jpg"
               alt="First slide"
             />
             <Carousel.Caption>
@@ -45,7 +46,7 @@ const HomePage = () => {
           <Carousel.Item>
             <img
               className="carousel-image"
-              src={HOMEPAGE_WALLPAPER_2}
+              src="https://wallpapercrafter.com/desktop/165563-Swiss-Alps-Switzerland-snowy-peak-mountains-field-trees-landscape-village-forest-grass-sunlight-sun-rays-sky-morning-fall.jpg"
               alt="Second slide"
             />
             <Carousel.Caption>
@@ -57,7 +58,7 @@ const HomePage = () => {
           <Carousel.Item>
             <img
               className="carousel-image"
-              src={HOMEPAGE_WALLPAPER_3}
+              src="https://i.pinimg.com/originals/dd/a6/5a/dda65aa323dcbb528f60b79acd06af44.jpg"
               alt="Third slide"
             />
             <Carousel.Caption>
@@ -69,7 +70,7 @@ const HomePage = () => {
           <Carousel.Item>
             <img
               className="carousel-image"
-              src={HOMEPAGE_WALLPAPER_4}
+              src="https://wallpaperaccess.com/full/938050.jpg"
               alt="Third slide"
             />
             <Carousel.Caption>
