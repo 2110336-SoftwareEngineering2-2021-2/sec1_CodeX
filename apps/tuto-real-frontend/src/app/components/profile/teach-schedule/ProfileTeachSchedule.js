@@ -13,55 +13,140 @@ import "../profile.css"
 import COLORS from "../../../constants/color";
 
 
-// const ProfileTeachSchedule = ({targetId, viewType}) => {
-const ProfileTeachSchedule = ({targetId}) => {
-    const viewType = "TutorOther"
+const ProfileTeachSchedule = ({targetId, viewType}) => {
+// const ProfileTeachSchedule = ({targetId}) => {
+    // const viewType = "TutorOther"
     // const viewType = "TutorSelf"
 
     const [isEditing,setEditing] = useState(false);
-    const [subjectList, setSubjectList] = useState([])
+    // const [subjectList, setSubjectList] = useState([])
     const [price, setPrice] = useState(0)
-    const [slotList, setSlotList] = useState([
-        {number: 0, subject: "Mat", status: "available"},
-        {number: 1, subject: "Mat", status: "disable"},
-        {number: 2, subject: "Sci", status: "booked"},
-        {number: 3, subject: "Sci", status: "pending"},
-        {number: 4, subject: "Art", status: "available"},
-        {number: 5, subject: "Art", status: "available"},
-        {number: 6, subject: "Art", status: "x"},
-        {number: 7, subject: "Art", status: "x"},
-        ...([...Array(62).keys()].map(i => ({number: i+8, subject: "", status: "disable"})))
-    ]) 
-    const [selected, setSelected] = useState([])
-    // const [teachingInfo, setTeachingInfo] = useState({
-    //     subjectList: [],
-    //     description: "",
-    // })
-    // const [tempTeachingInfo, setTempTeachingInfo] = useState({
-    //     subjectList: [],
-    //     description: "",
-    // })
+    const [scheduleList, setScheduleList] = useState([])
+    const [currentSchedule, setCurrentSchedule] = useState()
+    // const [slotList, setSlotList] = useState([
+    //     {number: 0, subject: "Mat", status: "available"},
+    //     {number: 1, subject: "Mat", status: "disable"},
+    //     {number: 2, subject: "Sci", status: "booked"},
+    //     {number: 3, subject: "Sci", status: "pending"},
+    //     {number: 4, subject: "Art", status: "available"},
+    //     {number: 5, subject: "Art", status: "available"},
+    //     {number: 6, subject: "Art", status: "x"},
+    //     {number: 7, subject: "Art", status: "x"},
+    //     ...([...Array(62).keys()].map(i => ({number: i+8, subject: "", status: "disable"})))
+    // ]) 
+    const [selected, setSelected] = useState([]) // Sun: 0-15, Mon: 16-31, Tue: 32-47, ..., Sat: 96-111
+    const [showModal, setShowModal] = useState(false)
 
-    const fetchData = useCallback(async () => {
+    const fetchData = useCallback(async () => { 
         await client({
             method: "GET",
-            // url: `/user/${targetEmail}`
             url: `/user`,
             params: {
                 _id: targetId
             },
         })
-        .then(({data :{data}}) => {
+        // .then(({data :{data}}) => {
+        .then(() => {
+            console.log("Data Fetched")
+            const data = [
+                {
+                    startDate: new Date("2022-02-20 0:0"),
+                    pricePerSlot: 250,
+                    allSubjects: ["Math", "Art"],
+                    days: [
+                        {
+                            day: "Monday",
+                            slots: [
+                                {
+                                    slot: 0,
+                                    subject: "Math",
+                                    description: "eieieieieieieieieieieieiei",
+                                    students: [
+                                        {id: "0000", firstName: "Komsorn", lastName: "Sookduay", status: "Pending"},
+                                        {id: "0001", firstName: "Rutthasate", lastName: "Gunsaduay", status: "Pending"},
+                                    ]
+                                },
+                                {
+                                    slot: 1,
+                                    subject: "Math",
+                                    description: "eieieieieieieieieieieieiei",
+                                    students: [
+                                        {id: "0000", firstName: "Komsorn", lastName: "Sookduay", status: "Approved"},
+                                        {id: "0001", firstName: "Rutthasate", lastName: "Gunsaduay", status: "Approved"},
+                                    ]
+                                },
+                            ]
+                        },
+                        {
+                            day: "Wednesday",
+                            slots: [{
+                                slot: 15,
+                                subject: "Art",
+                                description: "midnight art course",
+                                students: [
+                                    {id: "0000", firstName: "Komsorn", lastName: "Sookduay", status: "Approved"},
+                                    {id: "0001", firstName: "Rutthasate", lastName: "Gunsaduay", status: "Pending"},
+                                ]
+                            }]
+                        },
+                    ]
+                },
+                {
+                    startDate: new Date("2022-02-27 0:0"),
+                    pricePerSlot: 250,
+                    allSubjects: ["Math", "Art", "Sci"],
+                    days: [
+                        {
+                            day: "Tuesday",
+                            slots: [
+                                {
+                                    slot: 1,
+                                    subject: "Sci",
+                                    description: "Sciencee",
+                                    students: [
+                                        {id: "0000", firstName: "Komsorn", lastName: "Sookduay", status: "Approved"},
+                                        {id: "0001", firstName: "Rutthasate", lastName: "Gunsaduay", status: "Approved"},
+                                    ]
+                                },
+                                {
+                                    slot: 10,
+                                    subject: "Math",
+                                    description: "eieieieieieieieieieieieiei",
+                                    students: [
+                                        {id: "0000", firstName: "Komsorn", lastName: "Sookduay", status: "Approved"},
+                                        {id: "0001", firstName: "Rutthasate", lastName: "Gunsaduay", status: "Approved"},
+                                    ]
+                                },
+                                {
+                                    slot: 11,
+                                    subject: "Math",
+                                    description: "eieieieieieieieieieieieiei",
+                                    students: [
+                                        {id: "0000", firstName: "Komsorn", lastName: "Sookduay", status: "Pending"},
+                                        {id: "0001", firstName: "Rutthasate", lastName: "Gunsaduay", status: "Pending"},
+                                    ]
+                                },
+                            ]
+                        },
+                        {
+                            day: "Thursday",
+                            slots: [{
+                                slot: 15,
+                                subject: "Art",
+                                description: "midnight art course",
+                                students: [
+                                    {id: "0000", firstName: "Komsorn", lastName: "Sookduay", status: "Pending"},
+                                    {id: "0001", firstName: "Rutthasate", lastName: "Gunsaduay", status: "Pending"},
+                                ]
+                            }]
+                        },
+                    ]
+                },
+            ]
             console.log(data)
-            // setTempTeachingInfo({
-            //     subjectList: data.subjects ?? [],
-            //     description: data.description ?? ""
-            // })
-            // setTeachingInfo({
-            //     subjectList: data.subjects ?? [],
-            //     description: data.description ?? ""
-            // })
-            setSubjectList(data.subject ?? [])
+            setScheduleList(data ?? [])
+            if(data?.length > 0) setCurrentSchedule(0)
+            // setSubjectList(data.allSubjects ?? [])
             // setPrice(data.price ?? 0)
         }).catch(({response}) => {
             console.log(response)
@@ -70,12 +155,7 @@ const ProfileTeachSchedule = ({targetId}) => {
 
     useEffect(() => {
         fetchData()
-        // console.log("viewType: ", viewType)
     }, [fetchData])
-
-    // useEffect(() => {
-    //     console.log("setTempTeachingInfo: ", tempTeachingInfo)
-    // }, [tempTeachingInfo])
 
     const sendData = async () => {
         // await client({
@@ -139,7 +219,7 @@ const ProfileTeachSchedule = ({targetId}) => {
                     <p className='title'>Teaching Information</p>
                     <p className='header' style={{width: "100%"}}>Some of your information may be seen by other users.</p>
                     <hr />
-                    <div className='section'>
+                    {/* <div className='section'>
                         <p className='header'>SUBJECT</p>
                         <div style={{display:"flex", flexWrap: "wrap"}}>
                             {subjectList.length !== 0 ? 
@@ -158,8 +238,8 @@ const ProfileTeachSchedule = ({targetId}) => {
                                 />
                             }
                         </div>
-                    </div>
-                    <hr />
+                    </div> */}
+                    {/* <hr /> */}
                     <div className='section'>
                         <p className='header'>PRICE (PER HOUR)</p>
                         <div style={{display: 'flex', flexDirection: "row", alignItems: "center", width: "100%"}}>
@@ -171,20 +251,22 @@ const ProfileTeachSchedule = ({targetId}) => {
                     <Tabs defaultActiveKey="morning" style={{width: "100%"}}>
                         <Tab eventKey="morning" title="Morning" style={{width: "100%"}}>
                             <Schedule
-                                time="Morning" 
-                                slotList={slotList} 
+                                time="Day Time" 
+                                scheduleData={scheduleList[currentSchedule]? scheduleList[currentSchedule].days: []} 
                                 viewType={viewType}  
                                 selected={selected}
                                 setSelected={setSelected}
-                            />
+                                setShowModal={setShowModal}
+                                />
                         </Tab>
                         <Tab eventKey="evening" title="Evening" style={{width: "100%"}}>
                             <Schedule
-                                time="Evening"
-                                slotList={slotList}
+                                time="Night Time"
+                                scheduleData={scheduleList[currentSchedule]? scheduleList[currentSchedule].days: []}
                                 viewType={viewType}
                                 selected={selected}
                                 setSelected={setSelected}
+                                setShowModal={setShowModal}
                             />
                         </Tab>
                     </Tabs>
