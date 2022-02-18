@@ -1,5 +1,3 @@
-// import NxWelcome from './nx-welcome';
-
 import { Route, Routes } from 'react-router-dom';
 
 import NavBar from './components/navbar/navbar';
