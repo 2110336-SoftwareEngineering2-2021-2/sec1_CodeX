@@ -88,21 +88,19 @@ const ProfileInfo = ({targetId, viewType}) => {
     .catch(({response}) => {
       console.log(response)
     })
-  },[])
+  },[targetId])
 
   useEffect(() => {
     fetchData();
   }, [fetchData]);
 
-  useEffect(() => {
-    console.log("tempProfile.preview set to: ",tempProfile.preview);
-    console.log("tempProfile.raw set to: ",tempProfile.raw);
-  }, [tempProfile]);
+  // useEffect(() => {
+  //   console.log("tempProfile.preview set to: ",tempProfile.preview);
+  //   console.log("tempProfile.raw set to: ",tempProfile.raw);
+  // }, [tempProfile]);
 
   const sendData = async (data) => {
     console.log('sending data...');
-    // const formData = new FormData()
-    // formData.append("Profile Picture", tempProfile, tempProfile?.name)
     if (tempProfile.raw) {
       await client({
         method: "PATCH",
@@ -149,8 +147,6 @@ const ProfileInfo = ({targetId, viewType}) => {
   }
 
   const onSubmit = (data) => {
-    // console.log(data);
-    // console.log(tempProfile);
     setBasicInfo({
       ...basicInfo,
       picture: tempProfile.preview,

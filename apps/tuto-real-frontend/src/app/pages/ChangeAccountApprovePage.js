@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+
 import { client } from '../axiosConfig';
 import ModalTwoButton from '../components/modal/ModalTwoButton';
 import NormalButton from '../components/ui/NormalButton';
+import AdminGuard from '../components/guards/adminGuard';
 
 const ChangeAccountApprovePage = () => {
   //props from Link
@@ -83,6 +85,11 @@ const ChangeAccountApprovePage = () => {
         console.log(response);
       });
   };
+
+  const handleCancel = () => {
+    setShowModalApprove(false)
+    setShowModalReject(false)
+  }
 
   return (
     <div
@@ -166,14 +173,14 @@ const ChangeAccountApprovePage = () => {
       {/* modal component */}
       <ModalTwoButton
         show={showModalApprove}
-        setShow={setShowModalApprove}
         title="Please confirm the approvol"
         header="The user will become a tutor role. Are you sure?"
         leftFunc={handleApprove}
+        rightFunc={handleCancel}
         leftMessage="Approve"
         rightMessage="Cancel"
         leftColor="var(--third)"
-        rightColor="var(--yellow)"
+        rightColor="cancel-button"
         isPending={isPending}
         leftPending="Approving..."
         leftPendingColor="var(--lightgray)"
@@ -181,14 +188,14 @@ const ChangeAccountApprovePage = () => {
 
       <ModalTwoButton
         show={showModalReject}
-        setShow={setShowModalReject}
         title="Please confirm the reject"
         header="The request will be deleted. Are you sure?"
         leftFunc={handleReject}
+        rightFunc={handleCancel}
         leftMessage="Reject"
         rightMessage="Cancel"
         leftColor="red"
-        rightColor="var(--yellow)"
+        rightColor="cancel-button"
         isPending={isPending}
         leftPending="Rejecting..."
         leftPendingColor="var(--lightgray)"
@@ -197,4 +204,4 @@ const ChangeAccountApprovePage = () => {
   );
 };
 
-export default ChangeAccountApprovePage;
+export default AdminGuard(ChangeAccountApprovePage)

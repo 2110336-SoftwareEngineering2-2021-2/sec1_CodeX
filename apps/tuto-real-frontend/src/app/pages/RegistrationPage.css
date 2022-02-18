@@ -103,3 +103,14 @@ a.signin-button-regis {
   color: var(--third);
   text-decoration: none;
 }
+
+.search-container-responsive {
+  padding: 0px 20px;
+  width: 720px;
+}
+
+@media only screen and (max-width: 720px) {
+  .search-container-responsive {
+    width: 100%;
+  }
+}

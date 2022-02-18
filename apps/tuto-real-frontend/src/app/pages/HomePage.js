@@ -1,5 +1,17 @@
 import React from 'react';
+import { Carousel } from 'react-bootstrap';
 import { useAuth } from '../auth';
+import COLORS from '../constants/color';
+import './HomePage.css'
+
+import {
+  HOMEPAGE_LANDSCAPE_1, 
+  HOMEPAGE_LANDSCAPE_2, 
+  HOMEPAGE_LANDSCAPE_3,
+  HOMEPAGE_LANDSCAPE_4,
+  HOMEPAGE_CAROUSEL_1
+} from '../constants/image'
+
 const HomePage = () => {
   const {
     currentUser,
@@ -11,51 +23,73 @@ const HomePage = () => {
     resetPassword,
   } = useAuth();
 
-  const data1 = {
-    firstName: 'A',
-    lastName: 'B',
-    phoneNumber: '0123456789',
-    email: 'kadac52845@goonby.com',
-    birthDate: '01/01/2001',
-    address: 'TH',
-    citizenID: '123456789',
-    password: 888888,
-  };
-
   return (
-    <>
-      <h5>User: {currentUser?.email}</h5>
-      <div id="recaptcha"></div>
-      {currentUser ? (
-        <span>
-          <button onClick={() => updateUserPassword(data1.password, 555555)}>
-            Update Password
-          </button>
-          <button onClick={() => resetPassword(data1.email)}>
-            Reset Password
-          </button>
-          <button onClick={() => logOut()}>Sign Out</button>
-        </span>
-      ) : (
-        <span>
-          <button onClick={() => signUp(data1)}>Sign Up</button>
-          <button onClick={() => signInWithGoogle()}>
-            Sign In with Google
-          </button>
-          <button onClick={() => logIn(data1.email, data1.password)}>
-            Sign In
-          </button>
-        </span>
-      )}
+    <div style={{width:"100%", display:"flex", flexDirection:"column", alignItems:"center"}}>
+      <div style={{width:"100%"}}>
+        <Carousel>
+          <Carousel.Item>
+            <img
+              className="carousel-image"
+              src="https://wallpapercave.com/wp/wp2777161.jpg"
+              alt="First slide"
+            />
+            <Carousel.Caption>
+              {/* <div className='carousel-caption' id='home-page'>
+                <h1 style={{fontSize:"10vh"}}>TutoReal</h1>
+              </div> */}
 
-      <p>This is USER Home page</p>
-      <p>
-        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Molestias aut,
-        repellat ipsum facere voluptate dicta obcaecati deserunt nobis suscipit
-        eaque?
-      </p>
-    </>
-  );
+              <h3>First slide label</h3>
+              <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
+            </Carousel.Caption>
+          </Carousel.Item>
+
+          <Carousel.Item>
+            <img
+              className="carousel-image"
+              src="https://wallpapercrafter.com/desktop/165563-Swiss-Alps-Switzerland-snowy-peak-mountains-field-trees-landscape-village-forest-grass-sunlight-sun-rays-sky-morning-fall.jpg"
+              alt="Second slide"
+            />
+            <Carousel.Caption>
+              <h3>Second slide label</h3>
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+            </Carousel.Caption>
+          </Carousel.Item>
+
+          <Carousel.Item>
+            <img
+              className="carousel-image"
+              src="https://i.pinimg.com/originals/dd/a6/5a/dda65aa323dcbb528f60b79acd06af44.jpg"
+              alt="Third slide"
+            />
+            <Carousel.Caption>
+              <h3>Third slide label</h3>
+              <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
+            </Carousel.Caption>
+          </Carousel.Item>
+
+          <Carousel.Item>
+            <img
+              className="carousel-image"
+              src="https://wallpaperaccess.com/full/938050.jpg"
+              alt="Third slide"
+            />
+            <Carousel.Caption>
+              <h3>Third slide label</h3>
+              <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
+            </Carousel.Caption>
+          </Carousel.Item>
+        </Carousel>
+      </div>
+      <div style={{margin:"50vh 0px"}}>
+        <h2 style={{color:COLORS.third}}>
+          Welcome to
+        </h2>
+        <h1 style={{fontSize:"10vh", color:COLORS.primary}}>
+          Tutoreal.com
+        </h1>
+      </div>
+    </div>
+  )
 };
 
 export default HomePage;

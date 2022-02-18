@@ -63,7 +63,7 @@ export function AuthProvider({ children }) {
     }
   }
 
-  const signUp = (data) => {
+  const signUp = (data, onSuccess, onError) => {
     client({
       method: 'POST',
       url: '/user/create',
@@ -82,7 +82,8 @@ export function AuthProvider({ children }) {
       })
       .then(() => {
         alert('Next step. Please verify your email.');
-        logOut();
+        if(onSuccess) logOut(onSuccess)
+        else logOut();
       })
       .catch((err) => {
         console.log(err.message);
@@ -91,6 +92,7 @@ export function AuthProvider({ children }) {
         else if (err.message.includes('citizenID'))
           msg = 'CitizenID already existed.';
         alert(msg);
+        if(onError) onError()
       });
   };
 
@@ -107,12 +109,14 @@ export function AuthProvider({ children }) {
       });
   };
 
-  const logIn = (email, password) => {
+  const logIn = (email, password, onSuccess) => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         if (!userCredential.user.emailVerified) {
           alert('Email verification failed');
           logOut();
+        } else {
+          if(onSuccess) onSuccess()
         }
       })
       .catch((err) => {
@@ -120,12 +124,14 @@ export function AuthProvider({ children }) {
       });
   };
 
-  const logOut = () => {
+  const logOut = (onSuccess) => {
     signOut(auth)
       .then(() => {
+        setId("")
         setFirstName('');
         setLastName('');
         setRole(null);
+        if(onSuccess) onSuccess()
       })
       .catch((err) => {
         alert(err.message);

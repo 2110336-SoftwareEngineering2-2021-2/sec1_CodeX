@@ -5,36 +5,24 @@ import { client } from '../axiosConfig';
 import ProfileInfo from '../components/profile/ProfileInfo';
 import ProfileMenuBar from '../components/profile/ProfileMenuBar';
 import ProfileTeachSchedule from '../components/profile/teach-schedule/ProfileTeachSchedule';
-// import { getCookieData } from '../components/util/cookieHandler'
 
 import { useAuth } from '../auth';
-import { useLocation } from 'react-router-dom';
 
 const ProfilePage = () => {
   const [selecting, setSelecting] = useState('Info'); // "Info" | "Learn" | "Teach" | "Review"
   const [viewType, setViewType] = useState('StudentSelf'); // "TutorSelf" | "StudentSelf" | "TutorOther" | "StudentOther"
 
-  // const { currentUser } = useAuth();
-  // todo: uncomment this 
   const { currentUser, _id } = useAuth();
-  // const [currentId] = useState(_id);
-  // const [currentId] = useState("6204f93965936f2c15855c89");
 
   const params = useParams();
 
   const navigate = useNavigate();
-  // const location = useLocation();
-  // const [targetEmail] = useState(location.state?.targetEmail);
-  // const [targetId] = useState(params?._id);
   const [targetRole, setTargetRole] = useState('');
 
   const fetchData = useCallback(async () => {
-    console.log('Fetching.........');
     await client({
       method: 'GET',
       // url: `/user/${targetEmail}`,
-
-      // todo: uncomment this
       url: `/user`,
       params: {
         _id: params?._id
@@ -49,31 +37,22 @@ const ProfilePage = () => {
       .catch((res) => {
         console.log(res);
       });
-  }, []);
+  }, [params]);
 
   useEffect(() => {
-    fetchData();
+    if(params._id) fetchData();
+    else navigate('/');
     // console.log(params);
   }, [fetchData]);
 
-  // useEffect(() => {
-  //   if (!location.state) navigate('/');
-  // }, []);
   useEffect(() => {
-    if (!params._id) navigate('/');
-  }, []);
-
-  useEffect(() => {
-    // if (targetEmail === currentUser?.email) {
-    // console.log(params?._id , currentId)
     if (params?._id === _id) {
-    // if (false) {
       if (targetRole === 'Tutor') setViewType('TutorSelf');
       if (targetRole === 'Student') setViewType('StudentSelf');
     } 
     else if (targetRole === 'Tutor') setViewType('TutorOther'); 
     else setViewType('StudentOther');
-  }, [currentUser, targetRole, _id]);
+  }, [currentUser, targetRole, _id, params]);
 
   // useEffect(() => {
   //   console.log("Current User Updated!!!!")

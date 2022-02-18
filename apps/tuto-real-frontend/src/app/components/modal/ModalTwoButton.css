@@ -1,0 +1,19 @@
+.modal-two-title{
+    color: var(--darkgray);
+    font-size: larger;
+    font-weight: 550;
+}
+
+.modal-two-header{
+    color: var(--darkgray);
+    font-size: 16px;
+    font-weight: 400;
+}
+
+/* .modal-backdrop {
+    visibility: hidden !important;
+}
+
+.modal.in {
+    background-color: rgba(0,0,0,0.5);
+} */
