@@ -1,63 +1,75 @@
 import React from 'react';
-import { Modal } from 'react-bootstrap';
-import NormalButton from '../ui/NormalButton';
+import { Modal, Button } from 'react-bootstrap';
+import './ModalTwoButton.css';
 
 const ModalTwoButton = (props) => {
-
-    const {show, setShow, title, header, leftFunc, leftMessage, rightMessage, leftColor, rightColor, isPending, leftPending, leftPendingColor } = props
-
-    const handleclose = () => {
-        setShow(!show)
-    }
+  const {
+    show,
+    title,
+    header,
+    leftFunc,
+    rightFunc,
+    leftMessage,
+    rightMessage,
+    leftColor,
+    rightColor,
+    isPending,
+    leftPending,
+    leftPendingColor,
+  } = props;
 
   return (
-      <div>
-        <Modal 
-            show={show} 
-            onHide={handleclose} 
-            backdrop='static' 
-            keyboard={false} 
-            animation={false}
-            centered
-            style={{width: '35%', left: '32.5%'}}
-        >
-            <Modal.Header style={{flexDirection: 'column', alignItems: 'flex-start', border: 'none', paddingBottom: '0px'}}>
-                
-                <Modal.Title className='request-title'>{title}</Modal.Title>
-                <Modal.Title className='request-header'>{header}</Modal.Title>
-                
-                <hr/>
-            </Modal.Header>
+    <div>
+      <Modal
+        show={show}
+        backdrop="static"
+        onHide={rightFunc}
+        keyboard={false}
+        animation={false}
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title className="modal-two-title">{title}</Modal.Title>
+        </Modal.Header>
 
-            <Modal.Footer style={{border: 'none', paddingTop: '0px', flexDirection: 'row-reverse', justifyContent: 'flex-start'}}>
+        <Modal.Body>
+          <Modal.Title className="modal-two-header">{header}</Modal.Title>
+        </Modal.Body>
 
-                <NormalButton 
-                    title={rightMessage}
-                    whenClick={handleclose}
-                    size='s'
-                    bgColor={rightColor}
-                    fontSize='larger'
-                />
+        <Modal.Footer>
+          {isPending && (
+            <Button
+              style={{
+                backgroundColor: leftPendingColor,
+                borderColor: leftPendingColor,
+              }}
+            >
+              {leftPending}
+            </Button>
+          )}
 
-                {(!isPending ?? true) && <NormalButton 
-                    title={leftMessage}
-                    whenClick={() => leftFunc()}
-                    size='s'
-                    bgColor={leftColor}
-                    fontSize='larger'
-                />}
+          {!isPending && (
+            <Button
+              style={{ backgroundColor: leftColor, borderColor: leftColor }}
+              onClick={leftFunc}
+            >
+              {leftMessage}
+            </Button>
+          )}
 
-
-                {(isPending ?? false) && <NormalButton 
-                    title={leftPending}
-                    size='s'
-                    bgColor={leftPendingColor}
-                    fontSize='larger'
-                />}
-
-            </Modal.Footer>
-        </Modal>
-      </div>
+          <Button
+            id={rightColor}
+            variant={
+              rightColor === 'cancel-button' ? 'outline-dark' : 'primary'
+            }
+            style={{ backgroundColor: rightColor, borderColor: rightColor }}
+            onClick={rightFunc}
+          >
+            {rightMessage}
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </div>
   );
 };
 
