@@ -12,4 +12,8 @@ export class updateUserDto {
         url: String;
     };
     profile64: String
+    readonly zoomID: String;
+    readonly zoomStartURL: String;
+    readonly zoomJoinURL: String;
+    readonly schedule_id: [String];
 }

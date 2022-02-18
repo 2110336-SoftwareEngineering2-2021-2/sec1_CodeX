@@ -25,6 +25,8 @@ export const UserSchema = new mongoose.Schema({
     type: ImgSchema,
     default: {},
   },
+  
+  schedule_id: [String],
 });
 
 UserSchema.path('email').index({ unique: true });
@@ -36,3 +38,4 @@ UserSchema.path('email').required(true);
 UserSchema.path('birthDate').required(true);
 UserSchema.path('address').required(true);
 UserSchema.path('citizenID').required(true);
+

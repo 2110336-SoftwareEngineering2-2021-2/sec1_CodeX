@@ -19,4 +19,6 @@ export class UserDto {
   profileImg: {
     url: String;
   };
+  readonly schedule_id: [String];
+
 }

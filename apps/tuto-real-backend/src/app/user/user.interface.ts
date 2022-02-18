@@ -23,4 +23,6 @@ export interface User extends Document {
     fileName: String;
     url: String;
   };
+  schedule_id: [String];
+ 
 }
