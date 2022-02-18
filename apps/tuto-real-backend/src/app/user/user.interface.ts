@@ -15,4 +15,9 @@ export interface User extends Document {
     fileName: String;
     url: String;
   };
+  zoom_id: {type: String};
+  schedule_id: [String];
+  zoom_url: {type: String};
+  numReviews: Number;
+  totalRating: Number;
 }

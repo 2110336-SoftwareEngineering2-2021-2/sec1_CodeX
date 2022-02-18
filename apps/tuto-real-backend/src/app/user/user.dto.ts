@@ -12,4 +12,9 @@ export class UserDto {
   profileImg: {
     url: String;
   };
+  readonly zoom_id: String;
+  readonly schedule_id: [String];
+  readonly zoom_url: {type: String};
+  readonly numReviews: Number;
+  readonly totalRating: Number;
 }
