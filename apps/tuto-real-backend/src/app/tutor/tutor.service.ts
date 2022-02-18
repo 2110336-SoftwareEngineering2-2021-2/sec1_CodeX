@@ -17,9 +17,9 @@ export class TutorService {
     return tutors;
   }
 
-  public async searchTutor(dto : CriteriaDto) : Promise<any> {
+  public async searchTutor(dto : CriteriaDto) {
+    console.log(dto)
   var queryKeyword = [],queryDays = []
-  //console.log(dto)
   if (!!dto.keyword){
     dto.keyword.forEach((word)=>{
         if (word.length>=3)
@@ -37,7 +37,7 @@ export class TutorService {
     })
   }
 
-   var join = await this.tutorModel
+   return await this.tutorModel
    .aggregate([
     {$match : {$and :[
       (!!dto.subjects)? { subjects:  { $all: dto.subjects }} : {},
@@ -45,7 +45,7 @@ export class TutorService {
       {role : "Tutor"}      
   ]}},
   {
-    $project: {
+    $addFields: {
       "sid": {
           $map: {
           input: "$sid",
@@ -53,8 +53,7 @@ export class TutorService {
         }
       }
     }
-  }
-    ,
+  },
     {$lookup: {
               from: "schedules",
               localField: "sid",
@@ -67,23 +66,19 @@ export class TutorService {
         (!!dto.rate)? { "schedules.pricePerSlot" : { $gte :  dto.rate.min, $lte : dto.rate.max}}:{} ,
         (!!dto.keyword && queryKeyword.length!=0)? { $and :  queryKeyword} :{}
     ]}
-  }])
-  console.log(join)
-  return join
-  /*return await this.tutorModel.find({ $where: function () {
-    var search_key = "description";
-
-    function check_key(document) {
-      return Object.keys(document).some(function(key) {
-        if ( typeof(document[key]) == "object" ) {
-            return check_key(document[key]);
-        } else if (key==search_key){
-          return document[key].includes("Enjoy");
-        }
-      });
-    }
-    return check_key(this);
-  }})*/
+  },
+    {$project: {price: {$max : "$schedules.pricePerSlot"},"firstName" : 1,"lastName":1,
+    "profileImg":1,"subjects":1,"rating":{$divide : ["$totalRating","$numReviews"]} }},
+    {$unset : "schedules"}
+  ])
+  .then((res)=>{
+    res = res.sort((a,b) => (a.rating < b.rating) ? 1 : ((b.rating< a.rating) ? -1 : 0))
+    return {success : true , data : res}
+  })
+  .catch((err)=>{
+    return { success : false , data : err.message}
+  })
+ 
   }
 
   async send(){

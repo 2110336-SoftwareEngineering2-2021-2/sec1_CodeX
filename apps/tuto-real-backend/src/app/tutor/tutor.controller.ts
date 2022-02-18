@@ -34,7 +34,7 @@ export class TutorController {
     if (!!q.ratePrice){
       var price = q.ratePrice.split(",")
       dto.rate.min = parseInt(price[0])
-      dto.rate.max = parseInt(price[1])
+      if(!!price[1]) dto.rate.max = parseInt(price[1])
     }
     dto.keyword = (!!q.keyword)? q.keyword.split(" "):undefined
     dto.days = (!!q.days)? q.days.split(","):undefined
