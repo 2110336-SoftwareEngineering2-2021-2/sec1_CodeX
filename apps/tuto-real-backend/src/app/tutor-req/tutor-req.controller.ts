@@ -50,4 +50,6 @@ export class TutorReqController {
   update(@Query('_id') id: string, @Body() dto: updateStatusDto) {
     return this.service.updateStatus(id, dto);
   }
+
+
 }

@@ -3,6 +3,11 @@ import { Document } from 'mongoose';
 export interface User extends Document {
   readonly subjects: { type: [String]; default: undefined };
   readonly description: { type: [String]; default: undefined };
+
+  ratePrice : {type : Number , default : undefined};
+  schedule : {type : Object, default : undefined};
+
+
   readonly firstName: String;
   readonly lastName: String;
   readonly phoneNumber: String;
