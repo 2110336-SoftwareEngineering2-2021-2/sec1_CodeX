@@ -5,12 +5,13 @@ export const ScheduleSchema = new mongoose.Schema({
     startDate: {type: Date, require: true},
     pricePerSlot: {type: Number, require: true},
     days: [{
+            _id: false,
             day: String,
             slots: [{
                 slot: Number,
                 subject: String,
                 description: String,
-                students:[{
+                students: {type:[{
                     status: {
                         type: String,
                         enum: ['Approved', 'Pending'],
@@ -19,10 +20,16 @@ export const ScheduleSchema = new mongoose.Schema({
                     id: String,
                     firstName: String,
                     lastName: String
-                }]
+                }], default: undefined}
             }]
         }]
 });
 
-UserSchema.path('startDate').required(true);
-UserSchema.path('pricePerSlot').required(true);
+ScheduleSchema.path('startDate').required(true);
+ScheduleSchema.path('pricePerSlot').required(true);
+
+
+
+
+
+

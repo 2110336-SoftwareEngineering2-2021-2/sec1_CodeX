@@ -7,6 +7,7 @@ import { AppService } from './app.service';
 import { TutorReqModule } from './tutor-req/tutor-req.module';
 import { TutorModule } from './tutor/tutor.module';
 import { UserModule } from './user/user.module';
+import { ScheduleModule } from './schedule/schedule.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { UserModule } from './user/user.module';
     TutorReqModule,
     TutorModule,
     UserModule,
+    ScheduleModule
   ],
   controllers: [AppController],
   providers: [AppService],

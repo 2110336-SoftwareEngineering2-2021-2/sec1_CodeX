@@ -8,7 +8,7 @@ export interface Schedule extends Document {
                 slot: Number,
                 subject: String,
                 description: String,
-                students:[{
+                students:{type:[{
                     status: {
                         type: String,
                         enum: ['Approved', 'Pending'],
@@ -17,7 +17,7 @@ export interface Schedule extends Document {
                     id: String,
                     firstName: String,
                     lastName: String
-                }]
+                }], default: undefined};
             }]
         }];
 }

@@ -16,7 +16,7 @@ export class ScheduleDto {
                     id: String,
                     firstName: String,
                     lastName: String
-                }]
+                }];
             }]
         }];
 }

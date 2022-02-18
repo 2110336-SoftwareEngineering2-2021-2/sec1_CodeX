@@ -25,11 +25,8 @@ export const UserSchema = new mongoose.Schema({
     type: ImgSchema,
     default: {},
   },
-  zoom_id: String,
+  
   schedule_id: [String],
-  zoom_url: String,
-  numReviews: Number,
-  totalRating: Number,
 });
 
 UserSchema.path('email').index({ unique: true });

@@ -5,8 +5,9 @@ import { ScheduleService } from './schedule.service';
 @Controller('schedule')
 export class ScheduleController {
     constructor(private readonly service: ScheduleService){}
-    @Post('/create')
-    createSchedule(@Query('_id') id: string, @Body() dto: ScheduleDto){
-        return this.service.createSchedule(id, dto);
+    @Post()
+    createSchedule(@Query() query: any, @Body() dto: ScheduleDto){
+        return this.service.createSchedule(query._id, dto);
     }
+    
 }

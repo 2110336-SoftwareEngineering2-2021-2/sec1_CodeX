@@ -12,7 +12,7 @@ export class TutorService {
   constructor(@InjectModel('User') private tutorModel: Model<User> ,
   @InjectModel('Schedule') private scheduleModel: Model<Schedule>  ) {}
 
-  public async getTutor(): Promise<UserDto[]> {
+  public async getTutor(): Promise<any> {
     const tutors = this.tutorModel.find({ role: 'Tutor' }).exec();
     return tutors;
   }

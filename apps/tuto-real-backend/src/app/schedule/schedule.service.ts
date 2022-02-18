@@ -1,5 +1,6 @@
 import {HttpException,Injectable,UnauthorizedException} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { ideahub_v1beta } from 'googleapis';
 import { Model } from 'mongoose';
 import { Subject } from 'rxjs';
 import { User } from '../user/user.interface';
@@ -25,11 +26,19 @@ export class ScheduleService {
                 { upsert: true },
             ).exec();
             //add subject to user collection
-            const subjects = await this.scheduleModel.distinct("days.slots.subject");
+            const subjects_user = await this.userModel.distinct("subjects",{_id:id});
+            const subjects_schedule = await this.scheduleModel.distinct("days.slots.subject",{_id: schedule._id})
+            subjects_schedule.forEach(element => {
+                if(subjects_user.includes(element)){}
+                else{
+                    subjects_user.push(element)
+                }
+            });
             await this.userModel.updateOne(
                 {_id: id},
-                {$push: {subjects:{$each: subjects}}}
-            )
+                { $set: {subjects: subjects_user}},
+                { upsert: true },
+            ).exec();
            return {success: true, data: schedule};
         } catch(err){
             return {success:false, data: err.message};
