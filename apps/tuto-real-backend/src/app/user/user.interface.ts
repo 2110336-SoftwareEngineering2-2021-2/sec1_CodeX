@@ -16,6 +16,9 @@ export interface User extends Document {
   readonly address: String;
   readonly citizenID: String;
   role: String;
+  readonly zoomID: String;
+  readonly zoomStartURL: String;
+  readonly zoomJoinURL: String;
   profileImg: {
     fileName: String;
     url: String;

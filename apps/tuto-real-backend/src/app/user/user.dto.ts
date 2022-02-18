@@ -13,6 +13,9 @@ export class UserDto {
   readonly address: String;
   readonly citizenID: String;
   role: String;
+  readonly zoomID: String;
+  readonly zoomStartURL: String;
+  readonly zoomJoinURL: String;
   profileImg: {
     url: String;
   };
