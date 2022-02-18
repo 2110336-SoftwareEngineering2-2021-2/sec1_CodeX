@@ -12,6 +12,9 @@ export const UserSchema = new mongoose.Schema({
   address: { type: String, require: true },
   citizenID: { type: String, unique: true, require: true },
   role: { type: String, default: 'Student' },
+  zoomID: { type: String },
+  zoomStartURL: { type: String },
+  zoomJoinURL: { type: String },
   profileImg: {
     type: ImgSchema,
     default: {},
