@@ -3,16 +3,89 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { UserDto } from '../user/user.dto';
 import { User } from '../user/user.interface';
+import { sendMail } from '../util/google';
+import { CriteriaDto } from './cirteria.dto';
+import { Schedule } from './schedule.interface';
 
 @Injectable()
 export class TutorService {
-  constructor(@InjectModel('User') private tutorModel: Model<User>) {}
+  constructor(@InjectModel('User') private tutorModel: Model<User> ,
+  @InjectModel('Schedule') private scheduleModel: Model<Schedule>  ) {}
 
   public async getTutor(): Promise<UserDto[]> {
     const tutors = this.tutorModel.find({ role: 'Tutor' }).exec();
     return tutors;
   }
 
+  public async searchTutor(dto : CriteriaDto) {
+    console.log(dto)
+  var queryKeyword = [],queryDays = []
+  if (!!dto.keyword){
+    dto.keyword.forEach((word)=>{
+        if (word.length>=3)
+          queryKeyword.push({$or : [{description : {$regex:word, $options : 'i'}},
+                                {firstName : {$regex:word, $options : 'i'}} ,
+                                {lastName : {$regex:word, $options : 'i'}},
+                                {"schedules.days.slots.description" : {$regex:word, $options : 'i'}}
+                              ]})
+    })}
+  if (!!dto.days){
+    var tmp
+    dto.days.forEach((day)=>{
+      tmp = "schedules.days.day"
+        queryDays.push({ [tmp] : day})
+    })
+  }
+
+   return await this.tutorModel
+   .aggregate([
+    {$match : {$and :[
+      (!!dto.subjects)? { subjects:  { $all: dto.subjects }} : {},
+      {sid:{$exists : true}},
+      {role : "Tutor"}      
+  ]}},
+  {
+    $addFields: {
+      "sid": {
+          $map: {
+          input: "$sid",
+          in: { $toObjectId: "$$this" }
+        }
+      }
+    }
+  },
+    {$lookup: {
+              from: "schedules",
+              localField: "sid",
+              foreignField: "_id",
+              as: "schedules"
+          }
+  },{
+    $match: {$and :[
+        (!!dto.days)? {$and : queryDays} : {} ,
+        (!!dto.rate)? { "schedules.pricePerSlot" : { $gte :  dto.rate.min, $lte : dto.rate.max}}:{} ,
+        (!!dto.keyword && queryKeyword.length!=0)? { $and :  queryKeyword} :{}
+    ]}
+  },
+    {$project: {price: {$max : "$schedules.pricePerSlot"},"firstName" : 1,"lastName":1,
+    "profileImg":1,"subjects":1,"rating":{$divide : ["$totalRating","$numReviews"]} }},
+    {$unset : "schedules"}
+  ])
+  .then((res)=>{
+    res = res.sort((a,b) => (a.rating < b.rating) ? 1 : ((b.rating< a.rating) ? -1 : 0))
+    return {success : true , data : res}
+  })
+  .catch((err)=>{
+    return { success : false , data : err.message}
+  })
+ 
+  }
+
+  async send(){
+    return await sendMail()
+    .then((result) => console.log('Email sent...', result))
+    .catch((error) => console.log(error.message));
+  }
   /*GetProfileByID(id : String)  {
 
         return this.tutorModel.find({uid:id}).exec()

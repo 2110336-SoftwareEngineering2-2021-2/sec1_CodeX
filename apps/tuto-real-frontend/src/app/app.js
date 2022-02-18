@@ -1,5 +1,3 @@
-// import NxWelcome from './nx-welcome';
-
 import { Route, Routes } from 'react-router-dom';
 
 import NavBar from './components/navbar/navbar';
@@ -10,6 +8,8 @@ import ChangeAccountApprovePage from './pages/ChangeAccountApprovePage';
 import ChangeAccountRequestListPage from './pages/ChangeAccountRequestListPage';
 import ProfilePage from './pages/ProfilePage';
 import ChangeAccountTypePage from './pages/ChangeAccountTypePage';
+import SearchPage from './pages/SearchPage';
+import TestPage from './pages/TestPage';
 
 export function App() {
   return (
@@ -35,6 +35,12 @@ export function App() {
           path="/requestList"
           element={<ChangeAccountRequestListPage />}
         />
+        <Route
+          exact
+          path="/search"
+          element={<SearchPage />}
+        />
+        <Route exact path="/testPage" element={<TestPage />} />
       </Routes>
     </>
   );

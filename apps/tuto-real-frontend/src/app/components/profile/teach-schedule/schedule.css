@@ -1,0 +1,68 @@
+table {
+  /* border: 1px solid; */
+  /* border-collapse: collapse; */
+  margin: 3% 0%;
+  width: 100%;
+  height: 60vh;
+  color: var(--darkgray);
+}
+
+th,
+td {
+  border: 1px solid var(--lightgray);
+  background-color: var(--gray);
+  font-weight: normal;
+  padding: 0.5%;
+  width: 100px;
+}
+
+th {
+  font-weight: bold;
+}
+
+td {
+  height: 90px;
+}
+
+td#available {
+  background-color: white;
+}
+
+.hover-icon {
+  background-color: none;
+  color: var(--primary);
+  border-radius: 30px;
+}
+
+.hover-icon:hover {
+  background-color: var(--primary);
+  color: white;
+}
+
+.slot-tutor,
+.slot-student,
+.slot-active-tutor,
+.slot-active-student {
+  /* width: 100%; */
+  border-radius: 4px;
+  height: 100%;
+  cursor: pointer;
+}
+
+.slot-tutor:hover {
+  background-color: var(--lightyellow);
+}
+
+.slot-student:hover {
+  background-color: var(--lightgreen);
+}
+
+.slot-active-tutor {
+  border: 2px solid var(--yellow);
+  background-color: var(--lightyellow);
+}
+
+.slot-active-student {
+  border: 2px solid var(--third);
+  background-color: var(--lightgreen);
+}

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Form } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 
+import { useAuth } from '../../auth'
 import { client } from '../../axiosConfig';
 import AdvanceInfo from './AdvanceInfo';
 import ViewContactInfo from './ViewContactInfo';
@@ -47,6 +48,8 @@ const ProfileInfo = ({targetId, viewType}) => {
     reset,
     formState: { errors },
   } = useForm();
+
+  const { setReset } = useAuth()
 
   const fetchData = useCallback(async () => {
     // console.log(targetId)
@@ -101,49 +104,30 @@ const ProfileInfo = ({targetId, viewType}) => {
 
   const sendData = async (data) => {
     console.log('sending data...');
-    if (tempProfile.raw) {
-      await client({
-        method: "PATCH",
-        url: `/user`,
-        params: {
-          _id: targetId
-        },
-        data: {
-          profile64: tempProfile.raw,
-          firstName: data.firstName,
-          lastName: data.lastName,
-          birthDate: translateDateForSendToBack(data.date, data.month, data.year),
-          address: data.address,
-        }
-      })
-      .then(({ data: {data} }) => {
-        console.log(data)
-      })
-      .catch((res) => {
-        console.log(res)
-      })
+    // const formData = new FormData()
+    // formData.append("Profile Picture", tempProfile, tempProfile?.name)
+    let changeData = {
+      firstName: data.firstName,
+      lastName: data.lastName,
+      birthDate: translateDateForSendToBack(data.date, data.month, data.year),
+      address: data.address,
     }
-    else {
-      await client({
-        method: "PATCH",
-        url: `/user`,
-        params: {
-          _id: targetId
-        },
-        data: { 
-          firstName: data.firstName,
-          lastName: data.lastName,
-          birthDate: translateDateForSendToBack(data.date, data.month, data.year),
-          address: data.address,
-        }
-      })
-      .then(({ data: {data} }) => {
-        console.log(data)
-      })
-      .catch((res) => {
-        console.log(res)
-      })
-    }
+    if(tempProfile.raw) changeData = {...changeData, profile64: tempProfile.raw}
+    await client({
+      method: "PATCH",
+      url: `/user`,
+      params: {
+        _id: targetId
+      },
+      data: changeData
+    })
+    .then(({ data: {data} }) => {
+      console.log(data)
+      setReset(true)
+    })
+    .catch((res) => {
+      console.log(res)
+    })
   }
 
   const onSubmit = (data) => {
