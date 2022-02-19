@@ -8,12 +8,13 @@ import { Model } from 'mongoose';
 import { deleteImg, uploadImage, uploadImageBy64 } from '../util/google';
 import { updateUserDto } from './updateUser.dto';
 import { UserDto } from './user.dto';
+import * as dotenv from 'dotenv'
 import { User } from './user.interface';
 import axios from 'axios';
 
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
-
+dotenv.config()
 const payload = {
   iss: process.env.API_KEY,
   exp: Date.now() + 6000,
