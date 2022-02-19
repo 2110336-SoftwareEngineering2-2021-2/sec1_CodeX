@@ -1,6 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Form, Tabs, Tab, Button } from 'react-bootstrap';
 import { FiEdit } from 'react-icons/fi';
+import {
+  IoIosArrowDropleftCircle,
+  IoIosArrowDroprightCircle,
+} from 'react-icons/io';
 
 import { client } from '../../../axiosConfig';
 import Tag from './Tag';
@@ -21,14 +25,15 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
   const [isEditing, setEditing] = useState(false);
   const [isPending, setIsPending] = useState(false);
   const [showModal, setShowModal] = useState('none'); // "none" | "edit" | "info" | "delete" | "book" //
-  // const [showConfirmEditModal, setShowConfirmEditModal] = useState(false);
-  // const [subjectList, setSubjectList] = useState([])
+  const [subjectList, setSubjectList] = useState([]);
   const [price, setPrice] = useState(0);
   const [time, setTime] = useState('Day Time'); // "Day Time" | "Night Time" //
   const [scheduleList, setScheduleList] = useState([]);
   const [currentSchedule, setCurrentSchedule] = useState();
   const [selected, setSelected] = useState([]); // Sun: 0-15, Mon: 16-31, Tue: 32-47, ..., Sat: 96-111
   const [info, setInfo] = useState({})
+
+  const tagColor = ['red', 'blue', 'green', 'purple', 'orange', 'gray'];
 
   const fetchData = useCallback(async () => {
     await client({
@@ -38,7 +43,7 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
         _id: targetId,
       },
     })
-      // .then(({data}) => {
+      // .then(({ data: { data } }) => {
       .then(() => {
         console.log('Data Fetched');
         const data = [
@@ -210,11 +215,15 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
             ],
           },
         ];
+
         console.log(data);
         setScheduleList(data ?? []);
-        if (data?.length > 0) setCurrentSchedule(0);
-        // setSubjectList(data.allSubjects ?? [])
-        // setPrice(data.price ?? 0)
+        if (data?.length > 0) {
+          console.log('data is valid');
+          setCurrentSchedule(0);
+          setSubjectList(data[0].allSubjects ?? []);
+          setPrice(data[0].pricePerSlot ?? 0);
+        }
       })
       .catch(({ response }) => {
         console.log(response);
@@ -307,6 +316,23 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
     setShowModal('none')
   }
 
+  const renderDate = () => {
+    if ((currentSchedule || currentSchedule === 0) && scheduleList.length > 0) {
+      const start = new Date(scheduleList[currentSchedule].startDate);
+      const end = new Date(scheduleList[currentSchedule].startDate);
+      end.setDate(end.getDate() + 6);
+      const formatOptions = {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      };
+      return `${start.toLocaleDateString(
+        'en-us',
+        formatOptions
+      )} - ${end.toLocaleDateString('en-us', formatOptions)}`;
+    } else return 'Loading Date...';
+  };
+
   const renderButton = () => {
     if (selected.length === 0) return null;
     else if (viewType === 'TutorSelf')
@@ -379,27 +405,6 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
             Some of your information may be seen by other users.
           </p>
           <hr />
-          {/* <div className='section'>
-                        <p className='header'>SUBJECT</p>
-                        <div style={{display:"flex", flexWrap: "wrap"}}>
-                            {subjectList.length !== 0 ? 
-                                subjectList.map((e,i) => (
-                                    <Tag 
-                                        key={i}
-                                        text={e} 
-                                        textColor="white" 
-                                        bgColor={tagColor[i % 6]}
-                                    />
-                                )):
-                                <Tag 
-                                    text={viewType === "TutorSelf" ? "Please add your subject" : "The tutor didn't add his subjects yet"}
-                                    textColor="white" 
-                                    bgColor={COLORS.yellow}
-                                />
-                            }
-                        </div>
-                    </div> */}
-          {/* <hr /> */}
           <div className="section">
             <p className="header">PRICE (PER HOUR)</p>
             <div
@@ -423,6 +428,39 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
             </div>
           </div>
           <hr />
+          <div className="section" style={{ marginBottom: '1.5%' }}>
+            <IoIosArrowDropleftCircle className="arrow-icon" size={36} />
+            <IoIosArrowDroprightCircle
+              className="arrow-icon"
+              size={36}
+              style={{ marginRight: '2%' }}
+            />
+            <p className="header">{renderDate()}</p>
+          </div>
+          <div
+            style={{ display: 'flex', flexWrap: 'wrap', marginBottom: '3%' }}
+          >
+            {subjectList.length !== 0 ? (
+              subjectList.map((e, i) => (
+                <Tag
+                  key={i}
+                  text={e}
+                  textColor="white"
+                  bgColor={tagColor[i % 6]}
+                />
+              ))
+            ) : (
+              <Tag
+                text={
+                  viewType === 'TutorSelf'
+                    ? 'Please add your subject'
+                    : "The tutor didn't add his subjects yet"
+                }
+                textColor="white"
+                bgColor={COLORS.yellow}
+              />
+            )}
+          </div>
           <Tabs
             defaultActiveKey={time}
             activeKey={time}

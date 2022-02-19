@@ -29,7 +29,7 @@ td#available {
 }
 
 .hover-icon {
-  background-color: none;
+  background-color: transparent;
   color: var(--primary);
   border-radius: 30px;
 }

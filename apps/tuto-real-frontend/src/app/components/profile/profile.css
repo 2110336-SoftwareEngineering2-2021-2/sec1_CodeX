@@ -25,6 +25,18 @@ img {
   color: transparent;
 }
 
+.arrow-icon {
+  border-radius: 30px;
+  color: white;
+  background-color: var(--primary);
+  margin: 0% 1%;
+}
+
+.arrow-icon:hover {
+  background-color: white;
+  color: var(--primary);
+}
+
 .bar {
   display: flex;
   flex-direction: row;
