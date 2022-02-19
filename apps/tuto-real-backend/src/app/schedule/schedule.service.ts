@@ -2,7 +2,6 @@ import {HttpException,Injectable,UnauthorizedException} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { ideahub_v1beta } from 'googleapis';
 import { Model } from 'mongoose';
-import { Subject } from 'rxjs';
 import { User } from '../user/user.interface';
 import { ScheduleDto } from './schedule.dto';
 import { Schedule } from './schedule.interface';
@@ -14,6 +13,32 @@ export class ScheduleService {
         @InjectModel('Schedule') private scheduleModel: Model<Schedule>,
         @InjectModel('User') private userModel: Model<User>
       ){}
+
+    public async getSchedule(id: string): Promise<any> {
+        if(id) {
+            const user = await this.userModel.findOne({ _id: mongoose.Types.ObjectId(id) }).exec();
+            if(!user) return {success: false, data: "User not found"}
+            const scheduleIdList = user.schedule_id
+            if(!scheduleIdList) return {success: false, data: "This user has no schedules"}
+            const scheduleList = []
+            for(const scheduleId of scheduleIdList) {
+                const schedule = await this.scheduleModel.findById({ _id: mongoose.Types.ObjectId(scheduleId) }).exec()
+                if(schedule?.days) {
+                    const setOfSubject = new Set<String>()
+                    schedule.days.forEach(day => {
+                        if(day.slots) {
+                            day.slots.forEach(block => {
+                                if(block?.subject) setOfSubject.add(block.subject)
+                            })
+                        }
+                    })
+                    scheduleList.push({...(({...schedule})._doc), allSubjects: [...setOfSubject]})
+                }
+            }
+            return {success: true, data: scheduleList}
+        }
+        return {success: false, data: "Invalid user id"}
+    }
     
     public async createSchedule(id: string, dto: ScheduleDto): Promise<any>{
         try {

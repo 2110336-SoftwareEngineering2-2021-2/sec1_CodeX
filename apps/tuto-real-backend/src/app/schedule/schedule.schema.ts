@@ -5,7 +5,6 @@ export const ScheduleSchema = new mongoose.Schema({
     startDate: {type: Date, require: true},
     pricePerSlot: {type: Number, require: true},
     days: [{
-            _id: false,
             day: String,
             slots: [{
                 slot: Number,
