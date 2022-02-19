@@ -4,7 +4,7 @@ import './EditingSlotModal.css';
 import ModalTwoButton from './ModalTwoButton';
 
 const EditingSlotModal = (props) => {
-  const { show, setShow, subjectIn, descriptionIn } = props;
+  const { show, setShow, subjectIn, descriptionIn, setModalState } = props;
 
   const [subject, setSubject] = useState(subjectIn);
   const [description, setDescription] = useState(descriptionIn);
@@ -22,6 +22,7 @@ const EditingSlotModal = (props) => {
     setShow(!show);
     setSubject(subjectIn);
     setDescription(descriptionIn);
+    setModalState('none')
   };
 
   const handleLeft = () => {
@@ -102,6 +103,7 @@ const EditingSlotModal = (props) => {
         {/* button part */}
         <Modal.Footer>
           <Button
+            variant='success'
             style={{
               backgroundColor: 'var(--third)',
               borderColor: 'var(--third)',

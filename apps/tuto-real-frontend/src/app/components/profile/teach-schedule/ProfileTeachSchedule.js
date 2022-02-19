@@ -8,13 +8,15 @@ import Schedule from './Schedule';
 import '../profile.css';
 
 import COLORS from '../../../constants/color';
+import ModalTwoButton from '../../modal/ModalTwoButton';
+import EditingSlotModal from '../../modal/EditingSlotModal';
 
 const ProfileTeachSchedule = ({ targetId, viewType }) => {
   // const ProfileTeachSchedule = ({ targetId }) => {
   //   const viewType = 'TutorOther';
   // const viewType = "TutorSelf"
 
-  //   const [isEditing, setEditing] = useState(false);
+  const [isEditing, setEditing] = useState(false);
   const [showModal, setShowModal] = useState('none'); // "none" | "edit" | "info" | "delete" | "book" //
   const [showConfirmEditModal, setShowConfirmEditModal] = useState(false);
   // const [subjectList, setSubjectList] = useState([])
@@ -250,6 +252,15 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
     setShowModal('delete');
   };
 
+  const handleDelete = () => {
+    setSelected([])
+    setShowModal('none')
+  }
+
+  const handleCancel = () => {
+    setShowModal('none')
+  }
+
   const renderButton = () => {
     if (selected.length === 0) return null;
     else if (viewType === 'TutorSelf')
@@ -280,7 +291,7 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
                 color: COLORS.white,
                 marginLeft: '2%',
               }}
-              onClick={() => setShowModal('edit')}
+              onClick={() => {setShowModal('edit'); setEditing(true);}}
             >
               {' '}
               Edit{' '}
@@ -417,6 +428,30 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
           </div>
         </div>
       </Form>
+
+      {/* Delete selected modal */}
+      {showModal==='delete' && <ModalTwoButton 
+        show={true}
+        title='Are you sure you want to delete these slots?'
+        header='If you click delete button, information of the selected slots will be deleted.'
+        leftFunc={handleDelete}
+        rightFunc={handleCancel}
+        leftMessage='Delete'
+        rightMessage='Cancel'
+        leftColor='red'
+        rightColor='cancel-button'
+        isPending={isEditing}
+        leftPending='Deleting...'
+        leftPendingColor='var(--lightgray)'
+      />}
+
+      {showModal==='edit' && <EditingSlotModal
+        show={isEditing}
+        setShow={setEditing}
+        subjectIn='' //subject in slots
+        descriptionIn='' //description in slots
+        setModalState={setShowModal}
+      />}
     </>
   );
 };
