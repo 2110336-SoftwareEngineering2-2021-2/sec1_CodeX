@@ -5,7 +5,7 @@ import { UserDto } from '../user/user.dto';
 import { User } from '../user/user.interface';
 import { sendMail } from '../util/google';
 import { CriteriaDto } from './cirteria.dto';
-import { Schedule } from './schedule.interface';
+import { Schedule } from '../schedule/schedule.interface';
 
 @Injectable()
 export class TutorService {
