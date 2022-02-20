@@ -15,6 +15,13 @@ import { Schedule } from './schedule.interface';
 import { UpdateScheduleDto } from './updateSchedule.dto';
 
 const mongoose = require('mongoose');
+
+const getStartDate = (startDate: Date): Date => {
+    const dateNoTimeZone = startDate
+    dateNoTimeZone.setDate(dateNoTimeZone.getDate() + 7)
+    return dateNoTimeZone
+} 
+
 @Injectable()
 export class ScheduleService {
   constructor(
@@ -22,27 +29,31 @@ export class ScheduleService {
     @InjectModel('User') private userModel: Model<User>
   ) {}
 
-  public async getSchedule(id: string): Promise<any> {
-    if (id) {
-      const user = await this.userModel
-        .findOne({ _id: mongoose.Types.ObjectId(id) })
-        .exec();
-      if (!user) return { success: false, data: 'User not found' };
-      const scheduleIdList = user.schedule_id;
-      if (!scheduleIdList)
-        return { success: false, data: 'This user has no schedules' };
-      const scheduleList = [];
-      for (const scheduleId of scheduleIdList) {
-        const schedule = await this.scheduleModel
-          .findById({ _id: mongoose.Types.ObjectId(scheduleId) })
-          .exec();
-        if (schedule?.days) {
-          const setOfSubject = new Set<String>();
-          schedule.days.forEach((day) => {
-            if (day.slots) {
-              day.slots.forEach((block) => {
-                if (block?.subject) setOfSubject.add(block.subject);
-              });
+    public async getSchedule(id: string): Promise<any> {
+        if(id) {
+            const user = await this.userModel.findOne({ _id: mongoose.Types.ObjectId(id) }).exec();
+            if(!user) return {success: false, data: "User not found"}
+            const scheduleIdList = user.schedule_id
+            if(!scheduleIdList) return {success: false, data: "This user has no schedules"}
+            const scheduleList = []
+            for(const scheduleId of scheduleIdList) {
+                const schedule = await this.scheduleModel.findById({ _id: mongoose.Types.ObjectId(scheduleId) }).exec()
+                console.log(new Date(schedule?.startDate))
+                if(schedule?.startDate && getStartDate(new Date(schedule?.startDate)) < new Date()) {
+                    // If schedule is outdated -> delete it //
+                    // await this.deleteSchedule(scheduleId)
+                }
+                if(schedule?.days) {
+                    const setOfSubject = new Set<String>()
+                    schedule.days.forEach(day => {
+                        if(day.slots) {
+                            day.slots.forEach(block => {
+                                if(block?.subject) setOfSubject.add(block.subject)
+                            })
+                        }
+                    })
+                    scheduleList.push({...schedule.toObject(), allSubjects: [...setOfSubject]})
+                }
             }
           });
           scheduleList.push({
