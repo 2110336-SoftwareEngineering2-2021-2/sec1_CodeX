@@ -38,7 +38,6 @@ export class ScheduleService {
             const scheduleList = []
             for(const scheduleId of scheduleIdList) {
                 const schedule = await this.scheduleModel.findById({ _id: mongoose.Types.ObjectId(scheduleId) }).exec()
-                console.log(new Date(schedule?.startDate))
                 if(schedule?.startDate && getStartDate(new Date(schedule?.startDate)) < new Date()) {
                     // If schedule is outdated -> delete it //
                     // await this.deleteSchedule(scheduleId)

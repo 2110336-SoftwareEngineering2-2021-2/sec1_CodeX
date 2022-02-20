@@ -25,7 +25,8 @@ img {
   color: transparent;
 }
 
-.arrow-icon {
+.arrow-icon,
+.disable-arrow {
   border-radius: 30px;
   color: white;
   background-color: var(--primary);

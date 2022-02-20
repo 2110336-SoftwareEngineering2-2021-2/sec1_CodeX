@@ -25,15 +25,25 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
   const [isEditing, setEditing] = useState(false);
   const [isPending, setIsPending] = useState(false);
   const [showModal, setShowModal] = useState('none'); // "none" | "edit" | "info" | "delete" | "book" //
+  const [isEditingPrice, setEditingPrice] = useState(false);
+
   const [subjectList, setSubjectList] = useState([]);
   const [price, setPrice] = useState(0);
+  const [tempPrice, setTempPrice] = useState(0);
   const [time, setTime] = useState('Day Time'); // "Day Time" | "Night Time" //
   const [scheduleList, setScheduleList] = useState([]);
   const [currentSchedule, setCurrentSchedule] = useState();
   const [selected, setSelected] = useState([]); // Sun: 0-15, Mon: 16-31, Tue: 32-47, ..., Sat: 96-111
   const [info, setInfo] = useState({})
 
-  const tagColor = ['red', 'blue', 'green', 'purple', 'orange', 'gray'];
+  const tagColor = [
+    'Crimson',
+    'CornflowerBlue',
+    'LightSeaGreen',
+    'MediumOrchid',
+    'Tomato',
+    'SlateGrey',
+  ];
 
   const fetchData = useCallback(async () => {
     await client({
@@ -217,12 +227,12 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
         ];
 
         console.log(data);
-        setScheduleList(data ?? []);
+        setUpScheduleList(data);
+        setCurrentSchedule(0);
         if (data?.length > 0) {
-          console.log('data is valid');
-          setCurrentSchedule(0);
           setSubjectList(data[0].allSubjects ?? []);
           setPrice(data[0].pricePerSlot ?? 0);
+          setTempPrice(data[0].pricePerSlot ?? 0);
         }
       })
       .catch(({ response }) => {
@@ -235,8 +245,8 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
   }, [fetchData]);
 
   useEffect(() => {
-    console.log(showModal);
-  }, [showModal]);
+    console.log(tempPrice);
+  }, [tempPrice]);
 
   const sendData = async () => {
     // await client({
@@ -252,11 +262,8 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
     //     }
     // }).then(({data}) => {
     //     console.log(data)
-    //     setTeachingInfo(tempTeachingInfo);
-    //     setEditing(false)
     // }).catch(({response}) => {
     //     console.log(response)
-    //     setEditing(false);
     // })
   };
 
@@ -298,6 +305,46 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
 
   }
 
+  const savePrice = () => {
+    console.log('saving Price...', tempPrice);
+    setPrice(tempPrice ? tempPrice : 0);
+    setEditingPrice(false);
+  };
+
+  const cancelPrice = () => {
+    setTempPrice(price ? price : 0);
+    setEditingPrice(false);
+  };
+
+  const getPreviousSunday = () => {
+    const previousSunday = new Date();
+    previousSunday.setHours(0, 0, 0, 0);
+    previousSunday.setDate(previousSunday.getDate() - previousSunday.getDay());
+    return previousSunday;
+  };
+
+  const setUpScheduleList = (data) => {
+    const sunday = getPreviousSunday();
+    const tempScheduleList = [];
+    for (let i = 0; i < 4; i++) {
+      if (
+        i < data.length &&
+        new Date(data[i].startDate).getDate() === sunday.getDate()
+      ) {
+        tempScheduleList.push(data[i]);
+      } else {
+        tempScheduleList.push({
+          startDate: new Date(sunday),
+          pricePerSlot: data.length > 0 ? data[0].pricePerSlot : 0,
+          allSubjects: [],
+          days: [],
+        });
+      }
+      sunday.setDate(sunday.getDate() + 7); // Go to next sunday
+    }
+    setScheduleList(tempScheduleList);
+  };
+
   const deleteSlot = () => {
     console.log('Deleting....', selected);
     setShowModal('delete');
@@ -315,6 +362,77 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
   const handleCancel = () => {
     setShowModal('none')
   }
+
+  const goLeft = () => {
+    if (currentSchedule) setCurrentSchedule(currentSchedule - 1);
+    setSelected([]);
+  };
+
+  const goRight = () => {
+    if (
+      (currentSchedule || currentSchedule === 0) &&
+      currentSchedule < scheduleList.length - 1
+    )
+      setCurrentSchedule(currentSchedule + 1);
+    setSelected([]);
+  };
+
+  // Render Section //
+  const renderPrice = (
+    <div className="section">
+      <p className="header">PRICE (PER HOUR)</p>
+      {!isEditingPrice ? (
+        <>
+          <p
+            style={{
+              fontSize: 'larger',
+              marginRight: '2%',
+              color: 'gray',
+            }}
+          >
+            {`${price} THB`}
+          </p>
+          <FiEdit
+            size={20}
+            color={COLORS.third}
+            style={{ cursor: 'pointer' }}
+            onClick={() => setEditingPrice(true)}
+          />
+        </>
+      ) : (
+        <Form.Group
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            width: '100%',
+          }}
+        >
+          <Form.Control
+            type="number"
+            value={tempPrice ?? 0}
+            onChange={(e) => setTempPrice(parseInt(e.target.value))}
+          />
+          <Button
+            variant="success"
+            style={{
+              backgroundColor: COLORS.third,
+              borderColor: 'none',
+              color: COLORS.white,
+              margin: '0% 2% 0% 0%',
+              width: '25%',
+            }}
+            onClick={savePrice}
+          >
+            Save Change
+          </Button>
+          <Button variant="outline-secondary" onClick={cancelPrice}>
+            Cancel
+          </Button>
+        </Form.Group>
+      )}
+    </div>
+  );
 
   const renderDate = () => {
     if ((currentSchedule || currentSchedule === 0) && scheduleList.length > 0) {
@@ -340,8 +458,7 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
         <>
           <div style={{ display: 'flex', width: '100%' }}>
             <Button variant="danger" onClick={deleteSlot}>
-              {' '}
-              Delete Selected{' '}
+              Delete Selected
             </Button>
           </div>
           <div
@@ -353,8 +470,7 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
             }}
           >
             <Button variant="outline-secondary" onClick={() => setSelected([])}>
-              {' '}
-              Discard All{' '}
+              Discard All
             </Button>
             <Button
               variant="warning"
@@ -365,8 +481,7 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
               }}
               onClick={() => {setShowModal('edit'); setEditing(true);}}
             >
-              {' '}
-              Edit{' '}
+              Edit
             </Button>
           </div>
         </>
@@ -375,8 +490,7 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
       return (
         <>
           <Button variant="outline-secondary" onClick={() => setSelected([])}>
-            {' '}
-            Discard All{' '}
+            Discard All
           </Button>
           <Button
             variant="success"
@@ -388,8 +502,7 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
             }}
             onClick={() => setShowModal('book')}
           >
-            {' '}
-            Book Selecting Slot{' '}
+            Book Selecting Slot
           </Button>
         </>
       );
@@ -400,43 +513,35 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
     <>
       <Form className="form">
         <div className="table-card info-card shadow">
+          {/* Header */}
           <p className="title">Teaching Information</p>
           <p className="header" style={{ width: '100%' }}>
             Some of your information may be seen by other users.
           </p>
           <hr />
-          <div className="section">
-            <p className="header">PRICE (PER HOUR)</p>
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'center',
-                width: '100%',
-              }}
-            >
-              <p
-                style={{
-                  fontSize: 'x-large',
-                  marginRight: '2%',
-                  color: 'gray',
-                }}
-              >
-                {price}
-              </p>
-              <FiEdit size={20} color={COLORS.third} />
-            </div>
-          </div>
+          {/* Price Per Hour */}
+          {renderPrice}
           <hr />
+          {/* Date Choosing */}
           <div className="section" style={{ marginBottom: '1.5%' }}>
-            <IoIosArrowDropleftCircle className="arrow-icon" size={36} />
+            <IoIosArrowDropleftCircle
+              className={currentSchedule > 0 ? 'arrow-icon' : 'disable-arrow'}
+              size={36}
+              onClick={goLeft}
+            />
             <IoIosArrowDroprightCircle
-              className="arrow-icon"
+              className={
+                currentSchedule < scheduleList.length - 1
+                  ? 'arrow-icon'
+                  : 'disable-arrow'
+              }
               size={36}
               style={{ marginRight: '2%' }}
+              onClick={goRight}
             />
             <p className="header">{renderDate()}</p>
           </div>
+          {/* Subjects */}
           <div
             style={{ display: 'flex', flexWrap: 'wrap', marginBottom: '3%' }}
           >
@@ -461,11 +566,12 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
               />
             )}
           </div>
+          {/* Day/Night Time Tabs */}
           <Tabs
             defaultActiveKey={time}
             activeKey={time}
-            onChange={(e) => setTime(e.target.value)}
             style={{ width: '100%' }}
+            onSelect={(k) => setTime(k)}
           >
             <Tab eventKey="Day Time" title="Day Time" style={{ width: '100%' }}>
               <Schedule
@@ -502,6 +608,7 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
               />
             </Tab>
           </Tabs>
+          {/* Button Section */}
           <div
             style={{
               display: 'flex',
