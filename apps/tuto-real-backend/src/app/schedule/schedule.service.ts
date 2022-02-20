@@ -16,11 +16,18 @@ import { UpdateScheduleDto } from './updateSchedule.dto';
 
 const mongoose = require('mongoose');
 
-const getStartDate = (startDate: Date): Date => {
+const getFinalDate = (startDate: Date): Date => { // get final date of that week
     const dateNoTimeZone = startDate
     dateNoTimeZone.setDate(dateNoTimeZone.getDate() + 7)
     return dateNoTimeZone
 } 
+
+const getPreviousSunday = () => {
+    const previousSunday = new Date();
+    previousSunday.setHours(7, 0, 0, 0);
+    previousSunday.setDate(previousSunday.getDate() - previousSunday.getDay());
+    return previousSunday;
+}
 
 @Injectable()
 export class ScheduleService {
@@ -33,25 +40,43 @@ export class ScheduleService {
         if(id) {
             const user = await this.userModel.findOne({ _id: mongoose.Types.ObjectId(id) }).exec();
             if(!user) return {success: false, data: "User not found"}
-            const scheduleIdList = user.schedule_id
+            const scheduleIdList: String[] = user.schedule_id
             if(!scheduleIdList) return {success: false, data: "This user has no schedules"}
+
             const scheduleList = []
-            for(const scheduleId of scheduleIdList) {
-                const schedule = await this.scheduleModel.findById({ _id: mongoose.Types.ObjectId(scheduleId) }).exec()
-                if(schedule?.startDate && getStartDate(new Date(schedule?.startDate)) < new Date()) {
-                    // If schedule is outdated -> delete it //
-                    // await this.deleteSchedule(scheduleId)
-                }
-                if(schedule?.days) {
-                    const setOfSubject = new Set<String>()
-                    schedule.days.forEach(day => {
-                        if(day.slots) {
-                            day.slots.forEach(block => {
-                                if(block?.subject) setOfSubject.add(block.subject)
-                            })
+            const startDateList: Date[] = []
+            for(let i=0; i<4; i++) {
+                if(i < scheduleIdList.length) { 
+                    const schedule = await this.scheduleModel.findById({ _id: mongoose.Types.ObjectId(scheduleIdList[i]) }).exec()
+                    // Check if the schedule is outdated or not //
+                    if(schedule?.startDate && getFinalDate(new Date(schedule?.startDate)) < new Date()) {
+                        // await this.deleteSchedule(scheduleIdList[i])
+                    } else {
+                        const allSubjects = await this.scheduleModel.distinct("days.slots.subject", {_id: scheduleIdList[i]})
+                        startDateList.push(schedule.startDate)
+                        scheduleList.push({...schedule.toObject(), allSubjects})
+                    }
+                } else break
+            }
+
+            // If amount of schedule is not equal to 4 (1 month) -> add more until that tutor has 4 schedule //
+            if(startDateList.length < 4) {
+                const schedule = await this.scheduleModel.findById({ _id: mongoose.Types.ObjectId(scheduleIdList[0]) }).exec()
+                startDateList.sort((a,b) => ((new Date(a)).getTime() - (new Date(b)).getTime()))
+                console.log(startDateList)
+                const sunday = new Date(getPreviousSunday())
+                let idx = 0
+                for (let i = 0; i < 4; i++) {
+                    if (idx >= startDateList.length || new Date(startDateList[idx]).getDate() !== sunday.getDate()) {
+                        const emptySchedule = {
+                            startDate: new Date(sunday),
+                            pricePerSlot: schedule.pricePerSlot,
+                            days: []
                         }
-                    })
-                    scheduleList.push({...schedule.toObject(), allSubjects: [...setOfSubject]})
+                        const newSchedule: {success: boolean, data: Schedule} = await this.createSchedule(id, emptySchedule)
+                        if(newSchedule.success) scheduleList.push({...newSchedule.data.toObject(), allSubjects: []})
+                    } else idx++
+                    sunday.setDate(sunday.getDate() + 7); // Go to next sunday
                 }
             }
           });
