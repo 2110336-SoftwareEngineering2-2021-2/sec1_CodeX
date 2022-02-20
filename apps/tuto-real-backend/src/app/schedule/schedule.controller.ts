@@ -1,4 +1,4 @@
-import { Body, Controller, Patch, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Patch, Post, Query } from '@nestjs/common';
 import { ScheduleDto } from './schedule.dto';
 import { ScheduleService } from './schedule.service';
 import { UpdateScheduleDto } from './updateSchedule.dto';
@@ -14,5 +14,9 @@ export class ScheduleController {
   @Patch()
   updateSchedule(@Query() query: any, @Body() dto: UpdateScheduleDto) {
     return this.service.updateSchedule(query._id, dto);
+  }
+  @Get()
+  getSchedule(@Query('_id') id: string) {
+    return this.service.getSchedule(id);
   }
 }

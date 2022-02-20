@@ -5,7 +5,7 @@ import { UserDto } from '../user/user.dto';
 import { User } from '../user/user.interface';
 import { sendMail } from '../util/google';
 import { CriteriaDto } from './cirteria.dto';
-import { Schedule } from './schedule.interface';
+import { Schedule } from '../schedule/schedule.interface';
 
 @Injectable()
 export class TutorService {
@@ -41,14 +41,14 @@ export class TutorService {
    .aggregate([
     {$match : {$and :[
       (!!dto.subjects)? { subjects:  { $all: dto.subjects }} : {},
-      {sid:{$exists : true}},
+      {schedule_id:{$exists : true}},
       {role : "Tutor"}      
   ]}},
   {
     $addFields: {
-      "sid": {
+      "schedule_id": {
           $map: {
-          input: "$sid",
+          input: "$schedule_id",
           in: { $toObjectId: "$$this" }
         }
       }
@@ -56,7 +56,7 @@ export class TutorService {
   },
     {$lookup: {
               from: "schedules",
-              localField: "sid",
+              localField: "schedule_id",
               foreignField: "_id",
               as: "schedules"
           }

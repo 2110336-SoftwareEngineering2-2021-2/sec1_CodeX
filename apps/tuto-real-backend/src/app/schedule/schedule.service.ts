@@ -1,14 +1,8 @@
-import {
-  HttpException,
-  HttpStatus,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { ideahub_v1beta } from 'googleapis';
 import { datacatalog } from 'googleapis/build/src/apis/datacatalog';
 import { Model } from 'mongoose';
-import { Subject } from 'rxjs';
 import { User } from '../user/user.interface';
 import { ScheduleDto } from './schedule.dto';
 import { Schedule } from './schedule.interface';
@@ -21,6 +15,40 @@ export class ScheduleService {
     @InjectModel('Schedule') private scheduleModel: Model<Schedule>,
     @InjectModel('User') private userModel: Model<User>
   ) {}
+
+  public async getSchedule(id: string): Promise<any> {
+    if (id) {
+      const user = await this.userModel
+        .findOne({ _id: mongoose.Types.ObjectId(id) })
+        .exec();
+      if (!user) return { success: false, data: 'User not found' };
+      const scheduleIdList = user.schedule_id;
+      if (!scheduleIdList)
+        return { success: false, data: 'This user has no schedules' };
+      const scheduleList = [];
+      for (const scheduleId of scheduleIdList) {
+        const schedule = await this.scheduleModel
+          .findById({ _id: mongoose.Types.ObjectId(scheduleId) })
+          .exec();
+        if (schedule?.days) {
+          const setOfSubject = new Set<String>();
+          schedule.days.forEach((day) => {
+            if (day.slots) {
+              day.slots.forEach((block) => {
+                if (block?.subject) setOfSubject.add(block.subject);
+              });
+            }
+          });
+          scheduleList.push({
+            ...schedule.toObject(),
+            allSubjects: [...setOfSubject],
+          });
+        }
+      }
+      return { success: true, data: scheduleList };
+    }
+    return { success: false, data: 'Invalid user id' };
+  }
 
   public async createSchedule(id: string, dto: ScheduleDto): Promise<any> {
     try {
@@ -65,7 +93,14 @@ export class ScheduleService {
     id: string,
     dto: UpdateScheduleDto
   ): Promise<any> {
+    //update schedule
     try {
+      const schedule_check = await this.scheduleModel.findById(
+        mongoose.Types.ObjectId(id)
+      );
+      if (!schedule_check)
+        return { success: false, data: 'can not find a schedule' };
+
       const schedule = await this.scheduleModel
         .updateOne(
           { _id: mongoose.Types.ObjectId(id) },
@@ -74,8 +109,30 @@ export class ScheduleService {
         )
         .exec();
       if (!schedule) {
-        throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
+        return { success: false, message: 'fail to update' };
       }
+
+      //get all subject in a new schedule
+      const subjects_schedule = await this.scheduleModel.distinct(
+        'days.slots.subject',
+        { _id: mongoose.Types.ObjectId(id) }
+      );
+
+      const tutor = await this.userModel.findOne({ schedule_id: { $in: id } });
+      if (!tutor) return;
+
+      await this.userModel
+        .updateOne(
+          { _id: tutor._id },
+          { $set: { subjects: subjects_schedule } },
+          { upsert: true }
+        )
+        .exec();
+
+      const schedule_return = await this.scheduleModel.findById(
+        mongoose.Types.ObjectId(id)
+      );
+      return { success: true, data: schedule_return };
     } catch (err) {
       return { success: false, data: err.message };
     }
