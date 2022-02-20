@@ -6,6 +6,8 @@ import { deleteImg, uploadImage, uploadImageBy64 } from '../util/google';
 import { TutorReqDto } from './tutor-req.dto';
 import { TutorReq } from './tutor-req.interface';
 import { updateStatusDto } from './updateStatus.dto';
+import axios from 'axios';
+import * as jwt from 'jsonwebtoken';
 
 @Injectable()
 export class TutorReqService {
@@ -29,6 +31,7 @@ export class TutorReqService {
         url: url,
       };
     });
+
     await uploadImage('Evidence', fileTran[0]).then((url) => {
       dto.transcription = {
         fileName: fileTran[0].originalname,
@@ -72,28 +75,86 @@ export class TutorReqService {
         });
       });
   }
+
   async updateStatus(id: string, dto: updateStatusDto) {
-    const mail = await this.reqModel.find({_id: id},{"email": 1})
+    const token = jwt.sign(
+      { key: process.env.API_KEY },
+      process.env.API_SECRET,
+      { expiresIn: process.env.JWT_EXPIRE }
+    );
+
+    const { email, firstName, lastName, citizenID, transcription } =
+      await this.reqModel.findById(id);
+
     if (dto.status == 'Reject') {
-       const cit_img = await this.reqModel.find({_id: id},{"citizenID.url": 1, _id:0})
-       const tran_img = await this.reqModel.find({_id: id},{"transcription.url": 1, _id:0})
-
       await this.reqModel.deleteOne({ _id: id });
-      await deleteImg(cit_img[0].citizenID.url.split("Evidence/")[1],"Evidence");
-      await deleteImg(tran_img[0].transcription.url.split("Evidence/")[1],"Evidence");
+      await deleteImg(citizenID.url.split('Evidence/')[1], 'Evidence');
+      await deleteImg(transcription.url.split('Evidence/')[1], 'Evidence');
     } else if (dto.status == 'Approved') {
+      const date = new Date().toISOString().slice(0, 11) + '00:00:00Z';
+      const user = await axios({
+        method: 'post',
+        url: 'https://api.zoom.us/v2/users',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+          'User-Agent': 'Zoom-api-Jwt-Request',
+        },
+        data: {
+          action: 'custCreate',
+          user_info: {
+            email: email,
+            type: 1,
+            first_name: firstName,
+            last_name: lastName,
+          },
+        },
+      });
 
-     
-      await this.reqModel
-        .updateOne({ _id:id }, { status: 'Approved' }, { upsert: true })
-        .exec();
-      await this.userModel
-        .updateOne({ email: mail[0].email }, { role: 'Tutor' }, { upsert: true })
+      const meeting = await axios({
+        method: 'post',
+        url: `https://api.zoom.us/v2/users/${user.data.id}/meetings`,
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+          'User-Agent': 'Zoom-api-Jwt-Request',
+        },
+        data: {
+          topic: `${firstName} ${lastName}'s meetings`,
+          type: 8,
+          start_time: date,
+          duration: 17 * 60,
+          timezone: 'Asia/Bangkok',
+          recurrence: {
+            type: 1,
+            repeat_interval: 1,
+            end_times: 30,
+          },
+          settings: {
+            waiting_room: true,
+            mute_upon_entry: true,
+          },
+        },
+      });
+
+      await this.reqModel.updateOne({ _id: id }, { status: 'Approved' }).exec();
+
+      const zoomID = meeting.data.id;
+      const zoomStartURL = meeting.data.start_url;
+      const zoomJoinURL = meeting.data.join_url;
+      
+      return await this.userModel
+        .findOneAndUpdate(
+          { email },
+          {
+            zoomID,
+            zoomStartURL,
+            zoomJoinURL,
+            role: 'Tutor',
+          },
+          { new: true }
+        )
         .exec();
     }
-    return this.userModel.find(
-      { email: mail[0].email },
-      { firstName: 1, lastName: 1, _id: 1 }
-    );
   }
 }
