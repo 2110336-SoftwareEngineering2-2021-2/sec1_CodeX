@@ -32,7 +32,7 @@ export class ScheduleService {
                             })
                         }
                     })
-                    scheduleList.push({...(({...schedule})._doc), allSubjects: [...setOfSubject]})
+                    scheduleList.push({...schedule.toObject(), allSubjects: [...setOfSubject]})
                 }
             }
             return {success: true, data: scheduleList}
