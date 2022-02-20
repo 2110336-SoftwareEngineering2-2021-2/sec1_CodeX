@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Patch, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { ScheduleDto } from './schedule.dto';
 import { ScheduleService } from './schedule.service';
 import { UpdateScheduleDto } from './updateSchedule.dto';
@@ -8,15 +16,35 @@ export class ScheduleController {
   constructor(private readonly service: ScheduleService) {}
   @Post()
   createSchedule(@Query() query: any, @Body() dto: ScheduleDto) {
-    return this.service.createSchedule(query._id, dto);
+    try {
+      return this.service.createSchedule(query._id, dto);
+    } catch (err) {
+      return err;
+    }
   }
 
   @Patch()
   updateSchedule(@Query() query: any, @Body() dto: UpdateScheduleDto) {
-    return this.service.updateSchedule(query._id, dto);
+    try {
+      return this.service.updateSchedule(query._id, dto);
+    } catch (err) {
+      return err;
+    }
   }
   @Get()
   getSchedule(@Query('_id') id: string) {
-    return this.service.getSchedule(id);
+    try {
+      return this.service.getSchedule(id);
+    } catch (err) {
+      return err;
+    }
+  }
+  @Delete()
+  deleteSchedule(@Query('_id') id: string) {
+    try {
+      return this.service.deleteSchedule(id);
+    } catch (err) {
+      return err;
+    }
   }
 }

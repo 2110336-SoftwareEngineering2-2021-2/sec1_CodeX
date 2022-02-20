@@ -1,4 +1,10 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { ideahub_v1beta } from 'googleapis';
 import { datacatalog } from 'googleapis/build/src/apis/datacatalog';
@@ -99,7 +105,7 @@ export class ScheduleService {
         mongoose.Types.ObjectId(id)
       );
       if (!schedule_check)
-        return { success: false, data: 'can not find a schedule' };
+        return { success: false, data: 'cannot find a schedule' };
 
       const schedule = await this.scheduleModel
         .updateOne(
@@ -119,7 +125,6 @@ export class ScheduleService {
       );
 
       const tutor = await this.userModel.findOne({ schedule_id: { $in: id } });
-      if (!tutor) return;
 
       await this.userModel
         .updateOne(
@@ -136,5 +141,52 @@ export class ScheduleService {
     } catch (err) {
       return { success: false, data: err.message };
     }
+  }
+
+  public async deleteSchedule(id: string) {
+    const schedule_check = await this.scheduleModel.findById(
+      mongoose.Types.ObjectId(id)
+    );
+    if (!schedule_check)
+      throw new NotFoundException({ success: false, data: 'mos' });
+
+    //get tutor information
+    const tutor = await this.userModel.findOne({ schedule_id: { $in: id } });
+    const schedule_id = await this.userModel.distinct('schedule_id', {
+      _id: tutor._id,
+    });
+
+    const schedule = await this.scheduleModel.findByIdAndDelete(
+      mongoose.Types.ObjectId(id)
+    );
+
+    if (!schedule) {
+      return { success: false, data: 'cannot delete the schedule' };
+    }
+
+    var subjects_user = [];
+    const schedules = tutor.schedule_id;
+    for (var i = 0; i < schedules.length; i++) {
+      const subjects = await this.scheduleModel.distinct('days.slots.subject', {
+        _id: mongoose.Types.ObjectId(schedules[i]),
+      });
+      subjects_user = [...new Set([...subjects_user, ...subjects])];
+      console.log(schedules[i], subjects_user);
+    }
+
+    schedule_id.splice(schedule_id.indexOf(id), 1);
+    const result = await this.userModel
+      .findOneAndUpdate(
+        { _id: tutor._id },
+        {
+          $set: {
+            subjects: subjects_user,
+            schedule_id: schedule_id,
+          },
+        }
+      )
+      .exec();
+
+    return { success: true, data: {} };
   }
 }
