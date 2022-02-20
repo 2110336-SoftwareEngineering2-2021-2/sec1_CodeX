@@ -11,6 +11,7 @@ const Schedule = ({
   selected,
   setSelected,
   setShowModal,
+  onViewInfo
 }) => {
   /* 
     time: "Day Time" | "Night Time"
@@ -136,7 +137,7 @@ const Schedule = ({
                         isSelected={selected.includes(idx)}
                         isX={false}
                         whenClick={() => whenClickSlot(idx)}
-                        onViewInfo={() => setShowModal(true)}
+                        onViewInfo={onViewInfo}
                       />
                     </td>
                   </Fragment>

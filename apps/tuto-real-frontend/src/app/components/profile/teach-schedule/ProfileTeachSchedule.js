@@ -10,6 +10,8 @@ import '../profile.css';
 import COLORS from '../../../constants/color';
 import ModalTwoButton from '../../modal/ModalTwoButton';
 import EditingSlotModal from '../../modal/EditingSlotModal';
+import ViewingSlotModal from '../../modal/ViewingSlotModal';
+import { MdArticle } from 'react-icons/md';
 
 const ProfileTeachSchedule = ({ targetId, viewType }) => {
   // const ProfileTeachSchedule = ({ targetId }) => {
@@ -18,13 +20,14 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
 
   const [isEditing, setEditing] = useState(false);
   const [showModal, setShowModal] = useState('none'); // "none" | "edit" | "info" | "delete" | "book" //
-  const [showConfirmEditModal, setShowConfirmEditModal] = useState(false);
+  // const [showConfirmEditModal, setShowConfirmEditModal] = useState(false);
   // const [subjectList, setSubjectList] = useState([])
   const [price, setPrice] = useState(0);
   const [time, setTime] = useState('Day Time'); // "Day Time" | "Night Time" //
   const [scheduleList, setScheduleList] = useState([]);
   const [currentSchedule, setCurrentSchedule] = useState();
   const [selected, setSelected] = useState([]); // Sun: 0-15, Mon: 16-31, Tue: 32-47, ..., Sat: 96-111
+  const [info, setInfo] = useState({})
 
   const fetchData = useCallback(async () => {
     await client({
@@ -223,7 +226,16 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
 
   useEffect(() => {
     console.log(showModal);
+    // console.log(lastSelectedSchedule);
+    // console.log(lastSelected);
+    // console.log(scheduleList[currentSchedule].days[0]);
+    // if(currentSchedule===0) console.log(scheduleList[currentSchedule].filter( (schedule) => {schedule.slots.slot !== 0}));
   }, [showModal]);
+
+  // useLayoutEffect(() => {
+  //   console.log(scheduleList[0].startDate);
+  //   setLastSelectedSchedule(scheduleList.filter( (schedule) => {schedule.slots.slot === lastSelected}));
+  // }, [lastSelected]);
 
   const sendData = async () => {
     // await client({
@@ -247,18 +259,55 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
     // })
   };
 
+  const Editdata = async () => {
+    // await client({
+    //   method: 'POST',
+    //   url: '/updateSchedule',
+    //   params: {
+    //     _id: targetId
+    //   },
+    //   data: {
+    //     startDate: scheduleList[currentSchedule].startDate,
+    //     pricePerSlot: 100,
+    //     days: [{
+    //       day: 'Monday',
+    //       slots: [{
+    //         slot: 5,
+    //         subject: 'Art',
+    //         description: 'test woi'
+    //       }]
+    //     }]
+    //   }
+    // }).then( ({data}) => {
+    //   console.log(data)
+    // }).catch( ({response}) => {
+    //   console.log(response)
+    // })
+
+  }
+
   const deleteSlot = () => {
     console.log('Deleting....', selected);
     setShowModal('delete');
   };
 
+  const onViewInfo = (slotData) => {
+    setShowModal('info');
+    // setInfo({
+    //   subject: slotData.subject 
+    // })
+    setInfo(slotData)
+  }
+
   const handleDelete = () => {
     setSelected([])
+    setLastSelected()
     setShowModal('none')
   }
 
   const handleCancel = () => {
     setShowModal('none')
+    // console.log(scheduleList[currentSchedule].days.find(schedule => {schedule.day}));
   }
 
   const renderButton = () => {
@@ -395,6 +444,7 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
                 selected={selected}
                 setSelected={setSelected}
                 setShowModal={setShowModal}
+                onViewInfo={onViewInfo}
               />
             </Tab>
             <Tab
@@ -413,6 +463,7 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
                 selected={selected}
                 setSelected={setSelected}
                 setShowModal={setShowModal}
+                onViewInfo={onViewInfo}
               />
             </Tab>
           </Tabs>
@@ -448,9 +499,19 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
       {showModal==='edit' && <EditingSlotModal
         show={isEditing}
         setShow={setEditing}
-        subjectIn='' //subject in slots
+        subjectIn='Choose your subject' //subject in slots
         descriptionIn='' //description in slots
         setModalState={setShowModal}
+        confirmFunc={Editdata}
+      />}
+
+      {showModal==='info' && <ViewingSlotModal
+        show={true}
+        cancelFunc={handleCancel}
+        number={info.students.length}
+        subject={info.subject}
+        description={info.description}
+        studentList={info.students}
       />}
     </>
   );
