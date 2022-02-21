@@ -36,7 +36,7 @@ export class TutorController {
       dto.rate.min = parseInt(price[0])
       if(!!price[1]) dto.rate.max = parseInt(price[1])
     }
-    dto.keyword = (!!q.keyword)? q.keyword.split(" "):undefined
+    dto.keyword = (!!q.keyword)? q.keyword.split(","):undefined
     dto.days = (!!q.days)? q.days.split(","):undefined
     return this.tutorService.searchTutor(dto);
   }

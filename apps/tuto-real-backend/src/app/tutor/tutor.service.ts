@@ -41,6 +41,7 @@ export class TutorService {
    .aggregate([
     {$match : {$and :[
       (!!dto.subjects)? { subjects:  { $all: dto.subjects }} : {},
+      (!!dto.rate)? { "pricePerSlot" : { $gte :  dto.rate.min, $lte : dto.rate.max}}:{} ,
       {schedule_id:{$exists : true}},
       {role : "Tutor"}      
   ]}},
@@ -63,11 +64,10 @@ export class TutorService {
   },{
     $match: {$and :[
         (!!dto.days)? {$and : queryDays} : {} ,
-        (!!dto.rate)? { "schedules.pricePerSlot" : { $gte :  dto.rate.min, $lte : dto.rate.max}}:{} ,
         (!!dto.keyword && queryKeyword.length!=0)? { $and :  queryKeyword} :{}
     ]}
   },
-    {$project: {price: {$max : "$schedules.pricePerSlot"},"firstName" : 1,"lastName":1,
+    {$project: {price: "$pricePerSlot","firstName" : 1,"lastName":1,
     "profileImg":1,"subjects":1,"rating":{$divide : ["$totalRating","$numReviews"]} }},
     {$unset : "schedules"}
   ])
