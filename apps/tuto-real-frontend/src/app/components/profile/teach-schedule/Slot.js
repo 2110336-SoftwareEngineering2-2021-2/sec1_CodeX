@@ -21,7 +21,7 @@ const Slot = ({
     }
   */
 
-  const student = slotData?.students.find((student) => student.id === _id);
+  const student = slotData?.students?.find((student) => student.id === _id);
 
   const getSlotStyle = () => {
     // slot-tutor, slot-student, slot-active-tutor, slot-active-student //

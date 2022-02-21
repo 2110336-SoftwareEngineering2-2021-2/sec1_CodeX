@@ -628,10 +628,10 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
       {showModal==='info' && <ViewingSlotModal
         show={true}
         cancelFunc={handleCancel}
-        number={info.students.length}
+        number={info.students? info.students.length : 0}
         subject={info.subject}
         description={info.description}
-        studentList={info.students}
+        studentList={info.students?? []}
       />}
     </>
   );
