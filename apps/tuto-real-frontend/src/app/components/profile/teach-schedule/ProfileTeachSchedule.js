@@ -53,8 +53,9 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
         _id: targetId,
       },
     })
-      // .then(({ data: { data } }) => {
-      .then(() => {
+      .then(({ data: { data } }) => {
+        // .then(() => {
+        /*
         console.log('Data Fetched');
         const data = [
           {
@@ -225,11 +226,11 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
             ],
           },
         ];
-
+        */
         console.log(data);
-        setUpScheduleList(data);
-        setCurrentSchedule(0);
+        setScheduleList(data);
         if (data?.length > 0) {
+          setCurrentSchedule(0);
           setSubjectList(data[0].allSubjects ?? []);
           setPrice(data[0].pricePerSlot ?? 0);
           setTempPrice(data[0].pricePerSlot ?? 0);
@@ -243,6 +244,14 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
   useEffect(() => {
     fetchData();
   }, [fetchData]);
+
+  useEffect(() => {
+    if (scheduleList[currentSchedule]) {
+      setSubjectList(scheduleList[currentSchedule].allSubjects);
+      setPrice(scheduleList[currentSchedule].pricePerSlot);
+      setTime('Day Time');
+    }
+  }, [currentSchedule]);
 
   useEffect(() => {
     console.log(tempPrice);
@@ -314,35 +323,6 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
   const cancelPrice = () => {
     setTempPrice(price ? price : 0);
     setEditingPrice(false);
-  };
-
-  const getPreviousSunday = () => {
-    const previousSunday = new Date();
-    previousSunday.setHours(0, 0, 0, 0);
-    previousSunday.setDate(previousSunday.getDate() - previousSunday.getDay());
-    return previousSunday;
-  };
-
-  const setUpScheduleList = (data) => {
-    const sunday = getPreviousSunday();
-    const tempScheduleList = [];
-    for (let i = 0; i < 4; i++) {
-      if (
-        i < data.length &&
-        new Date(data[i].startDate).getDate() === sunday.getDate()
-      ) {
-        tempScheduleList.push(data[i]);
-      } else {
-        tempScheduleList.push({
-          startDate: new Date(sunday),
-          pricePerSlot: data.length > 0 ? data[0].pricePerSlot : 0,
-          allSubjects: [],
-          days: [],
-        });
-      }
-      sunday.setDate(sunday.getDate() + 7); // Go to next sunday
-    }
-    setScheduleList(tempScheduleList);
   };
 
   const deleteSlot = () => {
@@ -556,13 +536,9 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
               ))
             ) : (
               <Tag
-                text={
-                  viewType === 'TutorSelf'
-                    ? 'Please add your subject'
-                    : "The tutor didn't add his subjects yet"
-                }
+                text="There is no subject this week"
                 textColor="white"
-                bgColor={COLORS.yellow}
+                bgColor={COLORS.lightgray}
               />
             )}
           </div>

@@ -63,7 +63,6 @@ export class ScheduleService {
             if(startDateList.length < 4) {
                 const schedule = await this.scheduleModel.findById({ _id: mongoose.Types.ObjectId(scheduleIdList[0]) }).exec()
                 startDateList.sort((a,b) => ((new Date(a)).getTime() - (new Date(b)).getTime()))
-                console.log(startDateList)
                 const sunday = new Date(getPreviousSunday())
                 let idx = 0
                 for (let i = 0; i < 4; i++) {
@@ -79,11 +78,8 @@ export class ScheduleService {
                     sunday.setDate(sunday.getDate() + 7); // Go to next sunday
                 }
             }
-          });
-          scheduleList.push({
-            ...schedule.toObject(),
-            allSubjects: [...setOfSubject],
-          });
+            scheduleList.sort((a,b) => (new Date(a.startDate)).getTime() - (new Date(b.startDate)).getTime())
+            return {success: true, data: scheduleList}
         }
       }
       return { success: true, data: scheduleList };
