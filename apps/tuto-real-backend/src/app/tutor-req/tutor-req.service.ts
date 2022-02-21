@@ -77,12 +77,6 @@ export class TutorReqService {
   }
 
   async updateStatus(id: string, dto: updateStatusDto) {
-    const token = jwt.sign(
-      { key: process.env.API_KEY },
-      process.env.API_SECRET,
-      { expiresIn: process.env.JWT_EXPIRE }
-    );
-
     const { email, firstName, lastName, citizenID, transcription } =
       await this.reqModel.findById(id);
 
@@ -91,7 +85,13 @@ export class TutorReqService {
       await deleteImg(citizenID.url.split('Evidence/')[1], 'Evidence');
       await deleteImg(transcription.url.split('Evidence/')[1], 'Evidence');
     } else if (dto.status == 'Approved') {
+      const token = jwt.sign(
+        { iss: process.env.API_KEY },
+        process.env.API_SECRET,
+        { expiresIn: process.env.JWT_EXPIRE }
+      );
       const date = new Date().toISOString().slice(0, 11) + '00:00:00Z';
+      
       const user = await axios({
         method: 'post',
         url: 'https://api.zoom.us/v2/users',
@@ -142,7 +142,7 @@ export class TutorReqService {
       const zoomID = meeting.data.id;
       const zoomStartURL = meeting.data.start_url;
       const zoomJoinURL = meeting.data.join_url;
-      
+
       return await this.userModel
         .findOneAndUpdate(
           { email },

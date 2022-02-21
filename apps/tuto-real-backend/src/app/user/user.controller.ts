@@ -32,15 +32,4 @@ export class UserController {
   updateProfile(@Query('_id') id: string, @Body() dto: updateUserDto) {
     return this.service.updateProfile(id, dto);
   }
-
-  @Post('/zoom')
-  createZoomAccount(@Body() dto: any) {
-    return this.service.createZoomAccount(
-      dto.email,
-      dto.firstName,
-      dto.lastName,
-      dto.topic,
-      dto.description
-    );
-  }
 }
