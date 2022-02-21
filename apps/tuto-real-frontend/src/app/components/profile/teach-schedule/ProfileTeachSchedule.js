@@ -35,6 +35,7 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
   const [currentSchedule, setCurrentSchedule] = useState();
   const [selected, setSelected] = useState([]); // Sun: 0-15, Mon: 16-31, Tue: 32-47, ..., Sat: 96-111
   const [info, setInfo] = useState({})
+  const [editData, setEditData] = useState([]); 
 
   const tagColor = [
     'Crimson',
@@ -276,41 +277,33 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
     // })
   };
 
-  const Editdata = async (subject, description) => {
+  const sendEditData = async (subject, description) => {
     console.log(subject)
     console.log(description)
 
-    setIsPending(true)
+    // setIsPending(true)
+    selectedToDayAndSlot(subject, description)
 
-    // await client({
-    //   method: 'PATCH',
-    //   url: '/schedule',
-    //   params: {
-    //     _id: targetId //_id ของ tutor
-    //   },
-    //   data: {
-    //     pricePerSlot: 400, //ต้องการ price per slot
-
-    //     // ต้องการ list ของ day กับ slot ในการส่งข้อมูล
-    //     days: [{
-    //       day: 'Sunday',
-    //       slots: [{
-    //         slot: 0,
-    //         subject: subject,
-    //         description: description
-    //       }]
-    //     }]
-    //   }
+    await client({
+      method: 'PATCH',
+      url: '/schedule',
+      params: {
+        _id: scheduleList(currentSchedule)._id //_id ของ schedule
+      },
+      data: {
+        // ต้องการ list ของ day กับ slot ในการส่งข้อมูล
+        days: editData
+      }
       
-    // }).then( ({data}) => {
-    //   console.log(data)
-    //   setIsPending(false)
-    //   setShowModal('none')
-    //   setSelected([])
-    // }).catch( ({response}) => {
-    //   console.log(response)
+    }).then( ({data}) => {
+      console.log(data)
+      setIsPending(false)
+      setShowModal('none')
+      setSelected([])
+    }).catch( ({response}) => {
+      console.log(response)
       
-    // })
+    })
 
   }
 
@@ -325,8 +318,8 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
     setEditingPrice(false);
   };
 
+  //can fix
   const deleteSlot = () => {
-    console.log('Deleting....', selected);
     setShowModal('delete');
   };
 
@@ -335,12 +328,53 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
     setInfo(slotData)
   }
 
+  //can fix
   const handleDelete = () => {
-    Editdata('','')
+    sendEditData('','')
   }
 
+  //can fix
   const handleCancel = () => {
     setShowModal('none')
+  }
+
+  const selectedToDayAndSlot = (subject, description) => {
+    const dayList = [{
+      day: 'Sunday',
+      slots: []
+    },
+    {
+      day: 'Monday',
+      slots: []
+    },
+    {
+      day: 'Tuesday',
+      slots: []
+    },
+    {
+      day: 'Wednesday',
+      slots: []
+    },
+    {
+      day: 'Thursday',
+      slots: []
+    },
+    {
+      day: 'Friday',
+      slots: []
+    },
+    {
+      day: 'Saturday',
+      slots: []
+    }
+  ]
+    selected.sort()
+    for(let i=0; i != selected.length; i++){
+      const dayIndex = Math.floor(selected[i]/16)
+      dayList[dayIndex].slots = [...dayList[dayIndex].slots, {slot: selected[i]%16, subject, description}]
+    }
+    setEditData(dayList.filter(day => day.slots.length !== 0))
+    console.log(editData)
   }
 
   const goLeft = () => {
@@ -620,7 +654,7 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
         subjectIn='Choose your subject' //subject in slots
         descriptionIn='' //description in slots
         setModalState={setShowModal}
-        confirmFunc={Editdata}
+        confirmFunc={sendEditData}
         isPending={isPending}
       />}
 
