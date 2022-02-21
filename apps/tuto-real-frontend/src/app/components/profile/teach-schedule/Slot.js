@@ -65,7 +65,10 @@ const Slot = ({
       style={{ display: 'flex', flexDirection: 'column' }}
     >
       {slotData ? (
-        <div style={{ textAlign: 'right' }} onClick={ () => onViewInfo(slotData) ?? null}>
+        <div
+          style={{ textAlign: 'right' }}
+          onClick={onViewInfo ? () => onViewInfo(slotData) : null}
+        >
           <IoIosInformation size={24} className="hover-icon" />
         </div>
       ) : null}
