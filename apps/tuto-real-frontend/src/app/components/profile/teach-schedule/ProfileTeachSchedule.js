@@ -35,7 +35,7 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
   const [currentSchedule, setCurrentSchedule] = useState();
   const [selected, setSelected] = useState([]); // Sun: 0-15, Mon: 16-31, Tue: 32-47, ..., Sat: 96-111
   const [info, setInfo] = useState({})
-  const [editData, setEditData] = useState([]); 
+  // const [editData, setEditData] = useState([]); 
 
   const tagColor = [
     'Crimson',
@@ -281,14 +281,14 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
     console.log(subject)
     console.log(description)
 
-    // setIsPending(true)
-    selectedToDayAndSlot(subject, description)
-
+    setIsPending(true)
+    const editData = (await selectedToDayAndSlot(subject, description));
+    console.log(editData)
     await client({
       method: 'PATCH',
       url: '/schedule',
       params: {
-        _id: scheduleList(currentSchedule)._id //_id ของ schedule
+        _id: scheduleList[currentSchedule]._id //_id ของ schedule
       },
       data: {
         // ต้องการ list ของ day กับ slot ในการส่งข้อมูล
@@ -338,7 +338,7 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
     setShowModal('none')
   }
 
-  const selectedToDayAndSlot = (subject, description) => {
+  const selectedToDayAndSlot = async (subject, description, _callback) => {
     const dayList = [{
       day: 'Sunday',
       slots: []
@@ -373,8 +373,7 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
       const dayIndex = Math.floor(selected[i]/16)
       dayList[dayIndex].slots = [...dayList[dayIndex].slots, {slot: selected[i]%16, subject, description}]
     }
-    setEditData(dayList.filter(day => day.slots.length !== 0))
-    console.log(editData)
+    return dayList.filter(day => day.slots.length !== 0)
   }
 
   const goLeft = () => {
