@@ -260,29 +260,29 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
   };
 
   const Editdata = async () => {
-    // await client({
-    //   method: 'POST',
-    //   url: '/updateSchedule',
-    //   params: {
-    //     _id: targetId
-    //   },
-    //   data: {
-    //     startDate: scheduleList[currentSchedule].startDate,
-    //     pricePerSlot: 100,
-    //     days: [{
-    //       day: 'Monday',
-    //       slots: [{
-    //         slot: 5,
-    //         subject: 'Art',
-    //         description: 'test woi'
-    //       }]
-    //     }]
-    //   }
-    // }).then( ({data}) => {
-    //   console.log(data)
-    // }).catch( ({response}) => {
-    //   console.log(response)
-    // })
+    await client({
+      method: 'POST',
+      url: '/schedule',
+      params: {
+        _id: '620d99a33381e848d1e12c98' //_id ของ schedule
+      },
+      data: {
+        pricePerSlot: 400,
+        startDate: scheduleList[currentSchedule].startDate, //ของเก่า
+        days: [{
+          day: 'Sunday',
+          slots: [{
+            slot: 0,
+            subject: 'Art',
+            description: 'test woi'
+          }]
+        }]
+      }
+    }).then( ({data}) => {
+      console.log(data)
+    }).catch( ({response}) => {
+      console.log(response)
+    })
 
   }
 
@@ -301,7 +301,6 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
 
   const handleDelete = () => {
     setSelected([])
-    setLastSelected()
     setShowModal('none')
   }
 
