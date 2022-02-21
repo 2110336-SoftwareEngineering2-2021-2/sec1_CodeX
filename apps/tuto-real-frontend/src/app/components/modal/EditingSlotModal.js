@@ -4,14 +4,14 @@ import './EditingSlotModal.css';
 import ModalTwoButton from './ModalTwoButton';
 
 const EditingSlotModal = (props) => {
-  const { show, setShow, subjectIn, descriptionIn } = props;
+  const { show, setShow, subjectIn, descriptionIn, setModalState, confirmFunc, allSubject, isPending } = props;
 
   const [subject, setSubject] = useState(subjectIn);
   const [description, setDescription] = useState(descriptionIn);
-  const subjectChoice = ['Math', 'Art', 'Programing'];
+  // const subjectChoice = ['Math', 'Art', 'Programing'];
 
   const [showModal, setShowModal] = useState(false);
-  const [isPending, setIsPending] = useState(false);
+  // const [isPending, setIsPending] = useState(false);
 
   const handleSaveChanges = () => {
     setShow(!show);
@@ -22,13 +22,14 @@ const EditingSlotModal = (props) => {
     setShow(!show);
     setSubject(subjectIn);
     setDescription(descriptionIn);
+    setModalState('none')
   };
 
-  const handleLeft = () => {
-    setIsPending(!isPending);
-    console.log(subject);
-    console.log(description);
-  };
+  // const handleLeft = () => {
+  //   setIsPending(!isPending);
+  //   console.log(subject);
+  //   console.log(description);
+  // };
 
   const handleRight = () => {
     setShow(!show);
@@ -61,16 +62,18 @@ const EditingSlotModal = (props) => {
 
             <Form.Select
               style={{
-                color: 'var(--darkgray)',
+                color: subject==='Choose your subject' ? 'var(--lightgray)' :'var(--darkgray)',
                 width: '40%',
                 marginLeft: '1rem',
               }}
-              value={subject}
+              defaultValue='Choose your subject'
+              // value={subject}
               onChange={(e) => {
                 setSubject(e.target.value);
               }}
             >
-              {subjectChoice.map((subject) => (
+              <option key='default' style={{ color: 'var(--lightgray)' }} disabled>Choose your subject</option>
+              {allSubject.map((subject) => (
                 <option key={subject} style={{ color: 'var(--darkgray)' }}>
                   {subject}
                 </option>
@@ -88,7 +91,7 @@ const EditingSlotModal = (props) => {
 
             <Form.Control
               id="description"
-              style={{ marginLeft: '1rem', width: '95%' }}
+              style={{color: 'var(--darkgray)', marginLeft: '1rem', width: '95%' }}
               value={description}
               onChange={(e) => {
                 setDescription(e.target.value);
@@ -102,6 +105,7 @@ const EditingSlotModal = (props) => {
         {/* button part */}
         <Modal.Footer>
           <Button
+            variant='success'
             style={{
               backgroundColor: 'var(--third)',
               borderColor: 'var(--third)',
@@ -125,7 +129,7 @@ const EditingSlotModal = (props) => {
         show={showModal}
         title="Do you want to save these changes?"
         header="If you click confirm button, the following change will be applied to the selected slots."
-        leftFunc={handleLeft}
+        leftFunc={() => confirmFunc(subject, description)}
         rightFunc={handleRight}
         leftMessage="Confirm"
         rightMessage="Cancel"

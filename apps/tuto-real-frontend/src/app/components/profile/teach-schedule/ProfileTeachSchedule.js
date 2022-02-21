@@ -8,31 +8,37 @@ import Schedule from './Schedule';
 import '../profile.css';
 
 import COLORS from '../../../constants/color';
+import ModalTwoButton from '../../modal/ModalTwoButton';
+import EditingSlotModal from '../../modal/EditingSlotModal';
+import ViewingSlotModal from '../../modal/ViewingSlotModal';
+import { MdArticle } from 'react-icons/md';
 
 const ProfileTeachSchedule = ({ targetId, viewType }) => {
   // const ProfileTeachSchedule = ({ targetId }) => {
   //   const viewType = 'TutorOther';
   // const viewType = "TutorSelf"
 
-  //   const [isEditing, setEditing] = useState(false);
+  const [isEditing, setEditing] = useState(false);
+  const [isPending, setIsPending] = useState(false);
   const [showModal, setShowModal] = useState('none'); // "none" | "edit" | "info" | "delete" | "book" //
-  const [showConfirmEditModal, setShowConfirmEditModal] = useState(false);
+  // const [showConfirmEditModal, setShowConfirmEditModal] = useState(false);
   // const [subjectList, setSubjectList] = useState([])
   const [price, setPrice] = useState(0);
   const [time, setTime] = useState('Day Time'); // "Day Time" | "Night Time" //
   const [scheduleList, setScheduleList] = useState([]);
   const [currentSchedule, setCurrentSchedule] = useState();
   const [selected, setSelected] = useState([]); // Sun: 0-15, Mon: 16-31, Tue: 32-47, ..., Sat: 96-111
+  const [info, setInfo] = useState({})
 
   const fetchData = useCallback(async () => {
     await client({
       method: 'GET',
-      url: `/user`,
+      url: `/schedule`,
       params: {
         _id: targetId,
       },
     })
-      // .then(({data :{data}}) => {
+      // .then(({data}) => {
       .then(() => {
         console.log('Data Fetched');
         const data = [
@@ -245,10 +251,61 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
     // })
   };
 
+  const Editdata = async (subject, description) => {
+    console.log(subject)
+    console.log(description)
+
+    setIsPending(true)
+
+    // await client({
+    //   method: 'PATCH',
+    //   url: '/schedule',
+    //   params: {
+    //     _id: targetId //_id ของ tutor
+    //   },
+    //   data: {
+    //     pricePerSlot: 400, //ต้องการ price per slot
+
+    //     // ต้องการ list ของ day กับ slot ในการส่งข้อมูล
+    //     days: [{
+    //       day: 'Sunday',
+    //       slots: [{
+    //         slot: 0,
+    //         subject: subject,
+    //         description: description
+    //       }]
+    //     }]
+    //   }
+      
+    // }).then( ({data}) => {
+    //   console.log(data)
+    //   setIsPending(false)
+    //   setShowModal('none')
+    //   setSelected([])
+    // }).catch( ({response}) => {
+    //   console.log(response)
+      
+    // })
+
+  }
+
   const deleteSlot = () => {
     console.log('Deleting....', selected);
     setShowModal('delete');
   };
+
+  const onViewInfo = (slotData) => {
+    setShowModal('info');
+    setInfo(slotData)
+  }
+
+  const handleDelete = () => {
+    Editdata('','')
+  }
+
+  const handleCancel = () => {
+    setShowModal('none')
+  }
 
   const renderButton = () => {
     if (selected.length === 0) return null;
@@ -280,7 +337,7 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
                 color: COLORS.white,
                 marginLeft: '2%',
               }}
-              onClick={() => setShowModal('edit')}
+              onClick={() => {setShowModal('edit'); setEditing(true);}}
             >
               {' '}
               Edit{' '}
@@ -384,6 +441,7 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
                 selected={selected}
                 setSelected={setSelected}
                 setShowModal={setShowModal}
+                onViewInfo={onViewInfo}
               />
             </Tab>
             <Tab
@@ -402,6 +460,7 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
                 selected={selected}
                 setSelected={setSelected}
                 setShowModal={setShowModal}
+                onViewInfo={onViewInfo}
               />
             </Tab>
           </Tabs>
@@ -417,6 +476,42 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
           </div>
         </div>
       </Form>
+
+      {/* Delete selected modal */}
+      {showModal==='delete' && <ModalTwoButton 
+        show={true}
+        title='Are you sure you want to delete these slots?'
+        header='If you click delete button, information of the selected slots will be deleted.'
+        leftFunc={handleDelete}
+        rightFunc={handleCancel}
+        leftMessage='Delete'
+        rightMessage='Cancel'
+        leftColor='red'
+        rightColor='cancel-button'
+        isPending={isPending}
+        leftPending='Deleting...'
+        leftPendingColor='var(--lightgray)'
+      />}
+
+      {showModal==='edit' && <EditingSlotModal
+        show={isEditing}
+        setShow={setEditing}
+        allSubject={['Math', 'Art']} //get all subject
+        subjectIn='Choose your subject' //subject in slots
+        descriptionIn='' //description in slots
+        setModalState={setShowModal}
+        confirmFunc={Editdata}
+        isPending={isPending}
+      />}
+
+      {showModal==='info' && <ViewingSlotModal
+        show={true}
+        cancelFunc={handleCancel}
+        number={info.students.length}
+        subject={info.subject}
+        description={info.description}
+        studentList={info.students}
+      />}
     </>
   );
 };

@@ -18,6 +18,18 @@ const ModalTwoButton = (props) => {
     leftPendingColor,
   } = props;
 
+  let leftVariant = ''
+
+  if(leftColor === 'red')(
+    leftVariant='danger'
+  )
+  else if(leftColor === 'yellow')(
+    leftVariant='warning'
+  )
+  else if(leftColor === 'var(--third)')(
+    leftVariant='success'
+  )
+
   return (
     <div>
       <Modal
@@ -50,8 +62,9 @@ const ModalTwoButton = (props) => {
 
           {!isPending && (
             <Button
+              variant={leftVariant ?? undefined}
               style={{ backgroundColor: leftColor, borderColor: leftColor }}
-              onClick={leftFunc}
+              onClick={leftFunc ?? undefined}
             >
               {leftMessage}
             </Button>
@@ -63,7 +76,7 @@ const ModalTwoButton = (props) => {
               rightColor === 'cancel-button' ? 'outline-dark' : 'primary'
             }
             style={{ backgroundColor: rightColor, borderColor: rightColor }}
-            onClick={rightFunc}
+            onClick={rightFunc ?? undefined}
           >
             {rightMessage}
           </Button>
