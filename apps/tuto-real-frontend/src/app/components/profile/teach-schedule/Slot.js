@@ -45,8 +45,15 @@ const Slot = ({
   if (isX) {
     // render X slot (Only use on Night Time) //
     return (
-      <div style={{ display: 'flex', flexDirection: 'column' }}>
-        <ImCross size={24} color={COLORS.darkgray} />
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100%',
+        }}
+      >
+        <ImCross size={24} color={COLORS.lightgray} />
       </div>
     );
   }
@@ -58,7 +65,10 @@ const Slot = ({
       style={{ display: 'flex', flexDirection: 'column' }}
     >
       {slotData ? (
-        <div style={{ textAlign: 'right' }} onClick={ () => onViewInfo(slotData) ?? null}>
+        <div
+          style={{ textAlign: 'right' }}
+          onClick={onViewInfo ? () => onViewInfo(slotData) : null}
+        >
           <IoIosInformation size={24} className="hover-icon" />
         </div>
       ) : null}
