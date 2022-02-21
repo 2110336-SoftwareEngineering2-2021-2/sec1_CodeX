@@ -4,14 +4,14 @@ import './EditingSlotModal.css';
 import ModalTwoButton from './ModalTwoButton';
 
 const EditingSlotModal = (props) => {
-  const { show, setShow, subjectIn, descriptionIn, setModalState, confirmFunc } = props;
+  const { show, setShow, subjectIn, descriptionIn, setModalState, confirmFunc, allSubject, isPending } = props;
 
   const [subject, setSubject] = useState(subjectIn);
   const [description, setDescription] = useState(descriptionIn);
-  const subjectChoice = ['Math', 'Art', 'Programing'];
+  // const subjectChoice = ['Math', 'Art', 'Programing'];
 
   const [showModal, setShowModal] = useState(false);
-  const [isPending, setIsPending] = useState(false);
+  // const [isPending, setIsPending] = useState(false);
 
   const handleSaveChanges = () => {
     setShow(!show);
@@ -25,11 +25,11 @@ const EditingSlotModal = (props) => {
     setModalState('none')
   };
 
-  const handleLeft = () => {
-    setIsPending(!isPending);
-    console.log(subject);
-    console.log(description);
-  };
+  // const handleLeft = () => {
+  //   setIsPending(!isPending);
+  //   console.log(subject);
+  //   console.log(description);
+  // };
 
   const handleRight = () => {
     setShow(!show);
@@ -73,7 +73,7 @@ const EditingSlotModal = (props) => {
               }}
             >
               <option key='default' style={{ color: 'var(--lightgray)' }} disabled>Choose your subject</option>
-              {subjectChoice.map((subject) => (
+              {allSubject.map((subject) => (
                 <option key={subject} style={{ color: 'var(--darkgray)' }}>
                   {subject}
                 </option>
@@ -129,7 +129,7 @@ const EditingSlotModal = (props) => {
         show={showModal}
         title="Do you want to save these changes?"
         header="If you click confirm button, the following change will be applied to the selected slots."
-        leftFunc={confirmFunc}
+        leftFunc={() => confirmFunc(subject, description)}
         rightFunc={handleRight}
         leftMessage="Confirm"
         rightMessage="Cancel"

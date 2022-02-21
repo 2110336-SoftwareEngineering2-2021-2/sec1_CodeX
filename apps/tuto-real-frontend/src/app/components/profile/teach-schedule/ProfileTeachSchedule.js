@@ -19,6 +19,7 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
   // const viewType = "TutorSelf"
 
   const [isEditing, setEditing] = useState(false);
+  const [isPending, setIsPending] = useState(false);
   const [showModal, setShowModal] = useState('none'); // "none" | "edit" | "info" | "delete" | "book" //
   // const [showConfirmEditModal, setShowConfirmEditModal] = useState(false);
   // const [subjectList, setSubjectList] = useState([])
@@ -32,12 +33,12 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
   const fetchData = useCallback(async () => {
     await client({
       method: 'GET',
-      url: `/user`,
+      url: `/schedule`,
       params: {
         _id: targetId,
       },
     })
-      // .then(({data :{data}}) => {
+      // .then(({data}) => {
       .then(() => {
         console.log('Data Fetched');
         const data = [
@@ -226,16 +227,7 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
 
   useEffect(() => {
     console.log(showModal);
-    // console.log(lastSelectedSchedule);
-    // console.log(lastSelected);
-    // console.log(scheduleList[currentSchedule].days[0]);
-    // if(currentSchedule===0) console.log(scheduleList[currentSchedule].filter( (schedule) => {schedule.slots.slot !== 0}));
   }, [showModal]);
-
-  // useLayoutEffect(() => {
-  //   console.log(scheduleList[0].startDate);
-  //   setLastSelectedSchedule(scheduleList.filter( (schedule) => {schedule.slots.slot === lastSelected}));
-  // }, [lastSelected]);
 
   const sendData = async () => {
     // await client({
@@ -259,30 +251,41 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
     // })
   };
 
-  const Editdata = async () => {
-    await client({
-      method: 'POST',
-      url: '/schedule',
-      params: {
-        _id: '620d99a33381e848d1e12c98' //_id ของ schedule
-      },
-      data: {
-        pricePerSlot: 400,
-        startDate: scheduleList[currentSchedule].startDate, //ของเก่า
-        days: [{
-          day: 'Sunday',
-          slots: [{
-            slot: 0,
-            subject: 'Art',
-            description: 'test woi'
-          }]
-        }]
-      }
-    }).then( ({data}) => {
-      console.log(data)
-    }).catch( ({response}) => {
-      console.log(response)
-    })
+  const Editdata = async (subject, description) => {
+    console.log(subject)
+    console.log(description)
+
+    setIsPending(true)
+
+    // await client({
+    //   method: 'PATCH',
+    //   url: '/schedule',
+    //   params: {
+    //     _id: targetId //_id ของ tutor
+    //   },
+    //   data: {
+    //     pricePerSlot: 400, //ต้องการ price per slot
+
+    //     // ต้องการ list ของ day กับ slot ในการส่งข้อมูล
+    //     days: [{
+    //       day: 'Sunday',
+    //       slots: [{
+    //         slot: 0,
+    //         subject: subject,
+    //         description: description
+    //       }]
+    //     }]
+    //   }
+      
+    // }).then( ({data}) => {
+    //   console.log(data)
+    //   setIsPending(false)
+    //   setShowModal('none')
+    //   setSelected([])
+    // }).catch( ({response}) => {
+    //   console.log(response)
+      
+    // })
 
   }
 
@@ -293,20 +296,15 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
 
   const onViewInfo = (slotData) => {
     setShowModal('info');
-    // setInfo({
-    //   subject: slotData.subject 
-    // })
     setInfo(slotData)
   }
 
   const handleDelete = () => {
-    setSelected([])
-    setShowModal('none')
+    Editdata('','')
   }
 
   const handleCancel = () => {
     setShowModal('none')
-    // console.log(scheduleList[currentSchedule].days.find(schedule => {schedule.day}));
   }
 
   const renderButton = () => {
@@ -490,7 +488,7 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
         rightMessage='Cancel'
         leftColor='red'
         rightColor='cancel-button'
-        isPending={isEditing}
+        isPending={isPending}
         leftPending='Deleting...'
         leftPendingColor='var(--lightgray)'
       />}
@@ -498,10 +496,12 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
       {showModal==='edit' && <EditingSlotModal
         show={isEditing}
         setShow={setEditing}
+        allSubject={['Math', 'Art']} //get all subject
         subjectIn='Choose your subject' //subject in slots
         descriptionIn='' //description in slots
         setModalState={setShowModal}
         confirmFunc={Editdata}
+        isPending={isPending}
       />}
 
       {showModal==='info' && <ViewingSlotModal
