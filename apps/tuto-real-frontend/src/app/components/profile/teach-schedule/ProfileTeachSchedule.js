@@ -600,7 +600,6 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
 
       {/* Delete selected modal */}
       {showModal==='delete' && <ModalTwoButton 
-        show={true}
         title='Are you sure you want to delete these slots?'
         header='If you click delete button, information of the selected slots will be deleted.'
         leftFunc={handleDelete}
@@ -626,7 +625,6 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
       />}
 
       {showModal==='info' && <ViewingSlotModal
-        show={true}
         cancelFunc={handleCancel}
         number={info.students? info.students.length : 0}
         subject={info.subject}
