@@ -10,12 +10,12 @@ import { client } from '../../../axiosConfig';
 import Tag from './Tag';
 import Schedule from './Schedule';
 import '../profile.css';
-
-import COLORS from '../../../constants/color';
 import ModalTwoButton from '../../modal/ModalTwoButton';
 import EditingSlotModal from '../../modal/EditingSlotModal';
 import ViewingSlotModal from '../../modal/ViewingSlotModal';
-import { MdArticle } from 'react-icons/md';
+
+import COLORS from '../../../constants/color';
+import { DAY } from '../../../constants/day';
 
 const ProfileTeachSchedule = ({ targetId, viewType }) => {
   // const ProfileTeachSchedule = ({ targetId }) => {
@@ -32,10 +32,9 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
   const [tempPrice, setTempPrice] = useState(0);
   const [time, setTime] = useState('Day Time'); // "Day Time" | "Night Time" //
   const [scheduleList, setScheduleList] = useState([]);
-  const [currentSchedule, setCurrentSchedule] = useState();
+  const [currentSchedule, setCurrentSchedule] = useState(0);
   const [selected, setSelected] = useState([]); // Sun: 0-15, Mon: 16-31, Tue: 32-47, ..., Sat: 96-111
-  const [info, setInfo] = useState({})
-  // const [editData, setEditData] = useState([]); 
+  const [info, setInfo] = useState({});
 
   const tagColor = [
     'Crimson',
@@ -229,16 +228,16 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
         ];
         */
         console.log(data);
-        setScheduleList(data);
-        if (data?.length > 0) {
-          setCurrentSchedule(0);
-          setSubjectList(data[0].allSubjects ?? []);
-          setPrice(data[0].pricePerSlot ?? 0);
-          setTempPrice(data[0].pricePerSlot ?? 0);
+        setScheduleList(data.scheduleList ?? []);
+        setPrice(data.pricePerSlot ?? 0);
+        setTempPrice(data.pricePerSlot ?? 0);
+        if (data.scheduleList?.length > 0) {
+          // setCurrentSchedule(0);
+          setSubjectList(data.scheduleList[0].allSubjects ?? []);
         }
       })
-      .catch(({ response }) => {
-        console.log(response);
+      .catch((res) => {
+        console.log(res);
       });
   }, []);
 
@@ -249,14 +248,13 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
   useEffect(() => {
     if (scheduleList[currentSchedule]) {
       setSubjectList(scheduleList[currentSchedule].allSubjects);
-      setPrice(scheduleList[currentSchedule].pricePerSlot);
-      setTime('Day Time');
+      // setTime('Day Time');
     }
   }, [currentSchedule]);
 
-  useEffect(() => {
-    console.log(tempPrice);
-  }, [tempPrice]);
+  // useEffect(() => {
+  //   console.log(tempPrice);
+  // }, [tempPrice]);
 
   const sendEditData = async (subject, description) => {
     console.log(subject)
@@ -286,11 +284,10 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
       
     })
 
-  }
-
   const savePrice = () => {
     console.log('saving Price...', tempPrice);
     setPrice(tempPrice ? tempPrice : 0);
+    // Patch to backend.....
     setEditingPrice(false);
   };
 
@@ -306,18 +303,83 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
 
   const onViewInfo = (slotData) => {
     setShowModal('info');
-    setInfo(slotData)
-  }
+    setInfo(slotData);
+  };
 
-  //can fix
-  const handleDelete = () => {
-    sendEditData('','')
-  }
+  const getDeletingSlot = () => {
+    const selectedList = [];
+    const allSlots = [];
+    selected.sort();
+    scheduleList[currentSchedule].days.forEach(({ day, slots }) => {
+      slots.forEach(({ slot, students }) => {
+        const dateIdx = DAY.indexOf(day);
+        const haveStudent = students && students.length > 0 ? true : false;
+        if (dateIdx !== -1)
+          allSlots.push({ haveStudent, slotIdx: dateIdx * 16 + slot });
+      });
+    });
+    let dayList = [];
+    let currentDay = 0;
+    try {
+      selected.forEach((idx) => {
+        const slot = allSlots.filter((slot) => slot.slotIdx === idx);
+        if (slot.length > 0) {
+          // If tutor already have that slot //
+          // If that slot have to student => user cannot delete error //
+          if (slot[0].haveStudent) {
+            throw BreakException;
+          } else {
+            // If that slot don't have to student => push in array before delete the array //
+            if (Math.floor(idx / 16) === currentDay) dayList.push(idx % 16);
+            else {
+              selectedList.push({ day: DAY[currentDay], slots: dayList });
+              dayList = [];
+              currentDay++;
+            }
+          }
+        }
+      });
+      if (dayList.length > 0)
+        selectedList.push({ day: DAY[currentDay], slots: dayList });
+    } catch (err) {
+      if (err === BreakException) {
+        alert(
+          "You can't delete this slot because someone have aleady book this slot."
+        );
+        console.log(
+          "You can't delete this slot because someone have aleady book this slot."
+        );
+      }
+    }
+    return selectedList;
+  };
+
+  const handleDelete = async () => {
+    // Editdata('', '');
+    console.log('Deleting...', getDeletingSlot());
+    // await client({
+    //   method: 'DELETE',
+    //   url: '/schedule',
+    //   params: {
+    //     _id: scheduleList[currentSchedule]._id
+    //   },
+    //   data: {
+    //     days: getDeletingSlot()
+    //   }
+    // })
+    // .then(() => {
+    setSelected([]);
+    setShowModal('none');
+    // })
+    // .catch((res) => {
+    //   console.log(res)
+    // })
+  };
 
   //can fix
   const handleCancel = () => {
-    setShowModal('none')
-  }
+    setShowModal('none');
+  };
 
   const selectedToDayAndSlot = async (subject, description, _callback) => {
     const dayList = [{
@@ -451,7 +513,7 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
       return (
         <>
           <div style={{ display: 'flex', width: '100%' }}>
-            <Button variant="danger" onClick={deleteSlot}>
+            <Button variant="danger" onClick={() => setShowModal('delete')}>
               Delete Selected
             </Button>
           </div>
@@ -473,7 +535,10 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
                 color: COLORS.white,
                 marginLeft: '2%',
               }}
-              onClick={() => {setShowModal('edit'); setEditing(true);}}
+              onClick={() => {
+                setShowModal('edit');
+                setEditing(true);
+              }}
             >
               Edit
             </Button>
