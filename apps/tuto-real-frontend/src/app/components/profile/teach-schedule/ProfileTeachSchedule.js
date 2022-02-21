@@ -258,25 +258,6 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
     console.log(tempPrice);
   }, [tempPrice]);
 
-  const sendData = async () => {
-    // await client({
-    //     method: "PATCH",
-    //     // url: `/user/${targetEmail}`,
-    //     url: `/user`,
-    //     params: {
-    //         _id: targetId
-    //         },
-    //     data: {
-    //         subjects: tempTeachingInfo.subjectList,
-    //         description: tempTeachingInfo.description
-    //     }
-    // }).then(({data}) => {
-    //     console.log(data)
-    // }).catch(({response}) => {
-    //     console.log(response)
-    // })
-  };
-
   const sendEditData = async (subject, description) => {
     console.log(subject)
     console.log(description)
