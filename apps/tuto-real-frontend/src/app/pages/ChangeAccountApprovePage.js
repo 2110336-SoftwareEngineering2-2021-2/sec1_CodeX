@@ -171,8 +171,7 @@ const ChangeAccountApprovePage = () => {
       </div>
 
       {/* modal component */}
-      <ModalTwoButton
-        show={showModalApprove}
+      {showModalApprove && <ModalTwoButton
         title="Please confirm the approvol"
         header="The user will become a tutor role. Are you sure?"
         leftFunc={handleApprove}
@@ -184,10 +183,9 @@ const ChangeAccountApprovePage = () => {
         isPending={isPending}
         leftPending="Approving..."
         leftPendingColor="var(--lightgray)"
-      />
+      />}
 
-      <ModalTwoButton
-        show={showModalReject}
+      {showModalReject && <ModalTwoButton
         title="Please confirm the reject"
         header="The request will be deleted. Are you sure?"
         leftFunc={handleReject}
@@ -199,7 +197,7 @@ const ChangeAccountApprovePage = () => {
         isPending={isPending}
         leftPending="Rejecting..."
         leftPendingColor="var(--lightgray)"
-      />
+      />}
     </div>
   );
 };

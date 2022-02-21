@@ -4,7 +4,6 @@ import './ModalTwoButton.css';
 
 const ModalTwoButton = (props) => {
   const {
-    show,
     title,
     header,
     leftFunc,
@@ -23,7 +22,7 @@ const ModalTwoButton = (props) => {
   if(leftColor === 'red')(
     leftVariant='danger'
   )
-  else if(leftColor === 'yellow')(
+  else if(leftColor === 'var(--yellow)')(
     leftVariant='warning'
   )
   else if(leftColor === 'var(--third)')(
@@ -33,7 +32,7 @@ const ModalTwoButton = (props) => {
   return (
     <div>
       <Modal
-        show={show}
+        show={true}
         backdrop="static"
         onHide={rightFunc}
         keyboard={false}
@@ -63,7 +62,7 @@ const ModalTwoButton = (props) => {
           {!isPending && (
             <Button
               variant={leftVariant ?? undefined}
-              style={{ backgroundColor: leftColor, borderColor: leftColor }}
+              style={{color: 'white', backgroundColor: leftColor, borderColor: leftColor }}
               onClick={leftFunc ?? undefined}
             >
               {leftMessage}

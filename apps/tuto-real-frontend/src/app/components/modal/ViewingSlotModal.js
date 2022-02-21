@@ -3,14 +3,14 @@ import { Modal, Tabs, Tab, Button } from 'react-bootstrap';
 import './ViewingSlotModal.css';
 
 const ViewingSlotModal = (props) => {
-  const { show, cancelFunc, number, subject, description, studentList} = props;
+  const {cancelFunc, number, subject, description, studentList} = props;
 
   const [tabValue, setTabValue] = useState('Information');
 
   return (
     <div>
       <Modal
-        show={show}
+        show={true}
         backdrop="static"
         onHide={cancelFunc}
         keyboard={false}

@@ -125,8 +125,7 @@ const EditingSlotModal = (props) => {
         </Modal.Footer>
       </Modal>
 
-      <ModalTwoButton
-        show={showModal}
+      {showModal && <ModalTwoButton
         title="Do you want to save these changes?"
         header="If you click confirm button, the following change will be applied to the selected slots."
         leftFunc={() => confirmFunc(subject, description)}
@@ -138,7 +137,7 @@ const EditingSlotModal = (props) => {
         isPending={isPending}
         leftPending="Saving..."
         leftPendingColor="var(--lightgray)"
-      />
+      />}
     </div>
   );
 };
