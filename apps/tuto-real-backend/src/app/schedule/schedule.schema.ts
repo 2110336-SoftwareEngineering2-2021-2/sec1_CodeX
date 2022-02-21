@@ -3,7 +3,6 @@ import { UserSchema } from '../user/user.schema';
 
 export const ScheduleSchema = new mongoose.Schema({
   startDate: { type: Date, require: true },
-  pricePerSlot: { type: Number, require: true },
   days: [
     {
       _id: false,
@@ -37,4 +36,3 @@ export const ScheduleSchema = new mongoose.Schema({
 });
 
 ScheduleSchema.path('startDate').required(true);
-ScheduleSchema.path('pricePerSlot').required(true);

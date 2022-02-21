@@ -1,7 +1,7 @@
 import { Document } from 'mongoose';
 export interface Schedule extends Document {
   readonly startDate: Date;
-  pricePerSlot: Number;
+
   days: [
     {
       day: String;

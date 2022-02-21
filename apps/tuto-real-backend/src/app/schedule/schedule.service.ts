@@ -9,10 +9,12 @@ import { InjectModel } from '@nestjs/mongoose';
 import { ideahub_v1beta } from 'googleapis';
 import { datacatalog } from 'googleapis/build/src/apis/datacatalog';
 import { Model } from 'mongoose';
+import { TutorReqModule } from '../tutor-req/tutor-req.module';
 import { User } from '../user/user.interface';
 import { ScheduleDto } from './schedule.dto';
 import { Schedule } from './schedule.interface';
 import { UpdateScheduleDto } from './updateSchedule.dto';
+import { UpdateSlotWithDeleteDto } from './updateSlotWithDelete.dto';
 
 const mongoose = require('mongoose');
 
@@ -125,60 +127,66 @@ export class ScheduleService {
     }
   }
 
-  public async updateSchedule(
-    id: string,
-    dto: UpdateScheduleDto
-  ): Promise<any> {
-    //update schedule
-    try {
-      const schedule_check = await this.scheduleModel.findById(
-        mongoose.Types.ObjectId(id)
-      );
-      if (!schedule_check)
-        return { success: false, data: 'cannot find a schedule' };
+  // public async updateSchedule(
+  //   id: string,
+  //   dto: UpdateScheduleDto
+  // ): Promise<any> {
+  //   //update schedule
+  //   try {
+  //     const schedule_check = await this.scheduleModel.findById(
+  //       mongoose.Types.ObjectId(id)
+  //     );
+  //     if (!schedule_check)
+  //       throw new NotFoundException({
+  //         success: false,
+  //         data: 'cannot find a schedule',
+  //       });
 
-      const schedule = await this.scheduleModel
-        .updateOne(
-          { _id: mongoose.Types.ObjectId(id) },
-          { pricePerSlot: dto.pricePerSlot, days: dto.days },
-          { upsert: true }
-        )
-        .exec();
-      if (!schedule) {
-        return { success: false, message: 'fail to update' };
-      }
+  //     const schedule = await this.scheduleModel
+  //       .updateOne(
+  //         { _id: mongoose.Types.ObjectId(id) },
+  //         { days: dto.days },
+  //         { upsert: true }
+  //       )
+  //       .exec();
+  //     if (!schedule) {
+  //       return { success: false, message: 'fail to update' };
+  //     }
 
-      //get all subject in a new schedule
-      const subjects_schedule = await this.scheduleModel.distinct(
-        'days.slots.subject',
-        { _id: mongoose.Types.ObjectId(id) }
-      );
+  //     //get all subject in a new schedule
+  //     const subjects_schedule = await this.scheduleModel.distinct(
+  //       'days.slots.subject',
+  //       { _id: mongoose.Types.ObjectId(id) }
+  //     );
 
-      const tutor = await this.userModel.findOne({ schedule_id: { $in: id } });
+  //     const tutor = await this.userModel.findOne({ schedule_id: { $in: id } });
 
-      await this.userModel
-        .updateOne(
-          { _id: tutor._id },
-          { $set: { subjects: subjects_schedule } },
-          { upsert: true }
-        )
-        .exec();
+  //     await this.userModel
+  //       .updateOne(
+  //         { _id: tutor._id },
+  //         { $set: { subjects: subjects_schedule } },
+  //         { upsert: true }
+  //       )
+  //       .exec();
 
-      const schedule_return = await this.scheduleModel.findById(
-        mongoose.Types.ObjectId(id)
-      );
-      return { success: true, data: schedule_return };
-    } catch (err) {
-      return { success: false, data: err.message };
-    }
-  }
+  //     const schedule_return = await this.scheduleModel.findById(
+  //       mongoose.Types.ObjectId(id)
+  //     );
+  //     return { success: true, data: schedule_return };
+  //   } catch (err) {
+  //     return { success: false, data: err.message };
+  //   }
+  // }
 
   public async deleteSchedule(id: string) {
     const schedule_check = await this.scheduleModel.findById(
       mongoose.Types.ObjectId(id)
     );
     if (!schedule_check)
-      throw new NotFoundException({ success: false, data: 'mos' });
+      throw new NotFoundException({
+        success: false,
+        data: 'not found the schedule',
+      });
 
     //get tutor information
     const tutor = await this.userModel.findOne({ schedule_id: { $in: id } });
@@ -201,7 +209,6 @@ export class ScheduleService {
         _id: mongoose.Types.ObjectId(schedules[i]),
       });
       subjects_user = [...new Set([...subjects_user, ...subjects])];
-      console.log(schedules[i], subjects_user);
     }
 
     schedule_id.splice(schedule_id.indexOf(id), 1);
@@ -218,5 +225,41 @@ export class ScheduleService {
       .exec();
 
     return { success: true, data: {} };
+  }
+
+  public async updateSlotWithDelete(id: string, dto: UpdateSlotWithDeleteDto) {
+    //everything is checked by frontend
+
+    let schedule;
+    dto.days.forEach(async (element) => {
+      schedule = await this.scheduleModel
+        .findByIdAndUpdate(
+          mongoose.Types.ObjectId(id),
+          {
+            $pull: { 'days.$[elem].slots': { slot: { $in: element.slots } } },
+          },
+          {
+            arrayFilters: [{ 'elem.day': element.day }],
+            new: true,
+          }
+        )
+        .exec();
+    });
+
+    const subjects = await this.scheduleModel.distinct('days.slots.subject', {
+      _id: mongoose.Types.ObjectId(id),
+    });
+
+    const tutor = await this.userModel.findOneAndUpdate(
+      { schedule_id: { $in: id } },
+      { subjects },
+      { new: true }
+    );
+
+    return { success: true, data: schedule.days };
+  }
+
+  public async updateSlotWithAdd(id: string, dto: UpdateScheduleDto) {
+    return { message: 'eiei' };
   }
 }
