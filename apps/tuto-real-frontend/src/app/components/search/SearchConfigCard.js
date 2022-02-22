@@ -44,7 +44,10 @@ const SearchConfigCard = ({searchInfo, setSearchInfo, onClickFilterButton, onSea
                     <button 
                         className='search-button'
                         type='button'
-                        onClick={onSearch}
+                        onClick={() => {
+                            // console.log("click search button",searchInfo)
+                            onSearch()
+                            }}
                         >
                         Search
                     </button>
