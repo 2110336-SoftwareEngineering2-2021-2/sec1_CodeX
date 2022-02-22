@@ -520,6 +520,31 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
           studentList={info.students ?? []}
         />
       )}
+
+      {showModal==='book' && <ModalTwoButton
+        title='Do you want to enroll on this course?'
+        header={
+          <div>
+            Are you sure you want to enroll on the selected slotsIf you click confirm button, the request will be sent to this tutor. After this tutor accept your request, you will have to pay
+            <span style={{
+              fontSize: '18px', 
+              fontWeight: '600', 
+              color: 'var(--primary)'
+            }}>
+              {` 800 THB. (dummy cost) ` /* {scheduleList[currentSchedule].price} */}
+            </span>
+          </div>
+        }
+        leftFunc=''
+        rightFunc={() => setShowModal('none')}
+        leftMessage='Confirm'
+        rightMessage='Cancel'
+        leftColor='var(--yellow)'
+        rightColor='cancel-button'
+        isPending={isPending}
+        leftPending='Booking...'
+        leftPendingColor='var(--lightgray)'
+      />}
     </>
   );
 };
