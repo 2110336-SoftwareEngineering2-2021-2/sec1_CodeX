@@ -260,6 +260,62 @@ export class ScheduleService {
   }
 
   public async updateSlotWithAdd(id: string, dto: UpdateScheduleDto) {
-    return { message: 'eiei' };
+    //check valid slot
+    let schedule;
+
+    const { days } = await this.scheduleModel
+      .findById(mongoose.Types.ObjectId(id))
+      .exec();
+
+    dto.days.forEach(async (e) => {
+      const day = e.day;
+      const slots = e.slots;
+      const idx = days.findIndex((x) => x.day == day);
+      if (idx == -1) {
+        await this.scheduleModel.findByIdAndUpdate(
+          mongoose.Types.ObjectId(id),
+          {
+            $push: { days: e },
+          },
+          { new: true }
+        );
+      } else {
+        days[idx].slots.forEach((element) => {
+          let daySlot = [];
+          daySlot.push;
+        });
+        e.slots.forEach(async (element) => {
+          await this.scheduleModel.findByIdAndUpdate(
+            mongoose.Types.ObjectId(id),
+            {
+              $addToSet: { 'days.$[elem].slots': element },
+            },
+            { arrayFilters: [{ 'elem.day': e.day }] }
+          );
+        });
+      }
+    });
+
+    const subjects = await this.scheduleModel.distinct('days.slots.subject', {
+      _id: mongoose.Types.ObjectId(id),
+    });
+
+    const tutor = await this.userModel.findOneAndUpdate(
+      { schedule_id: { $in: id } },
+      { subjects },
+      { new: true }
+    );
+
+    return { success: true, data: days };
   }
 }
+
+// days: [{
+//   day: String,
+//   slots: [{
+//       slot: Number,
+//       subject: String,
+//       description: String,
+
+//   }]
+// }]

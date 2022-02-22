@@ -1,5 +1,5 @@
 export class UpdateScheduleDto {
-  days: [
+  readonly days: [
     {
       day: String;
       slots: [
