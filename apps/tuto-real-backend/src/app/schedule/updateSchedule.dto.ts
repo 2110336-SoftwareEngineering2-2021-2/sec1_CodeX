@@ -1,6 +1,5 @@
 export class UpdateScheduleDto {
-  pricePerSlot: Number;
-  days: [
+  readonly days: [
     {
       day: String;
       slots: [
@@ -8,18 +7,6 @@ export class UpdateScheduleDto {
           slot: Number;
           subject: String;
           description: String;
-          students: [
-            {
-              status: {
-                type: String;
-                enum: ['Approved', 'Pending'];
-                default: 'Pending';
-              };
-              id: String;
-              firstName: String;
-              lastName: String;
-            }
-          ];
         }
       ];
     }
