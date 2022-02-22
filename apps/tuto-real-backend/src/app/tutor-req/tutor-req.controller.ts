@@ -20,27 +20,33 @@ import { uploadImage } from '../util/google';
 import { TutorReqDto } from './tutor-req.dto';
 import { TutorReqService } from './tutor-req.service';
 import { updateStatusDto } from './updateStatus.dto';
+import {
+  ApiTags,
+  ApiBearerAuth,
+  ApiResponse,
+  ApiOperation,
+  ApiBody,
+  OmitType,
+  PickType,
+} from '@nestjs/swagger';
 
+@ApiTags("TutorReq")
 @Controller('tutorReq')
 export class TutorReqController {
   constructor(private readonly service: TutorReqService) {}
 
-  @Post('create1')
-  @UseInterceptors(
-    FileFieldsInterceptor([
-      { name: 'citizenID', maxCount: 1 },
-      { name: 'transcription', maxCount: 1 },
-    ])
-  )
-  create(@UploadedFiles() files, @Body() dto: TutorReqDto) {
-    return this.service.create(files.citizenID, files.transcription, dto);
-  }
+  
 
+  @ApiOperation({ summary: 'Create request' })
+  @ApiBody({type:PickType(TutorReqDto, ['email','citizenID64','transcription64'] as const) })
+  @ApiResponse({ status : 201 })
   @Post('create')
   create1(@Body() dto: TutorReqDto) {
     return this.service.create1(dto);
   }
 
+  @ApiOperation({ summary: 'Get all request' })
+  @ApiResponse({ status : 201 , type : OmitType(TutorReqDto,['citizenID64','transcription64'] as const)})
   @Get()
   findAll() {
     return this.service.findAll();

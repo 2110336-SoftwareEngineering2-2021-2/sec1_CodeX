@@ -43,9 +43,6 @@ export class CriteriaQuery{
 export class profileImg{
   @ApiProperty()
   url : String
-
-  @ApiProperty()
-  _id : String
 }
 export class nestedData{
   
@@ -60,8 +57,7 @@ export class nestedData{
 
     @ApiProperty({type:()=>profileImg})
     profileImg :{
-      url : String,
-      _id : String
+      url : String
     }
     
     @ApiProperty()

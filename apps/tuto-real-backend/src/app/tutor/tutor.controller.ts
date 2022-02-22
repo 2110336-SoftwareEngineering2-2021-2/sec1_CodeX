@@ -36,7 +36,7 @@ export class TutorController {
   })
   searchTutor(@Query() q) {
     var dto = new CriteriaDto()
-    console.log(q,dto)
+    //console.log(q,dto)
     dto.subjects = (!!q.subjects)? q.subjects.split(","):undefined
     if (!!q.ratePrice){
       var price = q.ratePrice.split(",")
@@ -47,11 +47,11 @@ export class TutorController {
     dto.days = (!!q.days)? q.days.split(","):undefined
     return this.tutorService.searchTutor(dto);
   }
-  /*
+  
   @Get("/send")
   sendMail(){
     return this.tutorService.send()
 
-  }*/
+  }
 
 }
