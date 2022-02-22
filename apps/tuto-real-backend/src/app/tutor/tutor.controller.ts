@@ -14,19 +14,26 @@ import { TutorReqDto } from '../tutor-req/tutor-req.dto';
 import { UserDto } from '../user/user.dto';
 import { User } from '../user/user.interface';
 import { sendMail } from '../util/google';
-import { CriteriaDto } from './cirteria.dto';
+import { CriteriaDto, CriteriaQuery, resultDto } from './cirteria.dto';
 import { TutorService } from './tutor.service';
+import { ApiTags,ApiBearerAuth,ApiResponse,ApiOperation,ApiBody, ApiQuery} from '@nestjs/swagger';
 
+@ApiTags('Tutor')
 @Controller('tutor')
 export class TutorController {
   constructor(private readonly tutorService: TutorService) {}
 
-  @Get()
-  getTutor() {
-    return this.tutorService.getTutor();
-  }
-
+  
   @Get("/search")
+  @ApiOperation({ summary: 'Search tutor' })
+  @ApiQuery({
+    description: 'Criteria',
+    type:CriteriaQuery,
+  })
+  @ApiResponse({
+    status : 200 ,
+    type : resultDto
+  })
   searchTutor(@Query() q) {
     var dto = new CriteriaDto()
     console.log(q,dto)
@@ -40,27 +47,11 @@ export class TutorController {
     dto.days = (!!q.days)? q.days.split(","):undefined
     return this.tutorService.searchTutor(dto);
   }
-
+  /*
   @Get("/send")
   sendMail(){
     return this.tutorService.send()
 
-  }
+  }*/
 
-  /*@Get(':id')
-    GetProfileByID(@Param('id') id: String) {
-        return this.service.GetProfileByID(id); 
-    }*/
-
-  /*@Post()
-    @UseInterceptors(FileInterceptor('img'))
-    UploadImage(@UploadedFile() file , @Body() dto:UserDto) {
-        //if (typeof (dto.subjects) == "string")
-           // dto.subjects = 
-        console.log(dto, file)
-        //const fileB64 = file.buffer.toString('base64')
-        dto.profileImg = { "name" : file.originalname , "data" : file.buffer , "type" : file.mimetype}
-        return this.service.UploadImage(dto);
-      
-    }*/
 }
