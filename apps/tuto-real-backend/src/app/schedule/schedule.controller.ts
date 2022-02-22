@@ -25,15 +25,6 @@ export class ScheduleController {
     }
   }
 
-  // @Patch()
-  // updateSchedule(@Query() query: any, @Body() dto: UpdateScheduleDto) {
-  //   try {
-  //     return this.service.updateSchedule(query._id, dto);
-  //   } catch (err) {
-  //     return err;
-  //   }
-  // }
-
   @Patch('/add')
   updateSlotWithAdd(@Query() query: any, @Body() dto: UpdateScheduleDto) {
     try {

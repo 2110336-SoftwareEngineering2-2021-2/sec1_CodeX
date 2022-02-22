@@ -127,57 +127,6 @@ export class ScheduleService {
     }
   }
 
-  // public async updateSchedule(
-  //   id: string,
-  //   dto: UpdateScheduleDto
-  // ): Promise<any> {
-  //   //update schedule
-  //   try {
-  //     const schedule_check = await this.scheduleModel.findById(
-  //       mongoose.Types.ObjectId(id)
-  //     );
-  //     if (!schedule_check)
-  //       throw new NotFoundException({
-  //         success: false,
-  //         data: 'cannot find a schedule',
-  //       });
-
-  //     const schedule = await this.scheduleModel
-  //       .updateOne(
-  //         { _id: mongoose.Types.ObjectId(id) },
-  //         { days: dto.days },
-  //         { upsert: true }
-  //       )
-  //       .exec();
-  //     if (!schedule) {
-  //       return { success: false, message: 'fail to update' };
-  //     }
-
-  //     //get all subject in a new schedule
-  //     const subjects_schedule = await this.scheduleModel.distinct(
-  //       'days.slots.subject',
-  //       { _id: mongoose.Types.ObjectId(id) }
-  //     );
-
-  //     const tutor = await this.userModel.findOne({ schedule_id: { $in: id } });
-
-  //     await this.userModel
-  //       .updateOne(
-  //         { _id: tutor._id },
-  //         { $set: { subjects: subjects_schedule } },
-  //         { upsert: true }
-  //       )
-  //       .exec();
-
-  //     const schedule_return = await this.scheduleModel.findById(
-  //       mongoose.Types.ObjectId(id)
-  //     );
-  //     return { success: true, data: schedule_return };
-  //   } catch (err) {
-  //     return { success: false, data: err.message };
-  //   }
-  // }
-
   public async deleteSchedule(id: string) {
     const schedule_check = await this.scheduleModel.findById(
       mongoose.Types.ObjectId(id)
@@ -261,15 +210,18 @@ export class ScheduleService {
 
   public async updateSlotWithAdd(id: string, dto: UpdateScheduleDto) {
     //check valid slot
-    let schedule;
 
     const { days } = await this.scheduleModel
       .findById(mongoose.Types.ObjectId(id))
       .exec();
+    if (!days)
+      throw new NotFoundException({
+        success: false,
+        data: 'cannot find the schedule',
+      });
 
     dto.days.forEach(async (e) => {
       const day = e.day;
-      const slots = e.slots;
       const idx = days.findIndex((x) => x.day == day);
       if (idx == -1) {
         await this.scheduleModel.findByIdAndUpdate(
@@ -280,18 +232,35 @@ export class ScheduleService {
           { new: true }
         );
       } else {
+        let daySlot = [];
         days[idx].slots.forEach((element) => {
-          let daySlot = [];
-          daySlot.push;
+          daySlot.push(element.slot);
         });
         e.slots.forEach(async (element) => {
-          await this.scheduleModel.findByIdAndUpdate(
-            mongoose.Types.ObjectId(id),
-            {
-              $addToSet: { 'days.$[elem].slots': element },
-            },
-            { arrayFilters: [{ 'elem.day': e.day }] }
-          );
+          var index = daySlot.indexOf(element.slot);
+          if (index == -1) {
+            await this.scheduleModel.findByIdAndUpdate(
+              mongoose.Types.ObjectId(id),
+              {
+                $addToSet: { 'days.$[elem].slots': element },
+              },
+              { arrayFilters: [{ 'elem.day': e.day }], new: true }
+            );
+          } else {
+            await this.scheduleModel.findByIdAndUpdate(
+              mongoose.Types.ObjectId(id),
+              {
+                $set: { 'days.$[elem].slots.$[index]': element },
+              },
+              {
+                arrayFilters: [
+                  { 'elem.day': e.day },
+                  { 'index.slot': element.slot },
+                ],
+                new: true,
+              }
+            );
+          }
         });
       }
     });
@@ -300,22 +269,14 @@ export class ScheduleService {
       _id: mongoose.Types.ObjectId(id),
     });
 
-    const tutor = await this.userModel.findOneAndUpdate(
+    await this.userModel.findOneAndUpdate(
       { schedule_id: { $in: id } },
       { subjects },
       { new: true }
     );
-
-    return { success: true, data: days };
+    const schedule = await this.scheduleModel.findById(
+      mongoose.Types.ObjectId(id)
+    );
+    return { success: true, data: schedule.days };
   }
 }
-
-// days: [{
-//   day: String,
-//   slots: [{
-//       slot: Number,
-//       subject: String,
-//       description: String,
-
-//   }]
-// }]
