@@ -10,9 +10,17 @@ import {
 import { ScheduleDto } from './schedule.dto';
 import { ScheduleService } from './schedule.service';
 import { UpdateScheduleDto } from './updateSchedule.dto';
-import { ApiTags,ApiBearerAuth,ApiResponse,ApiOperation,ApiBody, ApiQuery} from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiBearerAuth,
+  ApiResponse,
+  ApiOperation,
+  ApiBody,
+  ApiQuery,
+} from '@nestjs/swagger';
+import { UpdateSlotWithDeleteDto } from './updateSlotWithDelete.dto';
 
-@ApiTags("Schedule")
+@ApiTags('Schedule')
 @Controller('schedule')
 export class ScheduleController {
   constructor(private readonly service: ScheduleService) {}
