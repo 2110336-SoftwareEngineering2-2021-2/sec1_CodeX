@@ -4,23 +4,23 @@ export interface Schedule extends Document {
 
   days: [
     {
-      day: String;
+      day: string;
       slots: [
         {
-          slot: Number;
-          subject: String;
-          description: String;
+          slot: number;
+          subject: string;
+          description: string;
           students: {
             type: [
               {
                 status: {
-                  type: String;
+                  type: string;
                   enum: ['Approved', 'Pending'];
                   default: 'Pending';
                 };
-                id: String;
-                firstName: String;
-                lastName: String;
+                id: string;
+                firstName: string;
+                lastName: string;
               }
             ];
             default: undefined;

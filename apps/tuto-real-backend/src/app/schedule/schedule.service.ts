@@ -43,7 +43,7 @@ export class ScheduleService {
     if(id) {
       const user: User = await this.userModel.findOne({ _id: mongoose.Types.ObjectId(id) }).exec();
       if(!user) return {success: false, data: "User not found"}
-      const scheduleIdList: String[] = user.schedule_id
+      const scheduleIdList: string[] = user.schedule_id
       if(!scheduleIdList) return {success: false, data: "This user has no schedules"}
 
       const scheduleList = []

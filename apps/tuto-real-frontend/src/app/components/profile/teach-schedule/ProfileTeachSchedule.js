@@ -257,32 +257,33 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
   // }, [tempPrice]);
 
   const sendEditData = async (subject, description) => {
-    console.log(subject)
-    console.log(description)
+    console.log(subject);
+    console.log(description);
 
-    setIsPending(true)
-    const editData = (await selectedToDayAndSlot(subject, description));
-    console.log(editData)
+    setIsPending(true);
+    const editData = await selectedToDayAndSlot(subject, description);
+    console.log(editData);
     await client({
       method: 'PATCH',
       url: '/schedule',
       params: {
-        _id: scheduleList[currentSchedule]._id //_id ของ schedule
+        _id: scheduleList[currentSchedule]._id, //_id ของ schedule
       },
       data: {
         // ต้องการ list ของ day กับ slot ในการส่งข้อมูล
-        days: editData
-      }
-      
-    }).then( ({data}) => {
-      console.log(data)
-      setIsPending(false)
-      setShowModal('none')
-      setSelected([])
-    }).catch( ({response}) => {
-      console.log(response)
-      
+        days: editData,
+      },
     })
+      .then(({ data }) => {
+        console.log(data);
+        setIsPending(false);
+        setShowModal('none');
+        setSelected([]);
+      })
+      .catch(({ response }) => {
+        console.log(response);
+      });
+  };
 
   const savePrice = () => {
     console.log('saving Price...', tempPrice);
@@ -297,9 +298,9 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
   };
 
   //can fix
-  const deleteSlot = () => {
-    setShowModal('delete');
-  };
+  // const deleteSlot = () => {
+  //   setShowModal('delete');
+  // };
 
   const onViewInfo = (slotData) => {
     setShowModal('info');
@@ -382,42 +383,46 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
   };
 
   const selectedToDayAndSlot = async (subject, description, _callback) => {
-    const dayList = [{
-      day: 'Sunday',
-      slots: []
-    },
-    {
-      day: 'Monday',
-      slots: []
-    },
-    {
-      day: 'Tuesday',
-      slots: []
-    },
-    {
-      day: 'Wednesday',
-      slots: []
-    },
-    {
-      day: 'Thursday',
-      slots: []
-    },
-    {
-      day: 'Friday',
-      slots: []
-    },
-    {
-      day: 'Saturday',
-      slots: []
+    const dayList = [
+      {
+        day: 'Sunday',
+        slots: [],
+      },
+      {
+        day: 'Monday',
+        slots: [],
+      },
+      {
+        day: 'Tuesday',
+        slots: [],
+      },
+      {
+        day: 'Wednesday',
+        slots: [],
+      },
+      {
+        day: 'Thursday',
+        slots: [],
+      },
+      {
+        day: 'Friday',
+        slots: [],
+      },
+      {
+        day: 'Saturday',
+        slots: [],
+      },
+    ];
+    selected.sort();
+    for (let i = 0; i != selected.length; i++) {
+      const dayIndex = Math.floor(selected[i] / 16);
+      dayList[dayIndex].slots = [
+        ...dayList[dayIndex].slots,
+        { slot: selected[i] % 16, subject, description },
+      ];
     }
-  ]
-    selected.sort()
-    for(let i=0; i != selected.length; i++){
-      const dayIndex = Math.floor(selected[i]/16)
-      dayList[dayIndex].slots = [...dayList[dayIndex].slots, {slot: selected[i]%16, subject, description}]
-    }
-    return dayList.filter(day => day.slots.length !== 0)
-  }
+    return dayList.filter((day) => day.slots.length !== 0);
+  };
 
   const goLeft = () => {
     if (currentSchedule) setCurrentSchedule(currentSchedule - 1);
@@ -678,38 +683,44 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
       </Form>
 
       {/* Delete selected modal */}
-      {showModal==='delete' && <ModalTwoButton 
-        title='Are you sure you want to delete these slots?'
-        header='If you click delete button, information of the selected slots will be deleted.'
-        leftFunc={handleDelete}
-        rightFunc={handleCancel}
-        leftMessage='Delete'
-        rightMessage='Cancel'
-        leftColor='red'
-        rightColor='cancel-button'
-        isPending={isPending}
-        leftPending='Deleting...'
-        leftPendingColor='var(--lightgray)'
-      />}
+      {showModal === 'delete' && (
+        <ModalTwoButton
+          title="Are you sure you want to delete these slots?"
+          header="If you click delete button, information of the selected slots will be deleted."
+          leftFunc={handleDelete}
+          rightFunc={handleCancel}
+          leftMessage="Delete"
+          rightMessage="Cancel"
+          leftColor="red"
+          rightColor="cancel-button"
+          isPending={isPending}
+          leftPending="Deleting..."
+          leftPendingColor="var(--lightgray)"
+        />
+      )}
 
-      {showModal==='edit' && <EditingSlotModal
-        show={isEditing}
-        setShow={setEditing}
-        allSubject={['Math', 'Art']} //get all subject
-        subjectIn='Choose your subject' //subject in slots
-        descriptionIn='' //description in slots
-        setModalState={setShowModal}
-        confirmFunc={sendEditData}
-        isPending={isPending}
-      />}
+      {showModal === 'edit' && (
+        <EditingSlotModal
+          show={isEditing}
+          setShow={setEditing}
+          allSubject={['Math', 'Art']} //get all subject
+          subjectIn="Choose your subject" //subject in slots
+          descriptionIn="" //description in slots
+          setModalState={setShowModal}
+          confirmFunc={sendEditData}
+          isPending={isPending}
+        />
+      )}
 
-      {showModal==='info' && <ViewingSlotModal
-        cancelFunc={handleCancel}
-        number={info.students? info.students.length : 0}
-        subject={info.subject}
-        description={info.description}
-        studentList={info.students?? []}
-      />}
+      {showModal === 'info' && (
+        <ViewingSlotModal
+          cancelFunc={handleCancel}
+          number={info.students ? info.students.length : 0}
+          subject={info.subject}
+          description={info.description}
+          studentList={info.students ?? []}
+        />
+      )}
     </>
   );
 };
