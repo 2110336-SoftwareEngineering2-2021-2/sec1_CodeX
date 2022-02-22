@@ -25,14 +25,27 @@ export class ScheduleController {
     }
   }
 
-  @Patch()
-  updateSchedule(@Query() query: any, @Body() dto: UpdateScheduleDto) {
+  @Patch('/add')
+  updateSlotWithAdd(@Query() query: any, @Body() dto: UpdateScheduleDto) {
     try {
-      return this.service.updateSchedule(query._id, dto);
+      return this.service.updateSlotWithAdd(query._id, dto);
     } catch (err) {
       return err;
     }
   }
+
+  @Patch('/delete')
+  updateSlotWithDelete(
+    @Query() query: any,
+    @Body() dto: UpdateSlotWithDeleteDto
+  ) {
+    try {
+      return this.service.updateSlotWithDelete(query._id, dto);
+    } catch (err) {
+      return err;
+    }
+  }
+
   @Get()
   getSchedule(@Query('_id') id: string) {
     try {

@@ -5,8 +5,8 @@ export const UserSchema = new mongoose.Schema({
   //tutor only
   subjects: { type: [String], default: undefined },
   description: { type: String, default: undefined },
-  ratePrice : {type : Number , default : undefined},
-  schedule : {type : Object , default : undefined},
+  ratePrice: { type: Number, default: undefined },
+  schedule: { type: Object, default: undefined },
 
   //basic info
 
@@ -25,7 +25,7 @@ export const UserSchema = new mongoose.Schema({
     type: ImgSchema,
     default: {},
   },
-  
+  pricePerSlot: { type: Number, default: 0 },
   schedule_id: [String],
 });
 
@@ -38,4 +38,3 @@ UserSchema.path('email').required(true);
 UserSchema.path('birthDate').required(true);
 UserSchema.path('address').required(true);
 UserSchema.path('citizenID').required(true);
-

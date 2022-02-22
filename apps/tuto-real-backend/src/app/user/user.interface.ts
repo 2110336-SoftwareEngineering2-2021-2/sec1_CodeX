@@ -4,9 +4,8 @@ export interface User extends Document {
   readonly subjects: { type: [String]; default: undefined };
   readonly description: { type: [String]; default: undefined };
 
-  ratePrice : {type : Number , default : undefined};
-  schedule : {type : Object, default : undefined};
-
+  ratePrice: { type: Number; default: undefined };
+  schedule: { type: Object; default: undefined };
 
   readonly firstName: String;
   readonly lastName: String;
@@ -24,5 +23,5 @@ export interface User extends Document {
     url: String;
   };
   schedule_id: [String];
- 
+  pricePerSlot: { type: Number; default: 0 };
 }
