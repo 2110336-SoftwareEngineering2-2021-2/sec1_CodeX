@@ -128,11 +128,6 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
     setEditingPrice(false);
   };
 
-  //can fix
-  // const deleteSlot = () => {
-  //   setShowModal('delete');
-  // };
-
   const onViewInfo = (slotData) => {
     setShowModal('info');
     setInfo(slotData);
@@ -507,14 +502,12 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
 
       {showModal === 'edit' && (
         <EditingSlotModal
-          show={isEditing}
-          setShow={setEditing}
-          allSubject={Object.keys(SUBJECTS)} //get all subject
-          subjectIn="Choose your subject" //subject in slots
-          descriptionIn="" //description in slots
-          setModalState={setShowModal}
-          confirmFunc={sendEditData}
-          isPending={isPending}
+        show={isEditing}
+        setShow={setEditing}
+        allSubject={['Math', 'Art', 'Physic', 'Chemistry', 'Biology']} //get all subject
+        setModalState={setShowModal}
+        confirmFunc={sendEditData}
+        isPending={isPending}
         />
       )}
 
