@@ -46,7 +46,7 @@ const HomePage = () => {
           <Carousel.Item>
             <img
               className="carousel-image"
-              src="https://wallpapercrafter.com/desktop/165563-Swiss-Alps-Switzerland-snowy-peak-mountains-field-trees-landscape-village-forest-grass-sunlight-sun-rays-sky-morning-fall.jpg"
+              src="https://wallpaperaccess.com/full/170249.jpg"
               alt="Second slide"
             />
             <Carousel.Caption>
