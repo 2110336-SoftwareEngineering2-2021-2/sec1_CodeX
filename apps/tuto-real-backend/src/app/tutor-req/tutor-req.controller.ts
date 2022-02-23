@@ -30,23 +30,30 @@ import {
   PickType,
 } from '@nestjs/swagger';
 
-@ApiTags("TutorReq")
+@ApiTags('TutorReq')
 @Controller('tutorReq')
 export class TutorReqController {
   constructor(private readonly service: TutorReqService) {}
 
-  
-
   @ApiOperation({ summary: 'Create request' })
-  @ApiBody({type:PickType(TutorReqDto, ['email','citizenID64','transcription64'] as const) })
-  @ApiResponse({ status : 201 })
+  @ApiBody({
+    type: PickType(TutorReqDto, [
+      'email',
+      'citizenID64',
+      'transcription64',
+    ] as const),
+  })
+  @ApiResponse({ status: 201 })
   @Post('create')
-  create1(@Body() dto: TutorReqDto) {
-    return this.service.create1(dto);
+  create(@Body() dto: TutorReqDto) {
+    return this.service.create(dto);
   }
 
   @ApiOperation({ summary: 'Get all request' })
-  @ApiResponse({ status : 201 , type : OmitType(TutorReqDto,['citizenID64','transcription64'] as const)})
+  @ApiResponse({
+    status: 201,
+    type: OmitType(TutorReqDto, ['citizenID64', 'transcription64'] as const),
+  })
   @Get()
   findAll() {
     return this.service.findAll();
@@ -56,6 +63,4 @@ export class TutorReqController {
   update(@Query('_id') id: string, @Body() dto: updateStatusDto) {
     return this.service.updateStatus(id, dto);
   }
-
-
 }

@@ -1,9 +1,9 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty } from '@nestjs/swagger';
 
 export class TutorReqDto {
   @ApiProperty()
-  
-  _id : String
+  _id: String;
+
   @ApiProperty()
   firstName: String;
 

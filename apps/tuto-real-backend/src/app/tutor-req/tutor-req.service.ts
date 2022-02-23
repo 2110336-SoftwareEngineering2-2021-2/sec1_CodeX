@@ -23,35 +23,7 @@ export class TutorReqService {
       .exec();
   }
 
-  async create(fileCitizen, fileTran, dto: TutorReqDto) {
-    dto.timeStamp = new Date();
-    await uploadImage('Evidence', fileCitizen[0]).then((url) => {
-      dto.citizenID = {
-        fileName: fileCitizen[0].originalname,
-        url: url,
-      };
-    });
-
-    await uploadImage('Evidence', fileTran[0]).then((url) => {
-      dto.transcription = {
-        fileName: fileTran[0].originalname,
-        url: url,
-      };
-    });
-
-    return await this.userModel
-      .find({ email: dto.email })
-      .exec()
-      .then(async (name) => {
-        dto.firstName = name[0].firstName;
-        dto.lastName = name[0].lastName;
-        return await this.reqModel.updateOne({ email: dto.email }, dto, {
-          upsert: true,
-        });
-      });
-  }
-
-  async create1(dto) {
+  async create(dto) {
     dto.timeStamp = new Date();
     await uploadImageBy64('Evidence', dto.citizenID64).then((url) => {
       dto.citizenID = {
