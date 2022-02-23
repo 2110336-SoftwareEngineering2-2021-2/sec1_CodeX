@@ -116,6 +116,30 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
       });
   };
 
+  const sendBooking = async () => {
+    // setIsPending(true)
+    // await client({
+    //   method: 'POST',
+    //   url: '/booking/create',
+    //   data: {
+    //     studentId: targetId,
+    //     schedule_id: scheduleList[currentSchedule]._id,
+    //     days: 
+    //   }
+
+    // }).then( ({data}) => {
+    //   console.log(data)
+    //   setIsPending(false)
+    //   setShowModal('none')
+    //   setSelected([])
+    //   fetchData()
+
+    // }).catch( ({response}) => {
+    //   console.log(response)
+      
+    // })
+  }
+
   const savePrice = () => {
     console.log('saving Price...', tempPrice);
     setPrice(tempPrice ? tempPrice : 0);
@@ -535,7 +559,7 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
             </span>
           </div>
         }
-        leftFunc=''
+        leftFunc={sendBooking}
         rightFunc={() => setShowModal('none')}
         leftMessage='Confirm'
         rightMessage='Cancel'
