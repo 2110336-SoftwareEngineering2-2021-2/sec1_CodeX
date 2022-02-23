@@ -8,14 +8,11 @@ import { UserSchema } from '../user/user.schema';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([
-      {name: 'Schedule', schema: ScheduleSchema}
-    ]),
-    MongooseModule.forFeature([{name: 'User', schema: UserSchema}]),
+    MongooseModule.forFeature([{ name: 'Schedule', schema: ScheduleSchema }]),
+    MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
   ],
   providers: [ScheduleService],
   controllers: [ScheduleController],
   exports: [ScheduleService],
 })
 export class ScheduleModule {}
-

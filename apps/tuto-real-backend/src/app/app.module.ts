@@ -8,6 +8,7 @@ import { TutorReqModule } from './tutor-req/tutor-req.module';
 import { TutorModule } from './tutor/tutor.module';
 import { UserModule } from './user/user.module';
 import { ScheduleModule } from './schedule/schedule.module';
+import { BookingModule } from './booking-req/booking.module';
 
 @Module({
   imports: [
@@ -18,7 +19,8 @@ import { ScheduleModule } from './schedule/schedule.module';
     TutorReqModule,
     TutorModule,
     UserModule,
-    ScheduleModule
+    ScheduleModule,
+    BookingModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -2,11 +2,10 @@ import * as mongoose from 'mongoose';
 import { TimePeriodDto } from '../util/timePeriod.dto';
 
 export const BookingSchema = new mongoose.Schema({
-  firstName: String,
-  lastName: String,
-  email: String,
+  student_id: { type: String, required: true },
+  schedule_id: { type: String, required: true },
+  days: [{ _id: false, day: String, slots: [Number] }],
   timeStamp: Date,
-  tutorMail: String,
-  status: String,
-  timePeriod: [TimePeriodDto],
+  totalPrice: Number,
+  status: { type: String, enum: ['Pending', 'Approved'], default: 'Pending' },
 });
