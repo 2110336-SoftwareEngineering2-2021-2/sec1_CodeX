@@ -1,4 +1,5 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty, OmitType, PickType } from "@nestjs/swagger";
+import { ProfileImg } from "../util/image.schema";
 
 export class TutorReqDto {
   @ApiProperty()
@@ -14,16 +15,11 @@ export class TutorReqDto {
   readonly email: String;
 
   @ApiProperty()
-  citizenID: {
-    fileName: String;
-    url: String;
-  };
+  citizenID: ProfileImg
+   
 
   @ApiProperty()
-  transcription: {
-    fileName: String;
-    url: String;
-  };
+  transcription: ProfileImg
 
   @ApiProperty()
   timeStamp: Date;
@@ -34,3 +30,6 @@ export class TutorReqDto {
   @ApiProperty()
   transcription64: String;
 }
+
+export class CreateTutorReq extends PickType(TutorReqDto, ['email','citizenID64','transcription64'] as const) {}
+export class ShowTutorReq extends OmitType(TutorReqDto,['citizenID64','transcription64'] as const){}
