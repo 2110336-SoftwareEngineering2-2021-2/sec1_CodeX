@@ -5,8 +5,6 @@ export const UserSchema = new mongoose.Schema({
   //tutor only
   subjects: { type: [String], default: undefined },
   description: { type: String, default: undefined },
-  schedule: { type: Object, default: undefined },
-
   //basic info
   firstName: { type: String, require: true },
   lastName: { type: String, require: true },

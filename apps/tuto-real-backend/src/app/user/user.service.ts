@@ -8,6 +8,7 @@ import { Model } from 'mongoose';
 import { deleteImg, uploadImage, uploadImageBy64 } from '../util/google';
 import { updateUserDto } from './updateUser.dto';
 import { UserDto } from './user.dto';
+import * as dotenv from 'dotenv';
 import { User } from './user.interface';
 const mongoose = require('mongoose');
 

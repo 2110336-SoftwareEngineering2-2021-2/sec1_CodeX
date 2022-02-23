@@ -24,9 +24,11 @@ export class BookingController {
     }*/
 
   @Post('/create')
-  Create(@Body() dto: BookingDto) {
-    dto.timeStamp = new Date();
-
-    return this.service.Create(dto);
+  createBooking(@Body() dto: BookingDto) {
+    try {
+      return this.service.createBooking(dto);
+    } catch (err) {
+      return err;
+    }
   }
 }
