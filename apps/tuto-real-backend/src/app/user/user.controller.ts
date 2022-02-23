@@ -10,28 +10,44 @@ import {
 import { updateUserDto } from './updateUser.dto';
 import { UserDto } from './user.dto';
 import { UserService } from './user.service';
-import { ApiTags,ApiBearerAuth,ApiResponse,ApiOperation,ApiBody, ApiQuery} from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiBearerAuth,
+  ApiResponse,
+  ApiOperation,
+  ApiBody,
+  ApiQuery,
+} from '@nestjs/swagger';
 
-@ApiTags("User")
+@ApiTags('User')
 @Controller('user')
 export class UserController {
   constructor(private readonly service: UserService) {}
 
   @Get()
   getProfile(@Query() query: any) {
-    return this.service.getProfile(query._id, query.email);
+    try {
+      return this.service.getProfile(query._id, query.email);
+    } catch (err) {
+      return err;
+    }
   }
 
   @Post('/create')
   createProfile(@Body() dto: UserDto) {
-    dto.profileImg = {
-      url: 'https://storage.googleapis.com/codex_img/Profile/default.jpg',
-    };
-    return this.service.createProfile(dto);
+    try {
+      return this.service.createProfile(dto);
+    } catch (err) {
+      return err;
+    }
   }
 
   @Patch()
   updateProfile(@Query('_id') id: string, @Body() dto: updateUserDto) {
-    return this.service.updateProfile(id, dto);
+    try {
+      return this.service.updateProfile(id, dto);
+    } catch (err) {
+      return err;
+    }
   }
 }

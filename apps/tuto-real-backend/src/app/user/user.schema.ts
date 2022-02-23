@@ -5,11 +5,9 @@ export const UserSchema = new mongoose.Schema({
   //tutor only
   subjects: { type: [String], default: undefined },
   description: { type: String, default: undefined },
-  ratePrice: { type: Number, default: undefined },
   schedule: { type: Object, default: undefined },
 
   //basic info
-
   firstName: { type: String, require: true },
   lastName: { type: String, require: true },
   phoneNumber: { type: String, require: true },
@@ -23,7 +21,9 @@ export const UserSchema = new mongoose.Schema({
   zoomJoinURL: { type: String },
   profileImg: {
     type: ImgSchema,
-    default: {},
+    default: {
+      url: 'https://storage.googleapis.com/codex_img/Profile/default.jpg',
+    },
   },
   pricePerSlot: { type: Number, default: 0 },
   schedule_id: [String],

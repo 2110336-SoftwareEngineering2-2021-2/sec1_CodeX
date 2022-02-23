@@ -1,10 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { deleteImg, uploadImage, uploadImageBy64 } from '../util/google';
 import { updateUserDto } from './updateUser.dto';
 import { UserDto } from './user.dto';
-import * as dotenv from 'dotenv'
 import { User } from './user.interface';
 const mongoose = require('mongoose');
 
@@ -14,69 +17,73 @@ export class UserService {
 
   public async getProfile(id: String, email: String): Promise<any> {
     let profile;
-    if (!!id) {
-      if (id.length != 24) return { success: false, data: 'User not found!' };
+    if (id) {
       profile = await this.userModel
         .findOne({ _id: mongoose.Types.ObjectId(id) })
         .exec();
-    } else if (!!email)
+    } else if (email) {
       profile = await this.userModel.findOne({ email }).exec();
-    else return { success: false, data: 'User not found!' };
-    if (!profile) return { success: false, data: 'User not found!' };
+    }
+
+    if (!profile)
+      throw new NotFoundException({ success: false, data: 'User not found' });
+
     return { success: true, data: profile };
   }
 
   public async createProfile(dto: UserDto): Promise<any> {
-    try {
-      const profile = await this.userModel.create(dto);
-      return { success: true, data: profile };
-    } catch (err) {
-      return { success: false, data: err.message };
-    }
+    const profile = await this.userModel.create(dto);
+
+    if (!profile)
+      throw new BadRequestException({
+        success: false,
+        data: 'Create not success',
+      });
+
+    return { success: true, data: profile };
   }
 
   public async updateProfile(id: String, dto: updateUserDto): Promise<any> {
-    if (dto.profile64 != null) {
-      await this.userModel
-        .findOne({ _id: mongoose.Types.ObjectId(id) })
-        .exec()
-        .then(async (result) => {
-          //if prev img is not default, delete it
-          console.log(result.profileImg.url.split('Profile/')[1]);
-          if (result.profileImg.url.split('Profile/')[1] != 'default.jpg') {
-            await deleteImg(
-              result.profileImg.url.split('Profile/')[1],
-              'Profile'
-            );
-          }
-          await uploadImageBy64('Profile', dto.profile64).then((url) => {
-            dto.profileImg = { url };
-          });
-        });
+    const profile = await this.userModel.findById(id).exec();
+    if (!profile)
+      throw new NotFoundException({
+        success: false,
+        data: 'User not found',
+      });
+
+    let url = profile.profileImg.url;
+    let pricePerSlot = dto.pricePerSlot
+      ? dto.pricePerSlot
+      : profile.pricePerSlot;
+
+    if (dto.profile64) {
+      //if prev img is not default, delete it
+      if (url.split('Profile/')[1] != 'default.jpg') {
+        await deleteImg(url.split('Profile/')[1], 'Profile');
+      }
+      url = await uploadImageBy64('Profile', dto.profile64);
     }
 
-    try {
-      await this.userModel
-        .updateOne(
-          { _id: mongoose.Types.ObjectId(id) },
-          {
-            subjects: dto.subjects,
-            description: dto.description,
-            firstName: dto.firstName,
-            lastName: dto.lastName,
-            address: dto.address,
-            birthDate: dto.birthDate,
-            profileImg: dto.profileImg,
-          },
-          { upsert: true }
-        )
-        .exec();
-      const profile = await this.userModel.find({
-        _id: mongoose.Types.ObjectId(id),
-      });
-      return { success: true, data: profile[0] };
-    } catch (err) {
-      return { success: false, data: err.message };
-    }
+    const user = await this.userModel
+      .findByIdAndUpdate(
+        id,
+        {
+          subjects: dto.subjects,
+          description: dto.description,
+          firstName: dto.firstName,
+          lastName: dto.lastName,
+          address: dto.address,
+          birthDate: dto.birthDate,
+          profileImg: { url },
+          pricePerSlot,
+        },
+        { new: true }
+      )
+      .exec();
+
+    if (!user)
+      throw new NotFoundException({ success: false, data: 'User not found' });
+
+    return { success: true, data: user };
   }
 }
