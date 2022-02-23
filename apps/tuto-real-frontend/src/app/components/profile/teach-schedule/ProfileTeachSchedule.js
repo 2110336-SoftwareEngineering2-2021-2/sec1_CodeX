@@ -116,6 +116,30 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
       });
   };
 
+  const sendBooking = async () => {
+    // setIsPending(true)
+    // await client({
+    //   method: 'POST',
+    //   url: '/booking/create',
+    //   data: {
+    //     studentId: targetId,
+    //     schedule_id: scheduleList[currentSchedule]._id,
+    //     days: 
+    //   }
+
+    // }).then( ({data}) => {
+    //   console.log(data)
+    //   setIsPending(false)
+    //   setShowModal('none')
+    //   setSelected([])
+    //   fetchData()
+
+    // }).catch( ({response}) => {
+    //   console.log(response)
+      
+    // })
+  }
+
   const savePrice = () => {
     console.log('saving Price...', tempPrice);
     setPrice(tempPrice ? tempPrice : 0);
@@ -127,11 +151,6 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
     setTempPrice(price ? price : 0);
     setEditingPrice(false);
   };
-
-  //can fix
-  // const deleteSlot = () => {
-  //   setShowModal('delete');
-  // };
 
   const onViewInfo = (slotData) => {
     setShowModal('info');
@@ -507,14 +526,11 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
 
       {showModal === 'edit' && (
         <EditingSlotModal
-          show={isEditing}
-          setShow={setEditing}
-          allSubject={Object.keys(SUBJECTS)} //get all subject
-          subjectIn="Choose your subject" //subject in slots
-          descriptionIn="" //description in slots
-          setModalState={setShowModal}
-          confirmFunc={sendEditData}
-          isPending={isPending}
+        show={isEditing}
+        setShow={setEditing}
+        setModalState={setShowModal}
+        confirmFunc={sendEditData}
+        isPending={isPending}
         />
       )}
 
@@ -525,6 +541,33 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
           subject={info.subject}
           description={info.description}
           studentList={info.students ?? []}
+        />
+      )}
+
+      {showModal==='book' && (
+        <ModalTwoButton
+          title='Do you want to enroll on this course?'
+          header={
+            <div>
+              Are you sure you want to enroll on the selected slotsIf you click confirm button, the request will be sent to this tutor. After this tutor accept your request, you will have to pay
+              <span style={{
+                fontSize: '18px', 
+                fontWeight: '600', 
+                color: 'var(--primary)'
+              }}>
+                {` 800 THB. (dummy cost) ` /* {scheduleList[currentSchedule].price} */}
+              </span>
+            </div>
+          }
+          leftFunc={sendBooking}
+          rightFunc={() => setShowModal('none')}
+          leftMessage='Confirm'
+          rightMessage='Cancel'
+          leftColor='var(--yellow)'
+          rightColor='cancel-button'
+          isPending={isPending}
+          leftPending='Booking...'
+          leftPendingColor='var(--lightgray)'
         />
       )}
     </>

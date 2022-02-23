@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
 import './EditingSlotModal.css';
 import ModalTwoButton from './ModalTwoButton';
+import SUBJECTS from '../../constants/subjects';
 
 const EditingSlotModal = (props) => {
-  const { show, setShow, subjectIn, descriptionIn, setModalState, confirmFunc, allSubject, isPending } = props;
+  const { show, setShow, setModalState, confirmFunc, isPending } = props;
 
-  const [subject, setSubject] = useState(subjectIn);
-  const [description, setDescription] = useState(descriptionIn);
+  const [subject, setSubject] = useState('Choose your subject');
+  const [description, setDescription] = useState('');
   // const subjectChoice = ['Math', 'Art', 'Programing'];
 
   const [showModal, setShowModal] = useState(false);
@@ -20,8 +21,8 @@ const EditingSlotModal = (props) => {
 
   const handleClose = () => {
     setShow(!show);
-    setSubject(subjectIn);
-    setDescription(descriptionIn);
+    setSubject('Choose your subject');
+    setDescription('');
     setModalState('none')
   };
 
@@ -63,17 +64,17 @@ const EditingSlotModal = (props) => {
             <Form.Select
               style={{
                 color: subject==='Choose your subject' ? 'var(--lightgray)' :'var(--darkgray)',
-                width: '40%',
+                width: '45%',
                 marginLeft: '1rem',
               }}
-              defaultValue='Choose your subject'
+              value={subject}
               // value={subject}
               onChange={(e) => {
                 setSubject(e.target.value);
               }}
             >
               <option key='default' style={{ color: 'var(--lightgray)' }} disabled>Choose your subject</option>
-              {allSubject.map((subject) => (
+              {Object.keys(SUBJECTS).map((subject) => (
                 <option key={subject} style={{ color: 'var(--darkgray)' }}>
                   {subject}
                 </option>
