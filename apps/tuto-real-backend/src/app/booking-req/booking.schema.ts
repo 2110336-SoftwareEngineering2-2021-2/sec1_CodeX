@@ -9,3 +9,6 @@ export const BookingSchema = new mongoose.Schema({
   totalPrice: Number,
   status: { type: String, enum: ['Pending', 'Approved'], default: 'Pending' },
 });
+
+BookingSchema.path('student_id').required(true);
+BookingSchema.path('schedule_id').required(true);
