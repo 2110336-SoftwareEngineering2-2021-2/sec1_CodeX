@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Schedule } from '../schedule/schedule.interface';
@@ -28,7 +32,11 @@ export class BookingService {
     const tutor = await this.userModel.findOne({
       schedule_id: { $in: dto.schedule_id },
     });
+    if (!tutor)
+      throw new NotFoundException({ success: false, data: 'Tutor not found' });
     const student = await this.userModel.findById(dto.student_id);
+    if (!student)
+      throw new NotFoundException({ success: false, data: 'User not found' });
 
     let price = tutor.pricePerSlot;
 
