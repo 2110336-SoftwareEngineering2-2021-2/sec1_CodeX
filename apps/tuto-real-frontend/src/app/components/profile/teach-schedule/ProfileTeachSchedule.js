@@ -27,6 +27,7 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
   const [isPending, setIsPending] = useState(false);
   const [showModal, setShowModal] = useState('none'); // "none" | "edit" | "info" | "delete" | "book" //
   const [isEditingPrice, setEditingPrice] = useState(false);
+  const [refresh, setRefresh] = useState(false); // Set to true when you want to refresh page //
 
   const [subjectList, setSubjectList] = useState([]);
   const [price, setPrice] = useState(0);
@@ -55,179 +56,6 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
       },
     })
       .then(({ data: { data } }) => {
-        // .then(() => {
-        /*
-        console.log('Data Fetched');
-        const data = [
-          {
-            startDate: new Date('2022-02-20 0:0'),
-            pricePerSlot: 250,
-            allSubjects: ['Math', 'Art'],
-            days: [
-              {
-                day: 'Monday',
-                slots: [
-                  {
-                    slot: 0,
-                    subject: 'Math',
-                    description: 'eieieieieieieieieieieieiei',
-                    students: [
-                      {
-                        id: '0000',
-                        firstName: 'Komsorn',
-                        lastName: 'Sookduay',
-                        status: 'Pending',
-                      },
-                      {
-                        id: '0001',
-                        firstName: 'Rutthasate',
-                        lastName: 'Gunsaduay',
-                        status: 'Pending',
-                      },
-                    ],
-                  },
-                  {
-                    slot: 1,
-                    subject: 'Math',
-                    description: 'eieieieieieieieieieieieiei',
-                    students: [
-                      {
-                        id: '0000',
-                        firstName: 'Komsorn',
-                        lastName: 'Sookduay',
-                        status: 'Approved',
-                      },
-                      {
-                        id: '0001',
-                        firstName: 'Rutthasate',
-                        lastName: 'Gunsaduay',
-                        status: 'Approved',
-                      },
-                    ],
-                  },
-                ],
-              },
-              {
-                day: 'Wednesday',
-                slots: [
-                  {
-                    slot: 15,
-                    subject: 'Art',
-                    description: 'midnight art course',
-                    students: [
-                      {
-                        id: '0000',
-                        firstName: 'Komsorn',
-                        lastName: 'Sookduay',
-                        status: 'Approved',
-                      },
-                      {
-                        id: '0001',
-                        firstName: 'Rutthasate',
-                        lastName: 'Gunsaduay',
-                        status: 'Pending',
-                      },
-                    ],
-                  },
-                ],
-              },
-            ],
-          },
-          {
-            startDate: new Date('2022-02-27 0:0'),
-            pricePerSlot: 250,
-            allSubjects: ['Math', 'Art', 'Sci'],
-            days: [
-              {
-                day: 'Tuesday',
-                slots: [
-                  {
-                    slot: 1,
-                    subject: 'Sci',
-                    description: 'Sciencee',
-                    students: [
-                      {
-                        id: '0000',
-                        firstName: 'Komsorn',
-                        lastName: 'Sookduay',
-                        status: 'Approved',
-                      },
-                      {
-                        id: '0001',
-                        firstName: 'Rutthasate',
-                        lastName: 'Gunsaduay',
-                        status: 'Approved',
-                      },
-                    ],
-                  },
-                  {
-                    slot: 10,
-                    subject: 'Math',
-                    description: 'eieieieieieieieieieieieiei',
-                    students: [
-                      {
-                        id: '0000',
-                        firstName: 'Komsorn',
-                        lastName: 'Sookduay',
-                        status: 'Approved',
-                      },
-                      {
-                        id: '0001',
-                        firstName: 'Rutthasate',
-                        lastName: 'Gunsaduay',
-                        status: 'Approved',
-                      },
-                    ],
-                  },
-                  {
-                    slot: 11,
-                    subject: 'Math',
-                    description: 'eieieieieieieieieieieieiei',
-                    students: [
-                      {
-                        id: '0000',
-                        firstName: 'Komsorn',
-                        lastName: 'Sookduay',
-                        status: 'Pending',
-                      },
-                      {
-                        id: '0001',
-                        firstName: 'Rutthasate',
-                        lastName: 'Gunsaduay',
-                        status: 'Pending',
-                      },
-                    ],
-                  },
-                ],
-              },
-              {
-                day: 'Thursday',
-                slots: [
-                  {
-                    slot: 15,
-                    subject: 'Art',
-                    description: 'midnight art course',
-                    students: [
-                      {
-                        id: '0000',
-                        firstName: 'Komsorn',
-                        lastName: 'Sookduay',
-                        status: 'Pending',
-                      },
-                      {
-                        id: '0001',
-                        firstName: 'Rutthasate',
-                        lastName: 'Gunsaduay',
-                        status: 'Pending',
-                      },
-                    ],
-                  },
-                ],
-              },
-            ],
-          },
-        ];
-        */
         console.log(data);
         setScheduleList(data.scheduleList ?? []);
         setPrice(data.pricePerSlot ?? 0);
@@ -244,7 +72,8 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
 
   useEffect(() => {
     fetchData();
-  }, [fetchData]);
+    setRefresh(false);
+  }, [fetchData, refresh]);
 
   useEffect(() => {
     if (scheduleList[currentSchedule]) {
@@ -280,6 +109,7 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
         setIsPending(false);
         setShowModal('none');
         setSelected([]);
+        setRefresh(true);
       })
       .catch(({ response }) => {
         console.log(response);
@@ -357,7 +187,6 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
   };
 
   const handleDelete = async () => {
-    // Editdata('', '');
     console.log('Deleting...', getDeletingSlot());
     const deletingSlots = getDeletingSlot();
     if (deletingSlots && deletingSlots.length === 0) setSelected([]);
@@ -375,6 +204,7 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
         .then(({ data }) => {
           console.log(data);
           setSelected([]);
+          setRefresh(true);
         })
         .catch((res) => {
           console.log(res);
