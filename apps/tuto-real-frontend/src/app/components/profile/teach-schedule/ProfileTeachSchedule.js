@@ -62,7 +62,7 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
         setTempPrice(data.pricePerSlot ?? 0);
         if (data.scheduleList?.length > 0) {
           // setCurrentSchedule(0);
-          setSubjectList(data.scheduleList[0].allSubjects ?? []);
+          setSubjectList(data.scheduleList[currentSchedule].allSubjects ?? []);
         }
       })
       .catch((res) => {
