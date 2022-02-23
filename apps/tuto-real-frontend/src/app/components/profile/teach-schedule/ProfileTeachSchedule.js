@@ -311,6 +311,7 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
   const getDeletingSlot = () => {
     const selectedList = [];
     const allSlots = [];
+    // Get all existing slot in schedule //
     selected.sort();
     scheduleList[currentSchedule].days.forEach(({ day, slots }) => {
       slots.forEach(({ slot, students }) => {
@@ -322,61 +323,63 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
     });
     let dayList = [];
     let currentDay = 0;
+    // Select only the existing slot and send delete request to backend //
     try {
       selected.forEach((idx) => {
-        const slot = allSlots.filter((slot) => slot.slotIdx === idx);
+        const slot = allSlots.filter(({ slotIdx }) => slotIdx === idx);
         if (slot.length > 0) {
           // If tutor already have that slot //
           // If that slot have to student => user cannot delete error //
           if (slot[0].haveStudent) {
-            throw BreakException;
+            throw new Error(
+              "You can't delete this slot because someone have aleady book this slot."
+            );
           } else {
             // If that slot don't have to student => push in array before delete the array //
-            if (Math.floor(idx / 16) === currentDay) dayList.push(idx % 16);
-            else {
-              selectedList.push({ day: DAY[currentDay], slots: dayList });
-              dayList = [];
-              currentDay++;
+            if (Math.floor(idx / 16) !== currentDay) {
+              if (dayList.length > 0) {
+                selectedList.push({ day: DAY[currentDay], slots: dayList });
+                dayList = [];
+              }
+              currentDay = Math.floor(idx / 16);
             }
+            dayList.push(idx % 16);
           }
         }
       });
       if (dayList.length > 0)
         selectedList.push({ day: DAY[currentDay], slots: dayList });
+      return selectedList;
     } catch (err) {
-      if (err === BreakException) {
-        alert(
-          "You can't delete this slot because someone have aleady book this slot."
-        );
-        console.log(
-          "You can't delete this slot because someone have aleady book this slot."
-        );
-      }
+      alert(err);
     }
-    return selectedList;
+    return null;
   };
 
   const handleDelete = async () => {
     // Editdata('', '');
     console.log('Deleting...', getDeletingSlot());
-    await client({
-      method: 'PATCH',
-      url: '/schedule/delete',
-      params: {
-        _id: scheduleList[currentSchedule]._id,
-      },
-      data: {
-        days: getDeletingSlot(),
-      },
-    })
-      .then(({ data }) => {
-        console.log(data);
-        setSelected([]);
-        setShowModal('none');
+    const deletingSlots = getDeletingSlot();
+    if (deletingSlots && deletingSlots.length === 0) setSelected([]);
+    else if (deletingSlots && deletingSlots.length > 0)
+      await client({
+        method: 'PATCH',
+        url: '/schedule/delete',
+        params: {
+          _id: scheduleList[currentSchedule]._id,
+        },
+        data: {
+          days: deletingSlots,
+        },
       })
-      .catch((res) => {
-        console.log(res);
-      });
+        .then(({ data }) => {
+          console.log(data);
+          setSelected([]);
+        })
+        .catch((res) => {
+          console.log(res);
+        });
+    setShowModal('none');
   };
 
   //can fix

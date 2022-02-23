@@ -13,7 +13,7 @@ const SUBJECTS = {
   Network: 'Net',
   // Languages //
   English: 'Eng',
-  Japan: 'Jap',
+  Japanese: 'Jap',
   Chinese: 'Chin',
   Thai: 'Th',
 };

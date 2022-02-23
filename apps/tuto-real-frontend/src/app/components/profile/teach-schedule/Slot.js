@@ -74,9 +74,7 @@ const Slot = ({
           <IoIosInformation size={24} className="hover-icon" />
         </div>
       ) : null}
-      <p>
-        {slotData?.subject ? SUBJECTS[slotData?.subject] : slotData?.subject}
-      </p>
+      <p>{slotData?.subject ? SUBJECTS[slotData?.subject] : ' '}</p>
       {/* If this is student view and student is a member of the slot */}
       {viewType === 'TutorOther' && student ? (
         <p
