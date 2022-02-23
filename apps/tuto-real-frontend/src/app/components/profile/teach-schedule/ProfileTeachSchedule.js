@@ -10,12 +10,13 @@ import { client } from '../../../axiosConfig';
 import Tag from './Tag';
 import Schedule from './Schedule';
 import '../profile.css';
-
-import COLORS from '../../../constants/color';
 import ModalTwoButton from '../../modal/ModalTwoButton';
 import EditingSlotModal from '../../modal/EditingSlotModal';
 import ViewingSlotModal from '../../modal/ViewingSlotModal';
-import { MdArticle } from 'react-icons/md';
+
+import COLORS from '../../../constants/color';
+import SUBJECTS from '../../../constants/subjects';
+import { DAY } from '../../../constants/day';
 
 const ProfileTeachSchedule = ({ targetId, viewType }) => {
   // const ProfileTeachSchedule = ({ targetId }) => {
@@ -26,16 +27,16 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
   const [isPending, setIsPending] = useState(false);
   const [showModal, setShowModal] = useState('none'); // "none" | "edit" | "info" | "delete" | "book" //
   const [isEditingPrice, setEditingPrice] = useState(false);
+  const [refresh, setRefresh] = useState(false); // Set to true when you want to refresh page //
 
   const [subjectList, setSubjectList] = useState([]);
   const [price, setPrice] = useState(0);
   const [tempPrice, setTempPrice] = useState(0);
   const [time, setTime] = useState('Day Time'); // "Day Time" | "Night Time" //
   const [scheduleList, setScheduleList] = useState([]);
-  const [currentSchedule, setCurrentSchedule] = useState();
+  const [currentSchedule, setCurrentSchedule] = useState(0);
   const [selected, setSelected] = useState([]); // Sun: 0-15, Mon: 16-31, Tue: 32-47, ..., Sat: 96-111
-  const [info, setInfo] = useState({})
-  // const [editData, setEditData] = useState([]); 
+  const [info, setInfo] = useState({});
 
   const tagColor = [
     'Crimson',
@@ -55,242 +56,70 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
       },
     })
       .then(({ data: { data } }) => {
-        // .then(() => {
-        /*
-        console.log('Data Fetched');
-        const data = [
-          {
-            startDate: new Date('2022-02-20 0:0'),
-            pricePerSlot: 250,
-            allSubjects: ['Math', 'Art'],
-            days: [
-              {
-                day: 'Monday',
-                slots: [
-                  {
-                    slot: 0,
-                    subject: 'Math',
-                    description: 'eieieieieieieieieieieieiei',
-                    students: [
-                      {
-                        id: '0000',
-                        firstName: 'Komsorn',
-                        lastName: 'Sookduay',
-                        status: 'Pending',
-                      },
-                      {
-                        id: '0001',
-                        firstName: 'Rutthasate',
-                        lastName: 'Gunsaduay',
-                        status: 'Pending',
-                      },
-                    ],
-                  },
-                  {
-                    slot: 1,
-                    subject: 'Math',
-                    description: 'eieieieieieieieieieieieiei',
-                    students: [
-                      {
-                        id: '0000',
-                        firstName: 'Komsorn',
-                        lastName: 'Sookduay',
-                        status: 'Approved',
-                      },
-                      {
-                        id: '0001',
-                        firstName: 'Rutthasate',
-                        lastName: 'Gunsaduay',
-                        status: 'Approved',
-                      },
-                    ],
-                  },
-                ],
-              },
-              {
-                day: 'Wednesday',
-                slots: [
-                  {
-                    slot: 15,
-                    subject: 'Art',
-                    description: 'midnight art course',
-                    students: [
-                      {
-                        id: '0000',
-                        firstName: 'Komsorn',
-                        lastName: 'Sookduay',
-                        status: 'Approved',
-                      },
-                      {
-                        id: '0001',
-                        firstName: 'Rutthasate',
-                        lastName: 'Gunsaduay',
-                        status: 'Pending',
-                      },
-                    ],
-                  },
-                ],
-              },
-            ],
-          },
-          {
-            startDate: new Date('2022-02-27 0:0'),
-            pricePerSlot: 250,
-            allSubjects: ['Math', 'Art', 'Sci'],
-            days: [
-              {
-                day: 'Tuesday',
-                slots: [
-                  {
-                    slot: 1,
-                    subject: 'Sci',
-                    description: 'Sciencee',
-                    students: [
-                      {
-                        id: '0000',
-                        firstName: 'Komsorn',
-                        lastName: 'Sookduay',
-                        status: 'Approved',
-                      },
-                      {
-                        id: '0001',
-                        firstName: 'Rutthasate',
-                        lastName: 'Gunsaduay',
-                        status: 'Approved',
-                      },
-                    ],
-                  },
-                  {
-                    slot: 10,
-                    subject: 'Math',
-                    description: 'eieieieieieieieieieieieiei',
-                    students: [
-                      {
-                        id: '0000',
-                        firstName: 'Komsorn',
-                        lastName: 'Sookduay',
-                        status: 'Approved',
-                      },
-                      {
-                        id: '0001',
-                        firstName: 'Rutthasate',
-                        lastName: 'Gunsaduay',
-                        status: 'Approved',
-                      },
-                    ],
-                  },
-                  {
-                    slot: 11,
-                    subject: 'Math',
-                    description: 'eieieieieieieieieieieieiei',
-                    students: [
-                      {
-                        id: '0000',
-                        firstName: 'Komsorn',
-                        lastName: 'Sookduay',
-                        status: 'Pending',
-                      },
-                      {
-                        id: '0001',
-                        firstName: 'Rutthasate',
-                        lastName: 'Gunsaduay',
-                        status: 'Pending',
-                      },
-                    ],
-                  },
-                ],
-              },
-              {
-                day: 'Thursday',
-                slots: [
-                  {
-                    slot: 15,
-                    subject: 'Art',
-                    description: 'midnight art course',
-                    students: [
-                      {
-                        id: '0000',
-                        firstName: 'Komsorn',
-                        lastName: 'Sookduay',
-                        status: 'Pending',
-                      },
-                      {
-                        id: '0001',
-                        firstName: 'Rutthasate',
-                        lastName: 'Gunsaduay',
-                        status: 'Pending',
-                      },
-                    ],
-                  },
-                ],
-              },
-            ],
-          },
-        ];
-        */
         console.log(data);
-        setScheduleList(data);
-        if (data?.length > 0) {
-          setCurrentSchedule(0);
-          setSubjectList(data[0].allSubjects ?? []);
-          setPrice(data[0].pricePerSlot ?? 0);
-          setTempPrice(data[0].pricePerSlot ?? 0);
+        setScheduleList(data.scheduleList ?? []);
+        setPrice(data.pricePerSlot ?? 0);
+        setTempPrice(data.pricePerSlot ?? 0);
+        if (data.scheduleList?.length > 0) {
+          // setCurrentSchedule(0);
+          setSubjectList(data.scheduleList[currentSchedule].allSubjects ?? []);
         }
       })
-      .catch(({ response }) => {
-        console.log(response);
+      .catch((res) => {
+        console.log(res);
       });
   }, []);
 
   useEffect(() => {
     fetchData();
-  }, [fetchData]);
+    setRefresh(false);
+  }, [fetchData, refresh]);
 
   useEffect(() => {
     if (scheduleList[currentSchedule]) {
       setSubjectList(scheduleList[currentSchedule].allSubjects);
-      setPrice(scheduleList[currentSchedule].pricePerSlot);
-      setTime('Day Time');
+      // setTime('Day Time');
     }
   }, [currentSchedule]);
 
-  useEffect(() => {
-    console.log(tempPrice);
-  }, [tempPrice]);
+  // useEffect(() => {
+  //   console.log(tempPrice);
+  // }, [tempPrice]);
 
   const sendEditData = async (subject, description) => {
-    console.log(subject)
-    console.log(description)
+    console.log(subject);
+    console.log(description);
 
-    setIsPending(true)
-    const editData = (await selectedToDayAndSlot(subject, description));
-    console.log(editData)
+    setIsPending(true);
+    const editData = await selectedToDayAndSlot(subject, description);
+    console.log(editData);
     await client({
       method: 'PATCH',
-      url: '/schedule',
+      url: '/schedule/add',
       params: {
-        _id: scheduleList[currentSchedule]._id //_id ของ schedule
+        _id: scheduleList[currentSchedule]._id, //_id ของ schedule
       },
       data: {
         // ต้องการ list ของ day กับ slot ในการส่งข้อมูล
-        days: editData
-      }
-      
-    }).then( ({data}) => {
-      console.log(data)
-      setIsPending(false)
-      setShowModal('none')
-      setSelected([])
-    }).catch( ({response}) => {
-      console.log(response)
-      
+        days: editData,
+      },
     })
-
-  }
+      .then(({ data }) => {
+        console.log(data);
+        setIsPending(false);
+        setShowModal('none');
+        setSelected([]);
+        setRefresh(true);
+      })
+      .catch(({ response }) => {
+        console.log(response);
+      });
+  };
 
   const savePrice = () => {
     console.log('saving Price...', tempPrice);
     setPrice(tempPrice ? tempPrice : 0);
+    // Patch to backend.....
     setEditingPrice(false);
   };
 
@@ -300,62 +129,106 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
   };
 
   //can fix
-  const deleteSlot = () => {
-    setShowModal('delete');
-  };
+  // const deleteSlot = () => {
+  //   setShowModal('delete');
+  // };
 
   const onViewInfo = (slotData) => {
     setShowModal('info');
-    setInfo(slotData)
-  }
+    setInfo(slotData);
+  };
 
-  //can fix
-  const handleDelete = () => {
-    sendEditData('','')
-  }
+  const getDeletingSlot = () => {
+    const selectedList = [];
+    const allSlots = [];
+    // Get all existing slot in schedule //
+    selected.sort();
+    scheduleList[currentSchedule].days.forEach(({ day, slots }) => {
+      slots.forEach(({ slot, students }) => {
+        const dateIdx = DAY.indexOf(day);
+        const haveStudent = students && students.length > 0 ? true : false;
+        if (dateIdx !== -1)
+          allSlots.push({ haveStudent, slotIdx: dateIdx * 16 + slot });
+      });
+    });
+    let dayList = [];
+    let currentDay = 0;
+    // Select only the existing slot and send delete request to backend //
+    try {
+      selected.forEach((idx) => {
+        const slot = allSlots.filter(({ slotIdx }) => slotIdx === idx);
+        if (slot.length > 0) {
+          // If tutor already have that slot //
+          // If that slot have to student => user cannot delete error //
+          if (slot[0].haveStudent) {
+            throw new Error(
+              "You can't delete this slot because someone have aleady book this slot."
+            );
+          } else {
+            // If that slot don't have to student => push in array before delete the array //
+            if (Math.floor(idx / 16) !== currentDay) {
+              if (dayList.length > 0) {
+                selectedList.push({ day: DAY[currentDay], slots: dayList });
+                dayList = [];
+              }
+              currentDay = Math.floor(idx / 16);
+            }
+            dayList.push(idx % 16);
+          }
+        }
+      });
+      if (dayList.length > 0)
+        selectedList.push({ day: DAY[currentDay], slots: dayList });
+      return selectedList;
+    } catch (err) {
+      alert(err);
+    }
+    return null;
+  };
+
+  const handleDelete = async () => {
+    console.log('Deleting...', getDeletingSlot());
+    const deletingSlots = getDeletingSlot();
+    if (deletingSlots && deletingSlots.length === 0) setSelected([]);
+    else if (deletingSlots && deletingSlots.length > 0)
+      await client({
+        method: 'PATCH',
+        url: '/schedule/delete',
+        params: {
+          _id: scheduleList[currentSchedule]._id,
+        },
+        data: {
+          days: deletingSlots,
+        },
+      })
+        .then(({ data }) => {
+          console.log(data);
+          setSelected([]);
+          setRefresh(true);
+        })
+        .catch((res) => {
+          console.log(res);
+        });
+    setShowModal('none');
+  };
 
   //can fix
   const handleCancel = () => {
-    setShowModal('none')
-  }
+    setShowModal('none');
+  };
 
   const selectedToDayAndSlot = async (subject, description, _callback) => {
-    const dayList = [{
-      day: 'Sunday',
-      slots: []
-    },
-    {
-      day: 'Monday',
-      slots: []
-    },
-    {
-      day: 'Tuesday',
-      slots: []
-    },
-    {
-      day: 'Wednesday',
-      slots: []
-    },
-    {
-      day: 'Thursday',
-      slots: []
-    },
-    {
-      day: 'Friday',
-      slots: []
-    },
-    {
-      day: 'Saturday',
-      slots: []
+    const dayList = DAY.map((day) => ({ day, slots: [] }));
+    selected.sort();
+    for (let i = 0; i != selected.length; i++) {
+      const dayIndex = Math.floor(selected[i] / 16);
+      dayList[dayIndex].slots = [
+        ...dayList[dayIndex].slots,
+        { slot: selected[i] % 16, subject, description },
+      ];
     }
-  ]
-    selected.sort()
-    for(let i=0; i != selected.length; i++){
-      const dayIndex = Math.floor(selected[i]/16)
-      dayList[dayIndex].slots = [...dayList[dayIndex].slots, {slot: selected[i]%16, subject, description}]
-    }
-    return dayList.filter(day => day.slots.length !== 0)
-  }
+    return dayList.filter((day) => day.slots.length !== 0);
+  };
 
   const goLeft = () => {
     if (currentSchedule) setCurrentSchedule(currentSchedule - 1);
@@ -451,7 +324,7 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
       return (
         <>
           <div style={{ display: 'flex', width: '100%' }}>
-            <Button variant="danger" onClick={deleteSlot}>
+            <Button variant="danger" onClick={() => setShowModal('delete')}>
               Delete Selected
             </Button>
           </div>
@@ -473,7 +346,10 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
                 color: COLORS.white,
                 marginLeft: '2%',
               }}
-              onClick={() => {setShowModal('edit'); setEditing(true);}}
+              onClick={() => {
+                setShowModal('edit');
+                setEditing(true);
+              }}
             >
               Edit
             </Button>
@@ -613,38 +489,44 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
       </Form>
 
       {/* Delete selected modal */}
-      {showModal==='delete' && <ModalTwoButton 
-        title='Are you sure you want to delete these slots?'
-        header='If you click delete button, information of the selected slots will be deleted.'
-        leftFunc={handleDelete}
-        rightFunc={handleCancel}
-        leftMessage='Delete'
-        rightMessage='Cancel'
-        leftColor='red'
-        rightColor='cancel-button'
-        isPending={isPending}
-        leftPending='Deleting...'
-        leftPendingColor='var(--lightgray)'
-      />}
+      {showModal === 'delete' && (
+        <ModalTwoButton
+          title="Are you sure you want to delete these slots?"
+          header="If you click delete button, information of the selected slots will be deleted."
+          leftFunc={handleDelete}
+          rightFunc={handleCancel}
+          leftMessage="Delete"
+          rightMessage="Cancel"
+          leftColor="red"
+          rightColor="cancel-button"
+          isPending={isPending}
+          leftPending="Deleting..."
+          leftPendingColor="var(--lightgray)"
+        />
+      )}
 
-      {showModal==='edit' && <EditingSlotModal
-        show={isEditing}
-        setShow={setEditing}
-        allSubject={['Math', 'Art']} //get all subject
-        subjectIn='Choose your subject' //subject in slots
-        descriptionIn='' //description in slots
-        setModalState={setShowModal}
-        confirmFunc={sendEditData}
-        isPending={isPending}
-      />}
+      {showModal === 'edit' && (
+        <EditingSlotModal
+          show={isEditing}
+          setShow={setEditing}
+          allSubject={Object.keys(SUBJECTS)} //get all subject
+          subjectIn="Choose your subject" //subject in slots
+          descriptionIn="" //description in slots
+          setModalState={setShowModal}
+          confirmFunc={sendEditData}
+          isPending={isPending}
+        />
+      )}
 
-      {showModal==='info' && <ViewingSlotModal
-        cancelFunc={handleCancel}
-        number={info.students? info.students.length : 0}
-        subject={info.subject}
-        description={info.description}
-        studentList={info.students?? []}
-      />}
+      {showModal === 'info' && (
+        <ViewingSlotModal
+          cancelFunc={handleCancel}
+          number={info.students ? info.students.length : 0}
+          subject={info.subject}
+          description={info.description}
+          studentList={info.students ?? []}
+        />
+      )}
     </>
   );
 };

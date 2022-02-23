@@ -4,6 +4,8 @@ import { useAuth } from '../../../auth';
 import Slot from './Slot';
 import './schedule.css';
 
+import { DAY, DAY_SHORT } from '../../../constants/day';
+
 const Schedule = ({
   time,
   scheduleData,
@@ -11,7 +13,7 @@ const Schedule = ({
   selected,
   setSelected,
   setShowModal,
-  onViewInfo
+  onViewInfo,
 }) => {
   /* 
     time: "Day Time" | "Night Time"
@@ -27,27 +29,6 @@ const Schedule = ({
     }
   */
   const { _id } = useAuth();
-
-  const DAY = [
-    'Sunday',
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday',
-  ];
-  const DAY_SHORT = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
-
-  // const DAY = {
-  //   SUNDAY: "SUN",
-  //   MONDAY: 'MON',
-  //   TUESDAY: 'TUE',
-  //   WEDNESDAY: 'WED',
-  //   THURSDAY: 'THU',
-  //   FRIDAY: 'FRI',
-  //   SATURDAY: 'SAT'
-  // }
 
   const IdxToDayAndSlot = (idx) => {
     // console.log(idx)

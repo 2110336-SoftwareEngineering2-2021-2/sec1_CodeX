@@ -7,7 +7,7 @@ export interface Schedule extends Document {
       day: String;
       slots: [
         {
-          slot: Number;
+          slot: number;
           subject: String;
           description: String;
           students: {

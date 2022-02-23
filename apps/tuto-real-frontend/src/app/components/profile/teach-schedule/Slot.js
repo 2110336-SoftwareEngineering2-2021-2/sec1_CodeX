@@ -1,6 +1,8 @@
 import { IoIosInformation } from 'react-icons/io';
 import { ImCross } from 'react-icons/im';
+
 import COLORS from '../../../constants/color';
+import SUBJECTS from '../../../constants/subjects';
 
 const Slot = ({
   slotData,
@@ -72,7 +74,7 @@ const Slot = ({
           <IoIosInformation size={24} className="hover-icon" />
         </div>
       ) : null}
-      <p>{slotData?.subject}</p>
+      <p>{slotData?.subject ? SUBJECTS[slotData?.subject] : ' '}</p>
       {/* If this is student view and student is a member of the slot */}
       {viewType === 'TutorOther' && student ? (
         <p
