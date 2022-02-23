@@ -84,3 +84,10 @@ img {
   padding: 8px;
   margin-right: 8px;
 }
+
+.change-password-button {
+  background-color: transparent;
+  border-width: 0px;
+  color: var(--third);
+  /* font-size: 24px; */
+}

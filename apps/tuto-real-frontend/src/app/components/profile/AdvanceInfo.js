@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import COLORS from '../../constants/color';
 
-const AdvanceInfo = ({ viewType, advance, targetEmail}) => {
+const AdvanceInfo = ({ viewType, advance, targetEmail, changePasswordShow, setChangePasswordShow}) => {
   const { userType, password } = advance;
 
   return (
@@ -28,7 +28,13 @@ const AdvanceInfo = ({ viewType, advance, targetEmail}) => {
       <div className="section">
         <p className="header">PASSWORD</p>
         <p>{password}</p>
-        <input type="password" readOnly defaultValue="12345678" style={{margin:"0px"}}></input>
+        <input type="password" readOnly defaultValue="12345678" style={{margin:"0px" ,width:"25%", textAlign:"left"}}></input>
+        <button 
+          className='change-password-button'
+          onClick={() => setChangePasswordShow(true)}
+        >
+          [ change password]
+        </button>
       </div>
     </div>
   );

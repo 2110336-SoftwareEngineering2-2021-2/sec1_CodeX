@@ -14,7 +14,7 @@ import './profile.css';
 
 import COLORS from '../../constants/color';
 
-const ProfileInfo = ({targetId, viewType}) => {
+const ProfileInfo = ({targetId, viewType, changePasswordShow, setChangePasswordShow}) => {
   // const [viewType, setViewType] = useState('TutorSelf'); // "TutorSelf" | "StudentSelf" | "TutorOther"
   const [isEditing, setEditing] = useState(false);
   const [basicInfo, setBasicInfo] = useState({
@@ -214,7 +214,12 @@ const ProfileInfo = ({targetId, viewType}) => {
       {isEditing ? renderEditForm() : renderViewForm()}
       {viewType !== 'TutorOther' ? (
         <>
-          <AdvanceInfo advance={advance} viewType={viewType}/>
+          <AdvanceInfo 
+            changePasswordShow={changePasswordShow} 
+            setChangePasswordShow={setChangePasswordShow}
+            advance={advance} 
+            viewType={viewType}
+          />
           {isEditing ? (
             <div
               style={{ width: '45%', textAlign: 'right', marginBottom: '5%' }}
