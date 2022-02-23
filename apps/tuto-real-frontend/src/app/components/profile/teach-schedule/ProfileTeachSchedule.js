@@ -15,6 +15,7 @@ import EditingSlotModal from '../../modal/EditingSlotModal';
 import ViewingSlotModal from '../../modal/ViewingSlotModal';
 
 import COLORS from '../../../constants/color';
+import SUBJECTS from '../../../constants/subjects';
 import { DAY } from '../../../constants/day';
 
 const ProfileTeachSchedule = ({ targetId, viewType }) => {
@@ -265,7 +266,7 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
     console.log(editData);
     await client({
       method: 'PATCH',
-      url: '/schedule',
+      url: '/schedule/add',
       params: {
         _id: scheduleList[currentSchedule]._id, //_id ของ schedule
       },
@@ -358,23 +359,24 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
   const handleDelete = async () => {
     // Editdata('', '');
     console.log('Deleting...', getDeletingSlot());
-    // await client({
-    //   method: 'DELETE',
-    //   url: '/schedule',
-    //   params: {
-    //     _id: scheduleList[currentSchedule]._id
-    //   },
-    //   data: {
-    //     days: getDeletingSlot()
-    //   }
-    // })
-    // .then(() => {
-    setSelected([]);
-    setShowModal('none');
-    // })
-    // .catch((res) => {
-    //   console.log(res)
-    // })
+    await client({
+      method: 'PATCH',
+      url: '/schedule/delete',
+      params: {
+        _id: scheduleList[currentSchedule]._id,
+      },
+      data: {
+        days: getDeletingSlot(),
+      },
+    })
+      .then(({ data }) => {
+        console.log(data);
+        setSelected([]);
+        setShowModal('none');
+      })
+      .catch((res) => {
+        console.log(res);
+      });
   };
 
   //can fix
@@ -383,36 +385,7 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
   };
 
   const selectedToDayAndSlot = async (subject, description, _callback) => {
-    const dayList = [
-      {
-        day: 'Sunday',
-        slots: [],
-      },
-      {
-        day: 'Monday',
-        slots: [],
-      },
-      {
-        day: 'Tuesday',
-        slots: [],
-      },
-      {
-        day: 'Wednesday',
-        slots: [],
-      },
-      {
-        day: 'Thursday',
-        slots: [],
-      },
-      {
-        day: 'Friday',
-        slots: [],
-      },
-      {
-        day: 'Saturday',
-        slots: [],
-      },
-    ];
+    const dayList = DAY.map((day) => ({ day, slots: [] }));
     selected.sort();
     for (let i = 0; i != selected.length; i++) {
       const dayIndex = Math.floor(selected[i] / 16);
@@ -703,7 +676,7 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
         <EditingSlotModal
           show={isEditing}
           setShow={setEditing}
-          allSubject={['Math', 'Art']} //get all subject
+          allSubject={Object.keys(SUBJECTS)} //get all subject
           subjectIn="Choose your subject" //subject in slots
           descriptionIn="" //description in slots
           setModalState={setShowModal}
