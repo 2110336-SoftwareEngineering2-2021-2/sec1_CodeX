@@ -40,74 +40,58 @@ export class ScheduleService {
   ) {}
 
   public async getSchedule(id: string): Promise<any> {
-    if (id) {
-      const user = await this.userModel
-        .findOne({ _id: mongoose.Types.ObjectId(id) })
-        .exec();
-      if (!user) return { success: false, data: 'User not found' };
-      const scheduleIdList: String[] = user.schedule_id;
-      if (!scheduleIdList)
-        return { success: false, data: 'This user has no schedules' };
+    if(id) {
+      const user: User = await this.userModel.findOne({ _id: mongoose.Types.ObjectId(id) }).exec();
+      if(!user) return {success: false, data: "User not found"}
+      const scheduleIdList: String[] = user.schedule_id
+      if(!scheduleIdList) return {success: false, data: "This user has no schedules"}
 
-      const scheduleList = [];
-      const startDateList: Date[] = [];
-      for (let i = 0; i < 4; i++) {
-        if (i < scheduleIdList.length) {
-          const schedule = await this.scheduleModel
-            .findById({ _id: mongoose.Types.ObjectId(scheduleIdList[i]) })
-            .exec();
-          if (schedule?.startDate) {
+      const scheduleList = []
+      const startDateList: Date[] = []
+      let num = 0, i = 0 // Amount of schedule that we already got
+      while(num < 4 && i < scheduleIdList.length) {
+          const schedule = await this.scheduleModel.findById({ _id: mongoose.Types.ObjectId(scheduleIdList[i]) }).exec()
+          if(schedule?.startDate) {
             // Check if the schedule is outdated or not //
-            if (getFinalDate(new Date(schedule?.startDate)) < new Date()) {
-              // await this.deleteSchedule(scheduleIdList[i])
+            if(getFinalDate(new Date(schedule?.startDate)) < new Date()) {
+                await this.deleteSchedule(scheduleIdList[i])
             } else {
-              const allSubjects = await this.scheduleModel.distinct(
-                'days.slots.subject',
-                { _id: scheduleIdList[i] }
-              );
-              startDateList.push(schedule.startDate);
-              scheduleList.push({ ...schedule.toObject(), allSubjects });
+                const allSubjects = await this.scheduleModel.distinct("days.slots.subject", {_id: scheduleIdList[i]})
+                startDateList.push(schedule.startDate)
+                scheduleList.push({...schedule.toObject(), allSubjects})
             }
+            num++; i++
+          } else {
+            // If schedule is not found -> delete that schedule id from user's schedule_id list //
+            await this.userModel
+            .updateOne(
+              { _id: id },
+              { $pull: { schedule_id: scheduleIdList[i] } }
+            )
+            .exec();
+            i++
           }
-        } else break;
       }
 
       // If amount of schedule is not equal to 4 (1 month) -> add more until that tutor has 4 schedule //
-      if (startDateList.length < 4) {
-        const schedule = await this.scheduleModel
-          .findById({ _id: mongoose.Types.ObjectId(scheduleIdList[0]) })
-          .exec();
-        startDateList.sort(
-          (a, b) => new Date(a).getTime() - new Date(b).getTime()
-        );
-        const sunday = new Date(getPreviousSunday());
-        let idx = 0;
-        for (let i = 0; i < 4; i++) {
-          if (
-            idx >= startDateList.length ||
-            new Date(startDateList[idx]).getDate() !== sunday.getDate()
-          ) {
-            const emptySchedule = {
-              startDate: new Date(sunday),
-
-              days: [],
-            };
-            const newSchedule: { success: boolean; data: Schedule } =
-              await this.createSchedule(id, emptySchedule);
-            if (newSchedule.success)
-              scheduleList.push({
-                ...newSchedule.data.toObject(),
-                allSubjects: [],
-              });
-          } else idx++;
-          sunday.setDate(sunday.getDate() + 7); // Go to next sunday
-        }
+      if(startDateList.length < 4) {
+          startDateList.sort((a,b) => ((new Date(a)).getTime() - (new Date(b)).getTime()))
+          const sunday = new Date(getPreviousSunday())
+          let idx = 0
+          for (let i = 0; i < 4; i++) {
+              if (idx >= startDateList.length || new Date(startDateList[idx]).getDate() !== sunday.getDate()) {
+                  const emptySchedule = {
+                      startDate: new Date(sunday),
+                      days: []
+                  }
+                  const newSchedule: {success: boolean, data: Schedule} = await this.createSchedule(id, emptySchedule)
+                  if(newSchedule.success) scheduleList.push({...newSchedule.data.toObject(), allSubjects: []})
+              } else idx++
+              sunday.setDate(sunday.getDate() + 7); // Go to next sunday
+          }
       }
-      scheduleList.sort(
-        (a, b) =>
-          new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
-      );
-      return { success: true, data: scheduleList };
+      scheduleList.sort((a,b) => (new Date(a.startDate)).getTime() - (new Date(b.startDate)).getTime())
+      return {success: true, data: {pricePerSlot: user.pricePerSlot , scheduleList}}
     }
     return { success: false, data: 'Invalid user id' };
   }
@@ -151,7 +135,7 @@ export class ScheduleService {
     }
   }
 
-  public async deleteSchedule(id: string) {
+  public async deleteSchedule(id: String) {
     const schedule_check = await this.scheduleModel.findById(
       mongoose.Types.ObjectId(id)
     );
