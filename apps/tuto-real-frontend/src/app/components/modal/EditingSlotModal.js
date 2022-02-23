@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
 import './EditingSlotModal.css';
 import ModalTwoButton from './ModalTwoButton';
+import SUBJECTS from '../../constants/subjects';
 
 const EditingSlotModal = (props) => {
-  const { show, setShow, setModalState, confirmFunc, allSubject, isPending } = props;
+  const { show, setShow, setModalState, confirmFunc, isPending } = props;
 
   const [subject, setSubject] = useState('Choose your subject');
   const [description, setDescription] = useState('');
@@ -73,7 +74,7 @@ const EditingSlotModal = (props) => {
               }}
             >
               <option key='default' style={{ color: 'var(--lightgray)' }} disabled>Choose your subject</option>
-              {allSubject.map((subject) => (
+              {Object.keys(SUBJECTS).map((subject) => (
                 <option key={subject} style={{ color: 'var(--darkgray)' }}>
                   {subject}
                 </option>

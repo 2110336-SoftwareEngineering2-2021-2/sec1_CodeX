@@ -528,7 +528,6 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
         <EditingSlotModal
         show={isEditing}
         setShow={setEditing}
-        allSubject={['Math', 'Art', 'Physic', 'Chemistry', 'Biology']} //get all subject
         setModalState={setShowModal}
         confirmFunc={sendEditData}
         isPending={isPending}
@@ -545,30 +544,32 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
         />
       )}
 
-      {showModal==='book' && <ModalTwoButton
-        title='Do you want to enroll on this course?'
-        header={
-          <div>
-            Are you sure you want to enroll on the selected slotsIf you click confirm button, the request will be sent to this tutor. After this tutor accept your request, you will have to pay
-            <span style={{
-              fontSize: '18px', 
-              fontWeight: '600', 
-              color: 'var(--primary)'
-            }}>
-              {` 800 THB. (dummy cost) ` /* {scheduleList[currentSchedule].price} */}
-            </span>
-          </div>
-        }
-        leftFunc={sendBooking}
-        rightFunc={() => setShowModal('none')}
-        leftMessage='Confirm'
-        rightMessage='Cancel'
-        leftColor='var(--yellow)'
-        rightColor='cancel-button'
-        isPending={isPending}
-        leftPending='Booking...'
-        leftPendingColor='var(--lightgray)'
-      />}
+      {showModal==='book' && (
+        <ModalTwoButton
+          title='Do you want to enroll on this course?'
+          header={
+            <div>
+              Are you sure you want to enroll on the selected slotsIf you click confirm button, the request will be sent to this tutor. After this tutor accept your request, you will have to pay
+              <span style={{
+                fontSize: '18px', 
+                fontWeight: '600', 
+                color: 'var(--primary)'
+              }}>
+                {` 800 THB. (dummy cost) ` /* {scheduleList[currentSchedule].price} */}
+              </span>
+            </div>
+          }
+          leftFunc={sendBooking}
+          rightFunc={() => setShowModal('none')}
+          leftMessage='Confirm'
+          rightMessage='Cancel'
+          leftColor='var(--yellow)'
+          rightColor='cancel-button'
+          isPending={isPending}
+          leftPending='Booking...'
+          leftPendingColor='var(--lightgray)'
+        />
+      )}
     </>
   );
 };
