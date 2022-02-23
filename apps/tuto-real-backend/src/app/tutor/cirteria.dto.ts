@@ -1,5 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { StringDecoder } from "string_decoder";
+import { ProfileImg } from "../util/image.schema";
 
 export class CriteriaDto {
 
@@ -40,10 +41,7 @@ export class CriteriaQuery{
   
 }
 
-export class profileImg{
-  @ApiProperty()
-  url : String
-}
+
 export class nestedData{
   
   @ApiProperty()
@@ -55,7 +53,7 @@ export class nestedData{
     @ApiProperty()
     lastName : String
 
-    @ApiProperty({type:()=>profileImg})
+    @ApiProperty({type:()=>ProfileImg})
     profileImg :{
       url : String
     }

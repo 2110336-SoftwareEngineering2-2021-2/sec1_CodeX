@@ -27,14 +27,14 @@ export class TutorReqService {
     dto.timeStamp = new Date();
     await uploadImage('Evidence', fileCitizen[0]).then((url) => {
       dto.citizenID = {
-        fileName: fileCitizen[0].originalname,
+        //fileName: fileCitizen[0].originalname,
         url: url,
       };
     });
 
     await uploadImage('Evidence', fileTran[0]).then((url) => {
       dto.transcription = {
-        fileName: fileTran[0].originalname,
+        //fileName: fileTran[0].originalname,
         url: url,
       };
     });

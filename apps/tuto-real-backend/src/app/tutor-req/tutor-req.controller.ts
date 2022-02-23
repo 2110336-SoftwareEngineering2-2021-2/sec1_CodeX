@@ -17,7 +17,7 @@ import {
 } from '@nestjs/platform-express';
 import { uploadImage } from '../util/google';
 //import { ExpressAdapter, FileInterceptor  } from '@nestjs/platform-express';
-import { TutorReqDto } from './tutor-req.dto';
+import { CreateTutorReq, ShowTutorReq, TutorReqDto } from './tutor-req.dto';
 import { TutorReqService } from './tutor-req.service';
 import { updateStatusDto } from './updateStatus.dto';
 import {
@@ -38,7 +38,7 @@ export class TutorReqController {
   
 
   @ApiOperation({ summary: 'Create request' })
-  @ApiBody({type:PickType(TutorReqDto, ['email','citizenID64','transcription64'] as const) })
+  @ApiBody({type:CreateTutorReq})
   @ApiResponse({ status : 201 })
   @Post('create')
   create1(@Body() dto: TutorReqDto) {
@@ -46,7 +46,7 @@ export class TutorReqController {
   }
 
   @ApiOperation({ summary: 'Get all request' })
-  @ApiResponse({ status : 201 , type : OmitType(TutorReqDto,['citizenID64','transcription64'] as const)})
+  @ApiResponse({ status : 201 , type : ShowTutorReq})
   @Get()
   findAll() {
     return this.service.findAll();

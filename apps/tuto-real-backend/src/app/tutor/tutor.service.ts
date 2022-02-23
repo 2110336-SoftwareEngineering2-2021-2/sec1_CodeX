@@ -64,7 +64,6 @@ export class TutorService {
   },{
     $match: {$and :[
         (!!dto.days)? {$or : queryDays} : {} ,
-        (!!dto.rate)? { "schedules.pricePerSlot" : { $gte :  dto.rate.min, $lte : dto.rate.max}}:{} ,
         (!!dto.keyword && queryKeyword.length!=0)? { $and :  queryKeyword} :{}
     ]}
   },
