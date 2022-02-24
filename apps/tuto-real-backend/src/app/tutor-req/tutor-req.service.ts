@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from '../user/user.interface';
@@ -16,11 +16,17 @@ export class TutorReqService {
     @InjectModel('User') private userModel: Model<User>
   ) {}
 
-  findAll() {
-    return this.reqModel
+  async findAll() {
+    return await this.reqModel
       .find({ status: 'Pending' })
       .sort({ timeStamp: 'asc' })
-      .exec();
+      .exec()
+      .then((res)=>{
+        return {success : true , data : res}
+      })
+      .catch((err)=>{
+        throw new NotFoundException({success :false , data : err.msg})
+      })
   }
 
   async create(fileCitizen, fileTran, dto: TutorReqDto) {
@@ -30,6 +36,9 @@ export class TutorReqService {
         //fileName: fileCitizen[0].originalname,
         url: url,
       };
+    })
+    .catch((err)=>{
+      throw new BadRequestException({success:false,data:"Bad citizenID image file"}) 
     });
 
     await uploadImage('Evidence', fileTran[0]).then((url) => {
@@ -37,6 +46,9 @@ export class TutorReqService {
         //fileName: fileTran[0].originalname,
         url: url,
       };
+    })
+    .catch((err)=>{
+      throw new BadRequestException({success:false,data:"Bad transcription image file"}) 
     });
 
     return await this.userModel
@@ -47,8 +59,17 @@ export class TutorReqService {
         dto.lastName = name[0].lastName;
         return await this.reqModel.updateOne({ email: dto.email }, dto, {
           upsert: true,
-        });
-      });
+        })
+        .then((res)=>{
+          return {success:true , data:res}
+        })
+        .catch((err)=>{
+          throw new NotFoundException({success:false,data:"User not found"})
+        })
+      })
+      .catch((err)=>{
+        throw new NotFoundException({success:false,data:"User not found"})
+      })
   }
 
   async create1(dto) {
@@ -57,11 +78,18 @@ export class TutorReqService {
       dto.citizenID = {
         url: url,
       };
+    })
+    .catch((err)=>{
+      throw new BadRequestException({success:false,data:"Bad citizenID image file"}) 
     });
+
     await uploadImageBy64('Evidence', dto.transcription64).then((url) => {
       dto.transcription = {
         url: url,
       };
+    })
+    .catch((err)=>{
+      throw new BadRequestException({success:false,data:"Bad transcription image file"}) 
     });
 
     return await this.userModel
@@ -72,18 +100,41 @@ export class TutorReqService {
         dto.lastName = name[0].lastName;
         return await this.reqModel.updateOne({ email: dto.email }, dto, {
           upsert: true,
-        });
-      });
+        })
+        .then((res)=>{
+          return {success:true , data:res}
+        })
+        .catch((err)=>{
+          throw new NotFoundException({success:false,data:"User not found"})
+        })
+      })
+      .catch((err)=>{
+        throw new NotFoundException({success:false,data:"User not found"})
+      })
   }
 
   async updateStatus(id: string, dto: updateStatusDto) {
     const { email, firstName, lastName, citizenID, transcription } =
-      await this.reqModel.findById(id);
+      await this.reqModel.findById(id)
+      .catch((err)=>{
+        throw new NotFoundException({success:false,data:"User not found"})
+      })
 
     if (dto.status == 'Reject') {
-      await this.reqModel.deleteOne({ _id: id });
-      await deleteImg(citizenID.url.split('Evidence/')[1], 'Evidence');
-      await deleteImg(transcription.url.split('Evidence/')[1], 'Evidence');
+      await this.reqModel.deleteOne({ _id: id })
+      .catch((err)=>{
+        throw new NotFoundException({success:false,data:"User not found"})
+      })
+      
+      await deleteImg(citizenID.url.split('Evidence/')[1], 'Evidence')
+      .catch((err)=>{
+        throw new NotFoundException({success:false,data:"CitizenId image not found"})
+      })
+      await deleteImg(transcription.url.split('Evidence/')[1], 'Evidence')
+      .catch((err)=>{
+        throw new NotFoundException({success:false,data:"Transcription image not found"})
+      })
+
     } else if (dto.status == 'Approved') {
       const token = jwt.sign(
         { iss: process.env.API_KEY },
@@ -109,7 +160,10 @@ export class TutorReqService {
             last_name: lastName,
           },
         },
-      });
+      })
+      .catch((err)=>{
+        throw new ForbiddenException({success:false,data:"Can not connect Zoom API"})
+      })
 
       const meeting = await axios({
         method: 'post',
@@ -135,9 +189,15 @@ export class TutorReqService {
             mute_upon_entry: true,
           },
         },
-      });
+      })
+      .catch((err)=>{
+        throw new ForbiddenException({success:false,data:"Can not connect Zoom API"})
+      })
 
-      await this.reqModel.updateOne({ _id: id }, { status: 'Approved' }).exec();
+      await this.reqModel.updateOne({ _id: id }, { status: 'Approved' }).exec()
+      .catch((err)=>{
+        throw new NotFoundException({success:false,data:"User not found"})
+      })
 
       const zoomID = meeting.data.id;
       const zoomStartURL = meeting.data.start_url;
@@ -154,7 +214,13 @@ export class TutorReqService {
           },
           { new: true }
         )
-        .exec();
+        .exec()
+        .then((res)=>{
+          return {success:true,data:res}
+        })
+        .catch((err)=>{
+          throw new NotFoundException({success:false,data:"User not found"})
+        })
     }
   }
 }

@@ -8,7 +8,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { updateUserDto } from './updateUser.dto';
-import { UserDto } from './user.dto';
+import { NewUserDto, UserDto } from './user.dto';
 import { UserService } from './user.service';
 import {
   ApiTags,
@@ -34,6 +34,8 @@ export class UserController {
   }
 
   @Post('/create')
+  @ApiOperation({summary:"Create new user"})
+  @ApiBody({type:NewUserDto})
   createProfile(@Body() dto: UserDto) {
     try {
       return this.service.createProfile(dto);
