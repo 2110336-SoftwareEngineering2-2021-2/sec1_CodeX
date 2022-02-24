@@ -81,11 +81,11 @@ export class TutorService {
  
   }
 
-  async send(){
-    return await sendMail()
-    .then((result) => console.log('Email sent...', result))
-    .catch((error) => console.log(error.message));
-  }
+  // async send(){
+  //   return await sendMail()
+  //   .then((result) => console.log('Email sent...', result))
+  //   .catch((error) => console.log(error.message));
+  // }
   /*GetProfileByID(id : String)  {
 
         return this.tutorModel.find({uid:id}).exec()

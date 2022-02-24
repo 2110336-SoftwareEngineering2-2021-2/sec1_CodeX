@@ -9,21 +9,18 @@ import {
 import { client } from '../../../axiosConfig';
 import Tag from './Tag';
 import Schedule from './Schedule';
-import '../profile.css';
 import ModalTwoButton from '../../modal/ModalTwoButton';
 import EditingSlotModal from '../../modal/EditingSlotModal';
 import ViewingSlotModal from '../../modal/ViewingSlotModal';
+import { useAuth } from '../../../auth';
+import '../profile.css';
 
 import COLORS from '../../../constants/color';
-import SUBJECTS from '../../../constants/subjects';
 import { DAY } from '../../../constants/day';
-import { useAuth } from '../../../auth';
+import { ZOOM_ICON } from '../../../constants/image';
 
-const ProfileTeachSchedule = ({ targetId, viewType }) => {
-  // const ProfileTeachSchedule = ({ targetId }) => {
-  //   const viewType = 'TutorOther';
-  // const viewType = "TutorSelf"
-
+const ProfileTeachSchedule = ({ targetId, viewType, zoomUrl }) => {
+  const [isLoading, setLoading] = useState(true);
   const [isEditing, setEditing] = useState(false);
   const [isPending, setIsPending] = useState(false);
   const [showModal, setShowModal] = useState('none'); // "none" | "edit" | "info" | "delete" | "book" //
@@ -39,7 +36,7 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
   const [selected, setSelected] = useState([]); // Sun: 0-15, Mon: 16-31, Tue: 32-47, ..., Sat: 96-111
   const [info, setInfo] = useState({});
 
-  const { _id } = useAuth()
+  const { _id } = useAuth();
 
   const tagColor = [
     'Crimson',
@@ -67,6 +64,7 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
           // setCurrentSchedule(0);
           setSubjectList(data.scheduleList[currentSchedule].allSubjects ?? []);
         }
+        setLoading(false);
       })
       .catch((res) => {
         console.log(res);
@@ -74,6 +72,7 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
   }, []);
 
   useEffect(() => {
+    setLoading(true);
     fetchData();
     setRefresh(false);
   }, [fetchData, refresh]);
@@ -84,10 +83,6 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
       // setTime('Day Time');
     }
   }, [currentSchedule]);
-
-  // useEffect(() => {
-  //   console.log(tempPrice);
-  // }, [tempPrice]);
 
   const sendEditData = async (subject, description) => {
     console.log(subject);
@@ -120,9 +115,9 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
   };
 
   const sendBooking = async () => {
-    setIsPending(true)
-    const bookingData = await selectedToDayAndSlotWithNoSubject()
-    console.log(bookingData)
+    setIsPending(true);
+    const bookingData = await selectedToDayAndSlotWithNoSubject();
+    console.log(bookingData);
 
     await client({
       method: 'POST',
@@ -130,27 +125,37 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
       data: {
         student_id: _id,
         schedule_id: scheduleList[currentSchedule]._id,
-        days: bookingData
-      }
-
-    }).then( ({data}) => {
-      console.log(data);
-      setIsPending(false);
-      setShowModal('none');
-      setSelected([]);
-      setRefresh(true);
-
-    }).catch( ({response}) => {
-      console.log(response)
-      
+        days: bookingData,
+      },
     })
-  }
+      .then(({ data }) => {
+        console.log(data);
+        setIsPending(false);
+        setShowModal('none');
+        setSelected([]);
+        setRefresh(true);
+      })
+      .catch(({ response }) => {
+        console.log(response);
+      });
+  };
 
-  const savePrice = () => {
+  const savePrice = async () => {
     console.log('saving Price...', tempPrice);
-    setPrice(tempPrice ? tempPrice : 0);
-    // Patch to backend.....
-    setEditingPrice(false);
+    await client({
+      method: 'PATCH',
+      url: '/user',
+      params: { _id: targetId },
+      data: { pricePerSlot: tempPrice },
+    })
+      .then(({ data }) => {
+        console.log(data);
+        setPrice(tempPrice ? tempPrice : 0);
+        setEditingPrice(false);
+      })
+      .catch(({ response }) => {
+        console.log(response);
+      });
   };
 
   const cancelPrice = () => {
@@ -159,8 +164,8 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
   };
 
   const onViewInfo = (slotData) => {
-    setShowModal('info');
     setInfo(slotData);
+    setShowModal('info');
   };
 
   const getDeletingSlot = () => {
@@ -260,10 +265,7 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
     selected.sort();
     for (let i = 0; i != selected.length; i++) {
       const dayIndex = Math.floor(selected[i] / 16);
-      dayList[dayIndex].slots = [
-        ...dayList[dayIndex].slots,
-        selected[i] % 16 
-      ];
+      dayList[dayIndex].slots = [...dayList[dayIndex].slots, selected[i] % 16];
     }
     return dayList.filter((day) => day.slots.length !== 0);
   };
@@ -297,12 +299,14 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
           >
             {`${price} THB`}
           </p>
-          <FiEdit
-            size={20}
-            color={COLORS.third}
-            style={{ cursor: 'pointer' }}
-            onClick={() => setEditingPrice(true)}
-          />
+          {viewType === 'TutorSelf' ? (
+            <FiEdit
+              size={20}
+              color={COLORS.third}
+              style={{ cursor: 'pointer' }}
+              onClick={() => setEditingPrice(true)}
+            />
+          ) : null}
         </>
       ) : (
         <Form.Group
@@ -417,6 +421,8 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
     else return null;
   };
 
+  if (isLoading) return <h4 style={{ color: COLORS.darkgray }}>Loading...</h4>;
+
   return (
     <>
       <Form className="form">
@@ -430,6 +436,18 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
           {/* Price Per Hour */}
           {renderPrice}
           <hr />
+          {zoomUrl ? (
+            <>
+              <div className="zoom-button" onClick={() => window.open(zoomUrl)}>
+                <img
+                  src={ZOOM_ICON}
+                  style={{ width: '3vw', marginRight: '1vw' }}
+                />
+                <p>Click here to go to your classroom.</p>
+              </div>
+              <hr />
+            </>
+          ) : null}
           {/* Date Choosing */}
           <div className="section" style={{ marginBottom: '1.5%' }}>
             <IoIosArrowDropleftCircle
@@ -470,6 +488,7 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
               />
             )}
           </div>
+
           {/* Day/Night Time Tabs */}
           <Tabs
             defaultActiveKey={time}
@@ -512,6 +531,7 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
               />
             </Tab>
           </Tabs>
+
           {/* Button Section */}
           <div
             style={{
@@ -545,11 +565,11 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
 
       {showModal === 'edit' && (
         <EditingSlotModal
-        show={isEditing}
-        setShow={setEditing}
-        setModalState={setShowModal}
-        confirmFunc={sendEditData}
-        isPending={isPending}
+          show={isEditing}
+          setShow={setEditing}
+          setModalState={setShowModal}
+          confirmFunc={sendEditData}
+          isPending={isPending}
         />
       )}
 
@@ -563,30 +583,34 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
         />
       )}
 
-      {showModal==='book' && (
+      {showModal === 'book' && (
         <ModalTwoButton
-          title='Do you want to enroll on this course?'
+          title="Do you want to enroll on this course?"
           header={
             <div>
-              Are you sure you want to enroll on the selected slotsIf you click confirm button, the request will be sent to this tutor. After this tutor accept your request, you will have to pay
-              <span style={{
-                fontSize: '18px', 
-                fontWeight: '600', 
-                color: 'var(--primary)'
-              }}>
-                {` ${price*selected.length} THB. `}
+              Are you sure you want to enroll on the selected slotsIf you click
+              confirm button, the request will be sent to this tutor. After this
+              tutor accept your request, you will have to pay
+              <span
+                style={{
+                  fontSize: '18px',
+                  fontWeight: '600',
+                  color: 'var(--primary)',
+                }}
+              >
+                {` ${price * selected.length} THB. `}
               </span>
             </div>
           }
           leftFunc={sendBooking}
           rightFunc={() => setShowModal('none')}
-          leftMessage='Confirm'
-          rightMessage='Cancel'
-          leftColor='var(--yellow)'
-          rightColor='cancel-button'
+          leftMessage="Confirm"
+          rightMessage="Cancel"
+          leftColor="var(--yellow)"
+          rightColor="cancel-button"
           isPending={isPending}
-          leftPending='Booking...'
-          leftPendingColor='var(--lightgray)'
+          leftPending="Booking..."
+          leftPendingColor="var(--lightgray)"
         />
       )}
     </>

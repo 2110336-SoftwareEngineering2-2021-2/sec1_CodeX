@@ -23,11 +23,13 @@ const Slot = ({
     }
   */
 
-  const student = slotData?.students?.find((student) => student.id === _id);
+  const status = slotData?.students?.find(
+    (student) => student.id === _id
+  )?.status;
 
   const getSlotStyle = () => {
     // slot-tutor, slot-student, slot-active-tutor, slot-active-student //
-    if (student) return null;
+    if (status) return null;
     // Can't click if 'Pending' or 'Approved'
     else if (viewType === 'TutorSelf') {
       if (isSelected) return 'slot-active-tutor'; // Show green block
@@ -41,7 +43,7 @@ const Slot = ({
   };
 
   const onClick = () => {
-    if (viewType === 'TutorSelf' || (slotData && !student)) whenClick();
+    if (viewType === 'TutorSelf' || (slotData && !status)) whenClick();
   };
 
   if (isX) {
@@ -67,22 +69,23 @@ const Slot = ({
       style={{ display: 'flex', flexDirection: 'column' }}
     >
       {slotData ? (
-        <div
-          style={{ textAlign: 'right' }}
-          onClick={onViewInfo ? () => onViewInfo(slotData) : null}
-        >
-          <IoIosInformation size={24} className="hover-icon" />
+        <div style={{ textAlign: 'right' }}>
+          <IoIosInformation
+            size={24}
+            className="hover-icon"
+            onClick={onViewInfo ? () => onViewInfo(slotData) : null}
+          />
         </div>
       ) : null}
       <p>{slotData?.subject ? SUBJECTS[slotData?.subject] : ' '}</p>
       {/* If this is student view and student is a member of the slot */}
-      {viewType === 'TutorOther' && student ? (
+      {viewType === 'TutorOther' && status ? (
         <p
           style={{
-            color: student.status === 'Approved' ? COLORS.third : COLORS.orange,
+            color: status === 'Approved' ? COLORS.third : COLORS.orange,
           }}
         >
-          {student.status}
+          {status}
         </p>
       ) : null}
     </div>
