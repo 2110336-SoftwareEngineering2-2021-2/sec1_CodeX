@@ -85,6 +85,23 @@ img {
   margin-right: 8px;
 }
 
+.zoom-button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  cursor: pointer;
+  border: 1px solid var(--lightgray);
+  border-radius: 30px;
+  white-space: nowrap;
+  padding: 1% 1.5%;
+  color: var(--darkgray);
+}
+
+.zoom-button:hover {
+  background-color: var(--darkgray);
+  color: white;
+}
+
 .change-password-button {
   background-color: transparent;
   border-width: 0px;

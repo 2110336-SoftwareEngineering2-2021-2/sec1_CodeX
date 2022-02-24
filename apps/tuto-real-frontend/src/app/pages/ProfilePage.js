@@ -12,6 +12,7 @@ import ChangePassword from '../components/modal/ChangePassword';
 const ProfilePage = () => {
   const [selecting, setSelecting] = useState('Info'); // "Info" | "Learn" | "Teach" | "Review"
   const [viewType, setViewType] = useState('StudentSelf'); // "TutorSelf" | "StudentSelf" | "TutorOther" | "StudentOther"
+  const [zoomUrl, setZoomUrl] = useState(null);
 
   const { currentUser, _id } = useAuth();
 
@@ -28,14 +29,13 @@ const ProfilePage = () => {
       // url: `/user/${targetEmail}`,
       url: `/user`,
       params: {
-        _id: params?._id
-      }
+        _id: params?._id,
+      },
     })
-      .then(({ data: {data} }) => {
+      .then(({ data: { data } }) => {
         console.log(data);
-        // console.log("currentUser: ", firstName, " ", lastName, " ", currentUser)
-        // setViewType(calculateViewType(data[0]?.role))
         setTargetRole(data?.role);
+        setZoomUrl(data?.zoomStartURL ?? null);
       })
       .catch((res) => {
         console.log(res);
@@ -43,17 +43,15 @@ const ProfilePage = () => {
   }, [params]);
 
   useEffect(() => {
-    if(params._id) fetchData();
+    if (params._id) fetchData();
     else navigate('/');
-    // console.log(params);
   }, [fetchData]);
 
   useEffect(() => {
     if (params?._id === _id) {
       if (targetRole === 'Tutor') setViewType('TutorSelf');
       if (targetRole === 'Student') setViewType('StudentSelf');
-    } 
-    else if (targetRole === 'Tutor') setViewType('TutorOther'); 
+    } else if (targetRole === 'Tutor') setViewType('TutorOther');
     else setViewType('StudentOther');
   }, [currentUser, targetRole, _id, params]);
 
@@ -93,7 +91,11 @@ const ProfilePage = () => {
         return null; // Replace null with Student Schedule page...
       case 'Teach':
         return (
-          <ProfileTeachSchedule viewType={viewType} targetId={params?._id}/>
+          <ProfileTeachSchedule
+            viewType={viewType}
+            targetId={params?._id}
+            zoomUrl={zoomUrl}
+          />
         );
       case 'Review':
         return null; // Replace null with Review page...
@@ -109,7 +111,7 @@ const ProfilePage = () => {
         setSelecting={setSelecting}
         selecting={selecting}
       />
-      {viewType !== "StudentOther" ? renderContent() : null}
+      {viewType !== 'StudentOther' ? renderContent() : null}
       {/* {renderContent()} */}
       <ChangePassword show={changePasswordShow} setShow={setChangePasswordShow}/>
     </>

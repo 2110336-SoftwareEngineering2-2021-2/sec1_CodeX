@@ -54,10 +54,10 @@ export class TutorController {
     }
     }
   
-  @Get("/send")
-  sendMail(){
-    return this.tutorService.send()
+  // @Get("/send")
+  // sendMail(){
+  //   return this.tutorService.send()
 
-  }
+  // }
 
 }

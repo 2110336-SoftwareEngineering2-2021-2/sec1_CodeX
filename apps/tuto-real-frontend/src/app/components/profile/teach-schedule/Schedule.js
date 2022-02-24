@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import { Fragment } from 'react';
 
 import { useAuth } from '../../../auth';
 import Slot from './Slot';
@@ -12,14 +12,13 @@ const Schedule = ({
   viewType,
   selected,
   setSelected,
-  setShowModal,
   onViewInfo,
 }) => {
   /* 
     time: "Day Time" | "Night Time"
     scheduleData: {
       day: string,
-      slots: {slot: number, subject: string, description: string, student: {id, firstName, lastName, status}}[]
+      slots: {slot: number, subject: string, description: string, students: {id, firstName, lastName, status}}[]
     }[]
     slotData: {
       slot: number start from 0 - 15 (8.00 - 23.00)
@@ -114,7 +113,7 @@ const Schedule = ({
                       <Slot
                         slotData={getSlotData(idx)}
                         viewType={viewType}
-                        id={_id}
+                        _id={_id}
                         isSelected={selected.includes(idx)}
                         isX={false}
                         whenClick={() => whenClickSlot(idx)}
@@ -136,7 +135,7 @@ const Schedule = ({
                       <Slot
                         slotData={null}
                         viewType={viewType}
-                        id={_id}
+                        _id={_id}
                         isSelected={selected.includes(idx)}
                         isX={false}
                         whenClick={() => whenClickSlot(idx)}
