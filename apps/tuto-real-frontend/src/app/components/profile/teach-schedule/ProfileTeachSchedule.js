@@ -576,7 +576,6 @@ const ProfileTeachSchedule = ({ targetId, viewType, zoomUrl }) => {
       {showModal === 'info' && (
         <ViewingSlotModal
           cancelFunc={handleCancel}
-          number={info.students ? info.students.length : 0}
           subject={info.subject}
           description={info.description}
           studentList={info.students ?? []}

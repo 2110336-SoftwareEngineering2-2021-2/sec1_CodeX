@@ -1,11 +1,26 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, Tabs, Tab, Button } from 'react-bootstrap';
 import './ViewingSlotModal.css';
 
 const ViewingSlotModal = (props) => {
-  const {cancelFunc, number, subject, description, studentList} = props;
+  const {cancelFunc, subject, description, studentList} = props;
 
   const [tabValue, setTabValue] = useState('Information');
+  const [newInfo, setNewInfo] = useState([]);
+
+  const checkInfo = () => {
+    let tempData = []
+    studentList.map((student) => {
+      if(student.status === 'Approved') {
+        tempData = [...tempData,student]
+      }
+    })
+    setNewInfo(tempData)
+  }
+  
+  useEffect(() => {
+    checkInfo()
+  },[])
 
   return (
     <div>
@@ -108,11 +123,11 @@ const ViewingSlotModal = (props) => {
           </Tab>
 
             {/* member part */}
-          <Tab eventKey="Members" title={`Members (${number})`}>
+          <Tab eventKey="Members" title={`Members (${newInfo.length})`}>
 
               {/* studentList part */}
             <Modal.Body>
-              {studentList.map((student) => (
+              {newInfo.map((student) => (
                 <Modal.Title
                   key={student.id}
                   className="request-header"
@@ -120,7 +135,8 @@ const ViewingSlotModal = (props) => {
                 >
                   {` · ${student.firstName} ${student.lastName}`}
                 </Modal.Title>
-              ))}
+                )
+              )}
             </Modal.Body>
 
             {/* button part */}
