@@ -2,6 +2,7 @@ import { useState } from "react"
 import { Button, Form, Modal } from "react-bootstrap"
 import COLORS from "../../constants/color"
 import './search.css'
+import SUBJECTS from '../../constants/subjects'
 
 
 const SearchFilter = ({show, setShow, searchInfo, setSearchInfo, onSearch, backupSearchInfo}) => {
@@ -109,9 +110,9 @@ const SearchFilter = ({show, setShow, searchInfo, setSearchInfo, onSearch, backu
                             })
                         }
                     >
-                        {dummySubjects.map((e,i) => (
-                            <option value={e} key={`subject-${i}`}>
-                                {e}
+                        {Object.keys(SUBJECTS).map((subject) => (
+                            <option key={subject} style={{ color: 'var(--darkgray)' }}>
+                            {subject}
                             </option>
                         ))}
                     </Form.Select>
