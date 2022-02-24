@@ -1,3 +1,4 @@
+import { useState, createContext, useContext, useEffect } from 'react'
 import { Route, Routes } from 'react-router-dom';
 
 import NavBar from './components/navbar/navbar';
@@ -11,9 +12,19 @@ import ChangeAccountTypePage from './pages/ChangeAccountTypePage';
 import SearchPage from './pages/SearchPage';
 import TestPage from './pages/TestPage';
 
+
+export const SearchContext = createContext({searchText: '', setSearchText: () => {}})
+
 export function App() {
+  const [searchText, setSearchText] = useState('')
+
+  useEffect(() => {
+    console.log(searchText)
+  },[searchText])
+  
   return (
-    <>
+    <SearchContext.Provider value={{searchText, setSearchText}}>
+      {/* <> */}
       <NavBar />
       <Routes>
         <Route exact path="/" element={<HomePage />} />
@@ -42,7 +53,8 @@ export function App() {
         />
         <Route exact path="/testPage" element={<TestPage />} />
       </Routes>
-    </>
+    </SearchContext.Provider>
+    // </>
   );
 }
 export default App;

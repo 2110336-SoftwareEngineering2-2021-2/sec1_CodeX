@@ -1,5 +1,8 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useContext } from "react";
 import { Button, Modal } from "react-bootstrap";
+import { useParams, useNavigate } from "react-router-dom";
+
+import { SearchContext } from '../app'
 import { client } from "../axiosConfig";
 import SearchConfigCard from "../components/search/SearchConfigCard";
 import SearchFilter from "../components/search/SearchFilter";
@@ -8,7 +11,12 @@ import TutorCard from "../components/search/TuturCard";
 import './RegistrationPage.css'
 
 const SearchPage = () => {
+    // const params = useParams();
+    const navigate = useNavigate()
+    const { searchText, setSearchText } = useContext(SearchContext)
 
+    const [filterShow, setFilterShow] = useState(false);
+    const [isSearched, setSearched] = useState(false)
     const [tutorList,setTutorList] = useState([
         // {
         //     _id: "",
@@ -25,7 +33,7 @@ const SearchPage = () => {
     ])
 
     const [searchInfo,setSearchInfo] = useState({
-        searchText:"",
+        searchText: searchText ?? "",
         subject:"All",
         minPrice:0,
         maxPrice:1000000,
@@ -43,20 +51,32 @@ const SearchPage = () => {
         daysCheck: [true,true,true,true,true,true,true,true]
     })
     
+    useEffect(() => {
+        setSearchInfo({
+            ...searchInfo,
+            searchText: searchText
+        });
+        fetchData(true);
+    }, [searchText]);
+
     // useEffect(() => {
-    //     console.log(searchInfo);
-    // }, [searchInfo]);
+    //     if(params.searchText) {
+    //         setSearchInfo({
+    //             ...searchInfo,
+    //             searchText: params.searchText
+    //         });
+    //     }
+    // }, [params.searchText]);
 
     // useEffect(() => {
     //     onSearch()
     // },[searchInfo.daysCheck, searchInfo.searchType])
-    
-    const [filterShow, setFilterShow] = useState(false);
-    const [isSearched, setSearched] = useState(false)
+
 
     const onSearch = () => {
         console.log("onSearch",searchInfo)
-        fetchData()
+        setSearchText(searchInfo.searchText)
+        fetchData(0)
     };
 
     function genKeyword(text) {
@@ -74,7 +94,7 @@ const SearchPage = () => {
         return temp.join(",");
     };
 
-    const fetchData = async () => {
+    const fetchData = async (searchWithContext)  => {
         // console.log(`${searchInfo.minPrice},${searchInfo.maxPrice ?? "10000"}`)
         // console.log("fetchdata",search_info)
         console.log("fetchdata",searchInfo)
@@ -85,7 +105,7 @@ const SearchPage = () => {
           url: `/tutor/search`,
           params: {
             subjects: `${searchInfo.subject === "All" ? "" : searchInfo.subject}`,
-            keyword: genKeyword(searchInfo.searchText),
+            keyword: genKeyword(searchWithContext ? searchText : searchInfo.searchText),
             ratePrice: `${searchInfo.minPrice.toString()},${searchInfo.maxPrice.toString() ?? "10000"}`,
             days: genDayListText(searchInfo.daysCheck),
           }
@@ -94,6 +114,7 @@ const SearchPage = () => {
             console.log(data);
             setTutorList(data);
             setSearched(true)
+            navigate(`/search`)
             // console.log("currentUser: ", firstName, " ", lastName, " ", currentUser)
             // setViewType(calculateViewType(data[0]?.role))
             // setTargetRole(data?.role);
