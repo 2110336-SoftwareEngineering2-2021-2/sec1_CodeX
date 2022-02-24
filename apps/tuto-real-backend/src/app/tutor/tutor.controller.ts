@@ -45,8 +45,14 @@ export class TutorController {
     }
     dto.keyword = (!!q.keyword)? q.keyword.split(","):undefined
     dto.days = (!!q.days)? q.days.split(","):undefined
-    return this.tutorService.searchTutor(dto);
-  }
+
+    try{
+      return this.tutorService.searchTutor(dto);
+    } 
+    catch (err) {
+      return err;
+    }
+    }
   
   @Get("/send")
   sendMail(){

@@ -1,4 +1,4 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { HttpException, Injectable , BadRequestException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { UserDto } from '../user/user.dto';
@@ -76,7 +76,7 @@ export class TutorService {
     return {success : true , data : res}
   })
   .catch((err)=>{
-    return { success : false , data : err.message}
+    throw new BadRequestException( { success : false , data : err.message})
   })
  
   }

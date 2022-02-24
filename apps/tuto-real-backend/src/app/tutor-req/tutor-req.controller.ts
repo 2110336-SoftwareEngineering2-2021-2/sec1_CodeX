@@ -35,26 +35,37 @@ import {
 export class TutorReqController {
   constructor(private readonly service: TutorReqService) {}
 
-  
 
   @ApiOperation({ summary: 'Create request' })
   @ApiBody({type:CreateTutorReq})
   @ApiResponse({ status : 201 })
   @Post('create')
   create1(@Body() dto: TutorReqDto) {
+    try {
     return this.service.create1(dto);
+    } catch (err) {
+      return err;
+    }
   }
 
   @ApiOperation({ summary: 'Get all request' })
   @ApiResponse({ status : 201 , type : ShowTutorReq})
   @Get()
   findAll() {
-    return this.service.findAll();
+    try {
+      return this.service.findAll();
+    } catch (err) {
+      return err;
+    }
   }
 
   @Patch()
   update(@Query('_id') id: string, @Body() dto: updateStatusDto) {
-    return this.service.updateStatus(id, dto);
+    try {
+      return this.service.updateStatus(id, dto);
+    } catch (err) {
+    return err;
+    }
   }
 
 
