@@ -17,6 +17,7 @@ import ViewingSlotModal from '../../modal/ViewingSlotModal';
 import COLORS from '../../../constants/color';
 import SUBJECTS from '../../../constants/subjects';
 import { DAY } from '../../../constants/day';
+import { useAuth } from '../../../auth';
 
 const ProfileTeachSchedule = ({ targetId, viewType }) => {
   // const ProfileTeachSchedule = ({ targetId }) => {
@@ -37,6 +38,8 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
   const [currentSchedule, setCurrentSchedule] = useState(0);
   const [selected, setSelected] = useState([]); // Sun: 0-15, Mon: 16-31, Tue: 32-47, ..., Sat: 96-111
   const [info, setInfo] = useState({});
+
+  const { _id } = useAuth()
 
   const tagColor = [
     'Crimson',
@@ -117,27 +120,30 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
   };
 
   const sendBooking = async () => {
-    // setIsPending(true)
-    // await client({
-    //   method: 'POST',
-    //   url: '/booking/create',
-    //   data: {
-    //     studentId: targetId,
-    //     schedule_id: scheduleList[currentSchedule]._id,
-    //     days: 
-    //   }
+    setIsPending(true)
+    const bookingData = await selectedToDayAndSlotWithNoSubject()
+    console.log(bookingData)
 
-    // }).then( ({data}) => {
-    //   console.log(data)
-    //   setIsPending(false)
-    //   setShowModal('none')
-    //   setSelected([])
-    //   fetchData()
+    await client({
+      method: 'POST',
+      url: '/booking/create',
+      data: {
+        student_id: _id,
+        schedule_id: scheduleList[currentSchedule]._id,
+        days: bookingData
+      }
 
-    // }).catch( ({response}) => {
-    //   console.log(response)
+    }).then( ({data}) => {
+      console.log(data);
+      setIsPending(false);
+      setShowModal('none');
+      setSelected([]);
+      setRefresh(true);
+
+    }).catch( ({response}) => {
+      console.log(response)
       
-    // })
+    })
   }
 
   const savePrice = () => {
@@ -236,7 +242,7 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
     setShowModal('none');
   };
 
-  const selectedToDayAndSlot = async (subject, description, _callback) => {
+  const selectedToDayAndSlot = async (subject, description) => {
     const dayList = DAY.map((day) => ({ day, slots: [] }));
     selected.sort();
     for (let i = 0; i != selected.length; i++) {
@@ -244,6 +250,19 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
       dayList[dayIndex].slots = [
         ...dayList[dayIndex].slots,
         { slot: selected[i] % 16, subject, description },
+      ];
+    }
+    return dayList.filter((day) => day.slots.length !== 0);
+  };
+
+  const selectedToDayAndSlotWithNoSubject = async () => {
+    const dayList = DAY.map((day) => ({ day, slots: [] }));
+    selected.sort();
+    for (let i = 0; i != selected.length; i++) {
+      const dayIndex = Math.floor(selected[i] / 16);
+      dayList[dayIndex].slots = [
+        ...dayList[dayIndex].slots,
+        selected[i] % 16 
       ];
     }
     return dayList.filter((day) => day.slots.length !== 0);
@@ -555,7 +574,7 @@ const ProfileTeachSchedule = ({ targetId, viewType }) => {
                 fontWeight: '600', 
                 color: 'var(--primary)'
               }}>
-                {` 800 THB. (dummy cost) ` /* {scheduleList[currentSchedule].price} */}
+                {` ${price*selected.length} THB. `}
               </span>
             </div>
           }
