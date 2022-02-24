@@ -7,6 +7,7 @@ import ProfileMenuBar from '../components/profile/ProfileMenuBar';
 import ProfileTeachSchedule from '../components/profile/teach-schedule/ProfileTeachSchedule';
 
 import { useAuth } from '../auth';
+import ChangePassword from '../components/modal/ChangePassword';
 
 const ProfilePage = () => {
   const [selecting, setSelecting] = useState('Info'); // "Info" | "Learn" | "Teach" | "Review"
@@ -18,6 +19,8 @@ const ProfilePage = () => {
 
   const navigate = useNavigate();
   const [targetRole, setTargetRole] = useState('');
+
+  const [changePasswordShow, setChangePasswordShow] = useState(false);
 
   const fetchData = useCallback(async () => {
     await client({
@@ -79,7 +82,13 @@ const ProfilePage = () => {
     // console.log(viewType)
     switch (selecting) {
       case 'Info':
-        return <ProfileInfo viewType={viewType} targetId={params?._id}/>;
+        return (
+          <ProfileInfo 
+            changePasswordShow={changePasswordShow} 
+            setChangePasswordShow={setChangePasswordShow} 
+            viewType={viewType} 
+            targetId={params?._id}
+          />);
       case 'Learn':
         return null; // Replace null with Student Schedule page...
       case 'Teach':
@@ -102,6 +111,7 @@ const ProfilePage = () => {
       />
       {viewType !== "StudentOther" ? renderContent() : null}
       {/* {renderContent()} */}
+      <ChangePassword show={changePasswordShow} setShow={setChangePasswordShow}/>
     </>
   );
 };

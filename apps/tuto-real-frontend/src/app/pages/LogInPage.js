@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-
 import { useAuth } from '../auth';
 import './RegistrationPage.css';
+import ForgotPassword from '../../app/components/modal/ForgotPassword';
 
 export default function Signin() {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
+  const [showModal, setShowModal] = useState(false); // Forgot password modal //
 
   const navigate = useNavigate();
   const { logIn } = useAuth();
@@ -15,7 +16,9 @@ export default function Signin() {
   const handleSubmit = async () => {
     await logIn(email, password, () => navigate('/'));
   };
-
+  const handleClose = () => {
+    setShowModal(false);
+  };
   return (
     <div className="page-container">
       <div className="regispage-left-side">
@@ -63,7 +66,9 @@ export default function Signin() {
             Sign in
           </Button>
 
-          <p className="signup-button-regis">Forgotten password?</p>
+          <ForgotPassword show={showModal} handleClose={handleClose} />
+
+          <p style = {{cursor:'pointer'}}onClick={() => setShowModal(true)}>Forgot your password?</p>
 
           <Button
             className="signup-button-regis"
