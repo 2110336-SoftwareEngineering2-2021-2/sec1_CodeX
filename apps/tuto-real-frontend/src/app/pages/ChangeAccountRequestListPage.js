@@ -15,7 +15,7 @@ const ChangeAccountRequestListPage = () => {
       method: 'GET',
       url: '/tutorReq',
     })
-      .then(({ data }) => {
+      .then(({ data: {data}}) => {
         console.log(data);
         if(data) setDataList(data);
         setIsPending(false);
