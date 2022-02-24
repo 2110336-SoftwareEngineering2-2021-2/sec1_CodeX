@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react'
-import { useNavigate} from 'react-router-dom'
+import { useState, useEffect, useContext } from 'react'
+import { useNavigate } from 'react-router-dom'
 import {MdSearch} from 'react-icons/md'
 
+import { SearchContext } from '../../app'
 import { getNavbarData } from './navbarData'
 import { useAuth } from '../../auth'
 import './navbar.css'
@@ -10,9 +11,13 @@ import './navbar.css'
 const NavBar = () => {
   // User have type => "Guest" | "Student" | "Admin" | "Tutor" //
   const [userType, setUserType] = useState("Guest")
+  const [searchTextTemp, setSearchTextTemp] = useState("");
+
   const navigate = useNavigate()
-  
+  // const params = useParams();
+  const { searchText, setSearchText } = useContext(SearchContext)
   const { logOut, _id, role, firstName, lastName } = useAuth()
+
   const navbarDataList = getNavbarData(userType).map(item => (
     <button 
       key={item.id} 
@@ -29,6 +34,16 @@ const NavBar = () => {
     else setUserType("Guest")
   },[role])
 
+  useEffect(() => {
+    setSearchTextTemp(searchText)
+  },[searchText])
+
+  // useEffect(() => {
+  //   if(params?.searchText) {
+  //     setSearchText(params?.searchText)
+  //   }
+  // },[params.searchText])
+
   const handleButton = (name, path, param) => {
     if(name === "Sign out") {
       console.log("Logging out....")
@@ -39,13 +54,26 @@ const NavBar = () => {
     } else navigate(path)
   }
 
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      setSearchText(searchTextTemp)
+      navigate(`/search`)
+    }
+  }
+
   return (
     <div className='navbar'>
       <div className='left-side'>
         <button className='main-icon' onClick={() => navigate('/')}>TutoReal</button>
         <div className='search-bar'>
           <MdSearch size="5%" color='gray' style={{marginLeft: "2%"}} />
-          <input type='text' placeholder='Search to find your interested tutor.'></input>
+          <input 
+            type='text' 
+            placeholder='Search to find your interested tutor.'
+            value={searchTextTemp}
+            onKeyDown={handleKeyDown}
+            onChange={(e) => setSearchTextTemp(e.target.value)}
+          />
         </div>
       </div>
       <div className='right-side'>
