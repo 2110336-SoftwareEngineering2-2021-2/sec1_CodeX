@@ -13,6 +13,8 @@ const ProfilePage = () => {
   const [selecting, setSelecting] = useState('Info'); // "Info" | "Learn" | "Teach" | "Review"
   const [viewType, setViewType] = useState('StudentSelf'); // "TutorSelf" | "StudentSelf" | "TutorOther" | "StudentOther"
   const [zoomUrl, setZoomUrl] = useState(null);
+  const [firstName, setFirstName] = useState();
+  const [lastName, setLastName] = useState();
 
   const { currentUser, _id } = useAuth();
 
@@ -36,6 +38,8 @@ const ProfilePage = () => {
         console.log(data);
         setTargetRole(data?.role);
         setZoomUrl(data?.zoomStartURL ?? null);
+        setFirstName(data.firstName);
+        setLastName(data.lastName);
       })
       .catch((res) => {
         console.log(res);
@@ -95,6 +99,8 @@ const ProfilePage = () => {
             viewType={viewType}
             targetId={params?._id}
             zoomUrl={zoomUrl}
+            firstName={firstName}
+            lastName={lastName}
           />
         );
       case 'Review':

@@ -3,7 +3,11 @@ import { Modal, Tabs, Tab, Button } from 'react-bootstrap';
 import './ViewingSlotModal.css';
 
 const ViewingSlotModal = (props) => {
-  const {cancelFunc, subject, description, studentList} = props;
+  const {cancelFunc, day, info, firstName, lastName } = props;
+  const time = info.slot
+  const subject = info.subject
+  const description = info.description
+  const studentList = info.students ?? []
 
   const [tabValue, setTabValue] = useState('Information');
   const [newInfo, setNewInfo] = useState([]);
@@ -46,13 +50,13 @@ const ViewingSlotModal = (props) => {
               className="request-header"
               style={{ fontWeight: '600' }}
             >
-              Friday, 13.00 - 14.00
+              {`${day}, ${time+8}.00 - ${time+9}.00`}
             </Modal.Title>
             <Modal.Title
               className="request-header"
               style={{ fontWeight: '500', fontSize: '16px' }}
             >
-              Dr. Komsorn Sookkuay
+              {`${firstName} ${lastName}`}
             </Modal.Title>
           </div>
 

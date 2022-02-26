@@ -19,7 +19,7 @@ import COLORS from '../../../constants/color';
 import { DAY } from '../../../constants/day';
 import { ZOOM_ICON } from '../../../constants/image';
 
-const ProfileTeachSchedule = ({ targetId, viewType, zoomUrl }) => {
+const ProfileTeachSchedule = ({ targetId, viewType, zoomUrl, firstName, lastName }) => {
   const [isLoading, setLoading] = useState(true);
   const [isEditing, setEditing] = useState(false);
   const [isPending, setIsPending] = useState(false);
@@ -35,6 +35,7 @@ const ProfileTeachSchedule = ({ targetId, viewType, zoomUrl }) => {
   const [currentSchedule, setCurrentSchedule] = useState(0);
   const [selected, setSelected] = useState([]); // Sun: 0-15, Mon: 16-31, Tue: 32-47, ..., Sat: 96-111
   const [info, setInfo] = useState({});
+  const [modalDay, setModalDay] = useState()
 
   const { _id } = useAuth();
 
@@ -163,7 +164,8 @@ const ProfileTeachSchedule = ({ targetId, viewType, zoomUrl }) => {
     setEditingPrice(false);
   };
 
-  const onViewInfo = (slotData) => {
+  const onViewInfo = ({slotData, day}) => {
+    setModalDay(day);
     setInfo(slotData);
     setShowModal('info');
   };
@@ -576,9 +578,10 @@ const ProfileTeachSchedule = ({ targetId, viewType, zoomUrl }) => {
       {showModal === 'info' && (
         <ViewingSlotModal
           cancelFunc={handleCancel}
-          subject={info.subject}
-          description={info.description}
-          studentList={info.students ?? []}
+          day={modalDay}
+          info={info}
+          firstName={firstName}
+          lastName={lastName}
         />
       )}
 
