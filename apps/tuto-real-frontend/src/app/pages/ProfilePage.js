@@ -85,12 +85,13 @@ const ProfilePage = () => {
     switch (selecting) {
       case 'Info':
         return (
-          <ProfileInfo 
-            changePasswordShow={changePasswordShow} 
-            setChangePasswordShow={setChangePasswordShow} 
-            viewType={viewType} 
+          <ProfileInfo
+            changePasswordShow={changePasswordShow}
+            setChangePasswordShow={setChangePasswordShow}
+            viewType={viewType}
             targetId={params?._id}
-          />);
+          />
+        );
       case 'Learn':
         return null; // Replace null with Student Schedule page...
       case 'Teach':
@@ -119,7 +120,10 @@ const ProfilePage = () => {
       />
       {viewType !== 'StudentOther' ? renderContent() : null}
       {/* {renderContent()} */}
-      <ChangePassword show={changePasswordShow} setShow={setChangePasswordShow}/>
+      <ChangePassword
+        show={changePasswordShow}
+        setShow={setChangePasswordShow}
+      />
     </>
   );
 };

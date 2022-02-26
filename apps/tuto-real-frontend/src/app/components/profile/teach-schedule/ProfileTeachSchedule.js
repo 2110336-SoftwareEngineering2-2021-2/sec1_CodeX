@@ -19,7 +19,13 @@ import COLORS from '../../../constants/color';
 import { DAY } from '../../../constants/day';
 import { ZOOM_ICON } from '../../../constants/image';
 
-const ProfileTeachSchedule = ({ targetId, viewType, zoomUrl, firstName, lastName }) => {
+const ProfileTeachSchedule = ({
+  targetId,
+  viewType,
+  zoomUrl,
+  firstName,
+  lastName,
+}) => {
   const [isLoading, setLoading] = useState(true);
   const [isEditing, setEditing] = useState(false);
   const [isPending, setIsPending] = useState(false);
@@ -35,7 +41,7 @@ const ProfileTeachSchedule = ({ targetId, viewType, zoomUrl, firstName, lastName
   const [currentSchedule, setCurrentSchedule] = useState(0);
   const [selected, setSelected] = useState([]); // Sun: 0-15, Mon: 16-31, Tue: 32-47, ..., Sat: 96-111
   const [info, setInfo] = useState({});
-  const [modalDay, setModalDay] = useState()
+  const [modalDay, setModalDay] = useState();
 
   const { _id } = useAuth();
 
@@ -70,7 +76,7 @@ const ProfileTeachSchedule = ({ targetId, viewType, zoomUrl, firstName, lastName
       .catch((res) => {
         console.log(res);
       });
-  }, []);
+  }, [targetId]);
 
   useEffect(() => {
     setLoading(true);
@@ -164,7 +170,7 @@ const ProfileTeachSchedule = ({ targetId, viewType, zoomUrl, firstName, lastName
     setEditingPrice(false);
   };
 
-  const onViewInfo = ({slotData, day}) => {
+  const onViewInfo = ({ slotData, day }) => {
     setModalDay(day);
     setInfo(slotData);
     setShowModal('info');
@@ -438,7 +444,8 @@ const ProfileTeachSchedule = ({ targetId, viewType, zoomUrl, firstName, lastName
           {/* Price Per Hour */}
           {renderPrice}
           <hr />
-          {zoomUrl ? (
+          {/* Zoom Section (Only for tutor) */}
+          {zoomUrl && viewType === 'TutorSelf' ? (
             <>
               <div className="zoom-button" onClick={() => window.open(zoomUrl)}>
                 <img

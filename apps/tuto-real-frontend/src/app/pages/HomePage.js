@@ -1,31 +1,18 @@
-import React from 'react';
 import { Carousel } from 'react-bootstrap';
-import { useAuth } from '../auth';
 import COLORS from '../constants/color';
-import './HomePage.css'
-
-import {
-  HOMEPAGE_LANDSCAPE_1, 
-  HOMEPAGE_LANDSCAPE_2, 
-  HOMEPAGE_LANDSCAPE_3,
-  HOMEPAGE_LANDSCAPE_4,
-  HOMEPAGE_CAROUSEL_1
-} from '../constants/image'
+import './HomePage.css';
 
 const HomePage = () => {
-  const {
-    currentUser,
-    signUp,
-    signInWithGoogle,
-    logIn,
-    logOut,
-    updateUserPassword,
-    resetPassword,
-  } = useAuth();
-
   return (
-    <div style={{width:"100%", display:"flex", flexDirection:"column", alignItems:"center"}}>
-      <div style={{width:"100%"}}>
+    <div
+      style={{
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+      }}
+    >
+      <div style={{ width: '100%' }}>
         <Carousel>
           <Carousel.Item>
             <img
@@ -63,7 +50,9 @@ const HomePage = () => {
             />
             <Carousel.Caption>
               <h3>Third slide label</h3>
-              <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
+              <p>
+                Praesent commodo cursus magna, vel scelerisque nisl consectetur.
+              </p>
             </Carousel.Caption>
           </Carousel.Item>
 
@@ -75,21 +64,21 @@ const HomePage = () => {
             />
             <Carousel.Caption>
               <h3>Third slide label</h3>
-              <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
+              <p>
+                Praesent commodo cursus magna, vel scelerisque nisl consectetur.
+              </p>
             </Carousel.Caption>
           </Carousel.Item>
         </Carousel>
       </div>
-      <div style={{margin:"50vh 0px"}}>
-        <h2 style={{color:COLORS.third}}>
-          Welcome to
-        </h2>
-        <h1 style={{fontSize:"10vh", color:COLORS.primary}}>
+      <div style={{ margin: '50vh 0px' }}>
+        <h2 style={{ color: COLORS.third }}>Welcome to</h2>
+        <h1 style={{ fontSize: '10vh', color: COLORS.primary }}>
           Tutoreal.com
         </h1>
       </div>
     </div>
-  )
+  );
 };
 
 export default HomePage;
