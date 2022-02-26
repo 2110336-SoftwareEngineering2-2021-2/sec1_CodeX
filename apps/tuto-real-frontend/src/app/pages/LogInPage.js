@@ -63,7 +63,6 @@ export default function Signin() {
           <Button
             className="signin-button-regis"
             variant="secondary"
-            // variant="outline-success"
             type="button"
             onClick={handleSubmit}
           >
@@ -87,7 +86,6 @@ export default function Signin() {
           <Button
             className="signup-button-regis"
             style={{ width: 'fit-content' }}
-            // variant="secondary"
             variant="outline-success"
             type="button"
             onClick={() => navigate('/register')}

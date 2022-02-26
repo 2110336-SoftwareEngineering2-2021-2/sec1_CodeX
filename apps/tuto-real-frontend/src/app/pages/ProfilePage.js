@@ -56,29 +56,7 @@ const ProfilePage = () => {
     else setViewType('StudentOther');
   }, [targetRole, _id, params]);
 
-  // useEffect(() => {
-  //   console.log("Current User Updated!!!!")
-  //   if(!location.state && currentUser) setTargetEmail(currentUser.email)
-  // },[currentUser])
-
-  // function calculateViewType(targetProfileUserType) {
-  //   console.log(currentUser?.email)
-  //   if (targetEmail === currentUser?.email) {
-  //   // if ((targetEmail ?? dummyTargetEmail) === currentUser.email) {
-  //     if (targetProfileUserType === "Tutor"){
-  //       return "TutorSelf"
-  //     }
-  //     if (targetProfileUserType === "Student"){
-  //       return "StudentSelf"
-  //     }
-  //   }
-  //   else {
-  //     return "TutorOther"
-  //   }
-  // }
-
   const renderContent = () => {
-    // console.log(viewType)
     switch (selecting) {
       case 'Info':
         return <ProfileInfo viewType={viewType} targetId={params?._id} />;
