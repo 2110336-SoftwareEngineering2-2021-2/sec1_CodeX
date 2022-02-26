@@ -12,6 +12,7 @@ const Slot = ({
   isX,
   whenClick,
   onViewInfo,
+  day,
 }) => {
   // viewType => "TutorSelf" | "TutorOther" //
   /*
@@ -73,7 +74,7 @@ const Slot = ({
           <IoIosInformation
             size={24}
             className="hover-icon"
-            onClick={onViewInfo ? () => onViewInfo(slotData) : null}
+            onClick={onViewInfo ? () => onViewInfo({slotData, day}) : null}
           />
         </div>
       ) : null}

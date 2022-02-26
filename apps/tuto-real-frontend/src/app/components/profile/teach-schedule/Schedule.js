@@ -79,6 +79,7 @@ const Schedule = ({
             {[...Array(10).keys()].map((col) => {
               const idx =
                 time === 'Day Time' ? row * 16 + col : row * 16 + col + 6;
+              const modalDay = IdxToDayAndSlot(idx).day
               if (time === 'Night Time' && [0, 1, 2, 3].includes(col)) {
                 // Render X slot //
                 return (
@@ -96,6 +97,7 @@ const Schedule = ({
                         isX={true}
                         whenClick={null}
                         onViewInfo={null}
+                        day={null}
                       />
                     </td>
                   </Fragment>
@@ -118,6 +120,7 @@ const Schedule = ({
                         isX={false}
                         whenClick={() => whenClickSlot(idx)}
                         onViewInfo={onViewInfo}
+                        day={modalDay}
                       />
                     </td>
                   </Fragment>
@@ -140,6 +143,7 @@ const Schedule = ({
                         isX={false}
                         whenClick={() => whenClickSlot(idx)}
                         onViewInfo={null}
+                        day={null}
                       />
                     </td>
                   </Fragment>
