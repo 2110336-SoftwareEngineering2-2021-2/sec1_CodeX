@@ -21,9 +21,9 @@ export function useAuth() {
 
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
-  const [reset, setReset] = useState(false)
+  const [reset, setReset] = useState(false);
   // Personal Info
-  const [_id, setId] = useState("")
+  const [_id, setId] = useState('');
   const [role, setRole] = useState(null);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -34,13 +34,13 @@ export function AuthProvider({ children }) {
       setCurrentUser(user);
       // console.log(user)
       // setUserData(user)
-    })
+    });
   }, []);
 
   useEffect(() => {
-    setUserData(currentUser)
-    setReset(false)
-  },[currentUser, reset]);
+    setUserData(currentUser);
+    setReset(false);
+  }, [currentUser, reset]);
 
   const setUserData = (user) => {
     if (user) {
@@ -49,7 +49,7 @@ export function AuthProvider({ children }) {
         url: `/user?email=${user.email}`,
       })
         .then(({ data: { data } }) => {
-          setId(data._id)
+          setId(data._id);
           setRole(data.role);
           setFirstName(data.firstName);
           setLastName(data.lastName);
@@ -58,12 +58,12 @@ export function AuthProvider({ children }) {
           console.log(err.message);
         });
     } else {
-      setId("")
+      setId('');
       setRole(null);
       setFirstName('');
       setLastName('');
     }
-  }
+  };
 
   const signUp = (data, onSuccess, onError) => {
     client({
@@ -84,7 +84,7 @@ export function AuthProvider({ children }) {
       })
       .then(() => {
         alert('Next step. Please verify your email.');
-        if(onSuccess) logOut(onSuccess)
+        if (onSuccess) logOut(onSuccess);
         else logOut();
       })
       .catch((err) => {
@@ -94,7 +94,7 @@ export function AuthProvider({ children }) {
         else if (err.message.includes('citizenID'))
           msg = 'CitizenID already existed.';
         alert(msg);
-        if(onError) onError()
+        if (onError) onError();
       });
   };
 
@@ -118,7 +118,7 @@ export function AuthProvider({ children }) {
           alert('Email verification failed');
           logOut();
         } else {
-          if(onSuccess) onSuccess()
+          if (onSuccess) onSuccess();
         }
       })
       .catch((err) => {
@@ -129,35 +129,40 @@ export function AuthProvider({ children }) {
   const logOut = (onSuccess) => {
     signOut(auth)
       .then(() => {
-        setId("")
+        setId('');
         setFirstName('');
         setLastName('');
         setRole(null);
-        if(onSuccess) onSuccess()
+        if (onSuccess) onSuccess();
       })
       .catch((err) => {
         alert(err.message);
       });
   };
 
-  const updateUserPassword = (password, newPassword) => {
-    signInWithEmailAndPassword(auth, currentUser.email, password)
+  const updateUserPassword = async (password, newPassword, onSuccess) => {
+    await signInWithEmailAndPassword(auth, currentUser.email, password)
       .then((userCredential) => {
         console.log(userCredential);
         updatePassword(userCredential.user, newPassword);
       })
       .then(() => {
         console.log(`Change password from ${password} to ${newPassword}`);
+        if (onSuccess) onSuccess();
       })
       .catch((err) => {
         alert(err.message);
       });
   };
 
-  const resetPassword = (email) => {
-    sendPasswordResetEmail(auth, email).catch((err) => {
-      alert(err.message);
-    });
+  const resetPassword = (email, onSuccess) => {
+    sendPasswordResetEmail(auth, email)
+      .then(() => {
+        if (onSuccess) onSuccess();
+      })
+      .catch((err) => {
+        alert(err.message);
+      });
   };
 
   const value = {
@@ -172,7 +177,7 @@ export function AuthProvider({ children }) {
     role,
     firstName,
     lastName,
-    setReset
+    setReset,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

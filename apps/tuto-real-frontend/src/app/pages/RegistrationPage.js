@@ -62,16 +62,19 @@ const RegistrationPage = () => {
       setErrorMessage('The citizen id must be 13 numeric characters long.');
     else {
       setErrorMessage('');
-      await signUp({
-        email: emailAddress,
-        password: password,
-        firstName: firstName,
-        lastName: lastName,
-        phoneNumber: mobilePhone,
-        birthDate: new Date(birthYear, birthMonth, birthDay + 1, 0, 0, 0),
-        address: address,
-        citizenID: citizenId,
-      }, () => navigate('/login'));
+      await signUp(
+        {
+          email: emailAddress,
+          password: password,
+          firstName: firstName,
+          lastName: lastName,
+          phoneNumber: mobilePhone,
+          birthDate: new Date(birthYear, birthMonth, birthDay + 1, 0, 0, 0),
+          address: address,
+          citizenID: citizenId,
+        },
+        () => navigate('/login')
+      );
     }
   };
 
@@ -263,7 +266,7 @@ const RegistrationPage = () => {
           />
 
           <Button
-            className="signup-button-regis"
+            className="signin-button-regis"
             variant="secondary"
             type="button"
             onClick={onSubmit}
@@ -272,7 +275,7 @@ const RegistrationPage = () => {
           </Button>
 
           <div style={{ marginTop: '3vh' }}>
-            <Link to="/login" className="signin-button-regis">
+            <Link to="/login" className="signin-link">
               If you already have account, sign in
             </Link>
           </div>

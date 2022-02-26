@@ -1,60 +1,27 @@
 import React, { useState } from 'react';
-// import { ScrollView, StyleSheet, Text, View, TextInput, Button, Linking, Alert, } from 'react-native';
-//import { TestComponent, PhoneButton } from './../components/AppComponents';
-// import * as firebase from 'firebase';
 import { Button, Modal, Form } from 'react-bootstrap';
 import { useAuth } from '../../auth';
 import './ChangePassword.css';
 
-// export default class TestScreen extends React.Component {
-//   static navigationOptions = {
-//     header: null,
-//   };
-
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//       currentPassword: "",
-//       newPassword: "",
-//       newEmail: "",
-//     };
-//   }
-
-// Changes user's password...
-// onChangePasswordPress = () => {
-//   this.reauthenticate(this.state.currentPassword).then(() => {
-//     var user = firebase.auth().currentUser;
-//     user.updatePassword(this.state.newPassword).then(() => {
-//       Alert.alert("Password was changed");
-//     }).catch((error) => { console.log(error.message); });
-//   }).catch((error) => { console.log(error.message) });
-// }
-// const styles = StyleSheet.create({
-//   text: { color: "white", fontWeight: "bold", textAlign: "center", fontSize: 20, },
-//   textInput: { borderWidth:1, borderColor:"gray", marginVertical: 20, padding:10, height:40, alignSelf: "stretch", fontSize: 18, },
-// });
-
-const ChangePassword = (props) => {
-  const { show, setShow } = props;
-  const { updateUserPassword } = useAuth();
-  // const [show, setShow] = useState(false);
+const ChangePassword = ({ show, setShow }) => {
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+
+  const { updateUserPassword } = useAuth();
+
   const handleClose = () => {
     setCurrentPassword('');
     setNewPassword('');
     setConfirmPassword('');
     setShow(false);
   };
-  const handleShow = () => setShow(true);
-  const handleSubmit = () => {
-    if (newPassword == confirmPassword) {
-      updateUserPassword(currentPassword, newPassword);
-      setShow(false);
-    } else {
-      alert('Password mismatch');
-    }
+
+  const handleSubmit = async () => {
+    if (currentPassword.length < 8) alert('Invalid Password');
+    else if (newPassword === confirmPassword)
+      await updateUserPassword(currentPassword, newPassword, handleClose);
+    else alert('Password mismatch');
   };
   return (
     <Modal className="change-password" show={show} onHide={handleClose}>
@@ -63,7 +30,7 @@ const ChangePassword = (props) => {
       </Modal.Header>
 
       <Modal.Body style={{ paddingBottom: '0px' }}>
-        <Form.Group className="mb-3" controlId="formBasicEmail">
+        <Form.Group className="mb-3" controlId="oldPassword">
           <h6>OLD PASSWORD</h6>
           <Form.Control
             className="textInput"
@@ -71,7 +38,7 @@ const ChangePassword = (props) => {
             type="password"
             placeholder="Enter your old password."
             autoCapitalize="none"
-            secureTextEntry={true}
+            securetextentry="true"
             onChange={(e) => {
               setCurrentPassword(e.target.value);
             }}
@@ -80,7 +47,7 @@ const ChangePassword = (props) => {
       </Modal.Body>
       <hr />
       <Modal.Body style={{ paddingBottom: '0px' }}>
-        <Form.Group className="mb-3" controlId="formBasicEmail">
+        <Form.Group className="mb-3" controlId="newPassword">
           <h6>NEW PASSWORD</h6>
           <Form.Control
             className="textInput"
@@ -88,28 +55,27 @@ const ChangePassword = (props) => {
             value={newPassword}
             placeholder="Enter your new password."
             autoCapitalize="none"
-            secureTextEntry={true}
+            securetextentry="true"
             onChange={(e) => {
               setNewPassword(e.target.value);
             }}
           />
         </Form.Group>
 
-        <Form.Group className="mb-3" controlId="formBasicEmail">
+        <Form.Group className="mb-3" controlId="confirmPassword">
           <h6>CONFIRM NEW PASSWORD</h6>
           <Form.Control
             className="textInput"
             value={confirmPassword}
             placeholder="Enter your new password again."
             autoCapitalize="none"
-            secureTextEntry={true}
+            securetextentry="true"
             onChange={(e) => {
               setConfirmPassword(e.target.value);
             }}
             type="password"
           />
         </Form.Group>
-        {/* <Button title="Change Password" onPress={this.onChangePasswordPress} /> */}
       </Modal.Body>
 
       <Modal.Footer>

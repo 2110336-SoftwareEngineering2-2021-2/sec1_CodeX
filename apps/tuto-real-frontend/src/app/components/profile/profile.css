@@ -105,6 +105,7 @@ img {
 .change-password-button {
   background-color: transparent;
   border-width: 0px;
+  padding: 0%;
   color: var(--third);
   /* font-size: 24px; */
 }

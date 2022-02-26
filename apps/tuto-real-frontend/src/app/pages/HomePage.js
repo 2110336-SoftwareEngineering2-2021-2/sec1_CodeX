@@ -1,6 +1,7 @@
 import { Carousel } from 'react-bootstrap';
-import COLORS from '../constants/color';
 import './HomePage.css';
+
+import COLORS from '../constants/color';
 
 const HomePage = () => {
   return (
