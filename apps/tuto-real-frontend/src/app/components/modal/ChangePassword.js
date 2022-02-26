@@ -18,7 +18,8 @@ const ChangePassword = ({ show, setShow }) => {
   };
 
   const handleSubmit = async () => {
-    if (currentPassword.length < 8) alert('Invalid Password');
+    if (currentPassword.length < 8) alert('Invalid password');
+    else if (newPassword.length < 8) alert('New password is too short');
     else if (newPassword === confirmPassword)
       await updateUserPassword(currentPassword, newPassword, handleClose);
     else alert('Password mismatch');
