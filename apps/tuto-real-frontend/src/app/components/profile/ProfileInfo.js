@@ -201,7 +201,7 @@ const ProfileInfo = ({ targetId, viewType }) => {
   };
 
   return (
-    <>
+    <div style={{width:"100%", padding:"0px 20px", display:"flex", alignItems:"center", flexDirection:"column"}}>
       {isEditing ? renderEditForm() : renderViewForm()}
       {viewType !== 'TutorOther' ? (
         <>
@@ -210,48 +210,40 @@ const ProfileInfo = ({ targetId, viewType }) => {
             advance={advance}
             viewType={viewType}
           />
-          {isEditing ? (
-            <div
-              style={{ width: '45%', textAlign: 'right', marginBottom: '5%' }}
-            >
-              <NormalButton
-                title={'Submit'}
-                whenClick={handleSubmit(onSubmit)}
-                size={'l'}
-                bgColor={COLORS.third}
-              />
-              <NormalButton
-                title={'Cancel'}
-                whenClick={onCancel}
-                size={'l'}
-                bgColor={COLORS.yellow}
-              />
-            </div>
-          ) : (
-            <div
-              style={{ width: '45%', textAlign: 'right', marginBottom: '5%' }}
-            >
-              <NormalButton
-                title={'Edit'}
-                whenClick={() => {
-                  setEditing(true);
-                  setTempProfile({
-                    ...tempProfile,
-                    raw: undefined,
-                  });
-                }}
-                size={'l'}
-                bgColor={COLORS.third}
-              />
-            </div>
-          )}
+          <div className='profile-info-button-zone'>
+            {isEditing ? (
+              <>
+                <NormalButton
+                  title={'Submit'}
+                  whenClick={handleSubmit(onSubmit)}
+                  size={'l'}
+                  bgColor={COLORS.third}
+                  />
+                <NormalButton
+                  title={'Cancel'}
+                  whenClick={onCancel}
+                  size={'l'}
+                  bgColor={COLORS.yellow}
+                  />
+              </>
+            ) : (
+                <NormalButton
+                  title={'Edit'}
+                  whenClick={() => {
+                    setEditing(true);
+                    setTempProfile({
+                      ...tempProfile,
+                      raw: undefined
+                    })
+                  }}
+                  size={'l'}
+                  bgColor={COLORS.third}
+                />
+            )}
+          </div>
         </>
       ) : null}
-      <ChangePassword
-        show={changePasswordShow}
-        setShow={setChangePasswordShow}
-      />
-    </>
+    </div>
   );
 };
 

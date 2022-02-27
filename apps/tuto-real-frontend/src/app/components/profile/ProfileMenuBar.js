@@ -19,7 +19,7 @@ const ProfileMenuBar = ({viewType, selecting, setSelecting}) => {
   const navigate = useNavigate()
 
   return (
-    <>
+    <div className='profile-page-menu-bar-zone'>
       {/* Button Bar Section */}
       {viewType !== "StudentOther" ?
         <div className="bar">
@@ -41,7 +41,7 @@ const ProfileMenuBar = ({viewType, selecting, setSelecting}) => {
           <Button variant="primary" onClick={() => navigate(-1)}>Click here to go back</Button>
         </div>
       }
-    </>
+    </div>
   )
 }
 

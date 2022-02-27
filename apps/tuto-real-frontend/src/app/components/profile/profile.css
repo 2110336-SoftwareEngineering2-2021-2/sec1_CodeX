@@ -43,7 +43,7 @@ img {
   flex-direction: row;
   justify-content: space-between;
   align-items: stretch;
-  width: 45%;
+  width: 100%;
   background-color: white;
   border-color: var(--lightgray);
   border-style: solid;
@@ -108,4 +108,28 @@ img {
   padding: 0%;
   color: var(--third);
   /* font-size: 24px; */
+}
+
+.profile-info-button-zone {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  margin-bottom: 20vh;
+}
+
+@media only screen and (min-width: 720px) {
+  .profile-info-button-zone{
+    width: 680px;
+  }
+  .bar{
+    width: 680px;
+  }
+}
+
+.profile-page-menu-bar-zone {
+  width: 100%;
+  padding: 0px 20px;
+  display: flex;
+  justify-content: space-around;
 }
