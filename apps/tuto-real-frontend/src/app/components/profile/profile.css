@@ -119,10 +119,10 @@ img {
 }
 
 @media only screen and (min-width: 720px) {
-  .profile-info-button-zone{
-    width: 680px;
+  .bar-with-button {
+    max-width: 680px;
   }
-  .bar{
+  .profile-info-button-zone{
     width: 680px;
   }
 }
@@ -131,5 +131,61 @@ img {
   width: 100%;
   padding: 0px 20px;
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
+}
+
+.menu-bar-side {
+  width: 8%;
+  margin: 0px 25px;
+  display: flex;
+  justify-content: flex-end;
+  height: 6vh;
+}
+
+.menu-bar-side-button {
+  width: 6vh;
+  height: 6vh;
+  border-color: var(--lightgray);
+  border-style: solid;
+  border-radius: 10px;
+  background-color: white;
+  transition-duration: 0.3s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.menu-bar-side-button svg {
+  color: var(--lightgray);
+  width: 80%;
+  height: inherit;
+  transition-duration: 0.3s;
+}
+
+.menu-bar-side-button:hover {
+  border-width: 3px;
+  border-color: var(--gray);
+}
+
+.menu-bar-side-button svg:hover {
+  color: var(--gray);
+}
+
+@media only screen and (max-width: 1000px) {
+  .show-more-than-1000px {
+    display: none;
+  }
+}
+
+@media only screen and (min-width: 1000px) {
+  .show-less-than-1000px {
+    display: none;
+  }
+}
+
+.bar-with-button {
+  display:flex;
+  flex-direction:row; 
+  gap:25px;
+  width: 100%;
 }
