@@ -57,21 +57,8 @@ const SearchPage = () => {
     fetchData(true);
   }, [searchText]);
 
-  // useEffect(() => {
-  //     if(params.searchText) {
-  //         setSearchInfo({
-  //             ...searchInfo,
-  //             searchText: params.searchText
-  //         });
-  //     }
-  // }, [params.searchText]);
-
-  // useEffect(() => {
-  //     onSearch()
-  // },[searchInfo.daysCheck, searchInfo.searchType])
-
   const onSearch = () => {
-    console.log('onSearch', searchInfo);
+    // console.log('onSearch', searchInfo);
     setSearchText(searchInfo.searchText);
     fetchData(0);
   };
@@ -81,6 +68,7 @@ const SearchPage = () => {
   }
 
   function genDayListText(daysCheckList) {
+    if (daysCheckList[7]) return ''
     var temp = [];
     var dayRefference = [
       'Sunday',
@@ -100,8 +88,8 @@ const SearchPage = () => {
   }
 
   const fetchData = async (searchWithContext) => {
-    console.log('fetchdata', searchInfo);
-    console.log('days', genDayListText(searchInfo.daysCheck));
+    // console.log('fetchdata', searchInfo);
+    // console.log('days', genDayListText(searchInfo.daysCheck));
     await client({
       method: 'GET',
       url: `/tutor/search`,
@@ -117,13 +105,10 @@ const SearchPage = () => {
       },
     })
       .then(({ data: { data } }) => {
-        console.log(data);
+        // console.log(data);
         setTutorList(data);
         setSearched(true);
         navigate(`/search`);
-        // console.log("currentUser: ", firstName, " ", lastName, " ", currentUser)
-        // setViewType(calculateViewType(data[0]?.role))
-        // setTargetRole(data?.role);
       })
       .catch((res) => {
         console.log(res);
@@ -157,8 +142,7 @@ const SearchPage = () => {
         backupSearchInfo={backupSearchInfo}
         // onHide={() => setModalShow(false)}
       />
-      {/* <button onClick={() => {console.log(genKeyword("122      456   222"))}}>print search info</button> */}
-      {/* <button onClick={() => {console.log(tutorList.reverse())}}>xfgzth</button> */}
+
       {searchInfo.orderType==="Descending" ?
         <div>
           {tutorList.map((e, i) => (
