@@ -18,7 +18,7 @@ const HomePage = () => {
           <Carousel.Item>
             <img
               className="carousel-image"
-              src="https://wallpapercave.com/wp/wp2777161.jpg"
+              src="https://images.wallpaperscraft.com/image/single/headphones_books_education_121501_1366x768.jpg"
               alt="First slide"
             />
             <Carousel.Caption>
@@ -26,7 +26,7 @@ const HomePage = () => {
                 <h1 style={{fontSize:"10vh"}}>TutoReal</h1>
               </div> */}
 
-              <h3>First slide label</h3>
+              <h3>TutoReal to find your tutor</h3>
               <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
             </Carousel.Caption>
           </Carousel.Item>
@@ -34,11 +34,11 @@ const HomePage = () => {
           <Carousel.Item>
             <img
               className="carousel-image"
-              src="https://wallpaperaccess.com/full/170249.jpg"
+              src="https://quotefancy.com/media/wallpaper/3840x2160/13453-Henry-David-Thoreau-Quote-Success-usually-comes-to-those-who-are.jpg"
               alt="Second slide"
             />
             <Carousel.Caption>
-              <h3>Second slide label</h3>
+              <h3>Never stop learning</h3>
               <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
             </Carousel.Caption>
           </Carousel.Item>
@@ -46,11 +46,11 @@ const HomePage = () => {
           <Carousel.Item>
             <img
               className="carousel-image"
-              src="https://i.pinimg.com/originals/dd/a6/5a/dda65aa323dcbb528f60b79acd06af44.jpg"
+              src="https://quotefancy.com/media/wallpaper/3840x2160/1699923-Steve-Jobs-Quote-Learn-continually-There-s-always-one-more-thing.jpg"
               alt="Third slide"
             />
             <Carousel.Caption>
-              <h3>Third slide label</h3>
+              <h3>The endless learning</h3>
               <p>
                 Praesent commodo cursus magna, vel scelerisque nisl consectetur.
               </p>
@@ -60,11 +60,11 @@ const HomePage = () => {
           <Carousel.Item>
             <img
               className="carousel-image"
-              src="https://wallpaperaccess.com/full/938050.jpg"
+              src="https://quotefancy.com/media/wallpaper/3840x2160/50061-Will-Rogers-Quote-A-man-only-learns-in-two-ways-one-by-reading-and.jpg"
               alt="Third slide"
             />
             <Carousel.Caption>
-              <h3>Third slide label</h3>
+              {/* <h3>Don't stop learn</h3> */}
               <p>
                 Praesent commodo cursus magna, vel scelerisque nisl consectetur.
               </p>
