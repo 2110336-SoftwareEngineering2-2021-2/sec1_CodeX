@@ -38,7 +38,7 @@ const SearchPage = () => {
     rangePriceChoice: 0,
     days: [],
     searchType: 'rating',
-    orderType: 'ascending',
+    orderType: 'Descending',
     daysCheck: [true, true, true, true, true, true, true, true],
   });
   const [backupSearchInfo, setBackupSearchInfo] = useState({
@@ -158,18 +158,38 @@ const SearchPage = () => {
         // onHide={() => setModalShow(false)}
       />
       {/* <button onClick={() => {console.log(genKeyword("122      456   222"))}}>print search info</button> */}
-      {tutorList.map((e, i) => (
-        <TutorCard
-          key={`tutor-card-in-search-page-${e._id}`}
-          targetId={e._id}
-          firstName={e.firstName}
-          lastName={e.lastName}
-          rating={e.rating}
-          price={e.price}
-          subjectList={e.subjects}
-          imgUrl={e.profileImg.url}
-        />
-      ))}
+      {/* <button onClick={() => {console.log(tutorList.reverse())}}>xfgzth</button> */}
+      {searchInfo.orderType==="Descending" ?
+        <div>
+          {tutorList.map((e, i) => (
+            <TutorCard
+              key={`tutor-card-in-search-page-${e._id}`}
+              targetId={e._id}
+              firstName={e.firstName}
+              lastName={e.lastName}
+              rating={e.rating}
+              price={e.price}
+              subjectList={e.subjects}
+              imgUrl={e.profileImg.url}
+            />
+          ))}
+        </div>
+        :
+        <div>
+          {[...tutorList].reverse().map((e, i) => (
+            <TutorCard
+              key={`tutor-card-in-search-page-${e._id}`}
+              targetId={e._id}
+              firstName={e.firstName}
+              lastName={e.lastName}
+              rating={e.rating}
+              price={e.price}
+              subjectList={e.subjects}
+              imgUrl={e.profileImg.url}
+            />
+          ))}
+        </div>
+      }
       {!isSearched ? (
         <div
           style={{

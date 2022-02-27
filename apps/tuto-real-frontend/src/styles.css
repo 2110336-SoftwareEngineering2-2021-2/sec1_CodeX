@@ -48,11 +48,16 @@ body {
 /* .table-card {
   width: 65%;
 } */
+@media only screen and (min-width: 720px) {
+  .info-card {
+    width: 680px;
+  }
+}
 
 @media only screen and (min-width: 1000px) {
-  .info-card {
+  /* .info-card {
     width: 750px;
-  }
+  } */
   .table-card {
     width: 1100px;
   }
