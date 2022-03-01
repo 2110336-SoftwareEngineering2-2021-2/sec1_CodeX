@@ -26,6 +26,11 @@ const getFinalDate = (startDate: Date): Date => {
 };
 
 const getPreviousSunday = () => {
+  /*
+    "console.log" gives UTC+0
+    "compare" and do everything else with UTC+7 (Depend on local time)
+    time from "Database" is UTC+0
+  */
   const previousSunday = new Date();
   previousSunday.setHours(7, 0, 0, 0);
   previousSunday.setDate(previousSunday.getDate() - previousSunday.getDay());
@@ -152,10 +157,8 @@ export class ScheduleService {
         { _id: schedule._id }
       );
       subjects_schedule.forEach((element) => {
-        if (subjects_user.includes(element)) {
-        } else {
+        if (!subjects_user.includes(element)) 
           subjects_user.push(element);
-        }
       });
       await this.userModel
         .updateOne(
@@ -199,9 +202,9 @@ export class ScheduleService {
       });
     }
 
-    var subjects_user = [];
+    let subjects_user = [];
     const schedules = tutor.schedule_id;
-    for (var i = 0; i < schedules.length; i++) {
+    for (let i = 0; i < schedules.length; i++) {
       const subjects = await this.scheduleModel.distinct('days.slots.subject', {
         _id: mongoose.Types.ObjectId(schedules[i]),
       });
@@ -282,12 +285,12 @@ export class ScheduleService {
           { new: true }
         );
       } else {
-        let daySlot = [];
+        const daySlot = [];
         days[idx].slots.forEach((element) => {
           daySlot.push(element.slot);
         });
         e.slots.forEach(async (element) => {
-          var index = daySlot.indexOf(element.slot);
+          const index = daySlot.indexOf(element.slot);
           if (index == -1) {
             await this.scheduleModel.findByIdAndUpdate(
               mongoose.Types.ObjectId(id),
