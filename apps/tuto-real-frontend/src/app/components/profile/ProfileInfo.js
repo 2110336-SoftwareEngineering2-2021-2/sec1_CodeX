@@ -201,7 +201,15 @@ const ProfileInfo = ({ targetId, viewType }) => {
   };
 
   return (
-    <div style={{width:"100%", padding:"0px 20px", display:"flex", alignItems:"center", flexDirection:"column"}}>
+    <div
+      style={{
+        width: '100%',
+        padding: '0px 20px',
+        display: 'flex',
+        alignItems: 'center',
+        flexDirection: 'column',
+      }}
+    >
       {isEditing ? renderEditForm() : renderViewForm()}
       {viewType !== 'TutorOther' ? (
         <>
@@ -210,7 +218,7 @@ const ProfileInfo = ({ targetId, viewType }) => {
             advance={advance}
             viewType={viewType}
           />
-          <div className='profile-info-button-zone'>
+          <div className="profile-info-button-zone">
             {isEditing ? (
               <>
                 <NormalButton
@@ -218,31 +226,35 @@ const ProfileInfo = ({ targetId, viewType }) => {
                   whenClick={handleSubmit(onSubmit)}
                   size={'l'}
                   bgColor={COLORS.third}
-                  />
+                />
                 <NormalButton
                   title={'Cancel'}
                   whenClick={onCancel}
                   size={'l'}
                   bgColor={COLORS.yellow}
-                  />
+                />
               </>
             ) : (
-                <NormalButton
-                  title={'Edit'}
-                  whenClick={() => {
-                    setEditing(true);
-                    setTempProfile({
-                      ...tempProfile,
-                      raw: undefined
-                    })
-                  }}
-                  size={'l'}
-                  bgColor={COLORS.third}
-                />
+              <NormalButton
+                title={'Edit'}
+                whenClick={() => {
+                  setEditing(true);
+                  setTempProfile({
+                    ...tempProfile,
+                    raw: undefined,
+                  });
+                }}
+                size={'l'}
+                bgColor={COLORS.third}
+              />
             )}
           </div>
         </>
       ) : null}
+      <ChangePassword
+        show={changePasswordShow}
+        setShow={setChangePasswordShow}
+      />
     </div>
   );
 };
