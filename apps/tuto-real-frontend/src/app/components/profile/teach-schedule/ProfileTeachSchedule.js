@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Form, Tabs, Tab, Button } from 'react-bootstrap';
+import { Form, Tabs, Tab, Button, Spinner } from 'react-bootstrap';
 import { FiEdit } from 'react-icons/fi';
 import {
   IoIosArrowDropleftCircle,
@@ -295,7 +295,7 @@ const ProfileTeachSchedule = ({
   // Render Section //
   const renderPrice = (
     <div className="section">
-      <p className="header">PRICE (PER HOUR)</p>
+      <p className="header">PRICE (PER SLOT)</p>
       {!isEditingPrice ? (
         <>
           <p
@@ -429,7 +429,19 @@ const ProfileTeachSchedule = ({
     else return null;
   };
 
-  if (isLoading) return <h4 style={{ color: COLORS.darkgray }}>Loading...</h4>;
+  if (isLoading)
+    return (
+      <div className="loading_spinner">
+        <Spinner
+          animation="border"
+          role="status"
+          style={{ marginBottom: '2vh' }}
+        >
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
+        <h4 style={{ color: COLORS.darkgray }}>Loading</h4>
+      </div>
+    );
 
   return (
     <>
