@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Form, Tabs, Tab, Button, Spinner } from 'react-bootstrap';
-// import { FiEdit } from 'react-icons/fi';
+import { Form, Tabs, Tab, Spinner } from 'react-bootstrap';
 import {
   IoIosArrowDropleftCircle,
   IoIosArrowDroprightCircle,
@@ -9,15 +8,12 @@ import {
 import { client } from '../../../axiosConfig';
 import Tag from './Tag';
 import Schedule from './Schedule';
-// import ModalTwoButton from '../../modal/ModalTwoButton';
-// import EditingSlotModal from '../../modal/EditingSlotModal';
 import ViewingSlotModal from '../../modal/ViewingSlotModal';
 import { useAuth } from '../../../auth';
 import '../profile.css';
 
 import COLORS from '../../../constants/color';
-import { DAY } from '../../../constants/day';
-import { ZOOM_ICON } from '../../../constants/image';
+// import { ZOOM_ICON } from '../../../constants/image';
 
 const ProfileLearnSchedule = ({
   targetId,
@@ -34,7 +30,6 @@ const ProfileLearnSchedule = ({
   const [time, setTime] = useState('Day Time'); // "Day Time" | "Night Time" //
   const [scheduleList, setScheduleList] = useState([]);
   const [currentSchedule, setCurrentSchedule] = useState(0);
-  const [selected, setSelected] = useState([]); // Sun: 0-15, Mon: 16-31, Tue: 32-47, ..., Sat: 96-111
   const [info, setInfo] = useState({});
   const [modalDay, setModalDay] = useState();
 
@@ -60,10 +55,7 @@ const ProfileLearnSchedule = ({
       .then(({ data: { data } }) => {
         console.log(data);
         setScheduleList(data.scheduleList ?? []);
-        // setPrice(data.pricePerSlot ?? 0);
-        // setTempPrice(data.pricePerSlot ?? 0);
         if (data.scheduleList?.length > 0) {
-          // setCurrentSchedule(0);
           setSubjectList(data.scheduleList[currentSchedule].allSubjects ?? []);
         }
         setLoading(false);
@@ -94,7 +86,6 @@ const ProfileLearnSchedule = ({
 
   const goLeft = () => {
     if (currentSchedule) setCurrentSchedule(currentSchedule - 1);
-    setSelected([]);
   };
 
   const goRight = () => {
@@ -103,7 +94,6 @@ const ProfileLearnSchedule = ({
       currentSchedule < scheduleList.length - 1
     )
       setCurrentSchedule(currentSchedule + 1);
-    setSelected([]);
   };
 
   // Render Section //
@@ -206,10 +196,10 @@ const ProfileLearnSchedule = ({
                     : []
                 }
                 viewType={viewType}
-                selected={selected}
-                setSelected={setSelected}
+                selected={[]}
                 setShowModal={setShowModal}
                 onViewInfo={onViewInfo}
+                viewOnly={true}
               />
             </Tab>
             <Tab
@@ -225,10 +215,10 @@ const ProfileLearnSchedule = ({
                     : []
                 }
                 viewType={viewType}
-                selected={selected}
-                setSelected={setSelected}
+                selected={[]}
                 setShowModal={setShowModal}
                 onViewInfo={onViewInfo}
+                viewOnly={true}
               />
             </Tab>
           </Tabs>

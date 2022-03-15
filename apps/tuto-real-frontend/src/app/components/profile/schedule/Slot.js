@@ -13,6 +13,7 @@ const Slot = ({
   whenClick,
   onViewInfo,
   day,
+  viewOnly,
 }) => {
   // viewType => "TutorSelf" | "TutorOther" //
   /*
@@ -29,8 +30,9 @@ const Slot = ({
   )?.status;
 
   const getSlotStyle = () => {
-    // slot-tutor, slot-student, slot-active-tutor, slot-active-student //
-    if (status) return null;
+    // 4 Options: slot-tutor, slot-student, slot-active-tutor, slot-active-student //
+    // Don't show effects (when student is already Pending or Approve) or (in view only mode)
+    if (status || viewOnly) return null;
     // Can't click if 'Pending' or 'Approved'
     else if (viewType === 'TutorSelf') {
       if (isSelected) return 'slot-active-tutor'; // Show green block
@@ -66,7 +68,7 @@ const Slot = ({
   return (
     <div
       className={getSlotStyle()}
-      onClick={onClick}
+      onClick={!viewOnly ? onClick : null}
       style={{ display: 'flex', flexDirection: 'column' }}
     >
       {slotData ? (
@@ -74,7 +76,7 @@ const Slot = ({
           <IoIosInformation
             size={24}
             className="hover-icon"
-            onClick={onViewInfo ? () => onViewInfo({slotData, day}) : null}
+            onClick={onViewInfo ? () => onViewInfo({ slotData, day }) : null}
           />
         </div>
       ) : null}

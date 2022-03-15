@@ -13,6 +13,7 @@ const Schedule = ({
   selected,
   setSelected,
   onViewInfo,
+  viewOnly, // True if view only mode (No hover effect)
 }) => {
   /* 
     time: "Day Time" | "Night Time"
@@ -30,8 +31,6 @@ const Schedule = ({
   const { _id } = useAuth();
 
   const IdxToDayAndSlot = (idx) => {
-    // console.log(idx)
-    // console.log({day: DAY[Math.floor(idx/16)], slotNum: idx%16})
     return { day: DAY[Math.floor(idx / 16)], slotNum: idx % 16 }; // day, slot number
   };
 
@@ -41,7 +40,6 @@ const Schedule = ({
         .find((schedule) => schedule.day === day)
         ?.slots.find((slot) => slot.slot === slotIdx)
     ) {
-      // console.log(`${day} ${slotIdx} include`)
       return true;
     }
     return false;
@@ -79,7 +77,7 @@ const Schedule = ({
             {[...Array(10).keys()].map((col) => {
               const idx =
                 time === 'Day Time' ? row * 16 + col : row * 16 + col + 6;
-              const modalDay = IdxToDayAndSlot(idx).day
+              const modalDay = IdxToDayAndSlot(idx).day;
               if (time === 'Night Time' && [0, 1, 2, 3].includes(col)) {
                 // Render X slot //
                 return (
@@ -98,6 +96,7 @@ const Schedule = ({
                         whenClick={null}
                         onViewInfo={null}
                         day={null}
+                        viewOnly={viewOnly}
                       />
                     </td>
                   </Fragment>
@@ -121,6 +120,7 @@ const Schedule = ({
                         whenClick={() => whenClickSlot(idx)}
                         onViewInfo={onViewInfo}
                         day={modalDay}
+                        viewOnly={viewOnly}
                       />
                     </td>
                   </Fragment>
@@ -144,6 +144,7 @@ const Schedule = ({
                         whenClick={() => whenClickSlot(idx)}
                         onViewInfo={null}
                         day={null}
+                        viewOnly={viewOnly}
                       />
                     </td>
                   </Fragment>
