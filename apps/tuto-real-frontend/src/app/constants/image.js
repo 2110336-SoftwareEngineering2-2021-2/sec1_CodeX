@@ -17,3 +17,5 @@ export const HOMEPAGE_CAROUSEL_1 =
 export const ZOOM_ICON = '../../assets/images/icons/ZoomIcon.png';
 export const FULL_STAR = '../../assets/images/icons/FullStar.png';
 export const EMPTY_STAR = '../../assets/images/icons/EmptyStar.png';
+
+export const DESK = '../../assets/images/desk.png';

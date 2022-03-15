@@ -30,7 +30,8 @@ const ProfileLearnSchedule = ({
   const [time, setTime] = useState('Day Time'); // "Day Time" | "Night Time" //
   const [scheduleList, setScheduleList] = useState([]);
   const [currentSchedule, setCurrentSchedule] = useState(0);
-  const [info, setInfo] = useState({});
+  const [info, setInfo] = useState([]);
+  const [infoIdx, setInfoIdx] = useState(0);
   const [modalDay, setModalDay] = useState();
 
   const { _id } = useAuth();
@@ -78,9 +79,9 @@ const ProfileLearnSchedule = ({
     }
   }, [currentSchedule]);
 
-  const onViewInfo = ({ slotData, day }) => {
+  const onViewInfo = ({ slotDataList, day }) => {
     setModalDay(day);
-    setInfo(slotData);
+    setInfo(slotDataList);
     setShowModal('info');
   };
 
@@ -226,11 +227,15 @@ const ProfileLearnSchedule = ({
       </Form>
       {showModal === 'info' && (
         <ViewingSlotModal
-          cancelFunc={() => setShowModal('none')}
+          cancelFunc={() => {
+            setShowModal('none');
+            setInfoIdx(0);
+          }}
           day={modalDay}
           info={info}
           firstName={firstName}
           lastName={lastName}
+          infoIdx={infoIdx}
         />
       )}
     </>

@@ -89,7 +89,7 @@ const Schedule = ({
                     ) : null}
                     <td style={{ verticalAlign: 'top' }}>
                       <Slot
-                        slotData={null}
+                        slotDataList={null}
                         viewType={viewType}
                         isSelected={null}
                         isX={true}
@@ -112,7 +112,8 @@ const Schedule = ({
                     ) : null}
                     <td id="available" style={{ verticalAlign: 'top' }}>
                       <Slot
-                        slotData={getSlotData(idx)}
+                        // slotDataList={[getSlotData(idx)]}
+                        slotDataList={[getSlotData(idx), getSlotData(idx)]}
                         viewType={viewType}
                         _id={_id}
                         isSelected={selected.includes(idx)}
@@ -136,7 +137,7 @@ const Schedule = ({
                     ) : null}
                     <td style={{ verticalAlign: 'top' }}>
                       <Slot
-                        slotData={null}
+                        slotDataList={null}
                         viewType={viewType}
                         _id={_id}
                         isSelected={selected.includes(idx)}

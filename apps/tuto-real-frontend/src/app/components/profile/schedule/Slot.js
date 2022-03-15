@@ -5,7 +5,7 @@ import COLORS from '../../../constants/color';
 import SUBJECTS from '../../../constants/subjects';
 
 const Slot = ({
-  slotData,
+  slotDataList,
   viewType,
   _id,
   isSelected,
@@ -17,17 +17,18 @@ const Slot = ({
 }) => {
   // viewType => "TutorSelf" | "TutorOther" //
   /*
-    slotData: {
+    slotDataList: {
       slot: number start from 0 - 15 (8.00 - 23.00)
       subject: string
       description: string
       students: {id, firstName, lastName, status}[]
-    }
+    }[]
   */
 
-  const status = slotData?.students?.find(
-    (student) => student.id === _id
-  )?.status;
+  const status =
+    slotDataList && slotDataList[0]
+      ? slotDataList[0].students?.find((student) => student.id === _id)?.status
+      : null;
 
   const getSlotStyle = () => {
     // 4 Options: slot-tutor, slot-student, slot-active-tutor, slot-active-student //
@@ -40,13 +41,13 @@ const Slot = ({
     } else if (viewType === 'TutorOther') {
       if (isSelected) return 'slot-active-student';
       // Show orange block
-      else if (slotData) return 'slot-student'; // Show light orange background when hover
+      else if (slotDataList) return 'slot-student'; // Show light orange background when hover
     }
     return null; // no effect (can't click anything on this slot)
   };
 
   const onClick = () => {
-    if (viewType === 'TutorSelf' || (slotData && !status)) whenClick();
+    if (viewType === 'TutorSelf' || (slotDataList && !status)) whenClick();
   };
 
   if (isX) {
@@ -71,16 +72,22 @@ const Slot = ({
       onClick={!viewOnly ? onClick : null}
       style={{ display: 'flex', flexDirection: 'column' }}
     >
-      {slotData ? (
+      {slotDataList ? (
         <div style={{ textAlign: 'right' }}>
           <IoIosInformation
             size={24}
             className="hover-icon"
-            onClick={onViewInfo ? () => onViewInfo({ slotData, day }) : null}
+            onClick={
+              onViewInfo ? () => onViewInfo({ slotDataList, day }) : null
+            }
           />
         </div>
       ) : null}
-      <p>{slotData?.subject ? SUBJECTS[slotData?.subject] : ' '}</p>
+      <p>
+        {slotDataList && slotDataList[0].subject
+          ? SUBJECTS[slotDataList[0].subject]
+          : ' '}
+      </p>
       {/* If this is student view and student is a member of the slot */}
       {viewType === 'TutorOther' && status ? (
         <p
