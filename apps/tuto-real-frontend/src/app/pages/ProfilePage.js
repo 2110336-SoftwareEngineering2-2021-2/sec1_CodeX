@@ -3,10 +3,10 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import { useAuth } from '../auth';
 import { client } from '../axiosConfig';
-import ProfileLearnSchedule from '../components/profile/learn-schedule/ProfileLearnSchedule';
+import ProfileLearnSchedule from '../components/profile/schedule/ProfileLearnSchedule';
 import ProfileInfo from '../components/profile/ProfileInfo';
 import ProfileMenuBar from '../components/profile/ProfileMenuBar';
-import ProfileTeachSchedule from '../components/profile/teach-schedule/ProfileTeachSchedule';
+import ProfileTeachSchedule from '../components/profile/schedule/ProfileTeachSchedule';
 import ProfileReview from '../components/profile/review/ProfileReview';
 
 const ProfilePage = () => {

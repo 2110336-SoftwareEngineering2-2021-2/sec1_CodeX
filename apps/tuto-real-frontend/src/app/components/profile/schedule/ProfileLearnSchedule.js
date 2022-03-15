@@ -7,8 +7,8 @@ import {
 } from 'react-icons/io';
 
 import { client } from '../../../axiosConfig';
-import Tag from '../teach-schedule/Tag';
-import Schedule from '../teach-schedule/Schedule';
+import Tag from './Tag';
+import Schedule from './Schedule';
 // import ModalTwoButton from '../../modal/ModalTwoButton';
 // import EditingSlotModal from '../../modal/EditingSlotModal';
 import ViewingSlotModal from '../../modal/ViewingSlotModal';
