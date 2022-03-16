@@ -11,7 +11,7 @@ const ProfileReview = () => {
   return (
     <div>
         <RatingSummary/>
-        <WriteComment state='none' data={dummyData}/>
+        <WriteComment state='have' data={dummyData}/>
     </div>
   )
 }
