@@ -6,6 +6,7 @@ import { client } from '../axiosConfig';
 import ProfileInfo from '../components/profile/ProfileInfo';
 import ProfileMenuBar from '../components/profile/ProfileMenuBar';
 import ProfileTeachSchedule from '../components/profile/teach-schedule/ProfileTeachSchedule';
+import ProfileReview from '../components/profile/review/ProfileReview';
 
 const ProfilePage = () => {
   const [selecting, setSelecting] = useState('Info'); // "Info" | "Learn" | "Teach" | "Review"
@@ -73,7 +74,7 @@ const ProfilePage = () => {
           />
         );
       case 'Review':
-        return null; // Replace null with Review page...
+        return <ProfileReview />; // Replace null with Review page...
       default:
         return <ProfileInfo />;
     }
