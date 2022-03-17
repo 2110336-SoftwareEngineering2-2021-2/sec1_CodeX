@@ -74,7 +74,11 @@ const ProfilePage = () => {
           />
         );
       case 'Review':
-        return <ProfileReview />; // Replace null with Review page...
+        return (
+          <ProfileReview
+            viewType={viewType}
+          />
+        );
       default:
         return <ProfileInfo />;
     }
