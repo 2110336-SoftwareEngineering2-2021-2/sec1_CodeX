@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react'
+import {useState} from 'react'
 import { Button, Form } from 'react-bootstrap'
 import './WriteComment.css'
 import { FULL_STAR } from '../../../constants/image'
@@ -25,7 +25,8 @@ const WriteComment = (props) => {
                 }} 
                 src={star>number-1 ? FULL_STAR: EMPTY_STAR} 
                 className={commentState === 'have' ? 'star-left': 'star-right'}
-            />)
+            />
+        )
     }
 
     const discardComment = () => {
@@ -126,7 +127,7 @@ const WriteComment = (props) => {
                             backgroundColor: 'var(--third)', 
                             borderColor: 'var(--third)', 
                             margin: '2% 0%',
-                            marginRight: '13.5%'
+                            marginRight: '13.8%'
                         }}
                     >
                         Edit your review
