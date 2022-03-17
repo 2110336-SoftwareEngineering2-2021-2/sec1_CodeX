@@ -80,3 +80,24 @@ input {
   color: var(--primary);
   background-color: var(--gray);
 }
+
+.popover{
+  max-width: 420px;
+}
+#popover-contained {
+  background-color: var(--gray);
+}
+
+.booking-overlay h3{
+  color: var(--primary);
+  font-size: 24px;
+  width: 420px;
+}
+.booking-overlay .popover-header{
+  background-color: white;
+  border-width: 0px;
+}
+.booking-overlay .popover-body{
+  padding: 5px;
+  gap: 5px;
+}

@@ -6,6 +6,7 @@ import { SearchContext } from '../../app'
 import { getNavbarData } from './navbarData'
 import { useAuth } from '../../auth'
 import './navbar.css'
+import BookingOverlay from './booking/BookingOverlay'
 
 
 const NavBar = () => {
@@ -17,6 +18,11 @@ const NavBar = () => {
   // const params = useParams();
   const { searchText, setSearchText } = useContext(SearchContext)
   const { logOut, _id, role, firstName, lastName } = useAuth()
+
+  const [bookingTarget, setBookingTarget] = useState(null)
+  const [bookingShow, setBookingShow] = useState(false)
+  const [bookingRequestTarget, setBookingRequesrTarget] = useState(null)
+  const [bookingRequestShow, setBookingRequestShow] = useState(false)
 
   const navbarDataList = getNavbarData(userType).map(item => (
     <button 
@@ -77,6 +83,10 @@ const NavBar = () => {
         </div>
       </div>
       <div className='right-side'>
+        <button onClick={(e) => {setBookingShow(!bookingShow), setBookingTarget(e.target)}}>
+          test
+        </button>
+        <BookingOverlay show={bookingShow} target={bookingTarget}/>
         {navbarDataList}
       </div>
     </div>
