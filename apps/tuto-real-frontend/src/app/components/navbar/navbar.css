@@ -87,17 +87,81 @@ input {
 #popover-contained {
   background-color: var(--gray);
 }
-
+.booking-overlay {
+  width: 420px;
+}
 .booking-overlay h3{
   color: var(--primary);
   font-size: 24px;
-  width: 420px;
 }
-.booking-overlay .popover-header{
+.booking-overlay .popover-header {
   background-color: white;
   border-width: 0px;
+  width: 100%
 }
-.booking-overlay .popover-body{
+.booking-overlay .popover-body {
+  display: flex;
+  flex-direction: column;
   padding: 5px;
   gap: 5px;
+}
+.booking-card {
+  background-color: white;
+  border-radius: 4px;
+  border-width: 2px;
+  /* border-color: #FBE2C5; */
+  padding: 6px;
+  border-style: solid;
+}
+.booking-card p {
+  font-size: 12px;
+  color: var(--darkgray);
+}
+.booking-card #header {
+  padding: 0px;
+  display: flex;
+  gap: 10px;
+}
+.booking-card #header p {
+  margin: 0px;
+}
+.booking-card hr {
+  margin: 0px;
+}
+.booking-card #info-section {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.booking-card #info-section #text-zone{
+  display: flex;
+  flex-direction: column;
+}
+.booking-card #info-section #text-zone h3{
+  font-size: 18px;
+  color: var(--darkgray);
+  margin: 0px;
+}
+.booking-card #info-section #text-zone p{
+  margin: 0px;
+}
+.booking-card #info-section #button-zone{
+  /* height: 100%; */
+  display: flex;
+  gap: 5px;
+}
+.booking-card #info-section #button-zone button{
+  height: 100%;
+  color: white;
+  background-color: var(--yellow);
+  border-radius: 4px;
+  border-width: 1px;
+  border-color: var(--yellow);
+  border-style: solid;
+  padding: 0px 10px;
+  transform: 0.2;
+}
+.booking-card #info-section #button-zone button:hover{
+  background-color: transparent;
+  color: var(--yellow);
 }
