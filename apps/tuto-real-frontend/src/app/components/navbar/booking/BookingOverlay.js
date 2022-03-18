@@ -27,28 +27,76 @@ const BookingOverlay = (prop) => {
                         requestTime="February 29, 2000 9:30 a.m."
                         tutorName="Komsorn Sookdang"
                         totalPrice={200}
-                        subjectList={["math","Sci"]}
+                        subjectList={[
+                            "Science [ 13:00 - 14:00 ] February 29, 2000",
+                            "Science [ 14:00 - 15:00 ] February 29, 2000",
+                            "Mathematic [ 14:00 - 15:00 ] February 30, 2000",
+                            "Software Engineering [ 14:00 - 15:00 ] February 29, 2000"
+                        ]}
+                    />
+                    <BookingCard 
+                        status="Pending" 
+                        requestTime="February 29, 2000 9:30 a.m."
+                        tutorName="Komsorn Sookdang"
+                        totalPrice={200}
+                        subjectList={[
+                            "Science [ 13:00 - 14:00 ] February 29, 2000",
+                            "Software Engineering [ 14:00 - 15:00 ] February 29, 2000"
+                        ]}
                     />
                     <BookingCard 
                         status="Canceled" 
                         requestTime="February 29, 2000 9:30 a.m."
                         tutorName="Komsorn Sookdang"
                         totalPrice={200}
-                        subjectList={["math","Sci"]}
+                        subjectList={[
+                            "Science [ 13:00 - 14:00 ] February 29, 2000",
+                            "Science [ 14:00 - 15:00 ] February 29, 2000",
+                            "Mathematic [ 14:00 - 15:00 ] February 30, 2000",
+                            "Software Engineering [ 14:00 - 15:00 ] February 29, 2000"
+                        ]}
                     />
                     <BookingCard 
                         status="Accepted" 
                         requestTime="February 29, 2000 9:30 a.m."
                         tutorName="Komsorn Sookdang"
                         totalPrice={200}
-                        subjectList={["math","Sci"]}
+                        subjectList={[
+                            "Science [ 13:00 - 14:00 ] February 29, 2000",
+                            "Science [ 14:00 - 15:00 ] February 29, 2000",
+                            "Mathematic [ 14:00 - 15:00 ] February 30, 2000",
+                            "Software Engineering [ 14:00 - 15:00 ] February 29, 2000"
+                        ]}
                     />
                     <BookingCard 
                         status="Rejected" 
                         requestTime="February 29, 2000 9:30 a.m."
                         tutorName="Komsorn Sookdang"
                         totalPrice={200}
-                        subjectList={["math","Sci"]}
+                        subjectList={[
+                            "Science [ 13:00 - 14:00 ] February 29, 2000",
+                            "Science [ 14:00 - 15:00 ] February 29, 2000",
+                            "Mathematic [ 14:00 - 15:00 ] February 30, 2000",
+                            "Software Engineering [ 14:00 - 15:00 ] February 29, 2000"
+                        ]}
+                    />
+                    <BookingCard 
+                        status="Accepted" 
+                        requestTime="February 29, 2000 9:30 a.m."
+                        tutorName="Komsorn Sookdang"
+                        totalPrice={200}
+                        subjectList={[
+                            "Science [ 13:00 - 14:00 ] February 29, 2000",
+                        ]}
+                    />
+                    <BookingCard 
+                        status="Accepted" 
+                        requestTime="February 29, 2000 9:30 a.m."
+                        tutorName="Komsorn Sookdang"
+                        totalPrice={200}
+                        subjectList={[
+                            "Science [ 13:00 - 14:00 ] February 29, 2000",
+                        ]}
                     />
                 </Popover.Body>
             </Popover>

@@ -13,25 +13,27 @@ const BookingCard = (prop) => {
     const genStatusColor = (status) => {
         if (status === "Pending" || status === "Canceled") return "#EF8C18"
         else if (status === "Accepted") return COLORS.third
-        else if (status === "Rejected") return COLORS.warning
+        else if (status === "Rejected") return "#FF5D29"
         else return COLORS.primary
     }
 
     return (
         <div className="booking-card" style={{borderColor:genBorderColor(status)}}>
             <div id="header">
-                <p style={{color:genStatusColor(status)}}>
+                <p style={{fontWeight:"500", color:genStatusColor(status)}}>
                     {status}
                 </p>
                 <p>request time: {requestTime}</p>
             </div>
             {/* <div style={{height:"1px", borderColor:genBorderColor(status)}}/> */}
-            <hr style={{borderColor:genBorderColor(status)}}/>
-            <p>with</p>
+            {/* <hr style={{borderColor:genBorderColor(status), height:"50px"}}/> */}
+            <div style={{width:"100%", height:"2px", backgroundColor:genBorderColor(status)}}></div>
+            {/* <hr style={{borderColor:genBorderColor(status), margin:"1px 0px"}}/> */}
+            <p style={{marginBottom:"0px"}}>with</p>
             <div id="info-section">
                 <div id="text-zone">
                     <h3>{tutorName}</h3>
-                    <p>total price: {totalPrice} baht</p>
+                    <p>total price: <b>{totalPrice} baht</b></p>
                 </div>
                 <div id="button-zone">
                     {status === "Pending"?
@@ -42,12 +44,13 @@ const BookingCard = (prop) => {
                     {/* <button>1234</button> */}
                 </div>
             </div>
-            {subjectList.map((e) => (
-                <p>
-                    {e}
-                </p>
-            ))}
-
+            <ul>
+                {subjectList.map((e) => (
+                    <li>
+                        {e}
+                    </li>
+                ))}    
+            </ul>
         </div>
     )
 }
