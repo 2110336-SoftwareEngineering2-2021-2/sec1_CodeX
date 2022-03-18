@@ -1,5 +1,6 @@
 import { IoIosInformation } from 'react-icons/io';
 import { ImCross } from 'react-icons/im';
+import { BsFillCircleFill } from 'react-icons/bs';
 
 import COLORS from '../../../constants/color';
 import SUBJECTS from '../../../constants/subjects';
@@ -26,7 +27,7 @@ const Slot = ({
   */
 
   const status =
-    slotDataList && slotDataList[0]
+    slotDataList && slotDataList[0] && !viewOnly
       ? slotDataList[0].students?.find((student) => student.id === _id)?.status
       : null;
 
@@ -50,8 +51,36 @@ const Slot = ({
     if (viewType === 'TutorSelf' || (slotDataList && !status)) whenClick();
   };
 
+  const renderCenterContent = () => {
+    if (viewOnly && slotDataList?.length > 1)
+      return (
+        <div style={{ position: 'relative' }}>
+          <BsFillCircleFill size={32} style={{ color: COLORS.primary }} />
+          <span
+            style={{
+              position: 'absolute',
+              top: '15%',
+              left: '45%',
+              color: 'white',
+              fontWeight: 'bold',
+            }}
+          >
+            {slotDataList?.length}
+          </span>
+        </div>
+      );
+    else
+      return (
+        <p>
+          {slotDataList && slotDataList[0].subject
+            ? SUBJECTS[slotDataList[0].subject]
+            : ' '}
+        </p>
+      );
+  };
+
+  // render X slot (Only use on Night Time) //
   if (isX) {
-    // render X slot (Only use on Night Time) //
     return (
       <div
         style={{
@@ -83,11 +112,9 @@ const Slot = ({
           />
         </div>
       ) : null}
-      <p>
-        {slotDataList && slotDataList[0].subject
-          ? SUBJECTS[slotDataList[0].subject]
-          : ' '}
-      </p>
+
+      {renderCenterContent()}
+
       {/* If this is student view and student is a member of the slot */}
       {viewType === 'TutorOther' && status ? (
         <p

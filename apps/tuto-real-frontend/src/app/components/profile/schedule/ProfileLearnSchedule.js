@@ -9,7 +9,7 @@ import { client } from '../../../axiosConfig';
 import Tag from './Tag';
 import Schedule from './Schedule';
 import ViewingSlotModal from '../../modal/ViewingSlotModal';
-import { useAuth } from '../../../auth';
+// import { useAuth } from '../../../auth';
 import '../profile.css';
 
 import COLORS from '../../../constants/color';
@@ -34,7 +34,7 @@ const ProfileLearnSchedule = ({
   const [infoIdx, setInfoIdx] = useState(0);
   const [modalDay, setModalDay] = useState();
 
-  const { _id } = useAuth();
+  // const { _id } = useAuth();
 
   const tagColor = [
     'Crimson',
@@ -61,6 +61,16 @@ const ProfileLearnSchedule = ({
         }
         setLoading(false);
       })
+      // .then(({ data: { data } }) => {
+      //   console.log(data);
+      //   setScheduleList(data ?? []);
+
+      //   if (data.scheduleList?.length > 0) {
+      //     setSubjectList(data.scheduleList[currentSchedule].allSubjects ?? []);
+      //   }
+
+      //   setLoading(false);
+      // })
       .catch((res) => {
         console.log(res);
       });

@@ -19,14 +19,14 @@ const Schedule = ({
     time: "Day Time" | "Night Time"
     scheduleData: {
       day: string,
-      slots: {slot: number, subject: string, description: string, students: {id, firstName, lastName, status}}[]
+      slots: slotDataList
     }[]
-    slotData: {
+    slotDataList: {
       slot: number start from 0 - 15 (8.00 - 23.00)
       subject: string
       description: string
       students: {id, firstName, lastName, status}[]
-    }
+    }[]
   */
   const { _id } = useAuth();
 
@@ -55,7 +55,10 @@ const Schedule = ({
     const slotData = scheduleData
       .find((schedule) => schedule.day === day)
       ?.slots.find((slot) => slot.slot === slotNum);
-    return slotData;
+    // return List of data in a slot //
+    if (slotData.data) return slotData.data;
+    // else return [slotData];
+    else return [slotData, slotData];
   };
 
   const renderHeader = (
@@ -112,8 +115,7 @@ const Schedule = ({
                     ) : null}
                     <td id="available" style={{ verticalAlign: 'top' }}>
                       <Slot
-                        // slotDataList={[getSlotData(idx)]}
-                        slotDataList={[getSlotData(idx), getSlotData(idx)]}
+                        slotDataList={getSlotData(idx)}
                         viewType={viewType}
                         _id={_id}
                         isSelected={selected.includes(idx)}
