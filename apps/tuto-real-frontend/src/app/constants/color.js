@@ -12,6 +12,8 @@ const COLORS = {
   lightgray: "#CCD0D5",
   darkgray: "#606469",
 
+  warning: "FF5D29",
+
 
   white: "#FFFFFF",
   black: "#000000"
