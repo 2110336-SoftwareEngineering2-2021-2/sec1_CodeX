@@ -29,7 +29,7 @@ const NavBar = () => {
       key={item.id} 
       className={item.style} 
       style={{marginRight: "2%"}} 
-      onClick={() => handleButton(item.name, item.path, item.param)}>
+      onClick={(event) => handleButton(item.name, item.path, item.param, event)}>
         {item.icon}
         <p style={{width: "-webkit-fill-available"}}>{item.name !== "User Name"? item.name: `${firstName} ${lastName}`}</p>
     </button>     
@@ -50,10 +50,15 @@ const NavBar = () => {
   //   }
   // },[params.searchText])
 
-  const handleButton = (name, path, param) => {
+  const handleButton = (name, path, param, event) => {
     if(name === "Sign out") {
       console.log("Logging out....")
       logOut()
+    }
+    if(name === "Booking") {
+      setBookingShow(!bookingShow);
+      setBookingTarget(event.target);
+      return
     }
     if(param) {
       if(param === "_id") navigate(`${path}/${_id}`)
