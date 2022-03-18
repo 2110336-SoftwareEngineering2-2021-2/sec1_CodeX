@@ -88,9 +88,6 @@ const NavBar = () => {
         </div>
       </div>
       <div className='right-side'>
-        <button onClick={(e) => {setBookingShow(!bookingShow), setBookingTarget(e.target)}}>
-          test
-        </button>
         <BookingOverlay show={bookingShow} target={bookingTarget}/>
         {navbarDataList}
       </div>
