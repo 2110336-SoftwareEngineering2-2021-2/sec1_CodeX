@@ -1,5 +1,6 @@
 {
   "background.enabled": false,
   "background.useDefault": false,
-  "background.useFront": false
+  "background.useFront": false,
+  "json.schemaDownload.enable": false
 }
