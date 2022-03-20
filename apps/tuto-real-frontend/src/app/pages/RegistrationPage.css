@@ -86,19 +86,25 @@ input.form-control-regis {
   margin: 0px;
 }
 
-button.signup-button-regis {
+button.signin-button-regis {
   width: 100%;
   background-color: var(--third);
   border-color: var(--third);
 }
 
-/* .signin-button-regis {
-    margin-top: 3vh;
-    font-family: Roboto;
-    color: var(--third);
-} */
+button.signup-button-regis {
+  width: 100%;
+  font-family: Roboto;
+  color: var(--third);
+  border-color: var(--third);
+}
 
-a.signin-button-regis {
+button.signup-button-regis:hover {
+  background-color: var(--third);
+  border-color: var(--third);
+}
+
+a.signin-link {
   font-family: Roboto;
   color: var(--third);
   text-decoration: none;

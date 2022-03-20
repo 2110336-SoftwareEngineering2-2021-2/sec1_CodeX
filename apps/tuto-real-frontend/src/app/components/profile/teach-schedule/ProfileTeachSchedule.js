@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Form, Tabs, Tab, Button } from 'react-bootstrap';
+import { Form, Tabs, Tab, Button, Spinner } from 'react-bootstrap';
 import { FiEdit } from 'react-icons/fi';
 import {
   IoIosArrowDropleftCircle,
@@ -19,7 +19,13 @@ import COLORS from '../../../constants/color';
 import { DAY } from '../../../constants/day';
 import { ZOOM_ICON } from '../../../constants/image';
 
-const ProfileTeachSchedule = ({ targetId, viewType, zoomUrl, firstName, lastName }) => {
+const ProfileTeachSchedule = ({
+  targetId,
+  viewType,
+  zoomUrl,
+  firstName,
+  lastName,
+}) => {
   const [isLoading, setLoading] = useState(true);
   const [isEditing, setEditing] = useState(false);
   const [isPending, setIsPending] = useState(false);
@@ -35,7 +41,7 @@ const ProfileTeachSchedule = ({ targetId, viewType, zoomUrl, firstName, lastName
   const [currentSchedule, setCurrentSchedule] = useState(0);
   const [selected, setSelected] = useState([]); // Sun: 0-15, Mon: 16-31, Tue: 32-47, ..., Sat: 96-111
   const [info, setInfo] = useState({});
-  const [modalDay, setModalDay] = useState()
+  const [modalDay, setModalDay] = useState();
 
   const { _id } = useAuth();
 
@@ -70,7 +76,7 @@ const ProfileTeachSchedule = ({ targetId, viewType, zoomUrl, firstName, lastName
       .catch((res) => {
         console.log(res);
       });
-  }, []);
+  }, [targetId]);
 
   useEffect(() => {
     setLoading(true);
@@ -164,7 +170,7 @@ const ProfileTeachSchedule = ({ targetId, viewType, zoomUrl, firstName, lastName
     setEditingPrice(false);
   };
 
-  const onViewInfo = ({slotData, day}) => {
+  const onViewInfo = ({ slotData, day }) => {
     setModalDay(day);
     setInfo(slotData);
     setShowModal('info');
@@ -289,7 +295,7 @@ const ProfileTeachSchedule = ({ targetId, viewType, zoomUrl, firstName, lastName
   // Render Section //
   const renderPrice = (
     <div className="section">
-      <p className="header">PRICE (PER HOUR)</p>
+      <p className="header">PRICE (PER SLOT)</p>
       {!isEditingPrice ? (
         <>
           <p
@@ -423,7 +429,19 @@ const ProfileTeachSchedule = ({ targetId, viewType, zoomUrl, firstName, lastName
     else return null;
   };
 
-  if (isLoading) return <h4 style={{ color: COLORS.darkgray }}>Loading...</h4>;
+  if (isLoading)
+    return (
+      <div className="loading_spinner">
+        <Spinner
+          animation="border"
+          role="status"
+          style={{ marginBottom: '2vh' }}
+        >
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
+        <h4 style={{ color: COLORS.darkgray }}>Loading</h4>
+      </div>
+    );
 
   return (
     <>
@@ -438,7 +456,8 @@ const ProfileTeachSchedule = ({ targetId, viewType, zoomUrl, firstName, lastName
           {/* Price Per Hour */}
           {renderPrice}
           <hr />
-          {zoomUrl ? (
+          {/* Zoom Section (Only for tutor) */}
+          {zoomUrl && viewType === 'TutorSelf' ? (
             <>
               <div className="zoom-button" onClick={() => window.open(zoomUrl)}>
                 <img

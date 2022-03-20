@@ -110,6 +110,9 @@ const SearchFilter = ({show, setShow, searchInfo, setSearchInfo, onSearch, backu
                             })
                         }
                     >
+                        <option key='All' style={{ color: 'var(--darkgray)' }}>
+                            All
+                        </option>
                         {Object.keys(SUBJECTS).map((subject) => (
                             <option key={subject} style={{ color: 'var(--darkgray)' }}>
                             {subject}

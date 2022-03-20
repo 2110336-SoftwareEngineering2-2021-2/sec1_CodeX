@@ -6,6 +6,7 @@ import { SearchContext } from '../../app'
 import { getNavbarData } from './navbarData'
 import { useAuth } from '../../auth'
 import './navbar.css'
+import BookingOverlay from './booking/BookingOverlay'
 
 
 const NavBar = () => {
@@ -18,12 +19,17 @@ const NavBar = () => {
   const { searchText, setSearchText } = useContext(SearchContext)
   const { logOut, _id, role, firstName, lastName } = useAuth()
 
+  const [bookingTarget, setBookingTarget] = useState(null)
+  const [bookingShow, setBookingShow] = useState(false)
+  const [bookingRequestTarget, setBookingRequesrTarget] = useState(null)
+  const [bookingRequestShow, setBookingRequestShow] = useState(false)
+
   const navbarDataList = getNavbarData(userType).map(item => (
     <button 
       key={item.id} 
       className={item.style} 
       style={{marginRight: "2%"}} 
-      onClick={() => handleButton(item.name, item.path, item.param)}>
+      onClick={(event) => handleButton(item.name, item.path, item.param, event)}>
         {item.icon}
         <p style={{width: "-webkit-fill-available"}}>{item.name !== "User Name"? item.name: `${firstName} ${lastName}`}</p>
     </button>     
@@ -44,10 +50,15 @@ const NavBar = () => {
   //   }
   // },[params.searchText])
 
-  const handleButton = (name, path, param) => {
+  const handleButton = (name, path, param, event) => {
     if(name === "Sign out") {
       console.log("Logging out....")
       logOut()
+    }
+    if(name === "Booking") {
+      setBookingShow(!bookingShow);
+      setBookingTarget(event.target);
+      return
     }
     if(param) {
       if(param === "_id") navigate(`${path}/${_id}`)
@@ -77,6 +88,7 @@ const NavBar = () => {
         </div>
       </div>
       <div className='right-side'>
+        <BookingOverlay show={bookingShow} target={bookingTarget}/>
         {navbarDataList}
       </div>
     </div>
