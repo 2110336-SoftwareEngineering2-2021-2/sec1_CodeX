@@ -1,27 +1,20 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
 import './ForgotPassword.css';
 import { useAuth } from '../../auth';
 
-const ForgotPassword = (props) => {
-  // const { show } = props;
-  const { resetPassword } = useAuth();
-  const [show, setShow] = useState(props.show);
-  const [sending, setSending] = useState('');
+const ForgotPassword = ({ show, handleClose }) => {
   const [emailFill, setEmailFill] = useState('');
 
-  const handleShow = () => setShow(true);
+  const { resetPassword } = useAuth();
+
   const handleSubmit = () => {
-    resetPassword(emailFill);
-    props.handleClose();
+    if (emailFill.length === 0) alert('Please enter your email.');
+    else resetPassword(emailFill, handleClose);
   };
 
   return (
-    <Modal
-      className="forgot-password"
-      show={props.show}
-      onHide={props.handleClose}
-    >
+    <Modal className="forgot-password" show={show} onHide={handleClose}>
       <Modal.Header closeButton>
         <h4>Forgot your password</h4>
       </Modal.Header>
@@ -38,7 +31,6 @@ const ForgotPassword = (props) => {
             type="text"
             placeholder="Enter your email."
             autoCapitalize="none"
-            // secureTextEntry={true}
             onChange={(e) => {
               setEmailFill(e.target.value);
             }}
@@ -48,7 +40,7 @@ const ForgotPassword = (props) => {
 
       <hr />
       <Modal.Footer>
-        <Button variant="outline-secondary" onClick={props.handleClose}>
+        <Button variant="outline-secondary" onClick={handleClose}>
           Cancel
         </Button>
         <Button className="confirm-button" onClick={handleSubmit}>

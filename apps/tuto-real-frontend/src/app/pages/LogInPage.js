@@ -1,24 +1,27 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+
 import { useAuth } from '../auth';
-import './RegistrationPage.css';
 import ForgotPassword from '../../app/components/modal/ForgotPassword';
+import './RegistrationPage.css';
+
+import COLORS from '../constants/color';
 
 export default function Signin() {
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [showModal, setShowModal] = useState(false); // Forgot password modal //
 
   const navigate = useNavigate();
   const { logIn } = useAuth();
 
   const handleSubmit = async () => {
-    await logIn(email, password, () => navigate('/'));
+    if (email.length === 0) alert('Please enter your email.');
+    else if (password.length < 8) alert('Invalid password.');
+    else await logIn(email, password, () => navigate('/'));
   };
-  const handleClose = () => {
-    setShowModal(false);
-  };
+
   return (
     <div className="page-container">
       <div className="regispage-left-side">
@@ -58,7 +61,7 @@ export default function Signin() {
           />
 
           <Button
-            className="signup-button-regis"
+            className="signin-button-regis"
             variant="secondary"
             type="button"
             onClick={handleSubmit}
@@ -66,13 +69,24 @@ export default function Signin() {
             Sign in
           </Button>
 
-          <ForgotPassword show={showModal} handleClose={handleClose} />
+          <ForgotPassword
+            show={showModal}
+            handleClose={() => setShowModal(false)}
+          />
 
-          <p style = {{cursor:'pointer'}}onClick={() => setShowModal(true)}>Forgot your password?</p>
+          <div style={{ margin: '2.5vh 0vw' }}>
+            <p
+              style={{ cursor: 'pointer', color: COLORS.third }}
+              onClick={() => setShowModal(true)}
+            >
+              Forgot your password?
+            </p>
+          </div>
 
           <Button
             className="signup-button-regis"
-            variant="secondary"
+            style={{ width: 'fit-content' }}
+            variant="outline-success"
             type="button"
             onClick={() => navigate('/register')}
           >

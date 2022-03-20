@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Form } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 
-import { useAuth } from '../../auth'
+import { useAuth } from '../../auth';
 import { client } from '../../axiosConfig';
 import AdvanceInfo from './AdvanceInfo';
 import ViewContactInfo from './ViewContactInfo';
@@ -10,37 +10,39 @@ import ViewBasicInfo from './ViewBasicInfo';
 import EditBasicInfo from './EditBasicInfo';
 import EditContactInfo from './EditContactInfo';
 import NormalButton from '../ui/NormalButton';
+import ChangePassword from '../modal/ChangePassword';
 import './profile.css';
 
 import COLORS from '../../constants/color';
 
-const ProfileInfo = ({targetId, viewType, changePasswordShow, setChangePasswordShow}) => {
+const ProfileInfo = ({ targetId, viewType }) => {
   // const [viewType, setViewType] = useState('TutorSelf'); // "TutorSelf" | "StudentSelf" | "TutorOther"
   const [isEditing, setEditing] = useState(false);
   const [basicInfo, setBasicInfo] = useState({
     picture: undefined,
-    firstName: "",
-    lastName: "",
+    firstName: '',
+    lastName: '',
     birthDate: {
       date: 1,
       month: 1,
-      year: 2020
+      year: 2020,
     },
-    citizenId: ""
-  })
+    citizenId: '',
+  });
   const [contactInfo, setContactInfo] = useState({
-    email: "",
-    telephone: "",
-    address: ""
-  })
+    email: '',
+    telephone: '',
+    address: '',
+  });
   const [advance, setAdvance] = useState({
     userType: 'User',
     password: '',
   });
   const [tempProfile, setTempProfile] = useState({
-    preview: "",
-    raw: ""
+    preview: '',
+    raw: '',
   }); // use for preview new upload profile image
+  const [changePasswordShow, setChangePasswordShow] = useState(false);
 
   const {
     register,
@@ -48,8 +50,7 @@ const ProfileInfo = ({targetId, viewType, changePasswordShow, setChangePasswordS
     reset,
     formState: { errors },
   } = useForm();
-
-  const { setReset } = useAuth()
+  const { setReset } = useAuth();
 
   const fetchData = useCallback(async () => {
     // console.log(targetId)
@@ -57,78 +58,70 @@ const ProfileInfo = ({targetId, viewType, changePasswordShow, setChangePasswordS
       method: 'GET',
       url: `/user`,
       params: {
-        _id: targetId
-      }
+        _id: targetId,
+      },
     })
-    .then(({ data: {data} }) => {
-      // console.log("profile in fetch: ", data)
-      // console.log("fetch profile image @ ",data.profileImg.url)
-      setTempProfile({
-        ...tempProfile,
-        preview: data.profileImg.url
+      .then(({ data: { data } }) => {
+        setTempProfile({
+          ...tempProfile,
+          preview: data.profileImg.url,
+        });
+        setBasicInfo({
+          picture: data.profileImg.url,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          birthDate: {
+            date: parseInt(data.birthDate.substr(8, 2)),
+            month: parseInt(data.birthDate.substr(5, 2)),
+            year: parseInt(data.birthDate.substr(0, 4)),
+          },
+          citizenId: data.citizenID,
+        });
+        setContactInfo({
+          email: data.email,
+          telephone: data.phoneNumber,
+          address: data.address,
+        });
+        setAdvance({
+          userType: data.role,
+          password: '',
+        });
       })
-      setBasicInfo({
-        picture: data.profileImg.url,
-        firstName: data.firstName,
-        lastName: data.lastName,
-        birthDate: {
-          date: parseInt(data.birthDate.substr(8,2)),
-          month: parseInt(data.birthDate.substr(5,2)),
-          year: parseInt(data.birthDate.substr(0,4))
-        },
-        citizenId: data.citizenID
-      })
-      setContactInfo({
-        email: data.email,
-        telephone: data.phoneNumber,
-        address: data.address
-      })
-      setAdvance({
-        userType: data.role,
-        password: ""
-      })
-    })
-    .catch(({response}) => {
-      console.log(response)
-    })
-  },[targetId])
+      .catch(({ response }) => {
+        console.log(response);
+      });
+  }, [targetId]);
 
   useEffect(() => {
     fetchData();
   }, [fetchData]);
 
-  // useEffect(() => {
-  //   console.log("tempProfile.preview set to: ",tempProfile.preview);
-  //   console.log("tempProfile.raw set to: ",tempProfile.raw);
-  // }, [tempProfile]);
-
   const sendData = async (data) => {
     console.log('sending data...');
-    // const formData = new FormData()
-    // formData.append("Profile Picture", tempProfile, tempProfile?.name)
     let changeData = {
       firstName: data.firstName,
       lastName: data.lastName,
       birthDate: translateDateForSendToBack(data.date, data.month, data.year),
       address: data.address,
-    }
-    if(tempProfile.raw) changeData = {...changeData, profile64: tempProfile.raw}
+    };
+    if (tempProfile.raw)
+      changeData = { ...changeData, profile64: tempProfile.raw };
     await client({
-      method: "PATCH",
+      method: 'PATCH',
       url: `/user`,
       params: {
-        _id: targetId
+        _id: targetId,
       },
-      data: changeData
+      data: changeData,
     })
-    .then(({ data: {data} }) => {
-      console.log(data)
-      setReset(true)
-    })
-    .catch((res) => {
-      console.log(res)
-    })
-  }
+      .then(({ data: { data } }) => {
+        console.log(data);
+        setReset(true);
+      })
+      .catch((res) => {
+        console.log(res);
+      });
+  };
 
   const onSubmit = (data) => {
     setBasicInfo({
@@ -141,8 +134,8 @@ const ProfileInfo = ({targetId, viewType, changePasswordShow, setChangePasswordS
       birthDate: {
         date: data.date,
         month: data.month,
-        year: data.year
-      }
+        year: data.year,
+      },
     });
     setContactInfo({
       ...contactInfo,
@@ -156,10 +149,9 @@ const ProfileInfo = ({targetId, viewType, changePasswordShow, setChangePasswordS
     reset();
     setTempProfile({
       ...tempProfile,
-      preview: basicInfo.picture
+      preview: basicInfo.picture,
     });
     setEditing(false);
-    //console.log(translateDateForSendToBack(1,1,2022));
   };
 
   const renderViewForm = () => {
@@ -172,23 +164,22 @@ const ProfileInfo = ({targetId, viewType, changePasswordShow, setChangePasswordS
   };
 
   function translateDateForSendToBack(date, month, year) {
-    var temp = "";
-    temp += year + "-"; 
+    var temp = '';
+    temp += year + '-';
 
     if (month < 10) {
-      temp += "0";
+      temp += '0';
     }
-    temp += month.toString() + "-";
+    temp += month.toString() + '-';
 
     if (date < 10) {
-      temp += "0";
+      temp += '0';
     }
-    temp += date.toString() + "T17:00:00.000+00:00";
+    temp += date.toString() + 'T17:00:00.000+00:00';
 
     return temp;
     // 2001-03-12T17:00:00.000+00:00
   }
-
 
   const renderEditForm = () => {
     return (
@@ -210,54 +201,61 @@ const ProfileInfo = ({targetId, viewType, changePasswordShow, setChangePasswordS
   };
 
   return (
-    <>
+    <div
+      style={{
+        width: '100%',
+        padding: '0px 20px',
+        display: 'flex',
+        alignItems: 'center',
+        flexDirection: 'column',
+      }}
+    >
       {isEditing ? renderEditForm() : renderViewForm()}
       {viewType !== 'TutorOther' ? (
         <>
-          <AdvanceInfo 
-            changePasswordShow={changePasswordShow} 
+          <AdvanceInfo
             setChangePasswordShow={setChangePasswordShow}
-            advance={advance} 
+            advance={advance}
             viewType={viewType}
           />
-          {isEditing ? (
-            <div
-              style={{ width: '45%', textAlign: 'right', marginBottom: '5%' }}
-            >
-              <NormalButton
-                title={'Submit'}
-                whenClick={handleSubmit(onSubmit)}
-                size={'l'}
-                bgColor={COLORS.third}
-              />
-              <NormalButton
-                title={'Cancel'}
-                whenClick={onCancel}
-                size={'l'}
-                bgColor={COLORS.yellow}
-              />
-            </div>
-          ) : (
-            <div
-              style={{ width: '45%', textAlign: 'right', marginBottom: '5%' }}
-            >
+          <div className="profile-info-button-zone">
+            {isEditing ? (
+              <>
+                <NormalButton
+                  title={'Submit'}
+                  whenClick={handleSubmit(onSubmit)}
+                  size={'l'}
+                  bgColor={COLORS.third}
+                />
+                <NormalButton
+                  title={'Cancel'}
+                  whenClick={onCancel}
+                  size={'l'}
+                  bgColor={COLORS.yellow}
+                />
+              </>
+            ) : (
               <NormalButton
                 title={'Edit'}
                 whenClick={() => {
                   setEditing(true);
                   setTempProfile({
                     ...tempProfile,
-                    raw: undefined
-                  })
+                    raw: undefined,
+                  });
                 }}
                 size={'l'}
                 bgColor={COLORS.third}
               />
-            </div>
-          )}
+            )}
+          </div>
         </>
       ) : null}
-    </>
+      <ChangePassword
+        show={changePasswordShow}
+        setShow={setChangePasswordShow}
+      />
+    </div>
   );
 };
 

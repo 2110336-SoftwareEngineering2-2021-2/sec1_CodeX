@@ -1,8 +1,13 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
+
 import COLORS from '../../constants/color';
 
-const AdvanceInfo = ({ viewType, advance, targetEmail, changePasswordShow, setChangePasswordShow}) => {
+const AdvanceInfo = ({
+  viewType,
+  advance,
+  targetEmail,
+  setChangePasswordShow,
+}) => {
   const { userType, password } = advance;
 
   return (
@@ -12,28 +17,33 @@ const AdvanceInfo = ({ viewType, advance, targetEmail, changePasswordShow, setCh
       <div className="section">
         <p className="header">USER TYPE</p>
         <p className="header">{userType}</p>
-        {viewType === "StudentSelf" ?
-          <Link 
-            style={{textDecoration:'none', color: COLORS.third}} 
+        {viewType === 'StudentSelf' ? (
+          <Link
+            style={{ textDecoration: 'none', color: COLORS.third }}
             to={`/changAaccType`}
             state={{
-              ownerRequestEmail : targetEmail
+              ownerRequestEmail: targetEmail,
             }}
           >
-            [ upgrade to tutor]
+            [ upgrade to tutor ]
           </Link>
-        :null}
+        ) : null}
       </div>
       <hr />
       <div className="section">
         <p className="header">PASSWORD</p>
         <p>{password}</p>
-        <input type="password" readOnly defaultValue="12345678" style={{margin:"0px" ,width:"25%", textAlign:"left"}}></input>
-        <button 
-          className='change-password-button'
+        <input
+          type="password"
+          readOnly
+          defaultValue="12345678"
+          style={{ margin: '0px', width: '25%', textAlign: 'left' }}
+        ></input>
+        <button
+          className="change-password-button"
           onClick={() => setChangePasswordShow(true)}
         >
-          [ change password]
+          [ change password ]
         </button>
       </div>
     </div>
