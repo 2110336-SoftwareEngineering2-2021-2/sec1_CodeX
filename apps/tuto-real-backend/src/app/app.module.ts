@@ -3,12 +3,12 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-//import { BookingModule } from './booking-req/booking.module';
 import { TutorReqModule } from './tutor-req/tutor-req.module';
 import { TutorModule } from './tutor/tutor.module';
 import { UserModule } from './user/user.module';
 import { ScheduleModule } from './schedule/schedule.module';
 import { BookingModule } from './booking-req/booking.module';
+import { ReviewModule } from './review/review.module';
 
 @Module({
   imports: [
@@ -21,6 +21,7 @@ import { BookingModule } from './booking-req/booking.module';
     UserModule,
     ScheduleModule,
     BookingModule,
+    ReviewModule,
   ],
   controllers: [AppController],
   providers: [AppService],
