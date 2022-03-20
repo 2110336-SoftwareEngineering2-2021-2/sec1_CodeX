@@ -4,6 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { datapipelines } from 'googleapis/build/src/apis/datapipelines';
 import { Model } from 'mongoose';
 import { Schedule } from '../schedule/schedule.interface';
 import { User } from '../user/user.interface';
@@ -79,5 +80,41 @@ export class BookingService {
     } catch (err) {
       throw new BadRequestException({ success: false, data: err });
     }
+  }
+
+  //Get booking of the tutor
+  async getBookingTutor(id: String) {
+    //Find tutor
+    const tutor = await this.userModel.findById(id);
+    if (!tutor) {
+      throw new NotFoundException({
+        success: false,
+        message: 'Tutor not found',
+      });
+    }
+
+    //Get the bookings
+    var bookingTutor = [];
+    for (var i = 0; i < 4; i++) {
+      const booking = await this.bookingModel
+        .find(
+          { schedule_id: mongoose.Types.ObjectId(tutor.schedule_id[i]) },
+          { __v: 0 }
+        )
+        .exec();
+      bookingTutor = [...bookingTutor, ...booking];
+    }
+
+    var ordering = {},
+      sortOrder = ['Pending', 'Approved', 'Reject', 'Cancelled'];
+    for (var i = 0; i < sortOrder.length; i++) ordering[sortOrder[i]] = i;
+    bookingTutor.sort(function (a, b) {
+      return (
+        ordering[a.status] - ordering[b.status] ||
+        Number(a.timeStamp > b.timeStamp) - Number(a.timeStamp < b.timeStamp)
+      );
+    });
+
+    return { success: true, data: bookingTutor };
   }
 }

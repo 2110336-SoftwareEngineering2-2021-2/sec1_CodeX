@@ -7,7 +7,11 @@ export const BookingSchema = new mongoose.Schema({
   days: [{ _id: false, day: String, slots: [Number] }],
   timeStamp: Date,
   totalPrice: Number,
-  status: { type: String, enum: ['Pending', 'Approved'], default: 'Pending' },
+  status: {
+    type: String,
+    enum: ['Pending', 'Approved', 'Reject', 'Cancelled'],
+    default: 'Pending',
+  },
 });
 
 BookingSchema.path('student_id').required(true);

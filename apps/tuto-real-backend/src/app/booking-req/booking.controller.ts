@@ -5,6 +5,7 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Query,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
@@ -29,6 +30,15 @@ export class BookingController {
       return this.service.createBooking(dto);
     } catch (err) {
       return err;
+    }
+  }
+
+  @Get('/tutor')
+  getBookingTutor(@Query() query: any) {
+    try {
+      return this.service.getBookingTutor(query._id);
+    } catch (error) {
+      return error;
     }
   }
 }
