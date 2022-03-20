@@ -4,6 +4,7 @@ import { UserSchema } from '../user/user.schema';
 export class LearnScheduleDto {
   startDate: Date
   studentId : String
+  subjects : [String]
   days: 
     {
       

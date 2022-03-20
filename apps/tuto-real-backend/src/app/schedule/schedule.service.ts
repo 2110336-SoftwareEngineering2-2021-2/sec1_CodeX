@@ -397,6 +397,7 @@ export class ScheduleService {
     //lastedtSunday
     console.log(latestDate)
     for (let i=0;i<raw.length;i++){
+      var subjects = new Set()
       if (raw[i].startDate > latestDate) latestDate = raw[i].startDate
       for (var day of raw[i].days){
         for (var slot of day.slots){
@@ -405,10 +406,18 @@ export class ScheduleService {
             console.log(slot.data[j].slotId)
             var re = await this.scheduleModel.findOne(
               { "days.slots._id": slot.data[j].slotId},
-              { "days.slots.$": 1 })
-           
+              { "days.slots.$": 1 , "_id":1})
+            console.log(re._id)
+            var tutorInfo = await this.userModel.findOne(
+              {"schedule_id" : re._id}
+            )
+            subjects.add(re.days[0].slots[0].subject)
             slot.data[j].subject = re.days[0].slots[0].subject
             slot.data[j].description = re.days[0].slots[0].description
+            slot.data[j].tutorId = tutorInfo._id
+            slot.data[j].tutorName = tutorInfo.firstName
+            slot.data[j].tutorLastName = tutorInfo.lastName
+            slot.data[j].zoomURL = tutorInfo.zoomJoinURL
             slot.data[j].members = []
             let students : any= re.days[0].slots[0].students? re.days[0].slots[0].students:[]
             for (let k =0;k<students.length;k++){
@@ -422,6 +431,8 @@ export class ScheduleService {
             console.log(slot.data[j])
           }
       }
+      raw[i].subjects = Array.from(subjects)
+      
     }
 
     
