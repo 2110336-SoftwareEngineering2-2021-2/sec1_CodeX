@@ -12,6 +12,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { BookingDto } from './booking.dto';
 import { Booking } from './booking.interface';
 import { BookingService } from './booking.service';
+import { LearnScheduleDto } from '../LearnSchedule/learnSchedule.dto';
 
 @Controller('booking')
 export class BookingController {
@@ -30,5 +31,17 @@ export class BookingController {
     } catch (err) {
       return err;
     }
+  }
+
+  @Post('/test')
+  updateLearnSchedule(@Body() dto :BookingDto) {
+    console.log(dto)
+        try {
+      return this.service.updateLearnSchedule(dto);
+    }
+    catch(err){
+
+    }
+     
   }
 }
