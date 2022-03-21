@@ -2,8 +2,8 @@ import * as mongoose from 'mongoose';
 import { TimePeriodDto } from '../util/timePeriod.dto';
 
 export const BookingSchema = new mongoose.Schema({
-  student_id: { type: String, required: true },
-  schedule_id: { type: String, required: true },
+  student_id: { type: String, required: true, ref: 'User' },
+  schedule_id: { type: String, required: true, ref: 'Schedule' },
   days: [{ _id: false, day: String, slots: [Number] }],
   timeStamp: Date,
   totalPrice: Number,

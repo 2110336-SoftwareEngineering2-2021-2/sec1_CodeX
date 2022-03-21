@@ -92,19 +92,41 @@ export class BookingService {
         message: 'Tutor not found',
       });
     }
-
     //Get the bookings
     var bookingTutor = [];
+    var days = new Map([
+      ['Sunday', 0],
+      ['Monday', 1],
+      ['Tuesday', 2],
+      ['Wednesday', 3],
+      ['Thursday', 4],
+      ['Friday', 5],
+      ['Saturday', 6],
+    ]);
     for (var i = 0; i < 4; i++) {
-      const booking = await this.bookingModel
+      let booking = await this.bookingModel
         .find(
           { schedule_id: mongoose.Types.ObjectId(tutor.schedule_id[i]) },
           { __v: 0 }
         )
+        .populate({ path: 'student_id', select: 'firstName lastName' })
+        .populate({ path: 'schedule_id', select: 'startDate' })
+        .lean()
         .exec();
+
+      for (var j = 0; j < booking.length; j++) {
+        for (var k = 0; k < booking[j].days.length; k++) {
+          let day = booking[j].days[k].day as string;
+          const numDay = days.get(day);
+          const newDate = new Date(
+            booking[j].schedule_id['startDate'].getTime() +
+              1000 * 60 * 60 * 24 * numDay
+          );
+          booking[j].days[k]['date'] = newDate;
+        }
+      }
       bookingTutor = [...bookingTutor, ...booking];
     }
-
     var ordering = {},
       sortOrder = ['Pending', 'Approved', 'Reject', 'Cancelled'];
     for (var i = 0; i < sortOrder.length; i++) ordering[sortOrder[i]] = i;
@@ -114,7 +136,6 @@ export class BookingService {
         Number(a.timeStamp > b.timeStamp) - Number(a.timeStamp < b.timeStamp)
       );
     });
-
     return { success: true, data: bookingTutor };
   }
 }
