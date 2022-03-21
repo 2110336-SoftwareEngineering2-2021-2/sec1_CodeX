@@ -5,6 +5,7 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Query,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
@@ -33,6 +34,7 @@ export class BookingController {
     }
   }
 
+
   @Post('/test')
   updateLearnSchedule(@Body() dto :BookingDto) {
     console.log(dto)
@@ -43,5 +45,14 @@ export class BookingController {
 
     }
      
+
+  @Get('/tutor')
+  getBookingTutor(@Query() query: any) {
+    try {
+      return this.service.getBookingTutor(query._id);
+    } catch (error) {
+      return error;
+    }
+
   }
 }
