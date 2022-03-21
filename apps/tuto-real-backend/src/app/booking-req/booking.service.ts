@@ -96,7 +96,7 @@ export class BookingService {
     return null
   }
 
-  getBySlot(slots : any,target:Number){
+  private getBySlot(slots : any,target:Number){
     console.log("GeyBySlot",slots,target)
     for (let i=0;i<slots.length;i++){
       if (slots[i].slot == target){
@@ -109,7 +109,7 @@ export class BookingService {
     return null
   }
 
-  getApprovedStudents(students){
+  private getApprovedStudents(students){
     var re = []
     for (let s of students){
       if (s.status == "Approved")
@@ -119,7 +119,7 @@ export class BookingService {
 
   }
 
-  async updateLearnSchedule(booking : BookingDto){
+  public async updateLearnSchedule(booking : BookingDto){
       var studentId_ = booking.student_id
       var schedule = await this.scheduleModel.findById(mongoose.Types.ObjectId(booking.schedule_id))
       var startDate_ = schedule.startDate

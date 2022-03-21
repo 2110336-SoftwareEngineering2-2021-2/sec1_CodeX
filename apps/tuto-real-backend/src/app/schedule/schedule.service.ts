@@ -355,7 +355,7 @@ export class ScheduleService {
   }
 
 
-  async getLearnSchedules(studentId : string){
+  public async getLearnSchedules(studentId : string){
     //delte expired schedule
     var now = new Date()
     var expiredDate = new Date();
