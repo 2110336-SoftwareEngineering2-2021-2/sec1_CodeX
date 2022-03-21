@@ -22,7 +22,7 @@ export class Slot{
         subject: String,
         description: String,
         tutorId : String
-        tutorName : String,
+        tutorFirstName : String,
         tutorLastName : String,
         zoomURL : String
         members : String[]

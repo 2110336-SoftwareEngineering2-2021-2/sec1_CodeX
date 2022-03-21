@@ -387,7 +387,7 @@ export class ScheduleService {
       .then((res)=>{console.log(res)})
       .catch((err)=>{console.log(err)})
     }
-    var raw : any = await this.learnScheduleModel.find({'studentId' : studentId}).lean()
+    var raw : any = await this.learnScheduleModel.find({'studentId' : studentId}).sort({"startDate": -1}).lean()
     .then((res)=>{
       return res
     })
@@ -415,7 +415,7 @@ export class ScheduleService {
             slot.data[j].subject = re.days[0].slots[0].subject
             slot.data[j].description = re.days[0].slots[0].description
             slot.data[j].tutorId = tutorInfo._id
-            slot.data[j].tutorName = tutorInfo.firstName
+            slot.data[j].tutorFirstName = tutorInfo.firstName
             slot.data[j].tutorLastName = tutorInfo.lastName
             slot.data[j].zoomURL = tutorInfo.zoomJoinURL
             slot.data[j].members = []

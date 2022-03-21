@@ -72,7 +72,7 @@ export class ScheduleController {
   }
 
   @Get('/learn')
-  getLearnSchedules(@Query('sId') studentId : string){
+  getLearnSchedules(@Query('studentId') studentId : string){
     try {
       return this.service.getLearnSchedules(studentId);
     } catch (err) {
