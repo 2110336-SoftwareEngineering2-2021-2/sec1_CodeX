@@ -1,9 +1,18 @@
 import { useState } from "react"
+import { client } from "../../../axiosConfig";
 import COLORS from "../../../constants/color"
 
 
 const BookingCard = (prop) => {
-    const {requestTime, tutorName, totalPrice, subjectList} = prop;
+    const {
+        bookingId,
+        requestTime, 
+        tutorFirstName, 
+        tutorLastName, 
+        totalPrice, 
+        subjectList
+        } = prop; //and also with initial booking status(prop.status).
+
     const [status, setStatus] = useState(prop.status);
     // const genBorderColor = (status) => {
     //     if (status === "Pending" || status === "Canceled") return "#FBE2C5"
@@ -33,9 +42,9 @@ const BookingCard = (prop) => {
                     borderColor:"#FBE2C5",
                 };
 
-            case "Accepted":
+            case "Approved":
                 return {
-                    statusText:"Accepted",
+                    statusText:"Approved",
                     statusColor:COLORS.third,
                     borderColor:"#D3EAE5",
                 };
@@ -54,6 +63,35 @@ const BookingCard = (prop) => {
                 };
         }
     }
+    const cancelButtonHandle = () => {
+        //todo: show modal or something like that for comfirmation 
+        //
+        //
+
+        //todo: uncomment the statement belown when sendCancelBooking complete
+        //sendCancelBooking(bookingId)
+
+        //todo: delete the statement belown when sendCancelBooking complete 
+        setStatus("Cancelled")
+    }
+    const sendCancelBooking = async (bookingId) => {
+        console.log('sending cancel booking:',bookingId);
+        await client({
+            method: 'PATCH',
+            url: `/`,
+            // url: `/user`,
+            params: {
+                _id: bookingId,
+            },
+        })
+        .then(({ data: { data } }) => {
+            console.log('data response', data);
+            setStatus("Cancelled")
+        })
+        .catch((res) => {
+            console.log(res);
+        })
+    }
 
     return (
         <div className="booking-card" style={{borderColor:genConfigStatus().borderColor}}>
@@ -69,16 +107,15 @@ const BookingCard = (prop) => {
             <p style={{marginBottom:"0px"}}>with</p>
             <div id="info-section">
                 <div id="text-zone">
-                    <h3>{tutorName}</h3>
+                    <h3>{tutorFirstName} {tutorLastName}</h3>
                     <p>total price: <b>{totalPrice} baht</b></p>
                 </div>
                 <div id="button-zone">
                     {status === "Pending"?
-                        <button onClick={() => {setStatus("Cancelled")}}>Cancel</button>
+                        <button onClick={cancelButtonHandle}>Cancel</button>
                         :
                         null
                     }
-                    {/* <button>1234</button> */}
                 </div>
             </div>
             <ul>

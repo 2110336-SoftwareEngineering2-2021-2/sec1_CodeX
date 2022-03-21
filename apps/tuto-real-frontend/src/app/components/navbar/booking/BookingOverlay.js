@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Overlay, Popover } from "react-bootstrap";
 import { useAuth } from "../../../auth";
 import { client } from "../../../axiosConfig";
@@ -10,7 +10,7 @@ const BookingOverlay = (prop) => {
     const {show,target} = prop;
     const { _id } = useAuth();
 
-    const bookingList = useState([
+    const [bookingList, setBookingList] = useState([
         {
             _id:"11",
             tutorId:"6206273237ff1b8ed2759389",
@@ -68,6 +68,10 @@ const BookingOverlay = (prop) => {
             // ]
         }
     ])
+    useEffect(() => {
+        //todo: uncomment statement belown if url is ready
+        //fetchData();
+    }, []);
 
     const fetchData = async () => {
         console.log("fetch Booking of:",_id);
@@ -86,10 +90,8 @@ const BookingOverlay = (prop) => {
             },
         })
         .then(({ data: { data } }) => {
-            // console.log(data);
-            setTutorList(data);
-            setSearched(true);
-            navigate(`/search`);
+            console.log(data);
+            setBookingList(data);
         })
         .catch((res) => {
             console.log(res);
@@ -107,7 +109,24 @@ const BookingOverlay = (prop) => {
                 <Popover.Header as="h3">My Booking</Popover.Header>
                 <Popover.Body> 
 
-                    <BookingCard 
+                    {bookingList.map((e,i) => (
+                        <BookingCard
+                            key={e._id}
+                            bookingId={e._id}
+                            status={e.status}
+                            requestTime={e.timeStamp}
+                            tutorFirstName={e.tutorFirstName}
+                            tutorLastName={e.tutorLastName}
+                            totalPrice={e.totalPrice}
+                            subjectList={[
+                                "Science [ 13:00 - 14:00 ] February 29, 2000",
+                                "Science [ 14:00 - 15:00 ] February 29, 2000",
+                                "Mathematic [ 14:00 - 15:00 ] February 30, 2000",
+                                "Software Engineering [ 14:00 - 15:00 ] February 29, 2000"
+                            ]}
+                        />
+                    ))}
+                    {/* <BookingCard 
                         status="Pending" 
                         requestTime="February 29, 2000 9:30 a.m."
                         tutorName="Komsorn Sookdang"
@@ -182,7 +201,7 @@ const BookingOverlay = (prop) => {
                         subjectList={[
                             "Science [ 13:00 - 14:00 ] February 29, 2000",
                         ]}
-                    />
+                    /> */}
                 </Popover.Body>
             </Popover>
         </Overlay>
