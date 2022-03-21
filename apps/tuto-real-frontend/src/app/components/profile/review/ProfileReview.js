@@ -1,14 +1,38 @@
+import { useEffect, useState } from 'react';
+import { client } from '../../../axiosConfig';
 import OtherReview from './OtherReview';
 import RatingSummary from './RatingSummary';
 import WriteComment from './WriteComment';
 
 const ProfileReview = (props) => {
-  const { viewType } = props;
+  const { viewType, targetId } = props;
+  const [data,setData] = useState([])
 
   const dummyData = {
     rating: '3',
     comment: 'tester',
   };
+
+  const getReview = async () => {
+    await client({
+      method: 'GET',
+      url: `/reviews`,
+      params: {
+        tutorId: targetId,
+      },
+    })
+      .then(({data : { data }}) => {
+        console.log(data);
+        setData(data)
+      })
+      .catch((res) => {
+        console.log(res)
+      })
+  }
+
+  useEffect(() => {
+    getReview();
+  }, [])
 
   const getDummyData = [
     {
@@ -37,7 +61,7 @@ const ProfileReview = (props) => {
       {viewType !== 'StudentSelf' && viewType !== 'TutorSelf' && (
         <WriteComment state="have" data={dummyData} />
       )}
-      <OtherReview data={getDummyData} />
+      <OtherReview data={data} />
     </div>
   );
 };
