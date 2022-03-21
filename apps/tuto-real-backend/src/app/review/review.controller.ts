@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Get, Post, Put, Query } from '@nestjs/common';
 import { createReviewDto } from './createReview.dto';
 import { ReviewService } from './review.service';
 import { updateReviewDto } from './updateReview.dto';
@@ -19,6 +19,15 @@ export class ReviewController {
   updateReview(@Query('_id') id: string, @Body() dto: updateReviewDto) {
     try {
       return this.service.updateReview(id, dto);
+    } catch (err) {
+      return err;
+    }
+  }
+
+  @Get()
+  getReviews(@Query('_id') id: string , @Query('sortBy') sortBy : string) {
+    try {
+      return this.service.getReviews(id,sortBy);
     } catch (err) {
       return err;
     }
