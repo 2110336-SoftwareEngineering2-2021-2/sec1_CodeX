@@ -10,12 +10,38 @@ const BookingOverlay = (prop) => {
     const {show,target} = prop;
     const { _id } = useAuth();
 
+    const translateTimeFormat = (text) => {
+        //2001-02-15T17:00:00.000+00:00
+        //            to be
+        //February 29, 2000 9:30 a.m."
+        var date = parseInt(text.substr(8, 2));
+        var month = parseInt(text.substr(5, 2));
+        var year = parseInt(text.substr(0, 4));
+        var hour = text.substr(11, 2);
+        var min = text.substr(14, 2);
+        const monthName = [
+            'January', 
+            'February', 
+            'March', 
+            'April', 
+            'May', 
+            'June', 
+            'July', 
+            'August', 
+            'September', 
+            'October', 
+            'November', 
+            'December']
+        return (monthName[month-1] + " " + date.toString() + ", " + year.toString() 
+            + " " + hour.toString() + ":" + min.toString());
+    }
+
     const [bookingList, setBookingList] = useState([
         {
             _id:"11",
             tutorId:"6206273237ff1b8ed2759389",
-            tutorFirstName:"1first",
-            tutorLastName:" last",
+            tutorFirstName:"Veerin",
+            tutorLastName:" Juu-rek",
             timeStamp:"2001-02-15T17:00:00.000+00:00",
             totalPrice:200,
             status:"Cancelled",
@@ -28,8 +54,8 @@ const BookingOverlay = (prop) => {
         {
             _id:"12",
             tutorId:"6206273237ff1b8ed2759389",
-            tutorFirstName:"2first",
-            tutorLastName:"last",
+            tutorFirstName:"Prayut",
+            tutorLastName:"Jan-o-cha",
             timeStamp:"2001-02-15T17:00:00.000+00:00",
             totalPrice:200,
             status:"Pending",
@@ -42,8 +68,8 @@ const BookingOverlay = (prop) => {
         {
             _id:"13",
             tutorId:"6206273237ff1b8ed2759389",
-            tutorFirstName:"3first",
-            tutorLastName:"last",
+            tutorFirstName:"Moss",
+            tutorLastName:"Supawich",
             timeStamp:"2001-02-15T17:00:00.000+00:00",
             totalPrice:200,
             status:"Rejected",
@@ -56,8 +82,8 @@ const BookingOverlay = (prop) => {
         {
             _id:"13",
             tutorId:"6206273237ff1b8ed2759389",
-            tutorFirstName:"3first",
-            tutorLastName:"last",
+            tutorFirstName:"P' โต",
+            tutorLastName:"Silly fool",
             timeStamp:"2001-02-15T17:00:00.000+00:00",
             totalPrice:200,
             status:"Approved",
@@ -68,6 +94,7 @@ const BookingOverlay = (prop) => {
             // ]
         }
     ])
+    
     useEffect(() => {
         //todo: uncomment statement belown if url is ready
         //fetchData();
@@ -80,13 +107,6 @@ const BookingOverlay = (prop) => {
             url: `/booking/student`,
             params: {
                 tutorId: `${_id}`,
-                // keyword: genKeyword(
-                //     searchWithContext ? searchText : searchInfo.searchText
-                // ),
-                // ratePrice: `${searchInfo.minPrice.toString()},${
-                //     searchInfo.maxPrice.toString() ?? '10000'
-                // }`,
-                // days: genDayListText(searchInfo.daysCheck),
             },
         })
         .then(({ data: { data } }) => {
@@ -114,7 +134,7 @@ const BookingOverlay = (prop) => {
                             key={e._id}
                             bookingId={e._id}
                             status={e.status}
-                            requestTime={e.timeStamp}
+                            requestTime={translateTimeFormat(e.timeStamp)}
                             tutorFirstName={e.tutorFirstName}
                             tutorLastName={e.tutorLastName}
                             totalPrice={e.totalPrice}
@@ -126,82 +146,6 @@ const BookingOverlay = (prop) => {
                             ]}
                         />
                     ))}
-                    {/* <BookingCard 
-                        status="Pending" 
-                        requestTime="February 29, 2000 9:30 a.m."
-                        tutorName="Komsorn Sookdang"
-                        totalPrice={200}
-                        subjectList={[
-                            "Science [ 13:00 - 14:00 ] February 29, 2000",
-                            "Science [ 14:00 - 15:00 ] February 29, 2000",
-                            "Mathematic [ 14:00 - 15:00 ] February 30, 2000",
-                            "Software Engineering [ 14:00 - 15:00 ] February 29, 2000"
-                        ]}
-                    />
-                    <BookingCard 
-                        status="Pending" 
-                        requestTime="February 29, 2000 9:30 a.m."
-                        tutorName="Komsorn Sookdang"
-                        totalPrice={200}
-                        subjectList={[
-                            "Science [ 13:00 - 14:00 ] February 29, 2000",
-                            "Software Engineering [ 14:00 - 15:00 ] February 29, 2000"
-                        ]}
-                    />
-                    <BookingCard 
-                        status="Cancelled" 
-                        requestTime="February 29, 2000 9:30 a.m."
-                        tutorName="Komsorn Sookdang"
-                        totalPrice={200}
-                        subjectList={[
-                            "Science [ 13:00 - 14:00 ] February 29, 2000",
-                            "Science [ 14:00 - 15:00 ] February 29, 2000",
-                            "Mathematic [ 14:00 - 15:00 ] February 30, 2000",
-                            "Software Engineering [ 14:00 - 15:00 ] February 29, 2000"
-                        ]}
-                    />
-                    <BookingCard 
-                        status="Accepted" 
-                        requestTime="February 29, 2000 9:30 a.m."
-                        tutorName="Komsorn Sookdang"
-                        totalPrice={200}
-                        subjectList={[
-                            "Science [ 13:00 - 14:00 ] February 29, 2000",
-                            "Science [ 14:00 - 15:00 ] February 29, 2000",
-                            "Mathematic [ 14:00 - 15:00 ] February 30, 2000",
-                            "Software Engineering [ 14:00 - 15:00 ] February 29, 2000"
-                        ]}
-                    />
-                    <BookingCard 
-                        status="Rejected" 
-                        requestTime="February 29, 2000 9:30 a.m."
-                        tutorName="Komsorn Sookdang"
-                        totalPrice={200}
-                        subjectList={[
-                            "Science [ 13:00 - 14:00 ] February 29, 2000",
-                            "Science [ 14:00 - 15:00 ] February 29, 2000",
-                            "Mathematic [ 14:00 - 15:00 ] February 30, 2000",
-                            "Software Engineering [ 14:00 - 15:00 ] February 29, 2000"
-                        ]}
-                    />
-                    <BookingCard 
-                        status="Accepted" 
-                        requestTime="February 29, 2000 9:30 a.m."
-                        tutorName="Komsorn Sookdang"
-                        totalPrice={200}
-                        subjectList={[
-                            "Science [ 13:00 - 14:00 ] February 29, 2000",
-                        ]}
-                    />
-                    <BookingCard 
-                        status="Accepted" 
-                        requestTime="February 29, 2000 9:30 a.m."
-                        tutorName="Komsorn Sookdang"
-                        totalPrice={200}
-                        subjectList={[
-                            "Science [ 13:00 - 14:00 ] February 29, 2000",
-                        ]}
-                    /> */}
                 </Popover.Body>
             </Popover>
         </Overlay>
