@@ -387,7 +387,7 @@ export class ScheduleService {
       .then((res)=>{console.log(res)})
       .catch((err)=>{console.log(err)})
     }
-    var raw : any = await this.learnScheduleModel.find({'studentId' : studentId}).sort({"startDate": -1}).lean()
+    var raw : any = await this.learnScheduleModel.find({'studentId' : studentId}).sort({"startDate": 1}).lean()
     .then((res)=>{
       return res
     })
