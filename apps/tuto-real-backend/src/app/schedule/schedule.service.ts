@@ -9,13 +9,17 @@ import { InjectModel } from '@nestjs/mongoose';
 import { ideahub_v1beta } from 'googleapis';
 import { datacatalog } from 'googleapis/build/src/apis/datacatalog';
 import { Model } from 'mongoose';
+import { last } from 'rxjs';
+import { setFlagsFromString } from 'v8';
+import { LearnScheduleDto } from '../LearnSchedule/learnSchedule.dto';
+import { LearnSchedule } from '../LearnSchedule/learnSchedule.interface';
 import { TutorReqModule } from '../tutor-req/tutor-req.module';
 import { User } from '../user/user.interface';
 import { ScheduleDto } from './schedule.dto';
 import { Schedule } from './schedule.interface';
 import { UpdateScheduleDto } from './updateSchedule.dto';
 import { UpdateSlotWithDeleteDto } from './updateSlotWithDelete.dto';
-
+import { max, previousDay, startOfWeek } from 'date-fns'
 const mongoose = require('mongoose');
 
 const getFinalDate = (startDate: Date): Date => {
@@ -24,6 +28,16 @@ const getFinalDate = (startDate: Date): Date => {
   dateNoTimeZone.setDate(dateNoTimeZone.getDate() + 7);
   return dateNoTimeZone;
 };
+
+function nextweek(today){
+  today.setHours(7,0,0)
+  console.log(today.getDate())
+  var next = new Date(today.getFullYear(), today.getUTCMonth(), today.getUTCDate()+7);
+  //next.setHours(0,0,0)
+  console.log(next.getDate())
+  console.log(next)
+  return next;
+}
 
 const getPreviousSunday = () => {
   /*
@@ -41,7 +55,8 @@ const getPreviousSunday = () => {
 export class ScheduleService {
   constructor(
     @InjectModel('Schedule') private scheduleModel: Model<Schedule>,
-    @InjectModel('User') private userModel: Model<User>
+    @InjectModel('User') private userModel: Model<User>,
+    @InjectModel('LearnSchedule') private learnScheduleModel: Model<LearnSchedule>,
   ) {}
 
   public async getSchedule(id: string): Promise<any> {
@@ -337,4 +352,91 @@ export class ScheduleService {
       });
     return { success: true, data: schedule.days };
   }
+
+
+  async getLearnSchedules(studentId : string){
+    //delte expired schedule
+    var now = new Date()
+    var expiredDate = new Date();
+    expiredDate.setDate(now.getDate() - 7)
+    expiredDate.setHours(0,0,0)
+    console.log(expiredDate)
+    await this.learnScheduleModel.deleteMany({startDate : {$lt:expiredDate}})
+    .then((res)=>{
+      console.log(res)
+    })
+    .catch((err)=>{
+      console.log(err)
+    })
+    var maxDate =  await this.learnScheduleModel.distinct("startDate",{"studentId":studentId})
+
+    var latestDate = maxDate.length!=0? new Date(Math.max(...maxDate)): getPreviousSunday()
+    console.log(latestDate)
+        //insert advance schedule
+    var more = 4 - maxDate.length
+    
+    
+    console.log("latestDate",latestDate)
+    for (let i=1;i<=more;i++){
+      latestDate = nextweek(latestDate)
+      console.log("add",latestDate)
+      var add = new LearnScheduleDto()
+      add.studentId = studentId
+      add.startDate = latestDate
+      await this.learnScheduleModel.create(add)
+      .then((res)=>{console.log(res)})
+      .catch((err)=>{console.log(err)})
+    }
+    var raw : any = await this.learnScheduleModel.find({'studentId' : studentId}).sort({"startDate": 1}).lean()
+    .then((res)=>{
+      return res
+    })
+    .catch((err)=>{
+
+    })
+    //lastedtSunday
+    console.log(latestDate)
+    for (let i=0;i<raw.length;i++){
+      var subjects = new Set()
+      if (raw[i].startDate > latestDate) latestDate = raw[i].startDate
+      for (var day of raw[i].days){
+        for (var slot of day.slots){
+          console.log("slot",slot)
+          for(let j=0;j<slot.data.length;j++){
+            console.log(slot.data[j].slotId)
+            var re = await this.scheduleModel.findOne(
+              { "days.slots._id": slot.data[j].slotId},
+              { "days.slots.$": 1 , "_id":1})
+            console.log(re._id)
+            var tutorInfo = await this.userModel.findOne(
+              {"schedule_id" : re._id}
+            )
+            subjects.add(re.days[0].slots[0].subject)
+            slot.data[j].subject = re.days[0].slots[0].subject
+            slot.data[j].description = re.days[0].slots[0].description
+            slot.data[j].tutorId = tutorInfo._id
+            slot.data[j].tutorFirstName = tutorInfo.firstName
+            slot.data[j].tutorLastName = tutorInfo.lastName
+            slot.data[j].zoomURL = tutorInfo.zoomJoinURL
+            slot.data[j].members = []
+            let students : any= re.days[0].slots[0].students? re.days[0].slots[0].students:[]
+            for (let k =0;k<students.length;k++){
+              if (students[k].status == "Approved"){
+                slot.data[j].members.push({
+                  firstName : students[k].firstName,
+                  lastName : students[k].lastName
+                })
+              }
+            }
+            console.log(slot.data[j])
+          }
+      }
+      raw[i].subjects = Array.from(subjects)
+      
+    }
+
+    
+    return raw
+  }
+}
 }

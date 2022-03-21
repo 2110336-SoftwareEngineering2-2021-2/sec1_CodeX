@@ -1,7 +1,7 @@
 import { TimePeriodDto } from '../util/timePeriod.dto';
 
 export class BookingDto {
-  readonly student_id: { type: String; required: true };
+  student_id: String;
   readonly schedule_id: { type: String; required: true };
   readonly days: [{ _id: false; day: String; slots: [Number] }];
   timeStamp: Date;

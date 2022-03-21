@@ -12,7 +12,7 @@ export const ScheduleSchema = new mongoose.Schema({
           slot: Number,
           subject: String,
           description: String,
-          _id: false,
+         // _id: false,
           students: {
             type: [
               {

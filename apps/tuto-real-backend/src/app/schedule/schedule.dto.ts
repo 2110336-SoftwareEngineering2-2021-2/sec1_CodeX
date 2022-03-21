@@ -4,6 +4,7 @@ export class ScheduleDto {
   days: {
     day: String;
     slots: {
+      //_id : String,
       slot: Number;
       subject: String;
       description: String;

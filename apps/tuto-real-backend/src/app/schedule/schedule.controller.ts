@@ -70,4 +70,13 @@ export class ScheduleController {
       return err;
     }
   }
+
+  @Get('/learn')
+  getLearnSchedules(@Query('studentId') studentId : string){
+    try {
+      return this.service.getLearnSchedules(studentId);
+    } catch (err) {
+      return err;
+    }
+  }
 }

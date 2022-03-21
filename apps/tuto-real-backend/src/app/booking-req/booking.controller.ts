@@ -13,6 +13,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { BookingDto } from './booking.dto';
 import { Booking } from './booking.interface';
 import { BookingService } from './booking.service';
+import { LearnScheduleDto } from '../LearnSchedule/learnSchedule.dto';
 
 @Controller('booking')
 export class BookingController {
@@ -33,6 +34,18 @@ export class BookingController {
     }
   }
 
+
+  @Post('/test')
+  updateLearnSchedule(@Body() dto :BookingDto) {
+    console.log(dto)
+        try {
+      return this.service.updateLearnSchedule(dto);
+    }
+    catch(err){
+
+    }
+     
+
   @Get('/tutor')
   getBookingTutor(@Query() query: any) {
     try {
@@ -40,5 +53,6 @@ export class BookingController {
     } catch (error) {
       return error;
     }
+
   }
 }
