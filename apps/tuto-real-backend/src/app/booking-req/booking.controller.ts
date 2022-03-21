@@ -37,13 +37,13 @@ export class BookingController {
 
   @Post('/test')
   updateLearnSchedule(@Body() dto :BookingDto) {
-    console.log(dto)
         try {
       return this.service.updateLearnSchedule(dto);
     }
     catch(err){
 
     }
+  }
      
 
   @Get('/tutor')

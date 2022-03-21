@@ -2,6 +2,7 @@ import {
   BadRequestException,
   HttpStatus,
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -362,13 +363,13 @@ export class ScheduleService {
     expiredDate.setHours(0,0,0)
     console.log(expiredDate)
     await this.learnScheduleModel.deleteMany({startDate : {$lt:expiredDate}})
-    .then((res)=>{
-      console.log(res)
-    })
     .catch((err)=>{
-      console.log(err)
+      throw new BadRequestException({ success: false, data: 'Invalid studenID' });
     })
     var maxDate =  await this.learnScheduleModel.distinct("startDate",{"studentId":studentId})
+    .catch((err)=>{
+      throw new NotFoundException({ success: false, data: 'Invalid studenID' });
+    })
 
     var latestDate = maxDate.length!=0? new Date(Math.max(...maxDate)): getPreviousSunday()
     console.log(latestDate)
@@ -385,14 +386,16 @@ export class ScheduleService {
       add.startDate = latestDate
       await this.learnScheduleModel.create(add)
       .then((res)=>{console.log(res)})
-      .catch((err)=>{console.log(err)})
+      .catch((err)=>{
+        throw new BadRequestException({ success: false, data: err });
+      })
     }
     var raw : any = await this.learnScheduleModel.find({'studentId' : studentId}).sort({"startDate": 1}).lean()
     .then((res)=>{
       return res
     })
     .catch((err)=>{
-
+      throw new NotFoundException({ success: false, data: 'Invalid studenID' });
     })
     //lastedtSunday
     console.log(latestDate)
@@ -407,10 +410,17 @@ export class ScheduleService {
             var re = await this.scheduleModel.findOne(
               { "days.slots._id": slot.data[j].slotId},
               { "days.slots.$": 1 , "_id":1})
+            .catch((err)=>{
+              throw new NotFoundException({ success: false, data: "referenced slot not found" });
+            })
             console.log(re._id)
+
             var tutorInfo = await this.userModel.findOne(
               {"schedule_id" : re._id}
             )
+            .catch((err)=>{
+              throw new InternalServerErrorException({ success: false, data: err });
+            })
             subjects.add(re.days[0].slots[0].subject)
             slot.data[j].subject = re.days[0].slots[0].subject
             slot.data[j].description = re.days[0].slots[0].description
@@ -436,7 +446,7 @@ export class ScheduleService {
     }
 
     
-    return raw
+    return { success: true, data: raw };
   }
 }
 }

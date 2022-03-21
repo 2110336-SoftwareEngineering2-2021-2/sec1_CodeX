@@ -163,13 +163,14 @@ export class BookingService {
           }
         }
         data.days = tmpDays
-        return await this.learnScheduleModel.create(data)
+        var re = await this.learnScheduleModel.create(data)
         .then((res)=>{
           return res
         })
         .catch((err)=>{
           throw new BadRequestException({ success: false, data: err })
         })
+        return { success: true, data:re};
       }
       else{
         //update existed learn schedule
@@ -227,7 +228,7 @@ export class BookingService {
           }
         }
         console.log(result)
-        return await this.learnScheduleModel.replaceOne(
+        var ret = await this.learnScheduleModel.replaceOne(
           {_id:result._id} 
           , result)
           .then((res)=>{
@@ -237,7 +238,9 @@ export class BookingService {
             throw new BadRequestException({ success: false, data: err })
           })
         console.log("result",result)
+        return { success: true, data: ret };
       }
+     
       
 
 
