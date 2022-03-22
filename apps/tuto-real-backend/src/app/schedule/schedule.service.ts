@@ -361,7 +361,6 @@ export class ScheduleService {
     var expiredDate = new Date();
     expiredDate.setDate(now.getDate() - 7)
     expiredDate.setHours(0,0,0)
-    console.log(expiredDate)
     await this.learnScheduleModel.deleteMany({startDate : {$lt:expiredDate}})
     .catch((err)=>{
       throw new BadRequestException({ success: false, data: 'Invalid studenID' });
@@ -378,12 +377,18 @@ export class ScheduleService {
     
     
     console.log("latestDate",latestDate)
-    for (let i=1;i<=more;i++){
+    var i=0
+    if (maxDate.length==0)
+      more -= 1
+    else
+      i = 1
+    for (i;i<=more;i++){
       latestDate = nextweek(latestDate)
       console.log("add",latestDate)
       var add = new LearnScheduleDto()
       add.studentId = studentId
       add.startDate = latestDate
+      console.log(add)
       await this.learnScheduleModel.create(add)
       .then((res)=>{console.log(res)})
       .catch((err)=>{
