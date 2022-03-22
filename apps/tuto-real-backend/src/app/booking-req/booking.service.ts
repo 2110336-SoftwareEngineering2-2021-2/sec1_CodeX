@@ -316,7 +316,9 @@ export class BookingService {
     ]);
     try {
       //Find the student
-      const student = await this.userModel.findById(id);
+      const student = await this.userModel.findById(
+        mongoose.Types.ObjectId(id)
+      );
       if (!student) {
         throw new NotFoundException({
           success: false,
@@ -373,13 +375,3 @@ export class BookingService {
     }
   }
 }
-
-// for (var j = 0; j < booking[i].days.length; j++) {
-//   let day = booking[i].days[j].day as string;
-//   const numDay = days.get(day);
-//   const newDate = new Date(
-//     booking[i].schedule_id['startDate'].getTime() +
-//       1000 * 60 * 60 * 24 * numDay
-//   );
-//   booking[i].days[j]['date'] = newDate;
-// }
