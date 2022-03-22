@@ -34,17 +34,12 @@ export class BookingController {
     }
   }
 
-
   @Post('/test')
-  updateLearnSchedule(@Body() dto :BookingDto) {
-        try {
+  updateLearnSchedule(@Body() dto: BookingDto) {
+    try {
       return this.service.updateLearnSchedule(dto);
-    }
-    catch(err){
-
-    }
+    } catch (err) {}
   }
-     
 
   @Get('/tutor')
   getBookingTutor(@Query() query: any) {
@@ -53,6 +48,14 @@ export class BookingController {
     } catch (error) {
       return error;
     }
+  }
 
+  @Get('/student')
+  getBookingStudent(@Query() query: any) {
+    try {
+      return this.service.getBookingStudent(query._id);
+    } catch (error) {
+      return error;
+    }
   }
 }
