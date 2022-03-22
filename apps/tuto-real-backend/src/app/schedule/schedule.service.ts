@@ -353,127 +353,102 @@ export class ScheduleService {
     return { success: true, data: schedule.days };
   }
 
-  public async getLearnSchedules(studentId: string) {
+  public async getLearnSchedules(studentId : string){
     //delte expired schedule
-    var now = new Date();
+    var now = new Date()
     var expiredDate = new Date();
-    expiredDate.setDate(now.getDate() - 7);
-    expiredDate.setHours(0, 0, 0);
-    await this.learnScheduleModel
-      .deleteMany({ startDate: { $lt: expiredDate } })
-      .catch((err) => {
-        throw new BadRequestException({
-          success: false,
-          data: 'Invalid studenID',
-        });
-      });
-    var maxDate = await this.learnScheduleModel
-      .distinct('startDate', { studentId: studentId })
-      .catch((err) => {
-        throw new NotFoundException({
-          success: false,
-          data: 'Invalid studenID',
-        });
-      });
+    expiredDate.setDate(now.getDate() - 7)
+    expiredDate.setHours(0,0,0)
+    await this.learnScheduleModel.deleteMany({startDate : {$lt:expiredDate}})
+    .catch((err)=>{
+      throw new BadRequestException({ success: false, data: 'Invalid studenID' });
+    })
+    var maxDate =  await this.learnScheduleModel.distinct("startDate",{"studentId":studentId})
+    .catch((err)=>{
+      throw new NotFoundException({ success: false, data: 'Invalid studenID' });
+    })
 
-    var latestDate =
-      maxDate.length != 0
-        ? new Date(Math.max(...maxDate))
-        : getPreviousSunday();
-    console.log(latestDate);
-    //insert advance schedule
-    var more = 4 - maxDate.length;
-
-    console.log('latestDate', latestDate);
-    var i = 0;
-    if (maxDate.length == 0) more -= 1;
-    else i = 1;
-    for (i; i <= more; i++) {
-      latestDate = nextweek(latestDate);
-      console.log('add', latestDate);
-      var add = new LearnScheduleDto();
-      add.studentId = studentId;
-      add.startDate = latestDate;
-      console.log(add);
-      await this.learnScheduleModel
-        .create(add)
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => {
-          throw new BadRequestException({ success: false, data: err });
-        });
-      var raw: any = await this.learnScheduleModel
-        .find({ studentId: studentId })
-        .sort({ startDate: 1 })
-        .lean()
-        .then((res) => {
-          return res;
-        })
-        .catch((err) => {
-          throw new NotFoundException({
-            success: false,
-            data: 'Invalid studenID',
-          });
-        });
-      //lastedtSunday
-      console.log(latestDate);
-      for (let i = 0; i < raw.length; i++) {
-        var subjects = new Set();
-        if (raw[i].startDate > latestDate) latestDate = raw[i].startDate;
-        for (var day of raw[i].days) {
-          for (var slot of day.slots) {
-            console.log('slot', slot);
-            for (let j = 0; j < slot.data.length; j++) {
-              console.log(slot.data[j].slotId);
-              var re = await this.scheduleModel
-                .findOne(
-                  { 'days.slots._id': slot.data[j].slotId },
-                  { 'days.slots.$': 1, _id: 1 }
-                )
-                .catch((err) => {
-                  throw new NotFoundException({
-                    success: false,
-                    data: 'referenced slot not found',
-                  });
-                });
-              console.log(re._id);
-
-              var tutorInfo = await this.userModel
-                .findOne({ schedule_id: re._id })
-                .catch((err) => {
-                  throw new InternalServerErrorException({
-                    success: false,
-                    data: err,
-                  });
-                });
-              subjects.add(re.days[0].slots[0].subject);
-              slot.data[j].subject = re.days[0].slots[0].subject;
-              slot.data[j].description = re.days[0].slots[0].description;
-              slot.data[j].tutorId = tutorInfo._id;
-              slot.data[j].tutorFirstName = tutorInfo.firstName;
-              slot.data[j].tutorLastName = tutorInfo.lastName;
-              slot.data[j].zoomURL = tutorInfo.zoomJoinURL;
-              slot.data[j].members = [];
-              let students: any = re.days[0].slots[0].students
-                ? re.days[0].slots[0].students
-                : [];
-              for (let k = 0; k < students.length; k++) {
-                if (students[k].status == 'Approved') {
-                  slot.data[j].members.push({
-                    firstName: students[k].firstName,
-                    lastName: students[k].lastName,
-                  });
-                }
-              }
-              console.log(slot.data[j]);
-            }
-          }
-          raw[i].subjects = Array.from(subjects);
-        }
-
-        return { success: true, data: raw };
-      }
+    var latestDate = maxDate.length!=0? new Date(Math.max(...maxDate)): getPreviousSunday()
+    console.log(latestDate)
+        //insert advance schedule
+    var more = 4 - maxDate.length
+    
+    
+    console.log("latestDate",latestDate)
+    var i=0
+    if (maxDate.length==0)
+      more -= 1
+    else
+      i = 1
+    for (i;i<=more;i++){
+      latestDate = nextweek(latestDate)
+      console.log("add",latestDate)
+      var add = new LearnScheduleDto()
+      add.studentId = studentId
+      add.startDate = latestDate
+      console.log(add)
+      await this.learnScheduleModel.create(add)
+      .then((res)=>{console.log(res)})
+      .catch((err)=>{
+        throw new BadRequestException({ success: false, data: err });
+      })
     }
-  }
+    var raw : any = await this.learnScheduleModel.find({'studentId' : studentId}).sort({"startDate": 1}).lean()
+    .then((res)=>{
+      return res
+    })
+    .catch((err)=>{
+      throw new NotFoundException({ success: false, data: 'Invalid studenID' });
+    })
+    //lastedtSunday
+    console.log(latestDate)
+    for (let i=0;i<raw.length;i++){
+      var subjects = new Set()
+      if (raw[i].startDate > latestDate) latestDate = raw[i].startDate
+      for (var day of raw[i].days){
+        for (var slot of day.slots){
+          console.log("slot",slot)
+          for(let j=0;j<slot.data.length;j++){
+            console.log(slot.data[j].slotId)
+            var re = await this.scheduleModel.findOne(
+              { "days.slots._id": slot.data[j].slotId},
+              { "days.slots.$": 1 , "_id":1})
+            .catch((err)=>{
+              throw new NotFoundException({ success: false, data: "referenced slot not found" });
+            })
+            console.log(re._id)
+
+            var tutorInfo = await this.userModel.findOne(
+              {"schedule_id" : re._id}
+            )
+            .catch((err)=>{
+              throw new InternalServerErrorException({ success: false, data: err });
+            })
+            subjects.add(re.days[0].slots[0].subject)
+            slot.data[j].subject = re.days[0].slots[0].subject
+            slot.data[j].description = re.days[0].slots[0].description
+            slot.data[j].tutorId = tutorInfo._id
+            slot.data[j].tutorFirstName = tutorInfo.firstName
+            slot.data[j].tutorLastName = tutorInfo.lastName
+            slot.data[j].zoomURL = tutorInfo.zoomJoinURL
+            slot.data[j].members = []
+            let students : any= re.days[0].slots[0].students? re.days[0].slots[0].students:[]
+            for (let k =0;k<students.length;k++){
+              if (students[k].status == "Approved"){
+                slot.data[j].members.push({
+                  firstName : students[k].firstName,
+                  lastName : students[k].lastName
+                })
+              }
+            }
+            console.log(slot.data[j])
+          }
+        }
+        raw[i].subjects = Array.from(subjects)
+      
+      }
+    
+      return { success: true, data: raw };
+    }
+}
 }

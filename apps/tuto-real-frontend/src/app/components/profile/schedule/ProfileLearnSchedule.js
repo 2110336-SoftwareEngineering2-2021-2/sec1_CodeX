@@ -56,7 +56,7 @@ const ProfileLearnSchedule = ({ targetId, viewType }) => {
       .then(({ data: { data } }) => {
         console.log(data);
         setScheduleList(data ?? []);
-        if (data.scheduleList?.length > 0) {
+        if (data?.length > 0) {
           setSubjectList(data[currentSchedule].subjects ?? []);
         }
         setLoading(false);
