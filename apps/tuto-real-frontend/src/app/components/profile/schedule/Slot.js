@@ -1,11 +1,12 @@
 import { IoIosInformation } from 'react-icons/io';
 import { ImCross } from 'react-icons/im';
+import { BsFillCircleFill } from 'react-icons/bs';
 
 import COLORS from '../../../constants/color';
 import SUBJECTS from '../../../constants/subjects';
 
 const Slot = ({
-  slotData,
+  slotDataList,
   viewType,
   _id,
   isSelected,
@@ -13,24 +14,27 @@ const Slot = ({
   whenClick,
   onViewInfo,
   day,
+  viewOnly,
 }) => {
   // viewType => "TutorSelf" | "TutorOther" //
   /*
-    slotData: {
+    slotDataList: {
       slot: number start from 0 - 15 (8.00 - 23.00)
       subject: string
       description: string
       students: {id, firstName, lastName, status}[]
-    }
+    }[]
   */
 
-  const status = slotData?.students?.find(
-    (student) => student.id === _id
-  )?.status;
+  const status =
+    slotDataList && slotDataList[0] && !viewOnly
+      ? slotDataList[0].students?.find((student) => student.id === _id)?.status
+      : null;
 
   const getSlotStyle = () => {
-    // slot-tutor, slot-student, slot-active-tutor, slot-active-student //
-    if (status) return null;
+    // 4 Options: slot-tutor, slot-student, slot-active-tutor, slot-active-student //
+    // Don't show effects (when student is already Pending or Approve) or (in view only mode)
+    if (status || viewOnly) return null;
     // Can't click if 'Pending' or 'Approved'
     else if (viewType === 'TutorSelf') {
       if (isSelected) return 'slot-active-tutor'; // Show green block
@@ -38,17 +42,45 @@ const Slot = ({
     } else if (viewType === 'TutorOther') {
       if (isSelected) return 'slot-active-student';
       // Show orange block
-      else if (slotData) return 'slot-student'; // Show light orange background when hover
+      else if (slotDataList) return 'slot-student'; // Show light orange background when hover
     }
     return null; // no effect (can't click anything on this slot)
   };
 
   const onClick = () => {
-    if (viewType === 'TutorSelf' || (slotData && !status)) whenClick();
+    if (viewType === 'TutorSelf' || (slotDataList && !status)) whenClick();
   };
 
+  const renderCenterContent = () => {
+    if (viewOnly && slotDataList?.length > 1)
+      return (
+        <div style={{ position: 'relative' }}>
+          <BsFillCircleFill size={32} style={{ color: COLORS.primary }} />
+          <span
+            style={{
+              position: 'absolute',
+              top: '15%',
+              left: '45%',
+              color: 'white',
+              fontWeight: 'bold',
+            }}
+          >
+            {slotDataList?.length}
+          </span>
+        </div>
+      );
+    else
+      return (
+        <p>
+          {slotDataList && slotDataList[0].subject
+            ? SUBJECTS[slotDataList[0].subject]
+            : ' '}
+        </p>
+      );
+  };
+
+  // render X slot (Only use on Night Time) //
   if (isX) {
-    // render X slot (Only use on Night Time) //
     return (
       <div
         style={{
@@ -66,19 +98,23 @@ const Slot = ({
   return (
     <div
       className={getSlotStyle()}
-      onClick={onClick}
+      onClick={!viewOnly ? onClick : null}
       style={{ display: 'flex', flexDirection: 'column' }}
     >
-      {slotData ? (
+      {slotDataList ? (
         <div style={{ textAlign: 'right' }}>
           <IoIosInformation
             size={24}
             className="hover-icon"
-            onClick={onViewInfo ? () => onViewInfo({slotData, day}) : null}
+            onClick={
+              onViewInfo ? () => onViewInfo({ slotDataList, day }) : null
+            }
           />
         </div>
       ) : null}
-      <p>{slotData?.subject ? SUBJECTS[slotData?.subject] : ' '}</p>
+
+      {renderCenterContent()}
+
       {/* If this is student view and student is a member of the slot */}
       {viewType === 'TutorOther' && status ? (
         <p

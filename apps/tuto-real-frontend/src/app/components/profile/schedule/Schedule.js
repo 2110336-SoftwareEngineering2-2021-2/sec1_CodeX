@@ -13,25 +13,24 @@ const Schedule = ({
   selected,
   setSelected,
   onViewInfo,
+  viewOnly, // True if view only mode (No hover effect)
 }) => {
   /* 
     time: "Day Time" | "Night Time"
     scheduleData: {
       day: string,
-      slots: {slot: number, subject: string, description: string, students: {id, firstName, lastName, status}}[]
+      slots: slotDataList
     }[]
-    slotData: {
+    slotDataList: {
       slot: number start from 0 - 15 (8.00 - 23.00)
       subject: string
       description: string
       students: {id, firstName, lastName, status}[]
-    }
+    }[]
   */
   const { _id } = useAuth();
 
   const IdxToDayAndSlot = (idx) => {
-    // console.log(idx)
-    // console.log({day: DAY[Math.floor(idx/16)], slotNum: idx%16})
     return { day: DAY[Math.floor(idx / 16)], slotNum: idx % 16 }; // day, slot number
   };
 
@@ -41,7 +40,6 @@ const Schedule = ({
         .find((schedule) => schedule.day === day)
         ?.slots.find((slot) => slot.slot === slotIdx)
     ) {
-      // console.log(`${day} ${slotIdx} include`)
       return true;
     }
     return false;
@@ -57,7 +55,10 @@ const Schedule = ({
     const slotData = scheduleData
       .find((schedule) => schedule.day === day)
       ?.slots.find((slot) => slot.slot === slotNum);
-    return slotData;
+    // return List of data in a slot //
+    if (slotData.data) return slotData.data;
+    // else return [slotData];
+    else return [slotData, slotData];
   };
 
   const renderHeader = (
@@ -79,7 +80,7 @@ const Schedule = ({
             {[...Array(10).keys()].map((col) => {
               const idx =
                 time === 'Day Time' ? row * 16 + col : row * 16 + col + 6;
-              const modalDay = IdxToDayAndSlot(idx).day
+              const modalDay = IdxToDayAndSlot(idx).day;
               if (time === 'Night Time' && [0, 1, 2, 3].includes(col)) {
                 // Render X slot //
                 return (
@@ -91,13 +92,14 @@ const Schedule = ({
                     ) : null}
                     <td style={{ verticalAlign: 'top' }}>
                       <Slot
-                        slotData={null}
+                        slotDataList={null}
                         viewType={viewType}
                         isSelected={null}
                         isX={true}
                         whenClick={null}
                         onViewInfo={null}
                         day={null}
+                        viewOnly={viewOnly}
                       />
                     </td>
                   </Fragment>
@@ -113,7 +115,7 @@ const Schedule = ({
                     ) : null}
                     <td id="available" style={{ verticalAlign: 'top' }}>
                       <Slot
-                        slotData={getSlotData(idx)}
+                        slotDataList={getSlotData(idx)}
                         viewType={viewType}
                         _id={_id}
                         isSelected={selected.includes(idx)}
@@ -121,6 +123,7 @@ const Schedule = ({
                         whenClick={() => whenClickSlot(idx)}
                         onViewInfo={onViewInfo}
                         day={modalDay}
+                        viewOnly={viewOnly}
                       />
                     </td>
                   </Fragment>
@@ -136,7 +139,7 @@ const Schedule = ({
                     ) : null}
                     <td style={{ verticalAlign: 'top' }}>
                       <Slot
-                        slotData={null}
+                        slotDataList={null}
                         viewType={viewType}
                         _id={_id}
                         isSelected={selected.includes(idx)}
@@ -144,6 +147,7 @@ const Schedule = ({
                         whenClick={() => whenClickSlot(idx)}
                         onViewInfo={null}
                         day={null}
+                        viewOnly={viewOnly}
                       />
                     </td>
                   </Fragment>

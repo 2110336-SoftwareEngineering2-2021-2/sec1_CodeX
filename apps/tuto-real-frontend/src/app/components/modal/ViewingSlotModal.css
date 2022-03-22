@@ -1,3 +1,24 @@
 .viewingTabs li > button {
-    color: var(--darkgray);
+  color: var(--darkgray);
+}
+
+#ViewingSlotModal .singleDataHeader {
+  border: none;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: flex-start;
+}
+
+#ViewingSlotModal .singleDataHeader button {
+  position: absolute;
+  right: 4%;
+  top: 5%;
+}
+
+#ViewingSlotModal .multiDataHeader {
+  border: none;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  margin-bottom: 3%;
 }

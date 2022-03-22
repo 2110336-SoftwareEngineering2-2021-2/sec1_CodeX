@@ -3,9 +3,10 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import { useAuth } from '../auth';
 import { client } from '../axiosConfig';
+import ProfileLearnSchedule from '../components/profile/schedule/ProfileLearnSchedule';
 import ProfileInfo from '../components/profile/ProfileInfo';
 import ProfileMenuBar from '../components/profile/ProfileMenuBar';
-import ProfileTeachSchedule from '../components/profile/teach-schedule/ProfileTeachSchedule';
+import ProfileTeachSchedule from '../components/profile/schedule/ProfileTeachSchedule';
 import ProfileReview from '../components/profile/review/ProfileReview';
 
 const ProfilePage = () => {
@@ -62,7 +63,9 @@ const ProfilePage = () => {
       case 'Info':
         return <ProfileInfo viewType={viewType} targetId={params?._id} />;
       case 'Learn':
-        return null; // Replace null with Student Schedule page...
+        return (
+          <ProfileLearnSchedule viewType={viewType} targetId={params?._id} />
+        );
       case 'Teach':
         return (
           <ProfileTeachSchedule
@@ -74,11 +77,7 @@ const ProfilePage = () => {
           />
         );
       case 'Review':
-        return (
-          <ProfileReview
-            viewType={viewType}
-          />
-        );
+        return <ProfileReview viewType={viewType} />;
       default:
         return <ProfileInfo />;
     }

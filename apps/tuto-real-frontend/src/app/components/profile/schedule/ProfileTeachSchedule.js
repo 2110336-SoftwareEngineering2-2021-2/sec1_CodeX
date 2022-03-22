@@ -40,7 +40,7 @@ const ProfileTeachSchedule = ({
   const [scheduleList, setScheduleList] = useState([]);
   const [currentSchedule, setCurrentSchedule] = useState(0);
   const [selected, setSelected] = useState([]); // Sun: 0-15, Mon: 16-31, Tue: 32-47, ..., Sat: 96-111
-  const [info, setInfo] = useState({});
+  const [info, setInfo] = useState([]);
   const [modalDay, setModalDay] = useState();
 
   const { _id } = useAuth();
@@ -170,9 +170,9 @@ const ProfileTeachSchedule = ({
     setEditingPrice(false);
   };
 
-  const onViewInfo = ({ slotData, day }) => {
+  const onViewInfo = ({ slotDataList, day }) => {
     setModalDay(day);
-    setInfo(slotData);
+    setInfo(slotDataList);
     setShowModal('info');
   };
 
