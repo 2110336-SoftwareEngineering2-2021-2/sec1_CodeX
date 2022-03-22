@@ -64,12 +64,7 @@ const ProfilePage = () => {
         return <ProfileInfo viewType={viewType} targetId={params?._id} />;
       case 'Learn':
         return (
-          <ProfileLearnSchedule
-            viewType={viewType}
-            targetId={params?._id}
-            firstName={firstName}
-            lastName={lastName}
-          />
+          <ProfileLearnSchedule viewType={viewType} targetId={params?._id} />
         );
       case 'Teach':
         return (
@@ -82,11 +77,7 @@ const ProfilePage = () => {
           />
         );
       case 'Review':
-        return (
-          <ProfileReview
-            viewType={viewType}
-          />
-        );
+        return <ProfileReview viewType={viewType} />;
       default:
         return <ProfileInfo />;
     }

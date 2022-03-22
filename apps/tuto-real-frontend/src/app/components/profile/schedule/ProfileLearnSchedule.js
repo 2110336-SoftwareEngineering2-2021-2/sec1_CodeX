@@ -13,7 +13,7 @@ import '../profile.css';
 
 import COLORS from '../../../constants/color';
 
-const ProfileLearnSchedule = ({ targetId, viewType, firstName, lastName }) => {
+const ProfileLearnSchedule = ({ targetId, viewType }) => {
   const [isLoading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState('none'); // "none" | "edit" | "info" | "delete" | "book" //
   const [refresh, setRefresh] = useState(false); // Set to true when you want to refresh page //
@@ -39,29 +39,29 @@ const ProfileLearnSchedule = ({ targetId, viewType, firstName, lastName }) => {
   const fetchData = useCallback(async () => {
     await client({
       method: 'GET',
-      url: `/schedule`,
+      url: `/schedule/learn`,
       params: {
-        _id: targetId,
+        studentId: targetId,
       },
     })
-      .then(({ data: { data } }) => {
-        console.log(data);
-        setScheduleList(data.scheduleList ?? []);
-        if (data.scheduleList?.length > 0) {
-          setSubjectList(data.scheduleList[currentSchedule].allSubjects ?? []);
-        }
-        setLoading(false);
-      })
       // .then(({ data: { data } }) => {
       //   console.log(data);
-      //   setScheduleList(data ?? []);
-
+      //   setScheduleList(data.scheduleList ?? []);
       //   if (data.scheduleList?.length > 0) {
       //     setSubjectList(data.scheduleList[currentSchedule].allSubjects ?? []);
       //   }
-
       //   setLoading(false);
       // })
+
+      .then(({ data: { data } }) => {
+        console.log(data);
+        setScheduleList(data ?? []);
+        if (data.scheduleList?.length > 0) {
+          setSubjectList(data[currentSchedule].subjects ?? []);
+        }
+        setLoading(false);
+      })
+
       .catch((res) => {
         console.log(res);
       });
@@ -74,9 +74,11 @@ const ProfileLearnSchedule = ({ targetId, viewType, firstName, lastName }) => {
   }, [fetchData, refresh]);
 
   useEffect(() => {
+    // if (scheduleList[currentSchedule]) {
+    //   setSubjectList(scheduleList[currentSchedule].allSubjects);
+    // }
     if (scheduleList[currentSchedule]) {
-      setSubjectList(scheduleList[currentSchedule].allSubjects);
-      // setTime('Day Time');
+      setSubjectList(scheduleList[currentSchedule].subjects ?? []);
     }
   }, [currentSchedule]);
 
@@ -92,10 +94,7 @@ const ProfileLearnSchedule = ({ targetId, viewType, firstName, lastName }) => {
   };
 
   const goRight = () => {
-    if (
-      (currentSchedule || currentSchedule === 0) &&
-      currentSchedule < scheduleList.length - 1
-    )
+    if (currentSchedule < scheduleList.length - 1)
       setCurrentSchedule(currentSchedule + 1);
   };
 
@@ -234,9 +233,7 @@ const ProfileLearnSchedule = ({ targetId, viewType, firstName, lastName }) => {
           }}
           day={modalDay}
           info={info}
-          firstName={firstName}
-          lastName={lastName}
-          canBeMultiData={true}
+          fromLearnSchedule={true}
         />
       )}
     </>

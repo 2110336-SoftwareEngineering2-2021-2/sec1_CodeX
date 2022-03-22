@@ -10,7 +10,8 @@ import { DESK } from '../../constants/image';
 import COLORS from '../../constants/color';
 
 const ViewingSlotModal = (props) => {
-  const { cancelFunc, day, info, firstName, lastName, canBeMultiData } = props; // "isMultiData" is True when call from TeachSchedule
+  const { cancelFunc, day, info, firstName, lastName, fromLearnSchedule } =
+    props;
 
   const [tabValue, setTabValue] = useState('Information');
   const [newInfo, setNewInfo] = useState([]);
@@ -20,6 +21,12 @@ const ViewingSlotModal = (props) => {
   const subject = info[infoIdx].subject;
   const description = info[infoIdx].description;
   const studentList = info[infoIdx].students ?? [];
+  const showFirstName = fromLearnSchedule
+    ? info[infoIdx]?.tutorFirstName
+    : firstName;
+  const showLastName = fromLearnSchedule
+    ? info[infoIdx]?.tutorLastName
+    : lastName;
 
   const checkInfo = () => {
     let tempData = [];
@@ -36,7 +43,7 @@ const ViewingSlotModal = (props) => {
   }, []);
 
   const haveMultipleData = () => {
-    if (canBeMultiData && info.length > 1) return true;
+    if (fromLearnSchedule && info.length > 1) return true;
     return false;
   };
 
@@ -92,7 +99,7 @@ const ViewingSlotModal = (props) => {
                 className="request-header"
                 style={{ fontWeight: '500', fontSize: '16px' }}
               >
-                {`${firstName} ${lastName}`}
+                {`${showFirstName} ${showLastName}`}
               </Modal.Title>
             </div>
 
