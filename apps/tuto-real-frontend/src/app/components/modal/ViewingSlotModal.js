@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Modal, Tabs, Tab, Button } from 'react-bootstrap';
 import {
   IoIosArrowDropleftCircle,
@@ -9,21 +9,17 @@ import './ViewingSlotModal.css';
 import { DESK } from '../../constants/image';
 import COLORS from '../../constants/color';
 
-const isValid = (x) => {
-  if (x !== undefined && x !== null) return true;
-  return false;
-};
-
 const ViewingSlotModal = (props) => {
-  const { cancelFunc, day, info, firstName, lastName, infoIdx } = props; // "infoIdx" only available on TeachSchedule
-  const index = isValid(infoIdx) ? infoIdx : 0;
-  const time = info[index].slot;
-  const subject = info[index].subject;
-  const description = info[index].description;
-  const studentList = info[index].students ?? [];
+  const { cancelFunc, day, info, firstName, lastName, canBeMultiData } = props; // "isMultiData" is True when call from TeachSchedule
 
   const [tabValue, setTabValue] = useState('Information');
   const [newInfo, setNewInfo] = useState([]);
+  const [infoIdx, setInfoIdx] = useState(0);
+
+  const time = info[infoIdx].slot;
+  const subject = info[infoIdx].subject;
+  const description = info[infoIdx].description;
+  const studentList = info[infoIdx].students ?? [];
 
   const checkInfo = () => {
     let tempData = [];
@@ -39,41 +35,67 @@ const ViewingSlotModal = (props) => {
     checkInfo();
   }, []);
 
+  const haveMultipleData = () => {
+    if (canBeMultiData && info.length > 1) return true;
+    return false;
+  };
+
+  const goNext = () => {
+    // console.log('going right...');
+    if (infoIdx + 1 < info.length) setInfoIdx(infoIdx + 1);
+  };
+
+  const goPrev = () => {
+    // console.log('going left...');
+    if (infoIdx > 0) setInfoIdx(infoIdx - 1);
+  };
+
   // render section //
   const renderHeader = () => {
     return (
       <Modal.Header
-        className={isValid(infoIdx) ? 'multiDataHeader' : 'singleDataHeader'}
+        className={haveMultipleData() ? 'multiDataHeader' : 'singleDataHeader'}
         closeButton
       >
-        {isValid(infoIdx) ? (
+        {haveMultipleData() ? (
           // Have Multiple Data in 1 Slot //
           <div
             style={{
               display: 'flex',
-              flexDirection: 'column',
               alignItems: 'center',
+              justifyContent: 'center',
+              width: '100%',
             }}
           >
             {/* Left Arrow */}
             <IoIosArrowDropleftCircle
               className={infoIdx > 0 ? 'arrow-icon' : 'disable-arrow'}
               size={36}
-              // onClick={goLeft}
-              onClick={console.log('going left...')}
+              onClick={goPrev}
             />
-            <Modal.Title
-              className="request-header"
-              style={{ fontWeight: '600' }}
+
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                margin: '0% 5%',
+              }}
             >
-              {`${day}, ${time + 8}.00 - ${time + 9}.00`}
-            </Modal.Title>
-            <Modal.Title
-              className="request-header"
-              style={{ fontWeight: '500', fontSize: '16px' }}
-            >
-              {`${firstName} ${lastName}`}
-            </Modal.Title>
+              <Modal.Title
+                className="request-header"
+                style={{ fontWeight: '600' }}
+              >
+                {`${day}, ${time + 8}.00 - ${time + 9}.00`}
+              </Modal.Title>
+              <Modal.Title
+                className="request-header"
+                style={{ fontWeight: '500', fontSize: '16px' }}
+              >
+                {`${firstName} ${lastName}`}
+              </Modal.Title>
+            </div>
+
             {/* Right Arrow */}
             <IoIosArrowDroprightCircle
               className={
@@ -81,8 +103,7 @@ const ViewingSlotModal = (props) => {
               }
               size={36}
               style={{ marginRight: '2%' }}
-              // onClick={goRight}
-              onClick={console.log('going right...')}
+              onClick={goNext}
             />
           </div>
         ) : (
@@ -198,7 +219,6 @@ const ViewingSlotModal = (props) => {
   );
 
   return (
-    // <div>
     <Modal
       id="ViewingSlotModal"
       show={true}
@@ -231,7 +251,6 @@ const ViewingSlotModal = (props) => {
         </Tab>
       </Tabs>
     </Modal>
-    // </div>
   );
 };
 

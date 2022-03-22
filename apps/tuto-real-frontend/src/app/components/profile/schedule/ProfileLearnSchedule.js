@@ -9,19 +9,11 @@ import { client } from '../../../axiosConfig';
 import Tag from './Tag';
 import Schedule from './Schedule';
 import ViewingSlotModal from '../../modal/ViewingSlotModal';
-// import { useAuth } from '../../../auth';
 import '../profile.css';
 
 import COLORS from '../../../constants/color';
-// import { ZOOM_ICON } from '../../../constants/image';
 
-const ProfileLearnSchedule = ({
-  targetId,
-  viewType,
-  // zoomUrl,
-  firstName,
-  lastName,
-}) => {
+const ProfileLearnSchedule = ({ targetId, viewType, firstName, lastName }) => {
   const [isLoading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState('none'); // "none" | "edit" | "info" | "delete" | "book" //
   const [refresh, setRefresh] = useState(false); // Set to true when you want to refresh page //
@@ -31,7 +23,6 @@ const ProfileLearnSchedule = ({
   const [scheduleList, setScheduleList] = useState([]);
   const [currentSchedule, setCurrentSchedule] = useState(0);
   const [info, setInfo] = useState([]);
-  const [infoIdx, setInfoIdx] = useState(0);
   const [modalDay, setModalDay] = useState();
 
   // const { _id } = useAuth();
@@ -95,6 +86,7 @@ const ProfileLearnSchedule = ({
     setShowModal('info');
   };
 
+  // Arrow for changing week //
   const goLeft = () => {
     if (currentSchedule) setCurrentSchedule(currentSchedule - 1);
   };
@@ -239,13 +231,12 @@ const ProfileLearnSchedule = ({
         <ViewingSlotModal
           cancelFunc={() => {
             setShowModal('none');
-            setInfoIdx(0);
           }}
           day={modalDay}
           info={info}
           firstName={firstName}
           lastName={lastName}
-          infoIdx={infoIdx}
+          canBeMultiData={true}
         />
       )}
     </>
