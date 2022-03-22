@@ -7,6 +7,7 @@ import { getNavbarData } from './navbarData'
 import { useAuth } from '../../auth'
 import './navbar.css'
 import BookingOverlay from './booking/BookingOverlay'
+import BookingRequestOverlay from './bookingRequest/BookingRequestOverlay'
 
 
 const NavBar = () => {
@@ -21,7 +22,7 @@ const NavBar = () => {
 
   const [bookingTarget, setBookingTarget] = useState(null)
   const [bookingShow, setBookingShow] = useState(false)
-  const [bookingRequestTarget, setBookingRequesrTarget] = useState(null)
+  const [bookingRequestTarget, setBookingRequestTarget] = useState(null)
   const [bookingRequestShow, setBookingRequestShow] = useState(false)
 
   const navbarDataList = getNavbarData(userType).map(item => (
@@ -60,6 +61,11 @@ const NavBar = () => {
       setBookingTarget(event.target);
       return
     }
+    if(name === "Booking Request") {
+      setBookingRequestShow(!bookingRequestShow);
+      setBookingRequestTarget(event.target);
+      return
+    }
     if(param) {
       if(param === "_id") navigate(`${path}/${_id}`)
     } else navigate(path)
@@ -89,6 +95,7 @@ const NavBar = () => {
       </div>
       <div className='right-side'>
         <BookingOverlay show={bookingShow} target={bookingTarget}/>
+        <BookingRequestOverlay show={bookingRequestShow} target={bookingRequestTarget}/>
         {navbarDataList}
       </div>
     </div>
