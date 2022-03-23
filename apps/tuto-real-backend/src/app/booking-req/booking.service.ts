@@ -367,6 +367,26 @@ export class BookingService {
             schedule.startDate.getTime() + 1000 * 60 * 60 * 24 * numDay
           );
           booking[i].days[j]['date'] = newDate;
+
+          //Subject to learn
+          const subject = await this.scheduleModel.aggregate([
+            { $unwind: '$days' },
+            { $unwind: '$days.slots' },
+            {
+              $match: {
+                'days.slots.slot': { $in: booking[i].days[j].slots },
+                _id: mongoose.Types.ObjectId(booking[i].schedule_id),
+                'days.day': day,
+              },
+            },
+            { $group: { _id: '$days.slots' } },
+          ]);
+          //console.log(subject);
+          let subjects = [];
+          subject.forEach((element) => {
+            subjects.push(element._id.subject);
+          });
+          booking[i].days[j]['subject'] = subjects;
         }
       }
       return { success: true, message: booking };
@@ -375,3 +395,17 @@ export class BookingService {
     }
   }
 }
+
+//Subject
+// const subject = await this.scheduleModel.distinct(
+//   'days.slots.subject',
+//   {
+//     _id: mongoose.Types.ObjectId(booking[i].schedule_id),
+//     days: {
+//       $elemMatch: {
+//         day: day,
+//         'slots.slot': { $in: booking[i].days[j].slots },
+//       },
+//     },
+//   }
+// );
