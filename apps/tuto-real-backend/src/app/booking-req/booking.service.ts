@@ -287,6 +287,10 @@ export class BookingService {
               1000 * 60 * 60 * 24 * numDay
           );
           booking[j].days[k]['date'] = newDate;
+          const mos = await this.scheduleModel.distinct('days.slots.subject', {
+            $match: { _id: booking[j]._id },
+          });
+          booking[j].days[k]['subject'] = mos;
         }
       }
       bookingTutor = [...bookingTutor, ...booking];
@@ -379,13 +383,18 @@ export class BookingService {
                 'days.day': day,
               },
             },
+            { $sort: { 'days.slots.slot': 1 } },
             { $group: { _id: '$days.slots' } },
           ]);
-          //console.log(subject);
+          subject.sort(function (a, b) {
+            return a._id.slot - b._id.slot;
+          });
+
           let subjects = [];
           subject.forEach((element) => {
             subjects.push(element._id.subject);
           });
+
           booking[i].days[j]['subject'] = subjects;
         }
       }
@@ -395,17 +404,3 @@ export class BookingService {
     }
   }
 }
-
-//Subject
-// const subject = await this.scheduleModel.distinct(
-//   'days.slots.subject',
-//   {
-//     _id: mongoose.Types.ObjectId(booking[i].schedule_id),
-//     days: {
-//       $elemMatch: {
-//         day: day,
-//         'slots.slot': { $in: booking[i].days[j].slots },
-//       },
-//     },
-//   }
-// );
