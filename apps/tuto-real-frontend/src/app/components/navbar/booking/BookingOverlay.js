@@ -35,10 +35,11 @@ const BookingOverlay = (prop) => {
         console.log(bookingList)
     }, [bookingList]);
 
+    
     useEffect(() => {
         // window.location.reload(false)
     }, []);
-
+    
     const fetchData = useCallback(async () => {
         console.log("fetch Booking of:",_id);
         await client({
@@ -57,7 +58,13 @@ const BookingOverlay = (prop) => {
         .catch((res) => {
             console.log(res);
         });
-    }, [_id])
+    }, [_id, show])
+    
+    useEffect(() => {
+        //todo: uncomment statement belown if url is ready
+        fetchData();
+        // console.log(bookingList)
+    }, [fetchData]);
 
     return (
         <Overlay
@@ -69,7 +76,7 @@ const BookingOverlay = (prop) => {
             <Popover className="booking-overlay" id="popover-contained">
                 <Popover.Header as="h3">My Booking</Popover.Header>
                 <Popover.Body> 
-                    <button onClick={fetchData}>load data</button>
+                    {/* <button onClick={fetchData}>load data</button> */}
                     {bookingList.map((e,i) => (
                         <BookingCard
                             key={e._id}
