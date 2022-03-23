@@ -287,10 +287,28 @@ export class BookingService {
               1000 * 60 * 60 * 24 * numDay
           );
           booking[j].days[k]['date'] = newDate;
-          const mos = await this.scheduleModel.distinct('days.slots.subject', {
-            $match: { _id: booking[j]._id },
+          const subject = await this.scheduleModel.aggregate([
+            { $unwind: '$days' },
+            { $unwind: '$days.slots' },
+            {
+              $match: {
+                'days.slots.slot': { $in: booking[j].days[k].slots },
+                _id: mongoose.Types.ObjectId(booking[j].schedule_id['_id']),
+                'days.day': day,
+              },
+            },
+            { $sort: { 'days.slots.slot': 1 } },
+            { $group: { _id: '$days.slots' } },
+          ]);
+          subject.sort(function (a, b) {
+            return a._id.slot - b._id.slot;
           });
-          booking[j].days[k]['subject'] = mos;
+
+          let subjects = [];
+          subject.forEach((element) => {
+            subjects.push(element._id.subject);
+          });
+          booking[j].days[k]['subject'] = subjects;
         }
       }
       bookingTutor = [...bookingTutor, ...booking];
