@@ -1,8 +1,9 @@
 import COLORS from "../../../constants/color"
+import { useState } from 'react';
+import ModalTwoButton from '../../modal/ModalTwoButton';
 
 const BookingRequestCard= (prop) => {
-    const {status, requestTime, studentName, totalPrice, subjectList} = prop
-
+    const {status, requestTime, tutorName, totalPrice, subjectList, setShowModal,setShow} = prop
 
     const genBorderColor = (status) => {
         if (status === "Canceled") return "#FBE2C5"
@@ -16,6 +17,7 @@ const BookingRequestCard= (prop) => {
         else if (status === "Rejected") return "#FF5D29"
         else return COLORS.primary
     }
+
     
     return (  
         <div className="booking-card" style={{borderColor:genBorderColor(status)}}>
@@ -30,21 +32,19 @@ const BookingRequestCard= (prop) => {
             <p style={{marginBottom:"0px"}}>from</p>
             <div id="info-section">
                 <div id="text-zone">
-                    <h3>{studentName}</h3>
+                    <h3>{tutorName}</h3>
                     <p>total price: <b>{totalPrice} baht</b></p>
                 </div>
-                <div id="button-approve">
+                <div id="button-zone">
                     {status === "Waiting for Approval"?
-                        <button>
-                        Approve
+                        <>
+                        <button id="approve-button" onClick={() =>
+                            {setShow(false)  
+                            setShowModal('Approve')}}>
+                            Approve
                         </button>
-                        :
-                        null
-                    }
-                </div>
-                <div id="button-reject">
-                    {status === "Waiting for Approval"?
-                        <button>Reject</button>
+                        <button id="reject-button">Reject</button>
+                        </>
                         :
                         null
                     }
@@ -57,6 +57,8 @@ const BookingRequestCard= (prop) => {
                     </li>
                 ))}    
             </ul>
+
+    
         
         </div>
     );

@@ -8,7 +8,7 @@ import { useAuth } from '../../auth'
 import './navbar.css'
 import BookingOverlay from './booking/BookingOverlay'
 import BookingRequestOverlay from './bookingRequest/BookingRequestOverlay'
-
+import ModalTwoButton from '../modal/ModalTwoButton'
 
 const NavBar = () => {
   // User have type => "Guest" | "Student" | "Admin" | "Tutor" //
@@ -24,6 +24,9 @@ const NavBar = () => {
   const [bookingShow, setBookingShow] = useState(false)
   const [bookingRequestTarget, setBookingRequestTarget] = useState(null)
   const [bookingRequestShow, setBookingRequestShow] = useState(false)
+
+  const [showModal, setShowModal] = useState('none');
+  const [isPending, setIsPending] = useState(false);
 
   const navbarDataList = getNavbarData(userType).map(item => (
     <button 
@@ -78,6 +81,15 @@ const NavBar = () => {
     }
   }
 
+  const handleConfirm = () => {
+     
+  };
+  
+  const handleCancel = () => {
+      setShowModal(true);
+      setBookingRequestShow(!bookingRequestShow);
+  };
+
   return (
     <div className='navbar'>
       <div className='left-side'>
@@ -95,9 +107,27 @@ const NavBar = () => {
       </div>
       <div className='right-side'>
         <BookingOverlay show={bookingShow} target={bookingTarget}/>
-        <BookingRequestOverlay show={bookingRequestShow} target={bookingRequestTarget}/>
+        <BookingRequestOverlay show={bookingRequestShow} target={bookingRequestTarget} 
+        setShowModal={setShowModal} setShow={setBookingRequestShow}/>
         {navbarDataList}
       </div>
+
+      {/* modal approve */}
+      {showModal === 'Approve' && (
+            <ModalTwoButton
+              title="Do you want to approve the booking?"
+              header="If you click confirm button, that user will become a member of your course."
+              leftFunc={handleConfirm}
+              rightFunc={handleCancel}
+              leftMessage="Confirm"
+              rightMessage="Cancel"
+              leftColor="var(--third)"
+              rightColor="cancel-button"
+              isPending={isPending}
+              leftPending="Confirm..."
+              leftPendingColor="var(--lightgray)"
+            />
+        )}
     </div>
   )
 }

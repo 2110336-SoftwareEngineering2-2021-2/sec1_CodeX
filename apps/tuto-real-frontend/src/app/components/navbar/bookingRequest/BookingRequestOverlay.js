@@ -2,7 +2,7 @@ import { Overlay, Popover } from "react-bootstrap";
 import BookingRequestCard from "./BookingRequestCard";
 
 const BookingRequestOverlay = (prop) => {
-    const {show,target} = prop;
+    const {show,target,setShowModal,setShow} = prop;
     return (  
         <Overlay
             show={show}
@@ -16,7 +16,9 @@ const BookingRequestOverlay = (prop) => {
             <Popover className="booking-overlay" id="popover-contained">
                 <Popover.Header as="h3">Booking Request</Popover.Header>
                 <Popover.Body> 
-                    <BookingRequestCard 
+                    <BookingRequestCard
+                        setShowModal= {setShowModal} 
+                        setShow= {setShow}
                         status="Waiting for Approval" 
                         requestTime="February 29, 2000 9:30 a.m."
                         tutorName="Komsorn Sookdang"
