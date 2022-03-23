@@ -158,7 +158,7 @@ const BookingCard = (prop) => {
                     <div key={bookingId + i + bookingId}>
                         {e.slots.map((slot_no,ii) => (
                             <li key={bookingId + i + ii} style={{margin:"2px 0px"}}>
-                                {translateSlotsListFormat('anonymousSubject',e.date,slot_no)}
+                                {translateSlotsListFormat(e.subject[ii],e.date,slot_no)}
                             </li>
                         ))}
                     </div>
