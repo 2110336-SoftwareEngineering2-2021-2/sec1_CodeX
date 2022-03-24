@@ -18,7 +18,7 @@ const OtherReview = (props) => {
 
   return data.map((comment) => {
     return (
-      <div className="info-card shadow">
+      <div key={comment._id} className="info-card shadow">
         <div style={{ display: 'flex', width: '100%' }}>
           <div
             style={{ display: 'flex', flexDirection: 'column', width: '70%' }}

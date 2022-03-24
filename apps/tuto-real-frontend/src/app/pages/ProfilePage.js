@@ -77,7 +77,12 @@ const ProfilePage = () => {
           />
         );
       case 'Review':
-        return <ProfileReview viewType={viewType} />;
+        return (
+          <ProfileReview
+            viewType={viewType}
+            targetId={params?._id}
+          />
+        );
       default:
         return <ProfileInfo />;
     }
