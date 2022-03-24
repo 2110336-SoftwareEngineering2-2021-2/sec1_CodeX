@@ -18,7 +18,7 @@ const ProfileReview = (props) => {
       method: 'GET',
       url: `/reviews`,
       params: {
-        tutorId: targetId,
+        _id: targetId,
       },
     })
       .then(({data : { data }}) => {
@@ -59,7 +59,7 @@ const ProfileReview = (props) => {
     <div>
       <RatingSummary />
       {viewType !== 'StudentSelf' && viewType !== 'TutorSelf' && (
-        <WriteComment state="have" data={dummyData} />
+        <WriteComment state="none" data={dummyData} targetId={targetId} />
       )}
       <OtherReview data={data} />
     </div>

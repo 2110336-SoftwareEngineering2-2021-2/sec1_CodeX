@@ -3,16 +3,20 @@ import { Button, Form } from 'react-bootstrap';
 import './WriteComment.css';
 import { FULL_STAR, EMPTY_STAR } from '../../../constants/image';
 import ModalTwoButton from '../../modal/ModalTwoButton';
+import { useAuth } from '../../../auth';
+import { client } from '../../../axiosConfig';
 
 const WriteComment = (props) => {
-  let { state, data } = props;
+  let { state, data, targetId } = props;
 
   const [commentState, setCommentState] = useState(state); //none, new, have, edit
   const [comment, setComment] = useState(state === 'have' ? data.comment : '');
   const [star, setStar] = useState(state === 'have' ? data.rating : 0);
+  const [reviewId, setReviewId] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [isPending, setIsPending] = useState(false);
   const numberOfStar = [1, 2, 3, 4, 5];
+  const myId = useAuth();
 
   const createStar = (number) => {
     return (
@@ -37,6 +41,46 @@ const WriteComment = (props) => {
     setIsPending(!isPending);
   };
 
+  const createReview = async () => {
+    await client({
+      method: 'POST',
+      url: `/reviews`,
+      data: {
+        rating: star,
+        comment: comment,
+        tutorID: targetId,
+        writerID: myId._id,
+      },
+    })
+      .then(({ data: { data } }) => {
+        console.log(data);
+        setReviewId(data._id);
+      })
+      .catch((res) => {
+        console.log(res);
+      });
+  };
+
+  const updateReview = async () => {
+    await client({
+      method: 'PUT',
+      url: `/reviews`,
+      params: {
+        _id: reviewId,
+      },
+      data: {
+        rating: star,
+        comment: comment,
+      },
+    })
+      .then(({ data: { data } }) => {
+        console.log(data);
+      })
+      .catch((res) => {
+        console.log(res);
+      });
+  };
+
   return (
     <div>
       {commentState === 'none' && (
@@ -46,6 +90,7 @@ const WriteComment = (props) => {
           style={{
             backgroundColor: 'var(--third)',
             borderColor: 'var(--third)',
+            marginBottom: '2%',
           }}
         >
           Write your comment
@@ -107,6 +152,7 @@ const WriteComment = (props) => {
           >
             <Button
               onClick={() => {
+                createReview();
                 setCommentState('have');
               }}
               variant="success"
@@ -248,6 +294,7 @@ const WriteComment = (props) => {
             </Button>
             <Button
               onClick={() => {
+                updateReview();
                 setCommentState('have');
                 data.comment = comment;
                 data.rating = star;
