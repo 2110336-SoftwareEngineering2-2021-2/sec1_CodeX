@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
   Query,
   UploadedFile,
@@ -54,6 +55,15 @@ export class BookingController {
   getBookingStudent(@Query() query: any) {
     try {
       return this.service.getBookingStudent(query._id);
+    } catch (error) {
+      return error;
+    }
+  }
+
+  @Patch()
+  updateBooking(@Query() query: any, @Body() dto: BookingDto) {
+    try {
+      return this.service.updateBooking(query._id, dto);
     } catch (error) {
       return error;
     }
