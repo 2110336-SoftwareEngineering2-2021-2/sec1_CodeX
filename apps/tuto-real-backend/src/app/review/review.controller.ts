@@ -25,11 +25,7 @@ export class ReviewController {
   }
 
   @Get()
-  getReviews(
-    @Query('_id') id: string,
-    @Query('sortBy') sortBy: string,
-    @Query('sid') sid: string
-  ) {
+  getReviews(@Query('_id') id: string , @Query('sortBy') sortBy : string , @Query('sId') sid:string) {
     try {
       return this.service.getReviews(id, sortBy, sid);
     } catch (err) {

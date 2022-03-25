@@ -1,9 +1,11 @@
 import { FULL_STAR } from '../../../constants/image';
 
-const RatingSummary = () => {
+const RatingSummary = (props) => {
 
-  const dummyNumReviews = 5;
-  const dummyReviewScore = 3.3;
+  const {sumRating, number} = props
+
+  // const dummyNumReviews = 5;
+  // const dummyReviewScore = 3.3;
 
   const getSummary = (number) => {
     if(number > 4) {
@@ -36,7 +38,7 @@ const RatingSummary = () => {
             marginRight: '5%'
           }}
         >
-          {dummyReviewScore}
+          {sumRating.toFixed(1)}
         </p>
         <img
           alt=""
@@ -48,8 +50,8 @@ const RatingSummary = () => {
           }}
         />
         <div style={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start', width: '50vh', paddingLeft: '5%'}}>
-          <p style={{color: 'var(--darkgray)', fontSize: 'larger'}}>{`from ${dummyNumReviews} persons`}</p>
-          <p style={{color: 'var(--darkgray)', fontSize: 'larger'}}>{getSummary(dummyReviewScore)}</p>
+          <p style={{color: 'var(--darkgray)', fontSize: 'larger'}}>{`from ${number} persons`}</p>
+          <p style={{color: 'var(--darkgray)', fontSize: 'larger'}}>{getSummary(sumRating)}</p>
         </div>
         
       </div>
