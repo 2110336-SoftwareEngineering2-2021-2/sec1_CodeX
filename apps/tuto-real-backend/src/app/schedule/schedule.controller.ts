@@ -6,6 +6,7 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { ScheduleDto } from './schedule.dto';
 import { ScheduleService } from './schedule.service';
@@ -19,12 +20,15 @@ import {
   ApiQuery,
 } from '@nestjs/swagger';
 import { UpdateSlotWithDeleteDto } from './updateSlotWithDelete.dto';
+import { FirebaseAuthGuard } from '../auth/firebase-auth.guard';
 
 @ApiTags('Schedule')
 @Controller('schedule')
 export class ScheduleController {
   constructor(private readonly service: ScheduleService) {}
+
   @Post()
+  @UseGuards(FirebaseAuthGuard)
   createSchedule(@Query() query: any, @Body() dto: ScheduleDto) {
     try {
       return this.service.createSchedule(query._id, dto);
@@ -34,6 +38,7 @@ export class ScheduleController {
   }
 
   @Patch('/add')
+  @UseGuards(FirebaseAuthGuard)
   updateSlotWithAdd(@Query() query: any, @Body() dto: UpdateScheduleDto) {
     try {
       return this.service.updateSlotWithAdd(query._id, dto);
@@ -43,6 +48,7 @@ export class ScheduleController {
   }
 
   @Patch('/delete')
+  @UseGuards(FirebaseAuthGuard)
   updateSlotWithDelete(
     @Query() query: any,
     @Body() dto: UpdateSlotWithDeleteDto
@@ -55,6 +61,7 @@ export class ScheduleController {
   }
 
   @Get()
+  @UseGuards(FirebaseAuthGuard)
   getSchedule(@Query('_id') id: string) {
     try {
       return this.service.getSchedule(id);
@@ -62,7 +69,9 @@ export class ScheduleController {
       return err;
     }
   }
+
   @Delete()
+  @UseGuards(FirebaseAuthGuard)
   deleteSchedule(@Query('_id') id: string) {
     try {
       return this.service.deleteSchedule(id);
@@ -72,7 +81,8 @@ export class ScheduleController {
   }
 
   @Get('/learn')
-  getLearnSchedules(@Query('studentId') studentId : string){
+  @UseGuards(FirebaseAuthGuard)
+  getLearnSchedules(@Query('studentId') studentId: string) {
     try {
       return this.service.getLearnSchedules(studentId);
     } catch (err) {

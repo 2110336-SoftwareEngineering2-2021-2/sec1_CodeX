@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { app, auth } from './firebase';
+import { auth } from './firebase';
 import { client } from './axiosConfig';
 import {
   onAuthStateChanged,
@@ -7,10 +7,8 @@ import {
   signInWithEmailAndPassword,
   signOut,
   sendEmailVerification,
-  signInWithRedirect,
   updatePassword,
   sendPasswordResetEmail,
-  GoogleAuthProvider,
 } from 'firebase/auth';
 
 const AuthContext = React.createContext();
@@ -32,8 +30,6 @@ export function AuthProvider({ children }) {
     console.log('User status has been changed...');
     onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
-      // console.log(user)
-      // setUserData(user)
     });
   }, []);
 
@@ -42,11 +38,17 @@ export function AuthProvider({ children }) {
     setReset(false);
   }, [currentUser, reset]);
 
-  const setUserData = (user) => {
+  const setUserData = async (user) => {
     if (user) {
+      const token = await user.getIdToken(true);
+      localStorage.setItem('token', token);
       client({
         method: 'GET',
         url: `/user?email=${user.email}`,
+        headers: {
+          Accept: 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
       })
         .then(({ data: { data } }) => {
           setId(data._id);
@@ -62,6 +64,7 @@ export function AuthProvider({ children }) {
       setRole(null);
       setFirstName('');
       setLastName('');
+      localStorage.setItem('token', '');
     }
   };
 
@@ -98,19 +101,6 @@ export function AuthProvider({ children }) {
       });
   };
 
-  const signInWithGoogle = () => {
-    signInWithRedirect(auth, new GoogleAuthProvider())
-      .then((result) => {
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential.accessToken;
-        console.log(token);
-      })
-      .catch((err) => {
-        alert(err.message);
-        console.log(err.message);
-      });
-  };
-
   const logIn = (email, password, onSuccess) => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
@@ -143,7 +133,6 @@ export function AuthProvider({ children }) {
   const updateUserPassword = async (password, newPassword, onSuccess) => {
     await signInWithEmailAndPassword(auth, currentUser.email, password)
       .then((userCredential) => {
-        console.log(userCredential);
         updatePassword(userCredential.user, newPassword);
       })
       .then(() => {
@@ -168,7 +157,6 @@ export function AuthProvider({ children }) {
   const value = {
     currentUser,
     signUp,
-    signInWithGoogle,
     logIn,
     logOut,
     updateUserPassword,

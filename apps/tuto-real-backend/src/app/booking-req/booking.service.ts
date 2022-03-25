@@ -120,34 +120,39 @@ export class BookingService {
   }
 
   public async updateLearnSchedule(booking: BookingDto) {
-
     //add to studeiedWith
-    
+
     var studentId_ = booking.student_id;
     var schedule = await this.scheduleModel.findById(
       mongoose.Types.ObjectId(booking.schedule_id)
     );
-   
+
     var startDate_ = schedule.startDate;
     var result = await this.learnScheduleModel.findOne({
       studentId: studentId_,
       startDate: startDate_,
     });
-    var thatTutor : any = await this.userModel.findOne({
-      schedule_id: booking.schedule_id,
-    })
-    .catch((err)=>{
-      throw new NotFoundException({success:false,data:"Schedule not found"})
-    });
+    var thatTutor: any = await this.userModel
+      .findOne({
+        schedule_id: booking.schedule_id,
+      })
+      .catch((err) => {
+        throw new NotFoundException({
+          success: false,
+          data: 'Schedule not found',
+        });
+      });
 
-    await this.userModel.updateOne({"_id" : new mongoose.Types.ObjectId(booking.student_id) }, 
-    { $addToSet: { "studiedWith" : thatTutor._id}}, {"upsert" : true})
-    .catch((err)=>{
-      throw new NotFoundException({success:false,data:err})
-    })
+    await this.userModel
+      .updateOne(
+        { _id: new mongoose.Types.ObjectId(booking.student_id) },
+        { $addToSet: { studiedWith: thatTutor._id } },
+        { upsert: true }
+      )
+      .catch((err) => {
+        throw new NotFoundException({ success: false, data: err });
+      });
 
-    
-  
     if (result == null) {
       //create new LearnSchedule
       let data = new LearnScheduleDto();

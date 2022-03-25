@@ -61,6 +61,10 @@ const ProfileTeachSchedule = ({
       params: {
         _id: targetId,
       },
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
     })
       .then(({ data: { data } }) => {
         console.log(data);
@@ -108,6 +112,10 @@ const ProfileTeachSchedule = ({
         // ต้องการ list ของ day กับ slot ในการส่งข้อมูล
         days: editData,
       },
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
     })
       .then(({ data }) => {
         console.log(data);
@@ -134,6 +142,10 @@ const ProfileTeachSchedule = ({
         schedule_id: scheduleList[currentSchedule]._id,
         days: bookingData,
       },
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
     })
       .then(({ data }) => {
         console.log(data);
@@ -154,6 +166,10 @@ const ProfileTeachSchedule = ({
       url: '/user',
       params: { _id: targetId },
       data: { pricePerSlot: tempPrice },
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
     })
       .then(({ data }) => {
         console.log(data);
@@ -237,6 +253,10 @@ const ProfileTeachSchedule = ({
         },
         data: {
           days: deletingSlots,
+        },
+        headers: {
+          Accept: 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       })
         .then(({ data }) => {

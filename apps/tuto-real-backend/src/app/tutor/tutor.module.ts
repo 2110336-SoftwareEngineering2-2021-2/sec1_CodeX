@@ -6,8 +6,10 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ScheduleSchema } from '../schedule/schedule.schema';
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: 'User', schema: UserSchema }])
-,MongooseModule.forFeature([{ name: 'Schedule', schema: ScheduleSchema }])],
+  imports: [
+    MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
+    MongooseModule.forFeature([{ name: 'Schedule', schema: ScheduleSchema }]),
+  ],
   providers: [TutorService],
   controllers: [TutorController],
   exports: [TutorService],

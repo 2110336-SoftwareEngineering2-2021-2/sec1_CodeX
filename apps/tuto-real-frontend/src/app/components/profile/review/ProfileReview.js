@@ -20,14 +20,18 @@ const ProfileReview = (props) => {
       params: {
         _id: targetId,
       },
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
     })
-      .then(({data : { data }}) => {
+      .then(({ data: { data } }) => {
         console.log(data);
-        setData(data)
+        setData(data);
       })
       .catch((res) => {
-        console.log(res)
-      })
+        console.log(res);
+      });
   }
 
   useEffect(() => {

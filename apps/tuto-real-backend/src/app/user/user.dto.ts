@@ -1,15 +1,15 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty } from '@nestjs/swagger';
 
 export class UserDto {
   @ApiProperty()
   readonly subjects: { type: [String]; default: undefined };
-  studiedWith : {type : [String] , default : []}
+  studiedWith: { type: [String]; default: [] };
   @ApiProperty()
   readonly description: { type: [String]; default: undefined };
   readonly schedule: { type: Object; default: undefined };
-  
-  totalRating : number
-  numReviews : number
+
+  totalRating: number;
+  numReviews: number;
   @ApiProperty()
   readonly firstName: String;
 
@@ -43,9 +43,7 @@ export class UserDto {
   readonly pricePerSlot: { type: Number; default: 0 };
 }
 
-
 export class NewUserDto {
- 
   @ApiProperty()
   firstName: String;
 

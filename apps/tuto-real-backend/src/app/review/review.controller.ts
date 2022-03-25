@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Post, Put, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Put,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
+import { FirebaseAuthGuard } from '../auth/firebase-auth.guard';
 import { createReviewDto } from './createReview.dto';
 import { ReviewService } from './review.service';
 import { updateReviewDto } from './updateReview.dto';
@@ -7,6 +16,7 @@ import { updateReviewDto } from './updateReview.dto';
 export class ReviewController {
   constructor(private readonly service: ReviewService) {}
   @Post()
+  @UseGuards(FirebaseAuthGuard)
   createReview(@Body() dto: createReviewDto) {
     try {
       return this.service.createReview(dto);
@@ -16,6 +26,7 @@ export class ReviewController {
   }
 
   @Put()
+  @UseGuards(FirebaseAuthGuard)
   updateReview(@Query('_id') id: string, @Body() dto: updateReviewDto) {
     try {
       return this.service.updateReview(id, dto);
@@ -25,6 +36,7 @@ export class ReviewController {
   }
 
   @Get()
+  @UseGuards(FirebaseAuthGuard)
   getReviews(
     @Query('_id') id: string,
     @Query('sortBy') sortBy: string,
