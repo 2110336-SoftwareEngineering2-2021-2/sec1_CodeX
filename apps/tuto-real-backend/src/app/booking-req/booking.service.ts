@@ -11,11 +11,20 @@ import { Schedule } from '../schedule/schedule.interface';
 import { User } from '../user/user.interface';
 import { uploadImage } from '../util/google';
 import { BookingDto } from './booking.dto';
-import { Booking } from './booking.interface';
 import { LearnSchedule } from '../LearnSchedule/learnSchedule.interface';
 import { LearnScheduleDto, Slot } from '../LearnSchedule/learnSchedule.dto';
 import { domainToASCII } from 'url';
 import { UserDto } from '../user/user.dto';
+import { Document } from 'mongoose';
+
+export interface Booking extends Document {
+  student_id: String;
+  schedule_id: String;
+  readonly days: [{ _id: false; day: String; slots: [Number] }];
+  timeStamp: Date;
+  totalPrice: Number;
+  status: String;
+}
 
 const mongoose = require('mongoose');
 @Injectable()
@@ -429,7 +438,7 @@ export class BookingService {
     const booking = await this.bookingModel.findById(
       mongoose.Types.ObjectId(id)
     );
-    console.log(booking.days.length);
+    console.log(booking);
     if (!booking)
       throw new NotFoundException({
         success: false,
@@ -489,7 +498,7 @@ export class BookingService {
       //update schedule from pending to Approved
       for (var i = 0; i < booking.days.length; i++) {
         let schedule = await this.scheduleModel.findByIdAndUpdate(
-          booking.schedule_id,
+          { _id: mongoose.Types.ObjectId(booking.schedule_id) },
           {
             $set: {
               'days.$[elem].slots.$[index].students.$[ind].status': dto.status,
@@ -511,8 +520,7 @@ export class BookingService {
       }
 
       //Add to learn schedule
-
-      //this.updateLearnSchedule(newDto);
+      this.updateLearnSchedule(booking);
     } else {
       throw new BadRequestException({
         success: false,
