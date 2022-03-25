@@ -1,7 +1,5 @@
-import * as mongoose from 'mongoose';
-
 export class createReviewDto {
-  rating: number;
+  rating: Number;
   comment: string;
   tutorID: string;
   writerID: string;

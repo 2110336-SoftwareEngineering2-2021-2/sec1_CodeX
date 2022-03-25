@@ -1,4 +1,4 @@
 export class updateReviewDto {
-  rating: number;
+  rating: Number;
   comment: string;
 }
