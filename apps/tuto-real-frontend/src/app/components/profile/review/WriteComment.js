@@ -51,6 +51,10 @@ const WriteComment = (props) => {
         tutorID: targetId,
         writerID: myId._id,
       },
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
     })
       .then(({ data: { data } }) => {
         console.log(data);
@@ -71,6 +75,10 @@ const WriteComment = (props) => {
       data: {
         rating: star,
         comment: comment,
+      },
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
       },
     })
       .then(({ data: { data } }) => {

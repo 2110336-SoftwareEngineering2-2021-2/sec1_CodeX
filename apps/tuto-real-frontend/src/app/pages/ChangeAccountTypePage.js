@@ -111,6 +111,10 @@ const ChangeAccountTypePage = () => {
       url: '/tutorReq/create',
       method: 'POST',
       data: sendImage,
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
     })
       .then(({ data }) => {
         console.log(data);

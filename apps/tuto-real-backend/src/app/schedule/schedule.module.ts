@@ -11,7 +11,9 @@ import { LearnScheduleSchema } from '../LearnSchedule/learnSchedule.schema';
   imports: [
     MongooseModule.forFeature([{ name: 'Schedule', schema: ScheduleSchema }]),
     MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
-    MongooseModule.forFeature([{ name: 'LearnSchedule', schema: LearnScheduleSchema }])
+    MongooseModule.forFeature([
+      { name: 'LearnSchedule', schema: LearnScheduleSchema },
+    ]),
   ],
   providers: [ScheduleService],
   controllers: [ScheduleController],

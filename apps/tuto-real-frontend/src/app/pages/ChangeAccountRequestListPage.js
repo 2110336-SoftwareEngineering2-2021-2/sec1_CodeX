@@ -14,10 +14,14 @@ const ChangeAccountRequestListPage = () => {
     client({
       method: 'GET',
       url: '/tutorReq',
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
     })
-      .then(({ data: {data}}) => {
+      .then(({ data: { data } }) => {
         console.log(data);
-        if(data) setDataList(data);
+        if (data) setDataList(data);
         setIsPending(false);
       }, [])
       .catch((res) => {

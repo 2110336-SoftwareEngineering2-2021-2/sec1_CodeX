@@ -43,21 +43,25 @@ const BookingOverlay = (prop) => {
     const fetchData = useCallback(async () => {
         console.log("fetch Booking of:",_id);
         await client({
-            method: 'GET',
-            url: `/booking/student`,
-            params: {
-                // studentId: `${}`,
-                _id: `${_id}`,
-                // _id: `${_id}`,
-            },
+          method: 'GET',
+          url: `/booking/student`,
+          params: {
+            // studentId: `${}`,
+            _id: `${_id}`,
+            // _id: `${_id}`,
+          },
+          headers: {
+            Accept: 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
         })
-        .then((data) => {
+          .then((data) => {
             console.log(data.data.message);
             setBookingList(data.data.message);
-        })
-        .catch((res) => {
+          })
+          .catch((res) => {
             console.log(res);
-        });
+          });
     }, [_id, show])
     
     useEffect(() => {

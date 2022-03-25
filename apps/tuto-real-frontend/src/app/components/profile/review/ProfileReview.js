@@ -44,6 +44,10 @@ const ProfileReview = (props) => {
         _id: targetId,
         sId: myId._id,
       },
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
     })
       .then(({ data: { data } }) => {
         console.log(data);
