@@ -3,11 +3,13 @@ import { ApiProperty } from "@nestjs/swagger";
 export class UserDto {
   @ApiProperty()
   readonly subjects: { type: [String]; default: undefined };
-
+  studiedWith : {type : [String] , default : []}
   @ApiProperty()
   readonly description: { type: [String]; default: undefined };
   readonly schedule: { type: Object; default: undefined };
   
+  totalRating : number
+  numReviews : number
   @ApiProperty()
   readonly firstName: String;
 
