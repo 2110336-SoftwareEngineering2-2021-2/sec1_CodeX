@@ -16,6 +16,7 @@ import { LearnSchedule } from '../LearnSchedule/learnSchedule.interface';
 import { LearnScheduleDto, Slot } from '../LearnSchedule/learnSchedule.dto';
 import { domainToASCII } from 'url';
 import { UserDto } from '../user/user.dto';
+import { UpdateBookingDto } from './updateBooking.dto';
 const mongoose = require('mongoose');
 @Injectable()
 export class BookingService {
@@ -420,5 +421,112 @@ export class BookingService {
     } catch (error) {
       throw new ServiceUnavailableException({ success: false, message: error });
     }
+  }
+
+  //Update schedule API
+  async updateBooking(id: string, dto: BookingDto): Promise<any> {
+    //Find the booking first
+    const booking = await this.bookingModel.findById(
+      mongoose.Types.ObjectId(id)
+    );
+    console.log(booking.days.length);
+    if (!booking)
+      throw new NotFoundException({
+        success: false,
+        data: 'Booking not found',
+      });
+    // If status is reject or cancelled
+    if (dto.status == 'Reject' || dto.status == 'Cancelled') {
+      //update booking
+      const new_booking = await this.bookingModel.findByIdAndUpdate(
+        { _id: mongoose.Types.ObjectId(id) },
+        { status: dto.status },
+        { new: true }
+      );
+
+      if (!new_booking)
+        throw new BadRequestException({
+          success: false,
+          data: 'Fail to update',
+        });
+      //delete from schedule
+      for (var i = 0; i < booking.days.length; i++) {
+        let schedule = await this.scheduleModel.findByIdAndUpdate(
+          booking.schedule_id,
+          {
+            $pull: {
+              'days.$[elem].slots.$[index].students': {
+                id: mongoose.Types.ObjectId(booking.student_id),
+              },
+            },
+          },
+          {
+            arrayFilters: [
+              { 'elem.day': booking.days[i].day },
+              { 'index.slot': { $in: booking.days[i].slots } },
+            ],
+          }
+        );
+        if (!schedule)
+          throw new NotFoundException({
+            success: false,
+            data: 'Schedule not found',
+          });
+      }
+    } else if (dto.status == 'Approved') {
+      const new_booking = await this.bookingModel.findByIdAndUpdate(
+        { _id: mongoose.Types.ObjectId(id) },
+        { status: dto.status },
+        { new: true }
+      );
+
+      if (!new_booking)
+        throw new BadRequestException({
+          success: false,
+          data: 'Fail to update',
+        });
+
+      //update schedule from pending to Approved
+      for (var i = 0; i < booking.days.length; i++) {
+        let schedule = await this.scheduleModel.findByIdAndUpdate(
+          booking.schedule_id,
+          {
+            $set: {
+              'days.$[elem].slots.$[index].students.$[ind].status': dto.status,
+            },
+          },
+          {
+            arrayFilters: [
+              { 'elem.day': booking.days[i].day },
+              { 'index.slot': { $in: booking.days[i].slots } },
+              { 'ind.id': booking.student_id },
+            ],
+          }
+        );
+        if (!schedule)
+          throw new NotFoundException({
+            success: false,
+            data: 'Schedule not found',
+          });
+      };
+
+      //Add to learn schedule
+      const newDto = new BookingDto() {
+        student_id = booking.student_id,
+        schedule_id = booking.schedule_id,
+        days = booking.days,
+        timeStamp = booking.timeStamp,
+        totalPrice = booking.totalPrice,
+        status = dto.status}
+
+      this.updateLearnSchedule(newDto);
+    } else {
+      throw new BadRequestException({success: false, data: 'Wrong format of status'});
+    }
+    return {
+      success: true,
+      data: dto.status,
+      message: 'Update the booking is done',
+    };
   }
 }
