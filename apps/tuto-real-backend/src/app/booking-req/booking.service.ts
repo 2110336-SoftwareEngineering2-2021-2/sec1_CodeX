@@ -120,20 +120,34 @@ export class BookingService {
   }
 
   public async updateLearnSchedule(booking: BookingDto) {
+
+    //add to studeiedWith
+    
     var studentId_ = booking.student_id;
     var schedule = await this.scheduleModel.findById(
       mongoose.Types.ObjectId(booking.schedule_id)
     );
+   
     var startDate_ = schedule.startDate;
     var result = await this.learnScheduleModel.findOne({
       studentId: studentId_,
       startDate: startDate_,
     });
-    var thatTutor = await this.userModel.findOne({
+    var thatTutor : any = await this.userModel.findOne({
       schedule_id: booking.schedule_id,
+    })
+    .catch((err)=>{
+      throw new NotFoundException({success:false,data:"Schedule not found"})
     });
-    //console.log(thatTutor)
-    console.log('result', result);
+
+    await this.userModel.updateOne({"_id" : new mongoose.Types.ObjectId(booking.student_id) }, 
+    { $addToSet: { "studiedWith" : thatTutor._id}}, {"upsert" : true})
+    .catch((err)=>{
+      throw new NotFoundException({success:false,data:err})
+    })
+
+    
+  
     if (result == null) {
       //create new LearnSchedule
       let data = new LearnScheduleDto();
@@ -184,24 +198,24 @@ export class BookingService {
         let slots = booking.days[i].slots;
         //create new day
         if (tmp == null) {
-          console.log('That day is not already existed', tmp);
+          //console.log('That day is not already existed', tmp);
           let newDay = { day: day_, slots: [] };
 
-          console.log('thatDay', thatDay);
-          console.log('slots', slots);
+          //console.log('thatDay', thatDay);
+          //console.log('slots', slots);
 
           for (let idx of slots) {
-            console.log(idx);
+            //console.log(idx);
             let slotId = this.getBySlot(thatDay, idx);
             if (slotId == null) continue;
             var tmp2 = { slot: null, data: null };
             tmp2.slot = idx;
             tmp2.data = [{ slotId: slotId.data }];
-            console.log('tmp2', tmp2);
+            //console.log('tmp2', tmp2);
             newDay.slots.push(tmp2);
           }
           oldData.days.push(newDay);
-          console.log('new', oldData);
+          //console.log('new', oldData);
         }
         //update existed day
         else {
@@ -222,7 +236,7 @@ export class BookingService {
               console.log('new slot', oldData.days[i].slots[0]);
             } else {
               //update that oldSlot , use one data in tmp1
-              oldData.days[id].slots[oldSlot.idx].dataSlots.push(tmp1.data[0]);
+              oldData.days[id].slots[oldSlot.idx].data.push(tmp1.data[0]);
               console.log(
                 'update slot',
                 tmp1.data,

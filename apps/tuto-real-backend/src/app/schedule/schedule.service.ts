@@ -404,6 +404,7 @@ export class ScheduleService {
     console.log(latestDate)
     for (let i=0;i<raw.length;i++){
       var subjects = new Set()
+      
       if (raw[i].startDate > latestDate) latestDate = raw[i].startDate
       for (var day of raw[i].days){
         for (var slot of day.slots){
@@ -444,11 +445,13 @@ export class ScheduleService {
             console.log(slot.data[j])
           }
         }
+      }
         raw[i].subjects = Array.from(subjects)
       
-      }
+      
     
-      return { success: true, data: raw };
+     
     }
+    return { success: true, data: raw };
 }
 }
