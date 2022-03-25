@@ -6,11 +6,13 @@ import { Review } from './review.interface';
 import { updateReviewDto } from './updateReview.dto';
 import * as mongoose from 'mongoose';
 import { ReviewDto } from './review.dto';
+import { User } from '../user/user.interface';
 
 @Injectable()
 export class ReviewService {
   constructor(
-    @InjectModel('Review') private readonly reviewModel: Model<Review>
+    @InjectModel('Review') private readonly reviewModel: Model<Review>,
+    @InjectModel('User') private readonly userModel: Model<User>
   ) {}
 
   public async createReview(dto: createReviewDto): Promise<any> {
@@ -56,7 +58,7 @@ export class ReviewService {
     return now;
   }
 
-  async getReviews(tutorId : string , sortBy : string){
+  async getReviews(tutorId : string , sortBy : string,sid : string){
     var id
     if (sortBy==undefined){
       sortBy = 'createdAt'
@@ -69,7 +71,7 @@ export class ReviewService {
     } catch{
       throw new BadRequestException({success:false,data:"Wrong tutorId format"})
     }
-    var re = await this.reviewModel.aggregate([
+    var re_ = await this.reviewModel.aggregate([
       {
         $match: {"tutor" :id}
       },
@@ -86,6 +88,30 @@ export class ReviewService {
     .catch((err)=>{
       throw new InternalServerErrorException({success:false,data:err}) 
     })
-    return {success : true,data:re}
+    var rating = null
+    var tutor = await this.userModel.findOne({_id: new mongoose.Types.ObjectId(tutorId)}).exec()
+    .catch((err)=>{
+      throw new NotFoundException({success:false,data:err}) 
+    })
+    if (tutor==null) throw new NotFoundException({success:false,data:"Tutor not found"}) 
+    if (tutor.role != "Tutor") throw new BadRequestException({success:false,data:"Not a tutor"})
+    if (tutor.totalRating != undefined )
+      rating = tutor.totalRating / tutor.numReviews
+    var self = null
+    var allow = false
+    //if can not review
+    var studiedWith = await this.userModel.find({$and : [{_id : new mongoose.Types.ObjectId(sid)} , {studiedWith : tutorId}]})
+    if (studiedWith.length != 0)
+      allow = true
+    var re = []
+    for(let i=0;i<re_.length;i++){
+      if (sid != undefined && re_[i].writer == sid){
+        self = re_[i]
+      } 
+      else
+        re.push(re_[i])
+    }
+    if (sid==tutorId) allow = false
+    return {success : true,data: { "rating" : rating, "allow" : allow , "self" : self , "reviews" : re}}
   }
 }
