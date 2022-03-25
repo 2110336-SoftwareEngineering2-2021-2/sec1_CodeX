@@ -457,7 +457,7 @@ export class BookingService {
     const booking = await this.bookingModel.findById(
       mongoose.Types.ObjectId(id)
     );
-    console.log(booking.days.length);
+    console.log(booking);
     if (!booking)
       throw new NotFoundException({
         success: false,
@@ -517,7 +517,7 @@ export class BookingService {
       //update schedule from pending to Approved
       for (var i = 0; i < booking.days.length; i++) {
         let schedule = await this.scheduleModel.findByIdAndUpdate(
-          booking.schedule_id,
+          { _id: mongoose.Types.ObjectId(booking.schedule_id) },
           {
             $set: {
               'days.$[elem].slots.$[index].students.$[ind].status': dto.status,
@@ -539,15 +539,7 @@ export class BookingService {
       };
 
       //Add to learn schedule
-      const newDto = new BookingDto() {
-        student_id = booking.student_id,
-        schedule_id = booking.schedule_id,
-        days = booking.days,
-        timeStamp = booking.timeStamp,
-        totalPrice = booking.totalPrice,
-        status = dto.status}
-
-      this.updateLearnSchedule(newDto);
+      this.updateLearnSchedule(booking);
     } else {
       throw new BadRequestException({success: false, data: 'Wrong format of status'});
     }
