@@ -16,7 +16,7 @@ import { LearnSchedule } from '../LearnSchedule/learnSchedule.interface';
 import { LearnScheduleDto, Slot } from '../LearnSchedule/learnSchedule.dto';
 import { domainToASCII } from 'url';
 import { UserDto } from '../user/user.dto';
-import { UpdateBookingDto } from './updateBooking.dto';
+
 const mongoose = require('mongoose');
 @Injectable()
 export class BookingService {
@@ -522,20 +522,16 @@ export class BookingService {
             success: false,
             data: 'Schedule not found',
           });
-      };
+      }
 
       //Add to learn schedule
-      const newDto = new BookingDto() {
-        student_id = booking.student_id,
-        schedule_id = booking.schedule_id,
-        days = booking.days,
-        timeStamp = booking.timeStamp,
-        totalPrice = booking.totalPrice,
-        status = dto.status}
 
-      this.updateLearnSchedule(newDto);
+      //this.updateLearnSchedule(newDto);
     } else {
-      throw new BadRequestException({success: false, data: 'Wrong format of status'});
+      throw new BadRequestException({
+        success: false,
+        data: 'Wrong format of status',
+      });
     }
     return {
       success: true,
