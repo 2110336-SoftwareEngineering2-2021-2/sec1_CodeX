@@ -1,6 +1,7 @@
 import './navbar.css'
 import ModalTwoButton from '../modal/ModalTwoButton'
 import { useState } from 'react'
+import { client } from '../../axiosConfig'
 
 const BookingActionModal = (prop) => {
     const  {modalConfig,
@@ -40,10 +41,6 @@ const BookingActionModal = (prop) => {
         }
     }
 
-    const handleLeft = () => {
-
-    }
-
     const handleRight = () => {
         if (modalConfig.modalType === "Cancel") {
             setBookingOverlayShow(true);
@@ -61,6 +58,53 @@ const BookingActionModal = (prop) => {
             });
         }
     }
+
+    const translateCommand = () => {
+        
+    }
+
+    const handleLeft = () => {
+        setIsPending(true);
+        switch(modalConfig.modalType) {
+            case 'Cancel': {
+                sendUpdateBooking("Cancelled");
+                return
+            }
+            case 'Approve': {
+                sendUpdateBooking("Approved");
+                return
+            }
+            case 'Reject': {
+                sendUpdateBooking("Reject");
+                return
+            }
+            default: return
+        }
+    }
+
+    const sendUpdateBooking = async (toBeStatus) => {
+        console.log('sending update booking:', modalConfig.bookingId);
+        console.log('expect to be:', toBeStatus);
+        await client({
+            method: 'PATCH',
+            url: `/booking`,
+            // url: `/user`,
+            params: {
+                _id: modalConfig.bookingId,
+            },
+            data: {
+               status: toBeStatus
+            }
+        })
+        .then(({ data: { data } }) => {
+            console.log('data response', data);
+            handleRight()
+        })
+        .catch((res) => {
+            console.log(res);
+        });
+    };
+    
     return (
         <ModalTwoButton
             title={genActionConfig().title}

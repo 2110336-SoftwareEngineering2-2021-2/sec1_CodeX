@@ -41,7 +41,7 @@ const BookingCard = (prop) => {
           borderColor: '#D3EAE5',
         };
 
-      case 'Rejected':
+      case 'Reject':
         return {
           statusText: 'Rejected',
           statusColor: '#FF5D29',
@@ -109,36 +109,6 @@ const BookingCard = (prop) => {
       bookingId: bookingId,
       targetName:tutorName
     })
-    // prop.setModalActionType("Approve")
-    // prop.setModalActionType("Reject")
-
-    //todo: uncomment the statement belown when sendCancelBooking complete
-    //sendCancelBooking(bookingId)
-
-    //todo: delete the statement belown when sendCancelBooking complete
-    // setStatus('Cancelled');
-  };
-  const sendCancelBooking = async (bookingId) => {
-    console.log('sending cancel booking:', bookingId);
-    await client({
-      method: 'PATCH',
-      url: `/`,
-      // url: `/user`,
-      params: {
-        _id: bookingId,
-      },
-      headers: {
-        Accept: 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-    })
-      .then(({ data: { data } }) => {
-        console.log('data response', data);
-        setStatus('Cancelled');
-      })
-      .catch((res) => {
-        console.log(res);
-      });
   };
 
   return (
