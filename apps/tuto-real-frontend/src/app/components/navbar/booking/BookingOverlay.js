@@ -1,12 +1,16 @@
 import { useCallback, useEffect, useState } from "react";
-import { Overlay, Popover } from "react-bootstrap";
+import { Overlay, Popover, Spinner} from "react-bootstrap";
 import { useAuth } from "../../../auth";
 import { client } from "../../../axiosConfig";
+import COLORS from "../../../constants/color";
 import BookingCard from "./BookingCard";
+import { DESK } from "../../../constants/image"
 
 const BookingOverlay = (prop) => {
-    const {show,target} = prop;
+    const {show,setShow,target,setModalConfig} = prop;
     const { _id } = useAuth();
+
+    const [isLoading, setIsLoading] = useState(true) 
 
     const [bookingList, setBookingList] = useState([
         // {
@@ -29,11 +33,11 @@ const BookingOverlay = (prop) => {
         // }
     ])
     
-    useEffect(() => {
-        //todo: uncomment statement belown if url is ready
-        //fetchData();
-        console.log(bookingList)
-    }, [bookingList]);
+    // useEffect(() => {
+    //     //todo: uncomment statement belown if url is ready
+    //     //fetchData();
+    //     console.log(bookingList)
+    // }, [bookingList]);
 
     
     useEffect(() => {
@@ -41,27 +45,32 @@ const BookingOverlay = (prop) => {
     }, []);
     
     const fetchData = useCallback(async () => {
-        console.log("fetch Booking of:",_id);
-        await client({
-          method: 'GET',
-          url: `/booking/student`,
-          params: {
-            // studentId: `${}`,
-            _id: `${_id}`,
-            // _id: `${_id}`,
-          },
-          headers: {
-            Accept: 'application/json',
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        })
-          .then((data) => {
-            console.log(data.data.message);
-            setBookingList(data.data.message);
-          })
-          .catch((res) => {
-            console.log(res);
-          });
+        if (show && (_id)) {
+            setIsLoading(true)
+            console.log("fetch Booking of:",_id);
+            await client({
+                method: 'GET',
+                url: `/booking/student`,
+                params: {
+                // studentId: `${}`,
+                _id: `${_id}`,
+                // _id: `${_id}`,
+                },
+                headers: {
+                Accept: 'application/json',
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+            })
+            .then((data) => {
+                console.log(data.data.message);
+                setBookingList(data.data.message);
+                setIsLoading(false)
+            })
+            .catch((res) => {
+                console.log(res);
+                setShow(false);
+            });
+        }
     }, [_id, show])
     
     useEffect(() => {
@@ -79,20 +88,42 @@ const BookingOverlay = (prop) => {
         >
             <Popover className="booking-overlay" id="popover-contained">
                 <Popover.Header as="h3">My Booking</Popover.Header>
-                <Popover.Body> 
-                    {/* <button onClick={fetchData}>load data</button> */}
-                    {bookingList.map((e,i) => (
-                        <BookingCard
-                            key={e._id}
-                            bookingId={e._id}
-                            status={e.status}
-                            requestTime={e.timeStamp}
-                            tutorName={e.tutor}
-                            totalPrice={e.totalPrice}
-                            days={e.days}
-                        />
-                    ))}
-                </Popover.Body>
+                {!isLoading ? 
+                    <Popover.Body> 
+                        {/* <button onClick={fetchData}>load data</button> */}
+                        {bookingList.length === 0 && (
+                            <div id="place-hover-empty-image">
+                                <img src={DESK}/>
+                                <p>You don't have any booking</p>
+                            </div>
+                        )}
+                        {bookingList.map((e,i) => (
+                            <BookingCard
+                                setShow={setShow}
+                                setModalConfig={setModalConfig}
+
+                                key={e._id}
+                                bookingId={e._id}
+                                status={e.status}
+                                requestTime={e.timeStamp}
+                                tutorName={e.tutor}
+                                totalPrice={e.totalPrice}
+                                days={e.days}
+                            />
+                        ))}
+                    </Popover.Body>
+                    :
+                    <div className="loading_spinner" style={{marginBottom:"20px", width:"400px", height:"400px"}} >
+                        <Spinner
+                            animation="border"
+                            role="status"
+                            style={{ marginBottom: '2vh' }}
+                        >
+                            <span className="visually-hidden">Loading...</span>
+                        </Spinner>
+                        <h4 style={{ color: COLORS.darkgray }}>Loading</h4>
+                    </div>
+                }
             </Popover>
         </Overlay>
     );

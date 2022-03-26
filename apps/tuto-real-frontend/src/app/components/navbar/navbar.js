@@ -9,6 +9,7 @@ import './navbar.css'
 import BookingOverlay from './booking/BookingOverlay'
 import BookingRequestOverlay from './bookingRequest/BookingRequestOverlay'
 import ModalTwoButton from '../modal/ModalTwoButton'
+import BookingActionModal from './BookingActionModal'
 
 const NavBar = () => {
   // User have type => "Guest" | "Student" | "Admin" | "Tutor" //
@@ -20,13 +21,19 @@ const NavBar = () => {
   const { searchText, setSearchText } = useContext(SearchContext)
   const { logOut, _id, role, firstName, lastName } = useAuth()
 
-  const [bookingTarget, setBookingTarget] = useState(null)
-  const [bookingShow, setBookingShow] = useState(false)
-  const [bookingRequestTarget, setBookingRequestTarget] = useState(null)
-  const [bookingRequestShow, setBookingRequestShow] = useState(false)
+  const [bookingOverlayTarget, setBookingOverlayTarget] = useState(null)
+  const [bookingOverlayShow, setBookingOverlayShow] = useState(false)
+  const [bookingRequestOverlayTarget, setBookingRequestOverlayTarget] = useState(null)
+  const [bookingRequestOverlayShow, setBookingRequestOverlayShow] = useState(false)
 
   const [showModal, setShowModal] = useState('none');
-  const [isPending, setIsPending] = useState(false);
+  // const [isPending, setIsPending] = useState(false);
+  // const [modalActionType, setModalActionType] = useState('None'); //( "None" || "Cancel" || "Approve" || "Reject")
+  const [modalConfig, setModalConfig] = useState({
+                                                    modalType: "None",//( "None" || "Cancel" || "Approve" || "Reject")
+                                                    bookingId: "",
+                                                    targetName:""
+                                                });
 
   const navbarDataList = getNavbarData(userType).map(item => (
     <button 
@@ -48,6 +55,18 @@ const NavBar = () => {
     setSearchTextTemp(searchText)
   },[searchText])
 
+  useEffect(() => {
+    if (bookingOverlayShow) {
+      setBookingRequestOverlayShow(false)
+    }
+  },[bookingOverlayShow])
+
+  useEffect(() => {
+    if (bookingRequestOverlayShow) {
+      setBookingOverlayShow(false)
+    }
+  },[bookingRequestOverlayShow])
+
   // useEffect(() => {
   //   if(params?.searchText) {
   //     setSearchText(params?.searchText)
@@ -60,13 +79,13 @@ const NavBar = () => {
       logOut()
     }
     if(name === "Booking") {
-      setBookingShow(!bookingShow);
-      setBookingTarget(event.target);
+      setBookingOverlayShow(!bookingOverlayShow);
+      setBookingOverlayTarget(event.target);
       return
     }
     if(name === "Booking Request") {
-      setBookingRequestShow(!bookingRequestShow);
-      setBookingRequestTarget(event.target);
+      setBookingRequestOverlayShow(!bookingRequestOverlayShow);
+      setBookingRequestOverlayTarget(event.target);
       return
     }
     if(param) {
@@ -87,7 +106,7 @@ const NavBar = () => {
   
   const handleCancel = () => {
       setShowModal(true);
-      setBookingRequestShow(!bookingRequestShow);
+      setBookingRequestOverlayShow(!bookingRequestOverlayShow);
   };
 
   return (
@@ -106,28 +125,83 @@ const NavBar = () => {
         </div>
       </div>
       <div className='right-side'>
-        <BookingOverlay show={bookingShow} target={bookingTarget}/>
-        <BookingRequestOverlay show={bookingRequestShow} target={bookingRequestTarget} 
-        setShowModal={setShowModal} setShow={setBookingRequestShow}/>
+        <BookingOverlay 
+          show={bookingOverlayShow} 
+          setShow={setBookingOverlayShow}
+          target={bookingOverlayTarget}
+          setModalConfig={setModalConfig}
+          // setSelectedBooking={setSelectedBooking}
+        />
+        <BookingRequestOverlay 
+          show={bookingRequestOverlayShow} 
+          target={bookingRequestOverlayTarget} 
+          setShowModal={setShowModal} 
+          setShow={setBookingRequestOverlayShow}
+        />
         {navbarDataList}
       </div>
 
       {/* modal approve */}
-      {showModal === 'Approve' && (
-            <ModalTwoButton
-              title="Do you want to approve the booking?"
-              header="If you click confirm button, that user will become a member of your course."
-              leftFunc={handleConfirm}
-              rightFunc={handleCancel}
-              leftMessage="Confirm"
-              rightMessage="Cancel"
-              leftColor="var(--third)"
-              rightColor="cancel-button"
-              isPending={isPending}
-              leftPending="Confirm..."
-              leftPendingColor="var(--lightgray)"
-            />
-        )}
+      {(modalConfig.modalType === 'Cancel' ||
+        modalConfig.modalType === 'Approve' || 
+        modalConfig.modalType === 'Reject') && (
+          <BookingActionModal
+            modalConfig={modalConfig}
+            setModalConfig={setModalConfig}
+            setBookingOverlayShow={setBookingOverlayShow}
+            setBookingRequestOverlayShow={setBookingRequestOverlayShow}
+          />
+      )}
+      {/* modal approve */}
+      {/* {showModal === 'Approve' && (
+        <ModalTwoButton
+          title="Do you want to approve the booking?"
+          header="If you click confirm button, that user will become a member of your course."
+          leftFunc={handleConfirm}
+          rightFunc={handleCancel}
+          leftMessage="Confirm"
+          rightMessage="Cancel"
+          leftColor="var(--third)"
+          rightColor="cancel-button"
+          isPending={isPending}
+          leftPending="Confirm..."
+          leftPendingColor="var(--lightgray)"
+        />
+      )} */}
+
+      {/* modal approve */}
+      {/* {showModal === 'Approve' && (
+        <ModalTwoButton
+          title="Do you want to approve the booking?"
+          header="If you click confirm button, that user will become a member of your course."
+          leftFunc={handleConfirm}
+          rightFunc={handleCancel}
+          leftMessage="Confirm"
+          rightMessage="Cancel"
+          leftColor="var(--third)"
+          rightColor="cancel-button"
+          isPending={isPending}
+          leftPending="Confirm..."
+          leftPendingColor="var(--lightgray)"
+        />
+      )} */}
+
+      {/* modal approve */}
+      {/* {showModal === 'Approve' && (
+        <ModalTwoButton
+          title="Do you want to approve the booking?"
+          header="If you click confirm button, that user will become a member of your course."
+          leftFunc={handleConfirm}
+          rightFunc={handleCancel}
+          leftMessage="Confirm"
+          rightMessage="Cancel"
+          leftColor="var(--third)"
+          rightColor="cancel-button"
+          isPending={isPending}
+          leftPending="Confirm..."
+          leftPendingColor="var(--lightgray)"
+        />
+      )} */}
     </div>
   )
 }

@@ -41,7 +41,7 @@ const BookingCard = (prop) => {
           borderColor: '#D3EAE5',
         };
 
-      case 'Rejected':
+      case 'Reject':
         return {
           statusText: 'Rejected',
           statusColor: '#FF5D29',
@@ -103,36 +103,12 @@ const BookingCard = (prop) => {
 
   const cancelButtonHandle = () => {
     //todo: show modal or something like that for comfirmation
-    //
-    //
-
-    //todo: uncomment the statement belown when sendCancelBooking complete
-    //sendCancelBooking(bookingId)
-
-    //todo: delete the statement belown when sendCancelBooking complete
-    setStatus('Cancelled');
-  };
-  const sendCancelBooking = async (bookingId) => {
-    console.log('sending cancel booking:', bookingId);
-    await client({
-      method: 'PATCH',
-      url: `/`,
-      // url: `/user`,
-      params: {
-        _id: bookingId,
-      },
-      headers: {
-        Accept: 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
+    prop.setShow(false)
+    prop.setModalConfig({
+      modalType:"Cancel",
+      bookingId: bookingId,
+      targetName:tutorName
     })
-      .then(({ data: { data } }) => {
-        console.log('data response', data);
-        setStatus('Cancelled');
-      })
-      .catch((res) => {
-        console.log(res);
-      });
   };
 
   return (
@@ -145,7 +121,7 @@ const BookingCard = (prop) => {
           {genConfigStatus().statusText}
         </p>
         <p>
-          request time: {translateDateFormat('2022-03-22T13:14:15.166Z')}{' '}
+          request time: {translateDateFormat(requestTime)}{' '}
           {translateTimeFormat(requestTime)}
         </p>
       </div>
@@ -175,9 +151,9 @@ const BookingCard = (prop) => {
       {/* <button onClick={() => (console.log(requestTime))}>print days</button> */}
       <ul>
         {days.map((e, i) => (
-          <div key={bookingId + i + bookingId}>
+          <div key={bookingId + i + bookingId} style={{ margin: '0px' }}>
             {e.slots.map((slot_no, ii) => (
-              <li key={bookingId + i + ii} style={{ margin: '2px 0px' }}>
+              <li key={bookingId + i + ii} style={{ margin: '0px 2px' }}>
                 {translateSlotsListFormat(e.subject[ii], e.date, slot_no)}
               </li>
             ))}
