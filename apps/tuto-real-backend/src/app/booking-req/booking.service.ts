@@ -348,7 +348,7 @@ export class BookingService {
     bookingTutor.sort(function (a, b) {
       return (
         ordering[a.status] - ordering[b.status] ||
-        Number(a.timeStamp > b.timeStamp) - Number(a.timeStamp < b.timeStamp)
+        Number(a.timeStamp < b.timeStamp) - Number(a.timeStamp > b.timeStamp)
       );
     });
     return { success: true, data: bookingTutor };
@@ -445,6 +445,19 @@ export class BookingService {
           booking[i].days[j]['subject'] = subjects;
         }
       }
+      var ordering = {},
+        sortOrder = ['Pending', 'Approved', 'Reject', 'Cancelled'];
+      for (var i = 0; i < sortOrder.length; i++) ordering[sortOrder[i]] = i;
+      booking.sort(function (a, b) {
+        return (
+          ordering[a.status as string] -
+          ordering[
+            (b.status as string) ||
+              Number(a.timeStamp < b.timeStamp) -
+                Number(a.timeStamp > b.timeStamp)
+          ]
+        );
+      });
       return { success: true, message: booking };
     } catch (error) {
       throw new ServiceUnavailableException({ success: false, message: error });
