@@ -3,9 +3,8 @@ import ModalTwoButton from '../modal/ModalTwoButton'
 import { useState } from 'react'
 
 const BookingActionModal = (prop) => {
-    const {actionType,
-            setActionType,
-            bookingId,
+    const  {modalConfig,
+            setModalConfig,
             setBookingOverlayShow,
             setBookingRequestOverlayShow
         } = prop
@@ -13,23 +12,29 @@ const BookingActionModal = (prop) => {
     const [isPending, setIsPending] = useState(false)
     
     const genActionConfig = () => {
-        switch(actionType) {
+        switch(modalConfig.modalType) {
             case 'Cancel':
                 return {
                     title: 'Do you want to cancel your booking?',
-                    description: 'If you click confirm button, the following change will be applied to the booking request.',
+                    description: `If you click confirm button, your booking ( with ${modalConfig.targetName} ) will be cancelled. `,
                     confirmBtnColor: "var(--yellow)"
                 }
             case 'Approve':
                 return {
                     title: 'Do you want to approve the booking?',
-                    description: 'If you click confirm button, that user will become a member of your course. ',
+                    description: `If you click confirm button, that ( ${modalConfig.targetName} ) will become a member of your course. `,
                     confirmBtnColor: "var(--third)"
                 }
             case 'Reject':
                 return {
                     title: 'Do you want to reject the booking?',
-                    description: 'If you click confirm button, the booking request will be rejected.',
+                    description: `If you click confirm button, the booking request ( of ${modalConfig.targetName} ) will be rejected. `,
+                    confirmBtnColor: "var(--warning)"
+                }
+            default:
+                return {
+                    title: 'Something went wrong.',
+                    description: 'Something went wrong..',
                     confirmBtnColor: "var(--warning)"
                 }
         }
@@ -38,12 +43,22 @@ const BookingActionModal = (prop) => {
     const handleLeft = () => {
 
     }
+
     const handleRight = () => {
-        setActionType("None");
-        if (actionType === "Cancel") {
+        if (modalConfig.modalType === "Cancel") {
             setBookingOverlayShow(true);
-        } else if (actionType === "Approve" || actionType === "Reject") {
+            setModalConfig({
+                modalType: "None",
+                bookingId: "",
+                targetName:""
+            });
+        } else if (modalConfig.modalType === "Approve" || modalConfig.modalType === "Reject") {
             setBookingRequestOverlayShow(true);
+            setModalConfig({
+                modalType: "None",
+                bookingId: "",
+                targetName:""
+            });
         }
     }
     return (

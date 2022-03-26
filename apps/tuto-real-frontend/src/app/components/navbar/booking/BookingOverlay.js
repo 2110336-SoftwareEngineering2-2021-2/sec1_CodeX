@@ -5,7 +5,7 @@ import { client } from "../../../axiosConfig";
 import BookingCard from "./BookingCard";
 
 const BookingOverlay = (prop) => {
-    const {show,setShow,target,setModalActionType,setSelectedBookingId} = prop;
+    const {show,setShow,target,setModalConfig} = prop;
     const { _id } = useAuth();
 
     const [bookingList, setBookingList] = useState([
@@ -29,11 +29,11 @@ const BookingOverlay = (prop) => {
         // }
     ])
     
-    useEffect(() => {
-        //todo: uncomment statement belown if url is ready
-        //fetchData();
-        console.log(bookingList)
-    }, [bookingList]);
+    // useEffect(() => {
+    //     //todo: uncomment statement belown if url is ready
+    //     //fetchData();
+    //     console.log(bookingList)
+    // }, [bookingList]);
 
     
     useEffect(() => {
@@ -41,27 +41,29 @@ const BookingOverlay = (prop) => {
     }, []);
     
     const fetchData = useCallback(async () => {
-        console.log("fetch Booking of:",_id);
-        await client({
-          method: 'GET',
-          url: `/booking/student`,
-          params: {
-            // studentId: `${}`,
-            _id: `${_id}`,
-            // _id: `${_id}`,
-          },
-          headers: {
-            Accept: 'application/json',
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        })
-          .then((data) => {
-            console.log(data.data.message);
-            setBookingList(data.data.message);
-          })
-          .catch((res) => {
-            console.log(res);
-          });
+        if (show) {
+            console.log("fetch Booking of:",_id);
+            await client({
+                method: 'GET',
+                url: `/booking/student`,
+                params: {
+                // studentId: `${}`,
+                _id: `${_id}`,
+                // _id: `${_id}`,
+                },
+                headers: {
+                Accept: 'application/json',
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+            })
+            .then((data) => {
+                console.log(data.data.message);
+                setBookingList(data.data.message);
+            })
+            .catch((res) => {
+                console.log(res);
+            });
+        }
     }, [_id, show])
     
     useEffect(() => {
@@ -84,8 +86,7 @@ const BookingOverlay = (prop) => {
                     {bookingList.map((e,i) => (
                         <BookingCard
                             setShow={setShow}
-                            setModalActionType={setModalActionType}
-                            setSelectedBookingId={setModalActionType}
+                            setModalConfig={setModalConfig}
 
                             key={e._id}
                             bookingId={e._id}

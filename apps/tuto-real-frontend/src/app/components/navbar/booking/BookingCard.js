@@ -104,8 +104,11 @@ const BookingCard = (prop) => {
   const cancelButtonHandle = () => {
     //todo: show modal or something like that for comfirmation
     prop.setShow(false)
-    prop.setSelectedBookingId(bookingId)
-    prop.setModalActionType("Cancel")
+    prop.setModalConfig({
+      modalType:"Cancel",
+      bookingId: bookingId,
+      targetName:tutorName
+    })
     // prop.setModalActionType("Approve")
     // prop.setModalActionType("Reject")
 
@@ -113,7 +116,7 @@ const BookingCard = (prop) => {
     //sendCancelBooking(bookingId)
 
     //todo: delete the statement belown when sendCancelBooking complete
-    setStatus('Cancelled');
+    // setStatus('Cancelled');
   };
   const sendCancelBooking = async (bookingId) => {
     console.log('sending cancel booking:', bookingId);

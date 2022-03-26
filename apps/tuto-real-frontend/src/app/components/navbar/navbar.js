@@ -27,9 +27,13 @@ const NavBar = () => {
   const [bookingRequestOverlayShow, setBookingRequestOverlayShow] = useState(false)
 
   const [showModal, setShowModal] = useState('none');
-  const [isPending, setIsPending] = useState(false);
-  const [modalActionType, setModalActionType] = useState('None'); //( "None" || "Cancel" || "Approve" || "Reject")
-  const [selectedBookingId, setSelectedBookingId] = useState('None');
+  // const [isPending, setIsPending] = useState(false);
+  // const [modalActionType, setModalActionType] = useState('None'); //( "None" || "Cancel" || "Approve" || "Reject")
+  const [modalConfig, setModalConfig] = useState({
+                                                    modalType: "None",//( "None" || "Cancel" || "Approve" || "Reject")
+                                                    bookingId: "",
+                                                    targetName:""
+                                                });
 
   const navbarDataList = getNavbarData(userType).map(item => (
     <button 
@@ -50,6 +54,18 @@ const NavBar = () => {
   useEffect(() => {
     setSearchTextTemp(searchText)
   },[searchText])
+
+  useEffect(() => {
+    if (bookingOverlayShow) {
+      setBookingRequestOverlayShow(false)
+    }
+  },[bookingOverlayShow])
+
+  useEffect(() => {
+    if (bookingRequestOverlayShow) {
+      setBookingOverlayShow(false)
+    }
+  },[bookingRequestOverlayShow])
 
   // useEffect(() => {
   //   if(params?.searchText) {
@@ -113,8 +129,8 @@ const NavBar = () => {
           show={bookingOverlayShow} 
           setShow={setBookingOverlayShow}
           target={bookingOverlayTarget}
-          setModalActionType={setModalActionType}
-          setSelectedBookingId={setSelectedBookingId}
+          setModalConfig={setModalConfig}
+          // setSelectedBooking={setSelectedBooking}
         />
         <BookingRequestOverlay 
           show={bookingRequestOverlayShow} 
@@ -125,14 +141,13 @@ const NavBar = () => {
         {navbarDataList}
       </div>
 
-
-      {(modalActionType === 'Cancel' ||
-        modalActionType === 'Approve' || 
-        modalActionType === 'Reject') && (
+      {/* modal approve */}
+      {(modalConfig.modalType === 'Cancel' ||
+        modalConfig.modalType === 'Approve' || 
+        modalConfig.modalType === 'Reject') && (
           <BookingActionModal
-            actionType={modalActionType}
-            setActionType={setModalActionType}
-            bookingId={selectedBookingId}
+            modalConfig={modalConfig}
+            setModalConfig={setModalConfig}
             setBookingOverlayShow={setBookingOverlayShow}
             setBookingRequestOverlayShow={setBookingRequestOverlayShow}
           />
