@@ -1,0 +1,28 @@
+.reject-booking-request .text {
+    color: "white";
+    font-weight: "bold";
+    text-align: "center";
+    font-size: 24;
+}
+
+.reject-booking-request h6 {
+    font-size: 16px;
+    font-weight: 400;
+    color: var(--darkgray);
+}
+.reject-booking-request h4 {
+    font-size: 24px;
+    color: var(--darkgray);
+}
+
+.reject-booking-request .confirm-button {
+    padding: .375rem 10px;
+    border-width: 0px;
+    border-radius: 4px;
+    background-color: var(--third);
+    color: red;
+    margin: 0px;
+}
+.reject-booking-request .confirm-button:hover {
+    background-color: var(--primary);
+}
