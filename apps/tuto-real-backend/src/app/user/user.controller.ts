@@ -27,7 +27,7 @@ export class UserController {
   constructor(private readonly service: UserService) {}
 
   @Get()
-  @UseGuards(FirebaseAuthGuard)
+  //@UseGuards(FirebaseAuthGuard)
   getProfile(@Query() query: any) {
     try {
       return this.service.getProfile(query._id, query.email);

@@ -426,7 +426,9 @@ export class ScheduleService {
       for (var day of raw[i].days) {
         for (var slot of day.slots) {
           console.log('slot', slot);
-          for (let j = 0; j < slot.data.length; j++) {
+
+          var j = slot.data.length
+          while(j--){
             console.log(slot.data[j].slotId);
             var re = await this.scheduleModel
               .findOne(
@@ -439,7 +441,11 @@ export class ScheduleService {
                   data: 'referenced slot not found',
                 });
               });
-            console.log(re._id);
+            if (re==null) {
+              slot.data.splice(j,1)
+              continue
+            }
+
 
             var tutorInfo = await this.userModel
               .findOne({ schedule_id: re._id })

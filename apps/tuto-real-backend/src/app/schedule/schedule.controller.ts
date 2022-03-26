@@ -61,7 +61,7 @@ export class ScheduleController {
   }
 
   @Get()
-  @UseGuards(FirebaseAuthGuard)
+  //@UseGuards(FirebaseAuthGuard)
   getSchedule(@Query('_id') id: string) {
     try {
       return this.service.getSchedule(id);
