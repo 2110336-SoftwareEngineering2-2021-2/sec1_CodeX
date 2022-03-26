@@ -133,16 +133,12 @@ const NavBar = () => {
             actionType={modalActionType}
             setActionType={setModalActionType}
             bookingId={selectedBookingId}
-
-            bookingOverlayShow={bookingOverlayShow}
             setBookingOverlayShow={setBookingOverlayShow}
-
-            bookingRequestOverlayShow={bookingRequestOverlayShow}
             setBookingRequestOverlayShow={setBookingRequestOverlayShow}
           />
       )}
       {/* modal approve */}
-      {showModal === 'Approve' && (
+      {/* {showModal === 'Approve' && (
         <ModalTwoButton
           title="Do you want to approve the booking?"
           header="If you click confirm button, that user will become a member of your course."
@@ -156,7 +152,7 @@ const NavBar = () => {
           leftPending="Confirm..."
           leftPendingColor="var(--lightgray)"
         />
-      )}
+      )} */}
 
       {/* modal approve */}
       {/* {showModal === 'Approve' && (

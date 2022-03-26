@@ -9,12 +9,35 @@ const BookingActionModal = (prop) => {
             setBookingOverlayShow,
             setBookingRequestOverlayShow
         } = prop
+
     const [isPending, setIsPending] = useState(false)
+    
+    const genActionConfig = () => {
+        switch(actionType) {
+            case 'Cancel':
+                return {
+                    title: 'Do you want to cancel your booking?',
+                    description: 'If you click confirm button, the following change will be applied to the booking request.',
+                    confirmBtnColor: "var(--yellow)"
+                }
+            case 'Approve':
+                return {
+                    title: 'Do you want to approve the booking?',
+                    description: 'If you click confirm button, that user will become a member of your course. ',
+                    confirmBtnColor: "var(--third)"
+                }
+            case 'Reject':
+                return {
+                    title: 'Do you want to reject the booking?',
+                    description: 'If you click confirm button, the booking request will be rejected.',
+                    confirmBtnColor: "var(--warning)"
+                }
+        }
+    }
 
     const handleLeft = () => {
 
     }
-
     const handleRight = () => {
         setActionType("None");
         if (actionType === "Cancel") {
@@ -22,17 +45,16 @@ const BookingActionModal = (prop) => {
         } else if (actionType === "Approve" || actionType === "Reject") {
             setBookingRequestOverlayShow(true);
         }
-
     }
     return (
         <ModalTwoButton
-            title="Do you want to approve the booking?"
-            header="If you click confirm button, that user will become a member of your course."
+            title={genActionConfig().title}
+            header={genActionConfig().description}
             leftFunc={handleLeft}
             rightFunc={handleRight}
             leftMessage="Confirm"
             rightMessage="Cancel"
-            leftColor="var(--third)"
+            leftColor={genActionConfig().confirmBtnColor}
             rightColor="cancel-button"
             isPending={isPending}
             leftPending="Confirm..."

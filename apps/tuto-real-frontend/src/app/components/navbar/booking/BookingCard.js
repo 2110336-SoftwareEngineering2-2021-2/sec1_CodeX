@@ -106,6 +106,8 @@ const BookingCard = (prop) => {
     prop.setShow(false)
     prop.setSelectedBookingId(bookingId)
     prop.setModalActionType("Cancel")
+    // prop.setModalActionType("Approve")
+    // prop.setModalActionType("Reject")
 
     //todo: uncomment the statement belown when sendCancelBooking complete
     //sendCancelBooking(bookingId)
