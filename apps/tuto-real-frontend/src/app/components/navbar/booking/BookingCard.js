@@ -103,8 +103,9 @@ const BookingCard = (prop) => {
 
   const cancelButtonHandle = () => {
     //todo: show modal or something like that for comfirmation
-    //
-    //
+    prop.setShow(false)
+    prop.setSelectedBookingId(bookingId)
+    prop.setModalActionType("Cancel")
 
     //todo: uncomment the statement belown when sendCancelBooking complete
     //sendCancelBooking(bookingId)
@@ -145,7 +146,7 @@ const BookingCard = (prop) => {
           {genConfigStatus().statusText}
         </p>
         <p>
-          request time: {translateDateFormat('2022-03-22T13:14:15.166Z')}{' '}
+          request time: {translateDateFormat(requestTime)}{' '}
           {translateTimeFormat(requestTime)}
         </p>
       </div>

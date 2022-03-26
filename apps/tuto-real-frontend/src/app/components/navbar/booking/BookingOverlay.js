@@ -5,7 +5,7 @@ import { client } from "../../../axiosConfig";
 import BookingCard from "./BookingCard";
 
 const BookingOverlay = (prop) => {
-    const {show,target} = prop;
+    const {show,setShow,target,setModalActionType,setSelectedBookingId} = prop;
     const { _id } = useAuth();
 
     const [bookingList, setBookingList] = useState([
@@ -83,6 +83,10 @@ const BookingOverlay = (prop) => {
                     {/* <button onClick={fetchData}>load data</button> */}
                     {bookingList.map((e,i) => (
                         <BookingCard
+                            setShow={setShow}
+                            setModalActionType={setModalActionType}
+                            setSelectedBookingId={setModalActionType}
+
                             key={e._id}
                             bookingId={e._id}
                             status={e.status}
