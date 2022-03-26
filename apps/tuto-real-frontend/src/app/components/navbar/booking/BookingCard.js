@@ -151,9 +151,9 @@ const BookingCard = (prop) => {
       {/* <button onClick={() => (console.log(requestTime))}>print days</button> */}
       <ul>
         {days.map((e, i) => (
-          <div key={bookingId + i + bookingId}>
+          <div key={bookingId + i + bookingId} style={{ margin: '0px' }}>
             {e.slots.map((slot_no, ii) => (
-              <li key={bookingId + i + ii} style={{ margin: '2px 0px' }}>
+              <li key={bookingId + i + ii} style={{ margin: '0px 2px' }}>
                 {translateSlotsListFormat(e.subject[ii], e.date, slot_no)}
               </li>
             ))}

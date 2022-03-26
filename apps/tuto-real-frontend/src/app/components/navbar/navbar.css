@@ -118,6 +118,24 @@ input {
   overflow: hidden;
   overflow-y: scroll;
 }
+.booking-overlay .popover-body #place-hover-empty-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 400px;
+  height: 400px;
+  padding: 75px;
+  flex-direction: column;
+  gap: 20px
+}
+
+.booking-overlay .popover-body #place-hover-empty-image img {
+  width: 100%;
+}
+
+.booking-overlay .popover-body #place-hover-empty-image p {
+  font-size: 16px;
+}
 
 .booking-overlay .popover-body::-webkit-scrollbar {
   width: 8px;

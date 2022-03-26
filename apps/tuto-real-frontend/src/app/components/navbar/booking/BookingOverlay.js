@@ -4,6 +4,7 @@ import { useAuth } from "../../../auth";
 import { client } from "../../../axiosConfig";
 import COLORS from "../../../constants/color";
 import BookingCard from "./BookingCard";
+import { DESK } from "../../../constants/image"
 
 const BookingOverlay = (prop) => {
     const {show,setShow,target,setModalConfig} = prop;
@@ -44,7 +45,7 @@ const BookingOverlay = (prop) => {
     }, []);
     
     const fetchData = useCallback(async () => {
-        if (show) {
+        if (show && (_id)) {
             setIsLoading(true)
             console.log("fetch Booking of:",_id);
             await client({
@@ -67,6 +68,7 @@ const BookingOverlay = (prop) => {
             })
             .catch((res) => {
                 console.log(res);
+                setShow(false);
             });
         }
     }, [_id, show])
@@ -89,7 +91,12 @@ const BookingOverlay = (prop) => {
                 {!isLoading ? 
                     <Popover.Body> 
                         {/* <button onClick={fetchData}>load data</button> */}
-
+                        {bookingList.length === 0 && (
+                            <div id="place-hover-empty-image">
+                                <img src={DESK}/>
+                                <p>You don't have any booking</p>
+                            </div>
+                        )}
                         {bookingList.map((e,i) => (
                             <BookingCard
                                 setShow={setShow}
@@ -106,7 +113,7 @@ const BookingOverlay = (prop) => {
                         ))}
                     </Popover.Body>
                     :
-                    <div className="loading_spinner" style={{marginBottom:"20px"}} >
+                    <div className="loading_spinner" style={{marginBottom:"20px", width:"400px", height:"400px"}} >
                         <Spinner
                             animation="border"
                             role="status"
