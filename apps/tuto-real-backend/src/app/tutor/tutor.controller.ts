@@ -33,7 +33,7 @@ export class TutorController {
   constructor(private readonly tutorService: TutorService) {}
 
   @Get('/search')
-  @UseGuards(FirebaseAuthGuard)
+  //@UseGuards(FirebaseAuthGuard)
   @ApiOperation({ summary: 'Search tutor' })
   @ApiQuery({
     description: 'Criteria',

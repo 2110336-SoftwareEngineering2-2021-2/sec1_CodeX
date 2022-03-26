@@ -36,7 +36,7 @@ export class ReviewController {
   }
 
   @Get()
-  @UseGuards(FirebaseAuthGuard)
+  //@UseGuards(FirebaseAuthGuard)
   getReviews(
     @Query('_id') id: string,
     @Query('sortBy') sortBy: string,

@@ -39,7 +39,7 @@ export class BookingController {
   }
 
   @Post('/test')
-  @UseGuards(FirebaseAuthGuard)
+  //@UseGuards(FirebaseAuthGuard)
   updateLearnSchedule(@Body() dto: BookingDto) {
     try {
       return this.service.updateLearnSchedule(dto);
