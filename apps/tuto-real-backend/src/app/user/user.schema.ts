@@ -8,6 +8,7 @@ export const UserSchema = new mongoose.Schema({
   totalRating: { type: Number, default: undefined },
   numReviews: { type: Number, default: undefined },
   studiedWith: { type: [String], default: [] },
+  avgRating: { type: Number, default: undefined },
   //basic info
   firstName: { type: String, require: true },
   lastName: { type: String, require: true },

@@ -58,10 +58,12 @@ export class ReviewService {
         path: 'tutor',
         select: 'firstName lastName',
       })
-    ).populate({
-      path: 'writer',
-      select: 'firstName lastName',
-    });
+    )
+      .populate({
+        path: 'writer',
+        select: 'firstName lastName',
+      })
+      .then(() => this.getRating(dto.tutorID));
     return { success: true, data: review };
   }
 
@@ -72,13 +74,15 @@ export class ReviewService {
       rating: dto.rating,
       comment: dto.comment,
     };
-    const review = await this.reviewModel.findByIdAndUpdate(id, data, {
-      new: true,
-    });
+    const review = await this.reviewModel
+      .findByIdAndUpdate(id, data, {
+        new: true,
+      })
+      .then((res) => this.getRating(res.tutor.toString()));
     return { success: true, data: review };
   }
 
-  async getReviews(tutorId: string, sortBy: string, sid: string) {
+  public async getReviews(tutorId: string, sortBy: string, sid: string) {
     var id;
     if (sortBy == undefined) {
       sortBy = 'createdAt';
@@ -114,6 +118,7 @@ export class ReviewService {
       .catch((err) => {
         throw new InternalServerErrorException({ success: false, data: err });
       });
+    // console.log(re_);
     var rating = null;
     var tutor = await this.userModel
       .findOne({ _id: new mongoose.Types.ObjectId(tutorId) })
@@ -136,6 +141,7 @@ export class ReviewService {
         { studiedWith: tutorId },
       ],
     });
+    // console.log(studiedWith);
     if (studiedWith.length != 0) allow = true;
     var re = [];
     for (let i = 0; i < re_.length; i++) {
@@ -144,9 +150,34 @@ export class ReviewService {
       } else re.push(re_[i]);
     }
     if (sid == tutorId) allow = false;
+
     return {
       success: true,
       data: { rating: rating, allow: allow, self: self, reviews: re },
     };
+  }
+
+  private async getRating(tutorId: string): Promise<Number> {
+    const rating = await this.reviewModel
+      .aggregate([
+        {
+          $match: { tutor: new mongoose.Types.ObjectId(tutorId) },
+        },
+        {
+          $group: {
+            _id: '$tutor',
+            avgRating: { $avg: '$rating' },
+            numReviews: { $sum: 1 },
+          },
+        },
+      ])
+      .then((res) => res[0]);
+
+    await this.userModel.findByIdAndUpdate(tutorId, {
+      avgRating: rating.avgRating,
+      numReviews: rating.numReviews,
+    });
+
+    return rating;
   }
 }
