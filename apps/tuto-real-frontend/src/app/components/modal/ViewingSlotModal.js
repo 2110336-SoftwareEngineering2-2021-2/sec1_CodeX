@@ -20,7 +20,8 @@ const ViewingSlotModal = (props) => {
   const time = info[infoIdx].slot;
   const subject = info[infoIdx].subject;
   const description = info[infoIdx].description;
-  const studentList = info[infoIdx].students ?? [];
+  const studentList =
+    (fromLearnSchedule ? info[infoIdx].members : info[infoIdx].students) ?? [];
   const showFirstName = fromLearnSchedule
     ? info[infoIdx]?.tutorFirstName
     : firstName;
@@ -31,7 +32,7 @@ const ViewingSlotModal = (props) => {
   const checkInfo = () => {
     let tempData = [];
     studentList.map((student) => {
-      if (student.status === 'Approved') {
+      if (fromLearnSchedule || student.status === 'Approved') {
         tempData = [...tempData, student];
       }
     });
@@ -125,7 +126,7 @@ const ViewingSlotModal = (props) => {
               className="request-header"
               style={{ fontWeight: '500', fontSize: '16px' }}
             >
-              {`${firstName} ${lastName}`}
+              {`${showFirstName} ${showLastName}`}
             </Modal.Title>
           </div>
         )}
@@ -156,7 +157,7 @@ const ViewingSlotModal = (props) => {
       </Modal.Body>
 
       {/* Description part */}
-      <Modal.Body>
+      <Modal.Body style={{ borderBottom: '1px solid #dee2e6' }}>
         <Modal.Title
           className="request-header"
           style={{ fontWeight: '500', fontSize: '16px' }}
@@ -175,6 +176,30 @@ const ViewingSlotModal = (props) => {
         </Modal.Title>
       </Modal.Body>
 
+      {/* Zoom part (Only for learn schedule) */}
+      {fromLearnSchedule && info[infoIdx]?.zoomURL ? (
+        <Modal.Body>
+          <Modal.Title
+            className="request-header"
+            style={{ fontWeight: '500', fontSize: '16px' }}
+          >
+            ZOOM LINK
+          </Modal.Title>
+          <Modal.Title
+            className="request-header"
+            style={{
+              fontWeight: '400',
+              fontSize: '16px',
+              paddingLeft: '1rem',
+            }}
+          >
+            <a href={info[infoIdx]?.zoomURL} target="_blank">
+              {info[infoIdx]?.zoomURL}
+            </a>
+          </Modal.Title>
+        </Modal.Body>
+      ) : null}
+
       {/* button part */}
       <Modal.Footer>
         <Button id="cancel-button" variant="outline-dark" onClick={cancelFunc}>
@@ -189,9 +214,9 @@ const ViewingSlotModal = (props) => {
       {/* studentList part */}
       <Modal.Body>
         {newInfo.length > 0 ? (
-          newInfo.map((student) => (
+          newInfo.map((student, i) => (
             <Modal.Title
-              key={student.id}
+              key={i}
               className="request-header"
               style={{ fontWeight: '400', fontSize: '16px' }}
             >

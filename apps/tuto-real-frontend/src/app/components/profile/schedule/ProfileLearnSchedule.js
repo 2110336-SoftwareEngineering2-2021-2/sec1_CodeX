@@ -25,8 +25,6 @@ const ProfileLearnSchedule = ({ targetId, viewType }) => {
   const [info, setInfo] = useState([]);
   const [modalDay, setModalDay] = useState();
 
-  // const { _id } = useAuth();
-
   const tagColor = [
     'Crimson',
     'CornflowerBlue',
@@ -48,15 +46,6 @@ const ProfileLearnSchedule = ({ targetId, viewType }) => {
         Authorization: `Bearer ${localStorage.getItem('token')}`,
       },
     })
-      // .then(({ data: { data } }) => {
-      //   console.log(data);
-      //   setScheduleList(data.scheduleList ?? []);
-      //   if (data.scheduleList?.length > 0) {
-      //     setSubjectList(data.scheduleList[currentSchedule].allSubjects ?? []);
-      //   }
-      //   setLoading(false);
-      // })
-
       .then(({ data: { data } }) => {
         console.log(data);
         setScheduleList(data ?? []);
@@ -78,9 +67,6 @@ const ProfileLearnSchedule = ({ targetId, viewType }) => {
   }, [fetchData, refresh]);
 
   useEffect(() => {
-    // if (scheduleList[currentSchedule]) {
-    //   setSubjectList(scheduleList[currentSchedule].allSubjects);
-    // }
     if (scheduleList[currentSchedule]) {
       setSubjectList(scheduleList[currentSchedule].subjects ?? []);
     }
