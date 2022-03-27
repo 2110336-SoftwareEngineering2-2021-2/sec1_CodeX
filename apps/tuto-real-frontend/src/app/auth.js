@@ -41,6 +41,7 @@ export function AuthProvider({ children }) {
   const setUserData = async (user) => {
     if (user) {
       const token = await user.getIdToken(true);
+      console.log(token);
       localStorage.setItem('token', token);
       client({
         method: 'GET',
