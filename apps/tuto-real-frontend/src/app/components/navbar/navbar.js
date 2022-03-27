@@ -67,12 +67,6 @@ const NavBar = () => {
     }
   },[bookingRequestOverlayShow])
 
-  // useEffect(() => {
-  //   if(params?.searchText) {
-  //     setSearchText(params?.searchText)
-  //   }
-  // },[params.searchText])
-
   const handleButton = (name, path, param, event) => {
     if(name === "Sign out") {
       console.log("Logging out....")
@@ -100,15 +94,6 @@ const NavBar = () => {
     }
   }
 
-  const handleConfirm = () => {
-     
-  };
-  
-  const handleCancel = () => {
-      setShowModal(true);
-      setBookingRequestOverlayShow(!bookingRequestOverlayShow);
-  };
-
   return (
     <div className='navbar'>
       <div className='left-side'>
@@ -134,9 +119,9 @@ const NavBar = () => {
         />
         <BookingRequestOverlay 
           show={bookingRequestOverlayShow} 
-          target={bookingRequestOverlayTarget} 
-          setShowModal={setShowModal} 
           setShow={setBookingRequestOverlayShow}
+          target={bookingRequestOverlayTarget} 
+          setModalConfig={setModalConfig} 
         />
         {navbarDataList}
       </div>

@@ -76,6 +76,8 @@ const BookingOverlay = (prop) => {
             target={target}
             placement="bottom"
             className="booking-overlay"
+            onHide={() => setShow(false)}
+            rootClose={true}
         >
             <Popover className="booking-overlay" id="popover-contained">
                 <Popover.Header as="h3">My Booking</Popover.Header>

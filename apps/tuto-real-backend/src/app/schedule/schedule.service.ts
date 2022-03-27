@@ -25,17 +25,14 @@ const getFinalDate = (startDate: Date): Date => {
   return dateNoTimeZone;
 };
 
-function nextweek(today) {
+function nextweek(today,flag) {
   today.setHours(7, 0, 0);
   console.log(today.getDate());
   var next = new Date(
     today.getFullYear(),
     today.getUTCMonth(),
-    today.getUTCDate() + 7
+    today.getUTCDate() + 7*flag
   );
-  //next.setHours(0,0,0)
-  console.log(next.getDate());
-  console.log(next);
   return next;
 }
 
@@ -46,7 +43,7 @@ const getPreviousSunday = () => {
     time from "Database" is UTC+0
   */
   const previousSunday = new Date();
-  previousSunday.setHours(7, 0, 0, 0);
+  previousSunday.setHours(7, 0, 0);
   previousSunday.setDate(previousSunday.getDate() - previousSunday.getDay());
   return previousSunday;
 };
@@ -358,7 +355,6 @@ export class ScheduleService {
     var now = new Date();
     var expiredDate = new Date();
     expiredDate.setDate(now.getDate() - 7);
-    expiredDate.setHours(0, 0, 0);
     await this.learnScheduleModel
       .deleteMany({ startDate: { $lt: expiredDate } })
       .catch((err) => {
@@ -380,21 +376,21 @@ export class ScheduleService {
       maxDate.length != 0
         ? new Date(Math.max(...maxDate))
         : getPreviousSunday();
-    console.log(latestDate);
     //insert advance schedule
     var more = 4 - maxDate.length;
-
-    console.log('latestDate', latestDate);
     var i = 0;
     if (maxDate.length == 0) more -= 1;
     else i = 1;
     for (i; i <= more; i++) {
-      latestDate = nextweek(latestDate);
+      if (i==0)  {
+        latestDate = nextweek(latestDate,-1);
+      }
+      latestDate = nextweek(latestDate,1);
       console.log('add', latestDate);
+      latestDate.setHours(7,0,0)
       var add = new LearnScheduleDto();
       add.studentId = studentId;
       add.startDate = latestDate;
-      console.log(add);
       await this.learnScheduleModel
         .create(add)
         .then((res) => {

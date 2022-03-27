@@ -3,29 +3,17 @@ import { useState } from 'react';
 
 const BookingRequestCard= (prop) => {
     const {
+        setShow,
+        setModalConfig,
         bookingId,
         requestTime, 
         studentName, 
         totalPrice, 
-        days,
-        setShowModal,
-        setShow
+        days
         } = prop;
 
     const [status, setStatus] = useState(prop.status);
 
-    // const genBorderColor = (status) => {
-    //     if (status === "Canceled") return "#FBE2C5"
-    //     else if (status === "Accepted") return "#D3EAE5"
-    //     else if (status === "Rejected") return "#FFD6C9"
-    //     else return COLORS.lightgray
-    // }
-    // const genStatusColor = (status) => {
-    //     if (status === "Canceled") return "#EF8C18"
-    //     else if (status === "Accepted") return COLORS.third
-    //     else if (status === "Rejected") return "#FF5D29"
-    //     else return COLORS.primary
-    // }
     const genConfigStatus = () => {
         switch(status){
             case "Pending":
@@ -35,7 +23,7 @@ const BookingRequestCard= (prop) => {
                     borderColor: COLORS.lightgray,
                 };
 
-            case "Canceled":
+            case "Cancelled":
                 return {
                     statusText:"Canceled",
                     statusColor:"#EF8C18",
@@ -49,7 +37,7 @@ const BookingRequestCard= (prop) => {
                     borderColor:"#D3EAE5",
                 };
 
-            case "Rejected":
+            case "Reject":
                 return {
                     statusText:"Rejected",
                     statusColor:"#FF5D29",
@@ -68,9 +56,11 @@ const BookingRequestCard= (prop) => {
         //2001-02-15T17:00:00.000+00:00
         //            to be
         //February 29, 2000 9:30 a.m."
-        var date = parseInt(timeStamp.substr(8, 2));
-        var month = parseInt(timeStamp.substr(5, 2));
-        var year = parseInt(timeStamp.substr(0, 4));;
+        let temp = new Date(timeStamp);
+        // console.log(new Date(timeStamp));
+        var date = temp.getDate()
+        var month = temp.getMonth()
+        var year = temp.getFullYear()
         const monthName = [
             'January', 
             'February', 
@@ -84,20 +74,42 @@ const BookingRequestCard= (prop) => {
             'October', 
             'November', 
             'December']
-        return (monthName[month-1] + " " + date.toString() + ", " + year.toString());
+        return (monthName[month] + " " + date.toString() + ", " + year.toString());
     }
 
     const translateTimeFormat = (timeStamp) => {
-        var hour = timeStamp.substr(11, 2);
-        var min = timeStamp.substr(14, 2);
-        return hour.toString() + ":" + min.toString();
-    }
+        let temp = new Date(timeStamp);
+        // console.log(new Date(timeStamp));
+        var hour = temp.getHours()
+        var min = temp.getMinutes()
+        return hour.toString() + ':' + min.toString();
+      };
 
     const translateSlotsListFormat = (subjectName, timeStamp, slot_no) => {
         // return "1234"
         // return slot_no.toString()
         return subjectName + " [ " + (slot_no + 8).toString()  + ":00 - "+ (slot_no + 9).toString() + ":00 ] " + translateDateFormat(timeStamp)
     }
+
+    const approveButtonHandle = () => {
+        //todo: show modal or something like that for comfirmation
+        setShow(false)
+        setModalConfig({
+          modalType:"Approve",
+          bookingId: bookingId,
+          targetName: studentName
+        })
+      };
+
+      const rejectButtonHandle = () => {
+        //todo: show modal or something like that for comfirmation
+        setShow(false)
+        setModalConfig({
+          modalType:"Reject",
+          bookingId: bookingId,
+          targetName: studentName
+        })
+      };
     
     return (  
         <div className="booking-card" style={{borderColor:genConfigStatus().borderColor}}>
@@ -118,12 +130,19 @@ const BookingRequestCard= (prop) => {
                 <div id="button-zone">
                     {status === "Pending"?
                         <>
-                        <button id="approve-button" onClick={() =>
-                            {setShow(false)  
-                            setShowModal('Approve')}}>
+                        <button 
+                            id="approve-button" 
+                            onClick={approveButtonHandle}
+                        >
                             Approve
                         </button>
-                        <button id="reject-button">Reject</button>
+
+                        <button 
+                            id="reject-button" 
+                            onClick={rejectButtonHandle}
+                        >
+                            Reject
+                        </button>
                         </>
                         :
                         null
@@ -137,10 +156,10 @@ const BookingRequestCard= (prop) => {
                     </li>
                 ))} */}
                 {days.map((e,i) => (
-                    <div key={bookingId + i + bookingId}>
+                    <div key={bookingId + i + bookingId} style={{ margin: '0px' }}>
                         {e.slots.map((slot_no,ii) => (
-                            <li key={bookingId + i + ii} style={{margin:"2px 0px"}}>
-                                {translateSlotsListFormat(e.subject[ii],e.date,slot_no)}
+                            <li key={bookingId + i + ii} style={{margin:"0px 2px"}}>
+                                {translateSlotsListFormat(e.subject[ii], e.date, slot_no)}
                             </li>
                         ))}
                     </div>

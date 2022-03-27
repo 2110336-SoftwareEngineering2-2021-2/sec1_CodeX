@@ -7,7 +7,7 @@ import COLORS from "../../../constants/color";
 import { DESK } from "../../../constants/image"
 
 const BookingRequestOverlay = (prop) => {
-    const {show,target,setShowModal,setShow} = prop;
+    const {show,setShow,target,setModalConfig} = prop;
     const { _id } = useAuth();
     const [isLoading, setIsLoading] = useState(true)
 
@@ -51,10 +51,9 @@ const BookingRequestOverlay = (prop) => {
             show={show}
             target={target}
             placement="bottom"
-            // style={{width:"400px"}}
             className="booking-overlay"
-            // container={ref}
-            // containerPadding={20}
+            onHide={() => setShow(false)}
+            rootClose={true}
         >
             <Popover className="booking-overlay" id="popover-contained">
                 <Popover.Header as="h3">Booking Request</Popover.Header>
@@ -68,8 +67,9 @@ const BookingRequestOverlay = (prop) => {
                         )}
                         {bookingList.map((e,i) => (
                             <BookingRequestCard
-                                setShowModal= {setShowModal} 
                                 setShow= {setShow}
+                                setModalConfig= {setModalConfig} 
+
                                 key={e._id}
                                 bookingId={e._id}
                                 status={e.status}
@@ -95,7 +95,6 @@ const BookingRequestOverlay = (prop) => {
             </Popover>
         </Overlay>
     );
-    
 }
  
 export default BookingRequestOverlay;

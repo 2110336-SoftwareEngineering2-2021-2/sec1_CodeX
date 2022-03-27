@@ -59,10 +59,6 @@ const BookingActionModal = (prop) => {
         }
     }
 
-    const translateCommand = () => {
-        
-    }
-
     const handleLeft = () => {
         setIsPending(true);
         switch(modalConfig.modalType) {
