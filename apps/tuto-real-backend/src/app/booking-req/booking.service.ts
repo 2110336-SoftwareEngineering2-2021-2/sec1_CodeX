@@ -365,103 +365,98 @@ export class BookingService {
       ['Friday', 5],
       ['Saturday', 6],
     ]);
-    try {
-      //Find the student
-      const student = await this.userModel.findById(
-        mongoose.Types.ObjectId(id)
-      );
-      if (!student) {
-        throw new NotFoundException({
-          success: false,
-          message: 'Student not found',
-        });
-      }
-      //Get the student booking
-      const booking = await this.bookingModel
-        .find(
-          {
-            student_id: mongoose.Types.ObjectId(id),
-          },
-          { __v: 0 }
-        )
-        .sort({ timeStamp: 1 })
-        .populate({ path: 'student_id', select: 'firstName lastName' })
-        .lean()
-        .exec();
-      if (!booking)
-        throw new NotFoundException({
-          success: false,
-          meesage: 'booking not found',
-        });
 
-      //Find tutor
-      for (var i = 0; i < booking.length; i++) {
-        const schedule = await this.scheduleModel.findOne({
-          _id: mongoose.Types.ObjectId(booking[i].schedule_id),
-        });
-        const tutor = await this.userModel.findOne({
-          schedule_id: { $in: booking[i].schedule_id },
-        });
-        if (!tutor) {
-          //Delete because the schedule is not exist
-          await this.bookingModel.findByIdAndDelete(
-            mongoose.Types.ObjectId(booking[i]._id)
-          );
-        } else {
-          const tutorName = tutor.firstName + ' ' + tutor.lastName;
-          booking[i]['tutor'] = tutorName;
-        }
-        for (var j = 0; j < booking[i].days.length; j++) {
-          let day = booking[i].days[j].day as string;
-          const numDay = days.get(day);
-          const newDate = new Date(
-            schedule.startDate.getTime() + 1000 * 60 * 60 * 24 * numDay
-          );
-          booking[i].days[j]['date'] = newDate;
-
-          //Subject to learn
-          const subject = await this.scheduleModel.aggregate([
-            { $unwind: '$days' },
-            { $unwind: '$days.slots' },
-            {
-              $match: {
-                'days.slots.slot': { $in: booking[i].days[j].slots },
-                _id: mongoose.Types.ObjectId(booking[i].schedule_id),
-                'days.day': day,
-              },
-            },
-            { $sort: { 'days.slots.slot': 1 } },
-            { $group: { _id: '$days.slots' } },
-          ]);
-          subject.sort(function (a, b) {
-            return a._id.slot - b._id.slot;
-          });
-
-          let subjects = [];
-          subject.forEach((element) => {
-            subjects.push(element._id.subject);
-          });
-
-          booking[i].days[j]['subject'] = subjects;
-        }
-      }
-      var ordering = {},
-        sortOrder = ['Pending', 'Approved', 'Reject', 'Cancelled'];
-      for (var i = 0; i < sortOrder.length; i++) ordering[sortOrder[i]] = i;
-      booking.sort(function (a, b) {
-        return (
-          ordering[a.status as string] -
-          ordering[
-            (b.status as string) ||
-              Number(a.timeStamp < b.timeStamp) -
-                Number(a.timeStamp > b.timeStamp)
-          ]
-        );
+    //Find the student
+    const student = await this.userModel.findById(mongoose.Types.ObjectId(id));
+    if (!student) {
+      throw new NotFoundException({
+        success: false,
+        message: 'Student not found',
       });
-      return { success: true, message: booking };
-    } catch (error) {
-      throw new ServiceUnavailableException({ success: false, message: error });
     }
+    //Get the student booking
+    const booking = await this.bookingModel
+      .find(
+        {
+          student_id: mongoose.Types.ObjectId(id),
+        },
+        { __v: 0 }
+      )
+      .sort({ timeStamp: 1 })
+      .populate({ path: 'student_id', select: 'firstName lastName' })
+      .lean()
+      .exec();
+    if (!booking)
+      throw new NotFoundException({
+        success: false,
+        meesage: 'booking not found',
+      });
+
+    //Find tutor
+    for (var i = 0; i < booking.length; i++) {
+      const schedule = await this.scheduleModel.findOne({
+        _id: mongoose.Types.ObjectId(booking[i].schedule_id),
+      });
+      const tutor = await this.userModel.findOne({
+        schedule_id: { $in: booking[i].schedule_id },
+      });
+      if (!tutor) {
+        //Delete because the schedule is not exist
+        await this.bookingModel.findByIdAndDelete(
+          mongoose.Types.ObjectId(booking[i]._id)
+        );
+      } else {
+        const tutorName = tutor.firstName + ' ' + tutor.lastName;
+        booking[i]['tutor'] = tutorName;
+      }
+      for (var j = 0; j < booking[i].days.length; j++) {
+        let day = booking[i].days[j].day as string;
+        const numDay = days.get(day);
+        const newDate = new Date(
+          schedule.startDate.getTime() + 1000 * 60 * 60 * 24 * numDay
+        );
+        booking[i].days[j]['date'] = newDate;
+
+        //Subject to learn
+        const subject = await this.scheduleModel.aggregate([
+          { $unwind: '$days' },
+          { $unwind: '$days.slots' },
+          {
+            $match: {
+              'days.slots.slot': { $in: booking[i].days[j].slots },
+              _id: mongoose.Types.ObjectId(booking[i].schedule_id),
+              'days.day': day,
+            },
+          },
+          { $sort: { 'days.slots.slot': 1 } },
+          { $group: { _id: '$days.slots' } },
+        ]);
+        subject.sort(function (a, b) {
+          return a._id.slot - b._id.slot;
+        });
+
+        let subjects = [];
+        subject.forEach((element) => {
+          subjects.push(element._id.subject);
+        });
+
+        booking[i].days[j]['subject'] = subjects;
+      }
+    }
+    var ordering = {},
+      sortOrder = ['Pending', 'Approved', 'Reject', 'Cancelled'];
+    for (var i = 0; i < sortOrder.length; i++) ordering[sortOrder[i]] = i;
+    booking.sort(function (a, b) {
+      return (
+        ordering[a.status as string] -
+        ordering[
+          (b.status as string) ||
+            Number(a.timeStamp < b.timeStamp) -
+              Number(a.timeStamp > b.timeStamp)
+        ]
+      );
+    });
+    return { success: true, message: booking };
   }
 
   //Update schedule API
@@ -549,12 +544,15 @@ export class BookingService {
             success: false,
             data: 'Schedule not found',
           });
-      };
+      }
 
       //Add to learn schedule
       this.updateLearnSchedule(booking);
     } else {
-      throw new BadRequestException({success: false, data: 'Wrong format of status'});
+      throw new BadRequestException({
+        success: false,
+        data: 'Wrong format of status',
+      });
     }
     return {
       success: true,
