@@ -1,44 +1,43 @@
-import { Overlay, Popover } from "react-bootstrap";
+import { Overlay, Popover, Spinner } from "react-bootstrap";
 import { useCallback, useEffect, useState } from "react";
 import { useAuth } from "../../../auth";
 import { client } from "../../../axiosConfig";
 import BookingRequestCard from "./BookingRequestCard";
+import COLORS from "../../../constants/color";
+import { DESK } from "../../../constants/image"
 
 const BookingRequestOverlay = (prop) => {
     const {show,target,setShowModal,setShow} = prop;
     const { _id } = useAuth();
+    const [isLoading, setIsLoading] = useState(true)
 
     const [bookingList, setBookingList] = useState([])
 
-    useEffect(() => {
-        //todo: uncomment statement belown if url is ready
-        //fetchData();
-        console.log(bookingList)
-    }, [bookingList]);
-
-    useEffect(() => {
-        // window.location.reload(false)
-    }, []);
-
     const fetchData = useCallback(async () => {
-        console.log("fetch Booking of:",_id);
-        await client({
-            method: 'GET',
-            url: `/booking/tutor`,
-            params: {
-                // tutorId: `${}`,
-                _id: `${_id}`,
-                // _id: `${_id}`,
-            },
-        })
-        .then((data) => {
-            console.log(data.data.data);
-            // console.log(data.data.data[0].student_id.firstName);
-            setBookingList(data.data.data);
-        })
-        .catch((res) => {
-            console.log(res);
-        });
+        if (show && (_id)) {
+            setIsLoading(true)
+            console.log("fetch Booking of:",_id);
+            await client({
+                method: 'GET',
+                url: `/booking/tutor`,
+                params: {
+                    _id: `${_id}`,
+                },
+                headers: {
+                    Accept: 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+            })
+            .then((data) => {
+                // console.log(data.data.data);
+                setBookingList(data.data.data);
+                setIsLoading(false);
+            })
+            .catch((res) => {
+                console.log(res);
+                setShow(false);
+            });
+        }
     }, [_id, show])
 
     useEffect(() => {
@@ -59,71 +58,40 @@ const BookingRequestOverlay = (prop) => {
         >
             <Popover className="booking-overlay" id="popover-contained">
                 <Popover.Header as="h3">Booking Request</Popover.Header>
-                <Popover.Body>
-                    {bookingList.map((e,i) => (
-                        <BookingRequestCard
-                            setShowModal= {setShowModal} 
-                            setShow= {setShow}
-                            key={e._id}
-                            bookingId={e._id}
-                            status={e.status}
-                            requestTime={e.timeStamp}
-                            studentName={e.student_id.firstName+" "+e.student_id.lastName}
-                            totalPrice={e.totalPrice}
-                            days={e.days}
-                        />
-                    ))} 
-                    {/* <BookingRequestCard
-                        setShowModal= {setShowModal} 
-                        setShow= {setShow}
-                        status="Pending" 
-                        requestTime="February 29, 2000 9:30 a.m."
-                        tutorName="Komsorn Sookdang"
-                        totalPrice={200}
-                        subjectList={[
-                            "Science [ 13:00 - 14:00 ] February 29, 2000",
-                            "Science [ 14:00 - 15:00 ] February 29, 2000",
-                            "Mathematic [ 14:00 - 15:00 ] February 30, 2000",
-                            "Software Engineering [ 14:00 - 15:00 ] February 29, 2000"
-                        ]}
-                    />
-                    <BookingRequestCard 
-                        status="Canceled" 
-                        requestTime="February 29, 2000 9:30 a.m."
-                        tutorName="Komsorn Sookdang"
-                        totalPrice={200}
-                        subjectList={[
-                            "Science [ 13:00 - 14:00 ] February 29, 2000",
-                            "Science [ 14:00 - 15:00 ] February 29, 2000",
-                            "Mathematic [ 14:00 - 15:00 ] February 30, 2000",
-                            "Software Engineering [ 14:00 - 15:00 ] February 29, 2000"
-                        ]}
-                    />
-                    <BookingRequestCard 
-                        status="Approved" 
-                        requestTime="February 29, 2000 9:30 a.m."
-                        tutorName="Komsorn Sookdang"
-                        totalPrice={200}
-                        subjectList={[
-                            "Science [ 13:00 - 14:00 ] February 29, 2000",
-                            "Science [ 14:00 - 15:00 ] February 29, 2000",
-                            "Mathematic [ 14:00 - 15:00 ] February 30, 2000",
-                            "Software Engineering [ 14:00 - 15:00 ] February 29, 2000"
-                        ]}
-                    />
-                    <BookingRequestCard 
-                        status="Rejected" 
-                        requestTime="February 29, 2000 9:30 a.m."
-                        tutorName="Komsorn Sookdang"
-                        totalPrice={200}
-                        subjectList={[
-                            "Science [ 13:00 - 14:00 ] February 29, 2000",
-                            "Science [ 14:00 - 15:00 ] February 29, 2000",
-                            "Mathematic [ 14:00 - 15:00 ] February 30, 2000",
-                            "Software Engineering [ 14:00 - 15:00 ] February 29, 2000"
-                        ]}
-                    /> */}
-                </Popover.Body>
+                {!isLoading ?
+                    <Popover.Body>
+                        {bookingList.length === 0 && (
+                            <div id="place-hover-empty-image">
+                                <img src={DESK}/>
+                                <p>You don't have any booking request</p>
+                            </div>
+                        )}
+                        {bookingList.map((e,i) => (
+                            <BookingRequestCard
+                                setShowModal= {setShowModal} 
+                                setShow= {setShow}
+                                key={e._id}
+                                bookingId={e._id}
+                                status={e.status}
+                                requestTime={e.timeStamp}
+                                studentName={e.student_id.firstName+" "+e.student_id.lastName}
+                                totalPrice={e.totalPrice}
+                                days={e.days}
+                            />
+                        ))} 
+                    </Popover.Body>
+                :
+                    <div className="loading_spinner" style={{marginBottom:"20px", width:"400px", height:"400px"}} >
+                        <Spinner
+                            animation="border"
+                            role="status"
+                            style={{ marginBottom: '2vh' }}
+                        >
+                            <span className="visually-hidden">Loading...</span>
+                        </Spinner>
+                        <h4 style={{ color: COLORS.darkgray }}>Loading</h4>
+                    </div>
+                }
             </Popover>
         </Overlay>
     );

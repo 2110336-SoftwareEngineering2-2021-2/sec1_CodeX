@@ -8,7 +8,7 @@ import { useAuth } from '../../auth'
 import './navbar.css'
 import BookingOverlay from './booking/BookingOverlay'
 import BookingRequestOverlay from './bookingRequest/BookingRequestOverlay'
-import ModalTwoButton from '../modal/ModalTwoButton'
+// import ModalTwoButton from '../modal/ModalTwoButton'
 import BookingActionModal from './BookingActionModal'
 
 const NavBar = () => {
@@ -152,56 +152,6 @@ const NavBar = () => {
             setBookingRequestOverlayShow={setBookingRequestOverlayShow}
           />
       )}
-      {/* modal approve */}
-      {/* {showModal === 'Approve' && (
-        <ModalTwoButton
-          title="Do you want to approve the booking?"
-          header="If you click confirm button, that user will become a member of your course."
-          leftFunc={handleConfirm}
-          rightFunc={handleCancel}
-          leftMessage="Confirm"
-          rightMessage="Cancel"
-          leftColor="var(--third)"
-          rightColor="cancel-button"
-          isPending={isPending}
-          leftPending="Confirm..."
-          leftPendingColor="var(--lightgray)"
-        />
-      )} */}
-
-      {/* modal approve */}
-      {/* {showModal === 'Approve' && (
-        <ModalTwoButton
-          title="Do you want to approve the booking?"
-          header="If you click confirm button, that user will become a member of your course."
-          leftFunc={handleConfirm}
-          rightFunc={handleCancel}
-          leftMessage="Confirm"
-          rightMessage="Cancel"
-          leftColor="var(--third)"
-          rightColor="cancel-button"
-          isPending={isPending}
-          leftPending="Confirm..."
-          leftPendingColor="var(--lightgray)"
-        />
-      )} */}
-
-      {/* modal approve */}
-      {/* {showModal === 'Approve' && (
-        <ModalTwoButton
-          title="Do you want to approve the booking?"
-          header="If you click confirm button, that user will become a member of your course."
-          leftFunc={handleConfirm}
-          rightFunc={handleCancel}
-          leftMessage="Confirm"
-          rightMessage="Cancel"
-          leftColor="var(--third)"
-          rightColor="cancel-button"
-          isPending={isPending}
-          leftPending="Confirm..."
-          leftPendingColor="var(--lightgray)"
-        />
-      )} */}
     </div>
   )
 }

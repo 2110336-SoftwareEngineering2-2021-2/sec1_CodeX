@@ -32,14 +32,7 @@ const BookingOverlay = (prop) => {
         //   ]
         // }
     ])
-    
-    // useEffect(() => {
-    //     //todo: uncomment statement belown if url is ready
-    //     //fetchData();
-    //     console.log(bookingList)
-    // }, [bookingList]);
 
-    
     useEffect(() => {
         // window.location.reload(false)
     }, []);
@@ -52,17 +45,15 @@ const BookingOverlay = (prop) => {
                 method: 'GET',
                 url: `/booking/student`,
                 params: {
-                // studentId: `${}`,
-                _id: `${_id}`,
-                // _id: `${_id}`,
+                    _id: `${_id}`,
                 },
                 headers: {
-                Accept: 'application/json',
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    Accept: 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
                 },
             })
             .then((data) => {
-                console.log(data.data.message);
+                // console.log(data.data.message);
                 setBookingList(data.data.message);
                 setIsLoading(false)
             })
