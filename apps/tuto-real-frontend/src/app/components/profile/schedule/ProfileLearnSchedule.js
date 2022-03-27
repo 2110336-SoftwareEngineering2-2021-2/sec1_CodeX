@@ -43,6 +43,10 @@ const ProfileLearnSchedule = ({ targetId, viewType }) => {
       params: {
         studentId: targetId,
       },
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
     })
       // .then(({ data: { data } }) => {
       //   console.log(data);

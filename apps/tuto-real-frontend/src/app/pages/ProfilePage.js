@@ -28,6 +28,10 @@ const ProfilePage = () => {
       params: {
         _id: params?._id,
       },
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
     })
       .then(({ data: { data } }) => {
         console.log(data);
@@ -77,12 +81,7 @@ const ProfilePage = () => {
           />
         );
       case 'Review':
-        return (
-          <ProfileReview
-            viewType={viewType}
-            targetId={params?._id}
-          />
-        );
+        return <ProfileReview viewType={viewType} targetId={params?._id} />;
       default:
         return <ProfileInfo />;
     }

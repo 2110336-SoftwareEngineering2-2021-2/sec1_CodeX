@@ -3,7 +3,7 @@ import { UserSchema } from '../user/user.schema';
 
 export const LearnScheduleSchema = new mongoose.Schema({
   startDate: { type: Date, require: true },
-  studentId : { type: String, require: true },
+  studentId: { type: String, require: true },
   days: [
     {
       _id: false,
@@ -11,11 +11,12 @@ export const LearnScheduleSchema = new mongoose.Schema({
       slots: [
         {
           slot: Number,
-          data : 
-          [{
-          slotId : String,
-          _id:false
-          }]
+          data: [
+            {
+              slotId: String,
+              _id: false,
+            },
+          ],
         },
       ],
     },

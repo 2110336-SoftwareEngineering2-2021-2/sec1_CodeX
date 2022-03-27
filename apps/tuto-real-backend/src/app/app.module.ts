@@ -9,6 +9,7 @@ import { UserModule } from './user/user.module';
 import { ScheduleModule } from './schedule/schedule.module';
 import { BookingModule } from './booking-req/booking.module';
 import { ReviewModule } from './review/review.module';
+import { FirebaseAuthStrategy } from './auth/firebase-auth.strategy';
 
 @Module({
   imports: [
@@ -24,6 +25,6 @@ import { ReviewModule } from './review/review.module';
     ReviewModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, FirebaseAuthStrategy],
 })
 export class AppModule {}

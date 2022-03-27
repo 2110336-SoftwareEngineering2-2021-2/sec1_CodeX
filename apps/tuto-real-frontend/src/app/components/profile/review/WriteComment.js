@@ -7,12 +7,12 @@ import { useAuth } from '../../../auth';
 import { client } from '../../../axiosConfig';
 
 const WriteComment = (props) => {
-  let { state, data, targetId } = props;
+  const { state, data, targetId, inReviewId } = props;
 
   const [commentState, setCommentState] = useState(state); //none, new, have, edit
   const [comment, setComment] = useState(state === 'have' ? data.comment : '');
   const [star, setStar] = useState(state === 'have' ? data.rating : 0);
-  const [reviewId, setReviewId] = useState('');
+  const [reviewId, setReviewId] = useState(state === 'have' ? inReviewId : '');
   const [showModal, setShowModal] = useState(false);
   const [isPending, setIsPending] = useState(false);
   const numberOfStar = [1, 2, 3, 4, 5];
@@ -51,6 +51,10 @@ const WriteComment = (props) => {
         tutorID: targetId,
         writerID: myId._id,
       },
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
     })
       .then(({ data: { data } }) => {
         console.log(data);
@@ -71,6 +75,10 @@ const WriteComment = (props) => {
       data: {
         rating: star,
         comment: comment,
+      },
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
       },
     })
       .then(({ data: { data } }) => {

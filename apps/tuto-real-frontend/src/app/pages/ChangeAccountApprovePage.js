@@ -47,6 +47,10 @@ const ChangeAccountApprovePage = () => {
       method: 'PATCH',
       params: { _id: _id },
       data: { status: 'Approved' },
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
     })
       .then(({ data }) => {
         console.log(data);
@@ -71,6 +75,10 @@ const ChangeAccountApprovePage = () => {
       method: 'PATCH',
       params: { _id: _id },
       data: { status: 'Reject' },
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
     })
       .then(({ data }) => {
         console.log(data);

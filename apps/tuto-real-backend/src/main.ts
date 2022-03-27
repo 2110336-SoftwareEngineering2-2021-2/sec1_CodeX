@@ -11,13 +11,13 @@ import { AppModule } from './app/app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
-  const globalPrefix = 'api';
+  const globalPrefix = 'api/v1';
   app.setGlobalPrefix(globalPrefix);
   app.use(json({ limit: '50mb' }));
   app.use(urlencoded({ extended: true, limit: '50mb' }));
   const port = process.env.PORT || 3333;
   const options = new DocumentBuilder()
-     .setTitle('Test Open Api')
+    .setTitle('Test Open Api')
     .setDescription('The Open API description')
     .setVersion('1.0')
     .addTag('Customer')

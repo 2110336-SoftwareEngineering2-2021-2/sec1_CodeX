@@ -4,9 +4,11 @@ import {
   Get,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
   Query,
   UploadedFile,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -14,6 +16,7 @@ import { BookingDto } from './booking.dto';
 import { Booking } from './booking.interface';
 import { BookingService } from './booking.service';
 import { LearnScheduleDto } from '../LearnSchedule/learnSchedule.dto';
+import { FirebaseAuthGuard } from '../auth/firebase-auth.guard';
 
 @Controller('booking')
 export class BookingController {
@@ -26,6 +29,7 @@ export class BookingController {
     }*/
 
   @Post('/create')
+  @UseGuards(FirebaseAuthGuard)
   createBooking(@Body() dto: BookingDto) {
     try {
       return this.service.createBooking(dto);
@@ -35,6 +39,7 @@ export class BookingController {
   }
 
   @Post('/test')
+  @UseGuards(FirebaseAuthGuard)
   updateLearnSchedule(@Body() dto: BookingDto) {
     try {
       return this.service.updateLearnSchedule(dto);
@@ -42,6 +47,7 @@ export class BookingController {
   }
 
   @Get('/tutor')
+  @UseGuards(FirebaseAuthGuard)
   getBookingTutor(@Query() query: any) {
     try {
       return this.service.getBookingTutor(query._id);
@@ -51,9 +57,19 @@ export class BookingController {
   }
 
   @Get('/student')
+  @UseGuards(FirebaseAuthGuard)
   getBookingStudent(@Query() query: any) {
     try {
       return this.service.getBookingStudent(query._id);
+    } catch (error) {
+      return error;
+    }
+  }
+
+  @Patch()
+  updateBooking(@Query() query: any, @Body() dto: BookingDto) {
+    try {
+      return this.service.updateBooking(query._id, dto);
     } catch (error) {
       return error;
     }
