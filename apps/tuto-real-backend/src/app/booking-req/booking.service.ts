@@ -342,16 +342,24 @@ export class BookingService {
       }
       bookingTutor = [...bookingTutor, ...booking];
     }
-    var ordering = {},
-      sortOrder = ['Pending', 'Approved', 'Reject', 'Cancelled'];
-    for (var i = 0; i < sortOrder.length; i++) ordering[sortOrder[i]] = i;
-    bookingTutor.sort(function (a, b) {
+    let booking_pending = [];
+    let booking_other = [];
+    bookingTutor.forEach((element) => {
+      if (element.status == 'Pending') booking_pending.push(element);
+      else booking_other.push(element);
+    });
+    booking_pending.sort(function (a, b) {
       return (
-        ordering[a.status] - ordering[b.status] ||
         Number(a.timeStamp < b.timeStamp) - Number(a.timeStamp > b.timeStamp)
       );
     });
-    return { success: true, data: bookingTutor };
+    booking_other.sort(function (a, b) {
+      return (
+        Number(a.timeStamp < b.timeStamp) - Number(a.timeStamp > b.timeStamp)
+      );
+    });
+    var booking_result = booking_pending.concat(booking_other);
+    return { success: true, data: booking_result };
   }
 
   //Get the student booking
@@ -443,20 +451,25 @@ export class BookingService {
         booking[i].days[j]['subject'] = subjects;
       }
     }
-    var ordering = {},
-      sortOrder = ['Pending', 'Approved', 'Reject', 'Cancelled'];
-    for (var i = 0; i < sortOrder.length; i++) ordering[sortOrder[i]] = i;
-    booking.sort(function (a, b) {
+    let booking_pending = [];
+    let booking_other = [];
+    booking.forEach((element) => {
+      if (element.status == 'Pending') booking_pending.push(element);
+      else booking_other.push(element);
+    });
+    booking_pending.sort(function (a, b) {
       return (
-        ordering[a.status as string] -
-        ordering[
-          (b.status as string) ||
-            Number(a.timeStamp < b.timeStamp) -
-              Number(a.timeStamp > b.timeStamp)
-        ]
+        Number(a.timeStamp < b.timeStamp) - Number(a.timeStamp > b.timeStamp)
       );
     });
-    return { success: true, message: booking };
+    booking_other.sort(function (a, b) {
+      return (
+        Number(a.timeStamp < b.timeStamp) - Number(a.timeStamp > b.timeStamp)
+      );
+    });
+    var booking_result = booking_pending.concat(booking_other);
+
+    return { success: true, message: booking_result };
   }
 
   //Update schedule API
