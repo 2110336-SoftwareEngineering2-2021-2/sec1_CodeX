@@ -1,23 +1,19 @@
 import { useState } from 'react';
-import { client } from '../../../axiosConfig';
+// import { client } from '../../../axiosConfig';
 import COLORS from '../../../constants/color';
 
 const BookingCard = (prop) => {
-  const { bookingId, requestTime, tutorName, totalPrice, days } = prop; //and also with initial booking status(prop.status).
+  const { 
+      setShow,
+      setModalConfig,
+      bookingId, 
+      requestTime, 
+      tutorName, 
+      totalPrice, 
+      days } = prop; //and also with initial booking status(prop.status).
 
   const [status, setStatus] = useState(prop.status);
-  // const genBorderColor = (status) => {
-  //     if (status === "Pending" || status === "Canceled") return "#FBE2C5"
-  //     else if (status === "Accepted") return "#D3EAE5"
-  //     else if (status === "Rejected") return "#FFD6C9"
-  //     else return COLORS.lightgray
-  // }
-  // const genStatusColor = (status) => {
-  //     if (status === "Pending" || status === "Canceled") return "#EF8C18"
-  //     else if (status === "Accepted") return COLORS.third
-  //     else if (status === "Rejected") return "#FF5D29"
-  //     else return COLORS.primary
-  // }
+
   const genConfigStatus = () => {
     switch (status) {
       case 'Pending':
@@ -29,7 +25,7 @@ const BookingCard = (prop) => {
 
       case 'Cancelled':
         return {
-          statusText: 'Cancelled',
+          statusText: 'Canceled',
           statusColor: '#EF8C18',
           borderColor: '#FBE2C5',
         };
@@ -59,31 +55,32 @@ const BookingCard = (prop) => {
     //2001-02-15T17:00:00.000+00:00
     //            to be
     //February 29, 2000 9:30 a.m."
-    var date = parseInt(timeStamp.substr(8, 2));
-    var month = parseInt(timeStamp.substr(5, 2));
-    var year = parseInt(timeStamp.substr(0, 4));
+    let temp = new Date(timeStamp);
+    // console.log(new Date(timeStamp));
+    var date = temp.getDate()
+    var month = temp.getMonth()
+    var year = temp.getFullYear()
     const monthName = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December',
-    ];
-    return (
-      monthName[month - 1] + ' ' + date.toString() + ', ' + year.toString()
-    );
-  };
+        'January', 
+        'February', 
+        'March', 
+        'April', 
+        'May', 
+        'June', 
+        'July', 
+        'August', 
+        'September', 
+        'October', 
+        'November', 
+        'December']
+    return (monthName[month] + " " + date.toString() + ", " + year.toString());
+}
 
   const translateTimeFormat = (timeStamp) => {
-    var hour = timeStamp.substr(11, 2);
-    var min = timeStamp.substr(14, 2);
+    let temp = new Date(timeStamp);
+    // console.log(new Date(timeStamp));
+    var hour = temp.getHours()
+    var min = temp.getMinutes()
     return hour.toString() + ':' + min.toString();
   };
 
@@ -103,8 +100,8 @@ const BookingCard = (prop) => {
 
   const cancelButtonHandle = () => {
     //todo: show modal or something like that for comfirmation
-    prop.setShow(false)
-    prop.setModalConfig({
+    setShow(false)
+    setModalConfig({
       modalType:"Cancel",
       bookingId: bookingId,
       targetName:tutorName
