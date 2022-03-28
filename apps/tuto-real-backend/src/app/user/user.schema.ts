@@ -5,10 +5,9 @@ export const UserSchema = new mongoose.Schema({
   //tutor only
   subjects: { type: [String], default: undefined },
   description: { type: String, default: undefined },
-  totalRating: { type: Number, default: undefined },
-  numReviews: { type: Number, default: undefined },
   studiedWith: { type: [String], default: [] },
-  avgRating: { type: Number, default: undefined },
+  numReviews: { type: Number },
+  avgRating: { type: Number },
   //basic info
   firstName: { type: String, require: true },
   lastName: { type: String, require: true },

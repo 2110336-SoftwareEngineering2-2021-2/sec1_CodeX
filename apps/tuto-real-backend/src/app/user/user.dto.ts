@@ -4,12 +4,13 @@ export class UserDto {
   @ApiProperty()
   readonly subjects: { type: [String]; default: undefined };
   studiedWith: { type: [String]; default: [] };
+  
   @ApiProperty()
   readonly description: { type: [String]; default: undefined };
   readonly schedule: { type: Object; default: undefined };
 
-  totalRating: number;
   numReviews: number;
+  avgRating: number;
   @ApiProperty()
   readonly firstName: String;
 
