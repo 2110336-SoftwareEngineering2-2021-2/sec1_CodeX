@@ -92,7 +92,6 @@ export const sendMail = async (
   topic: String,
   message: String
 ) => {
-
   try {
     const transport = nodemailer.createTransport({
       service: 'gmail',
