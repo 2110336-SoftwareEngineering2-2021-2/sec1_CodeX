@@ -42,5 +42,6 @@ Thumbs.db
 ./apps/tuto-real-backend/src/app/util/key.json
 /key
 .env
+.envv
 ./env
 ./apps/tuto-real-frontend/src/app/firebase.config.json
