@@ -270,4 +270,97 @@ export class TutorReqService {
         });
     }
   }
+
+  async genZoom(){
+    var email = "gemesen421@bepureme.com"
+    var firstName = "Nobi"
+    var lastName = "Nobita"
+    console.log(process.env.API_KEY)
+    const token = jwt.sign(
+      { iss: process.env.API_KEY },
+      process.env.API_SECRET,
+      { expiresIn: "180s" }
+    );
+    const date = new Date().toISOString().slice(0, 11) + '00:00:00Z';
+
+    const user = await axios({
+      method: 'post',
+      url: 'https://api.zoom.us/v2/users',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        'User-Agent': 'Zoom-api-Jwt-Request',
+      },
+      data: {
+        action: 'custCreate',
+        user_info: {
+          email: email,
+          type: 1,
+          first_name: firstName,
+          last_name: lastName,
+        },
+      },
+    }).catch((err) => {
+      throw new ForbiddenException({
+        success: false,
+        data: 'Can not connect Zoom API',
+      });
+    });
+
+    const meeting = await axios({
+      method: 'post',
+      url: `https://api.zoom.us/v2/users/${user.data.id}/meetings`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        'User-Agent': 'Zoom-api-Jwt-Request',
+      },
+      data: {
+        topic: `${firstName} ${lastName}'s meetings`,
+        type: 8,
+        start_time: date,
+        duration: 17 * 60,
+        timezone: 'Asia/Bangkok',
+        recurrence: {
+          type: 1,
+          repeat_interval: 1,
+          end_times: 30,
+        },
+        settings: {
+          waiting_room: true,
+          mute_upon_entry: true,
+        },
+      },
+    }).catch((err) => {
+      throw new ForbiddenException({
+        success: false,
+        data: 'Can not connect Zoom API',
+      });
+    });
+    const zoomID = meeting.data.id;
+    const zoomStartURL = meeting.data.start_url;
+    const zoomJoinURL = meeting.data.join_url;
+    return await this.userModel
+        .findOneAndUpdate(
+          { email },
+          {
+            zoomID,
+            zoomStartURL,
+            zoomJoinURL,
+            role: 'Tutor',
+          },
+          { new: true }
+        )
+        .exec()
+        .then((res) => {
+          return { success: true, data: res };
+        })
+        .catch((err) => {
+          throw new NotFoundException({
+            success: false,
+            data: 'User not found',
+          });
+        });
+    }
+  
 }

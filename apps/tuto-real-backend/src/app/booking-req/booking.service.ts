@@ -9,7 +9,7 @@ import { datapipelines } from 'googleapis/build/src/apis/datapipelines';
 import { Model, Types } from 'mongoose';
 import { Schedule } from '../schedule/schedule.interface';
 import { User } from '../user/user.interface';
-import { uploadImage } from '../util/google';
+import { sendMail, uploadImage } from '../util/google';
 import { BookingDto } from './booking.dto';
 import { LearnSchedule } from '../LearnSchedule/learnSchedule.interface';
 import { LearnScheduleDto, Slot } from '../LearnSchedule/learnSchedule.dto';
@@ -523,6 +523,18 @@ export class BookingService {
           });
       }
     } else if (dto.status == 'Approved') {
+      const tutor = await this.userModel.findOne({
+        schedule_id: { $in: booking.schedule_id },
+      });
+      await this.userModel.findById(dto.student_id).then((user) => {
+        sendMail(
+          user.email,
+          'Your booking is approved',
+          `Your zoom link is ${tutor.zoomJoinURL}`
+        );
+
+      })
+      
       const new_booking = await this.bookingModel.findByIdAndUpdate(
         { _id: mongoose.Types.ObjectId(id) },
         { status: dto.status },
