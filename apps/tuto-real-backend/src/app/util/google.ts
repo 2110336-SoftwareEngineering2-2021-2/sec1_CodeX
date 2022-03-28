@@ -7,6 +7,7 @@ const mailKey = require('./config').mailKey;
 const BUCKETNAME = 'vimsbin';
 const nodemailer = require('nodemailer');
 const bucket = gc.bucket('codex_img');
+require('dotenv').config()
 
 class GoogleStorage {
   storage: Storage;
