@@ -98,7 +98,7 @@ export class TutorService {
             lastName: 1,
             profileImg: 1,
             subjects: 1,
-            rating: { $divide: ['$totalRating', '$numReviews'] },
+            rating: '$avgRating',
           },
         },
         { $unset: 'schedules' },

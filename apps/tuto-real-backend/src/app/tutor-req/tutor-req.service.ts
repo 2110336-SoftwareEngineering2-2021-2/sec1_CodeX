@@ -7,7 +7,11 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from '../user/user.interface';
-import { deleteImg, uploadImage, uploadImageBy64 } from '../util/google';
+import {
+  deleteImg,
+  uploadImage,
+  uploadImageBy64,
+} from '../util/google';
 import { TutorReqDto } from './tutor-req.dto';
 import { TutorReq } from './tutor-req.interface';
 import { updateStatusDto } from './updateStatus.dto';
@@ -255,6 +259,8 @@ export class TutorReqService {
             zoomStartURL,
             zoomJoinURL,
             role: 'Tutor',
+            numReviews: 0,
+            avgRating: 0,
           },
           { new: true }
         )
