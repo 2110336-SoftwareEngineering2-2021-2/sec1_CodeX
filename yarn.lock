@@ -7733,7 +7733,7 @@
     "ecdsa-sig-formatter" "1.0.11"
     "safe-buffer" "^5.0.1"
 
-"jwks-rsa@^2.0.2":
+"jwks-rsa@^2.0.2", "jwks-rsa@^2.0.5":
   "integrity" "sha512-fliHfsiBRzEU0nXzSvwnh0hynzGB0WihF+CinKbSRlaqRxbqqKf2xbBPgwc8mzf18/WgwlG8e5eTpfSTBcU4DQ=="
   "resolved" "https://registry.npmjs.org/jwks-rsa/-/jwks-rsa-2.0.5.tgz"
   "version" "2.0.5"

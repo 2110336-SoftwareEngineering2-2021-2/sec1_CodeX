@@ -85,11 +85,13 @@ export const deleteImg = async (fileName: String, type: String) => {
   return await gc.bucket(bucket.name).file(`${type}/${fileName}`).delete();
 };
 
+
 export const sendMail = async (
   email: String,
   topic: String,
   message: String
 ) => {
+
   try {
     const transport = nodemailer.createTransport({
       service: 'gmail',
@@ -107,6 +109,7 @@ export const sendMail = async (
     };
 
     const result = await transport.sendMail(mailOptions);
+    console.log(result)
     return result;
   } catch (error) {
     return error;

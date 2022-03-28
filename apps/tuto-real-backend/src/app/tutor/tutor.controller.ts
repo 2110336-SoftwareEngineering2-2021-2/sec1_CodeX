@@ -60,4 +60,10 @@ export class TutorController {
       return err;
     }
   }
+
+  @Post()
+  send(){
+    return  sendMail("mchutipon@gmail.com","Test","xxxxxxxx")
+  }
+
 }
