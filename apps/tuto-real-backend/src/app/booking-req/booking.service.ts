@@ -108,7 +108,7 @@ export class BookingService {
   }
 
   private getBySlot(slots: any, target: Number) {
-    console.log('GeyBySlot', slots, target);
+    // console.log('GeyBySlot', slots, target);
     for (let i = 0; i < slots.length; i++) {
       if (slots[i].slot == target) {
         return { data: slots[i]._id, idx: i };
@@ -175,8 +175,8 @@ export class BookingService {
         tmpDays.push({ day: day_, slots: [] });
         let slots = booking.days[i].slots;
         let thatDay = this.getByDay(schedule.days, day_).slot;
-        console.log('thatDay', thatDay);
-        console.log('slots', slots);
+        // console.log('thatDay', thatDay);
+        // console.log('slots', slots);
         //for each slot in that day
         for (var idx of slots) {
           var slotId = this.getBySlot(thatDay, idx);
@@ -187,7 +187,7 @@ export class BookingService {
           tmp.slot = idx;
           //has only one subject for sure in this booking
           tmp.data = [{ slotId: slotId.data }];
-          console.log(tmp);
+          // console.log(tmp);
 
           //append in slots of that day
           tmpDays[i].slots.push(tmp);
@@ -244,24 +244,24 @@ export class BookingService {
             tmp1.slot = idx;
             tmp1.data = [{ slotId: slotId.data }];
             let oldSlot = this.getBySlot(oldDay, idx);
-            console.log('tmp', idx, tmp1, oldSlot, day_);
+            // console.log('tmp', idx, tmp1, oldSlot, day_);
             if (oldSlot == null) {
               //create new slot , use tmp1 as list
               oldData.days[id].slots.push(tmp1);
-              console.log('new slot', oldData.days[i].slots[0]);
+              // console.log('new slot', oldData.days[i].slots[0]);
             } else {
               //update that oldSlot , use one data in tmp1
               oldData.days[id].slots[oldSlot.idx].data.push(tmp1.data[0]);
-              console.log(
-                'update slot',
-                tmp1.data,
-                oldData.days[id].slots[oldSlot.idx].data
-              );
+              // console.log(
+              //   'update slot',
+              //   tmp1.data,
+              //   oldData.days[id].slots[oldSlot.idx].data
+              // );
             }
           }
         }
       }
-      console.log(result);
+      // console.log(result);
       var ret = await this.learnScheduleModel
         .replaceOne({ _id: result._id }, result)
         .then((res) => {
@@ -270,7 +270,7 @@ export class BookingService {
         .catch((err) => {
           throw new BadRequestException({ success: false, data: err });
         });
-      console.log('result', result);
+      // console.log('result', result);
       return { success: true, data: ret };
     }
   }
@@ -478,7 +478,7 @@ export class BookingService {
     const booking = await this.bookingModel.findById(
       mongoose.Types.ObjectId(id)
     );
-    console.log(booking);
+
     if (!booking)
       throw new NotFoundException({
         success: false,
@@ -538,12 +538,13 @@ export class BookingService {
       const tutor = await this.userModel.findOne({
         schedule_id: { $in: booking.schedule_id },
       });
+      console.log(booking, tutor);
 
       await this.userModel.findById(new_booking.student_id).then((user) => {
         sendMail(
           user.email,
-          'Your booking is approved',
-          `Your zoom link is ${tutor.zoomJoinURL}`
+          'Your booking has been approved.',
+          `<p>You can join ${tutor.firstName}'s room with zoom ID: ${tutor.zoomID} or click <a href=${tutor.zoomJoinURL}>here</a></p>`
         );
       });
 
