@@ -7,7 +7,7 @@ const mailKey = require('./config').mailKey;
 const BUCKETNAME = 'vimsbin';
 const nodemailer = require('nodemailer');
 const bucket = gc.bucket('codex_img');
-require('dotenv').config()
+require('dotenv').config();
 
 class GoogleStorage {
   storage: Storage;
@@ -86,11 +86,10 @@ export const deleteImg = async (fileName: String, type: String) => {
   return await gc.bucket(bucket.name).file(`${type}/${fileName}`).delete();
 };
 
-
 export const sendMail = async (
   email: String,
   topic: String,
-  message: String
+  code: String
 ) => {
   try {
     const transport = nodemailer.createTransport({
@@ -105,11 +104,10 @@ export const sendMail = async (
       from: 'CodeX <thisisfinebackend@gmail.com>',
       to: email,
       subject: topic,
-      text: message,
+      html: code,
     };
 
     const result = await transport.sendMail(mailOptions);
-    console.log(result)
     return result;
   } catch (error) {
     return error;
