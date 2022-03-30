@@ -13,7 +13,7 @@ import '../profile.css';
 
 import COLORS from '../../../constants/color';
 
-const ProfileLearnSchedule = ({ targetId, viewType }) => {
+const ProfileLearnSchedule = ({ targetId, viewType, redirectToTutor }) => {
   const [isLoading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState('none'); // "none" | "edit" | "info" | "delete" | "book" //
   const [refresh, setRefresh] = useState(false); // Set to true when you want to refresh page //
@@ -224,6 +224,7 @@ const ProfileLearnSchedule = ({ targetId, viewType }) => {
           day={modalDay}
           info={info}
           fromLearnSchedule={true}
+          redirectToTutor={redirectToTutor}
         />
       )}
     </>

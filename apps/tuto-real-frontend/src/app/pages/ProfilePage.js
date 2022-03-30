@@ -21,6 +21,11 @@ const ProfilePage = () => {
   const params = useParams();
   const navigate = useNavigate();
 
+  const redirectToTutor = (id) => {
+    setSelecting('Info');
+    navigate(`/profile/${id}`);
+  };
+
   const fetchData = useCallback(async () => {
     await client({
       method: 'GET',
@@ -68,7 +73,11 @@ const ProfilePage = () => {
         return <ProfileInfo viewType={viewType} targetId={params?._id} />;
       case 'Learn':
         return (
-          <ProfileLearnSchedule viewType={viewType} targetId={params?._id} />
+          <ProfileLearnSchedule
+            viewType={viewType}
+            targetId={params?._id}
+            redirectToTutor={redirectToTutor}
+          />
         );
       case 'Teach':
         return (
@@ -93,6 +102,7 @@ const ProfilePage = () => {
         viewType={viewType}
         setSelecting={setSelecting}
         selecting={selecting}
+        onResetMenu={() => setSelecting('Info')}
       />
       {viewType !== 'StudentOther' ? renderContent() : null}
     </>
