@@ -523,18 +523,6 @@ export class BookingService {
           });
       }
     } else if (dto.status == 'Approved') {
-      const tutor = await this.userModel.findOne({
-        schedule_id: { $in: booking.schedule_id },
-      });
-      await this.userModel.findById(dto.student_id).then((user) => {
-        sendMail(
-          user.email,
-          'Your booking is approved',
-          `Your zoom link is ${tutor.zoomJoinURL}`
-        );
-
-      })
-      
       const new_booking = await this.bookingModel.findByIdAndUpdate(
         { _id: mongoose.Types.ObjectId(id) },
         { status: dto.status },
@@ -546,6 +534,18 @@ export class BookingService {
           success: false,
           data: 'Fail to update',
         });
+
+      const tutor = await this.userModel.findOne({
+        schedule_id: { $in: booking.schedule_id },
+      });
+
+      await this.userModel.findById(new_booking.student_id).then((user) => {
+        sendMail(
+          user.email,
+          'Your booking is approved',
+          `Your zoom link is ${tutor.zoomJoinURL}`
+        );
+      });
 
       //update schedule from pending to Approved
       for (var i = 0; i < booking.days.length; i++) {

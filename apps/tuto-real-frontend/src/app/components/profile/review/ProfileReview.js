@@ -24,17 +24,25 @@ const ProfileReview = (props) => {
   };
 
   const getReview = async () => {
+    const tempParams = 
+    (myId._id ? 
+      {
+        _id: targetId,
+        sid: myId._id
+      }
+      :
+      {
+        _id: targetId,
+      }
+    )
     await client({
       method: 'GET',
       url: `/reviews`,
-      params: {
-        _id: targetId,
-        sid: myId._id,
-      },
-      headers: {
-        Accept: 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
+      params: tempParams,
+      // headers: {
+      //   Accept: 'application/json',
+      //   Authorization: `Bearer ${localStorage.getItem('token')}`,
+      // },
     })
       .then(({ data: { data } }) => {
         console.log(data);
