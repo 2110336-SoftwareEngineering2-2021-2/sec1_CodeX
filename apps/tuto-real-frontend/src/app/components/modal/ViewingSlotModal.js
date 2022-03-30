@@ -4,14 +4,22 @@ import {
   IoIosArrowDropleftCircle,
   IoIosArrowDroprightCircle,
 } from 'react-icons/io';
+import { RiShareForwardFill } from 'react-icons/ri';
 import './ViewingSlotModal.css';
 
 import { DESK } from '../../constants/image';
 import COLORS from '../../constants/color';
 
 const ViewingSlotModal = (props) => {
-  const { cancelFunc, day, info, firstName, lastName, fromLearnSchedule } =
-    props;
+  const {
+    cancelFunc,
+    day,
+    info,
+    firstName,
+    lastName,
+    fromLearnSchedule,
+    redirectToTutor,
+  } = props;
 
   const [tabValue, setTabValue] = useState('Information');
   const [newInfo, setNewInfo] = useState([]);
@@ -58,6 +66,11 @@ const ViewingSlotModal = (props) => {
     if (infoIdx > 0) setInfoIdx(infoIdx - 1);
   };
 
+  const onGoToTutor = () => {
+    cancelFunc();
+    redirectToTutor(info[infoIdx]?.tutorId);
+  };
+
   // render section //
   const renderHeader = () => {
     return (
@@ -100,7 +113,13 @@ const ViewingSlotModal = (props) => {
                 className="request-header"
                 style={{ fontWeight: '500', fontSize: '16px' }}
               >
-                {`${showFirstName} ${showLastName}`}
+                {`${showFirstName} ${showLastName} `}
+                <RiShareForwardFill
+                  size={20}
+                  color={COLORS.third}
+                  style={{ cursor: 'pointer' }}
+                  onClick={onGoToTutor}
+                />
               </Modal.Title>
             </div>
 
@@ -126,7 +145,13 @@ const ViewingSlotModal = (props) => {
               className="request-header"
               style={{ fontWeight: '500', fontSize: '16px' }}
             >
-              {`${showFirstName} ${showLastName}`}
+              {`${showFirstName} ${showLastName} `}
+              <RiShareForwardFill
+                size={20}
+                color={COLORS.third}
+                style={{ cursor: 'pointer' }}
+                onClick={onGoToTutor}
+              />
             </Modal.Title>
           </div>
         )}

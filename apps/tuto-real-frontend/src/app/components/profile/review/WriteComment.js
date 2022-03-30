@@ -7,7 +7,7 @@ import { useAuth } from '../../../auth';
 import { client } from '../../../axiosConfig';
 
 const WriteComment = (props) => {
-  const { state, data, targetId, inReviewId } = props;
+  const { state, data, targetId, inReviewId, setReset } = props;
 
   const [commentState, setCommentState] = useState(state); //none, new, have, edit
   const [comment, setComment] = useState(state === 'have' ? data.comment : '');
@@ -59,6 +59,7 @@ const WriteComment = (props) => {
       .then(({ data: { data } }) => {
         console.log(data);
         setReviewId(data._id);
+        setReset(true);
       })
       .catch((res) => {
         console.log(res);
@@ -83,6 +84,7 @@ const WriteComment = (props) => {
     })
       .then(({ data: { data } }) => {
         console.log(data);
+        setReset(true);
       })
       .catch((res) => {
         console.log(res);
@@ -286,7 +288,7 @@ const WriteComment = (props) => {
               justifyContent: 'flex-end',
             }}
           >
-            <Button
+            {/* <Button
               onClick={() => {
                 setShowModal(!showModal);
               }}
@@ -299,7 +301,7 @@ const WriteComment = (props) => {
               }}
             >
               Delete Comment
-            </Button>
+            </Button> */}
             <Button
               onClick={() => {
                 updateReview();
