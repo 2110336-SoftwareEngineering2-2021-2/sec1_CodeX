@@ -21,6 +21,7 @@ import {
 } from '@nestjs/swagger';
 import { UpdateSlotWithDeleteDto } from './updateSlotWithDelete.dto';
 import { FirebaseAuthGuard } from '../auth/firebase-auth.guard';
+import { LearnScheduleDto } from '../LearnSchedule/learnSchedule.dto';
 
 @ApiTags('Schedule')
 @Controller('schedule')
@@ -81,6 +82,11 @@ export class ScheduleController {
   }
 
   @Get('/learn')
+  @ApiOperation({ summary: "Get user's learnSchedule" })
+  @ApiResponse({
+    status: 200,
+    type: [LearnScheduleDto],
+  })
   @UseGuards(FirebaseAuthGuard)
   getLearnSchedules(@Query('studentId') studentId: string) {
     try {
