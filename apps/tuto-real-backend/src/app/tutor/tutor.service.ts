@@ -1,10 +1,8 @@
-import { HttpException, Injectable, BadRequestException } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { UserDto } from '../user/user.dto';
 import { User } from '../user/user.interface';
-import { sendMail } from '../util/google';
-import { CriteriaDto } from './cirteria.dto';
+import { CriteriaDto } from './criteria.dto';
 import { Schedule } from '../schedule/schedule.interface';
 
 @Injectable()
@@ -113,19 +111,4 @@ export class TutorService {
         throw new BadRequestException({ success: false, data: err.message });
       });
   }
-
-  // async send(){
-  //   return await sendMail()
-  //   .then((result) => console.log('Email sent...', result))
-  //   .catch((error) => console.log(error.message));
-  // }
-  /*GetProfileByID(id : String)  {
-
-        return this.tutorModel.find({uid:id}).exec()
-  
-    }*/
-
-  /*UploadImage(dto : UserDto){
-        return this.tutorModel.create(dto);
-    }*/
 }
