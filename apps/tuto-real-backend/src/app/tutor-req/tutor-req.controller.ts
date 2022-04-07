@@ -2,33 +2,20 @@ import {
   Body,
   Controller,
   Get,
-  Param,
   Patch,
   Post,
   Query,
-  UploadedFile,
-  UploadedFiles,
   UseGuards,
-  UseInterceptors,
 } from '@nestjs/common';
-import {
-  FileFieldsInterceptor,
-  FileInterceptor,
-  FilesInterceptor,
-} from '@nestjs/platform-express';
-import { uploadImage } from '../util/google';
-//import { ExpressAdapter, FileInterceptor  } from '@nestjs/platform-express';
-import { CreateTutorReq, ShowTutorReq, TutorReqDto } from './tutor-req.dto';
+import { TutorReqDto } from './tutor-req.dto';
 import { TutorReqService } from './tutor-req.service';
 import { updateStatusDto } from './updateStatus.dto';
 import {
   ApiTags,
-  ApiBearerAuth,
   ApiResponse,
   ApiOperation,
   ApiBody,
-  OmitType,
-  PickType,
+  ApiQuery,
 } from '@nestjs/swagger';
 import { FirebaseAuthGuard } from '../auth/firebase-auth.guard';
 
@@ -37,26 +24,28 @@ import { FirebaseAuthGuard } from '../auth/firebase-auth.guard';
 export class TutorReqController {
   constructor(private readonly service: TutorReqService) {}
 
-  @Post('create')
+  @Get()
   @UseGuards(FirebaseAuthGuard)
-  @ApiOperation({ summary: 'Create request' })
-  @ApiBody({ type: CreateTutorReq })
-  @ApiResponse({ status: 201 })
-  create1(@Body() dto: TutorReqDto) {
+  @ApiOperation({ summary: 'Get all requests' })
+  @ApiResponse({ status: 200, description: 'Get all requests successfully' })
+  getRequests() {
     try {
-      return this.service.create1(dto);
+      return this.service.getRequests();
     } catch (err) {
       return err;
     }
   }
 
-  @Get()
+  @Post('create')
   @UseGuards(FirebaseAuthGuard)
-  @ApiOperation({ summary: 'Get all request' })
-  @ApiResponse({ status: 201, type: ShowTutorReq })
-  findAll() {
+  @ApiOperation({ summary: 'Create request' })
+  @ApiBody({ type: TutorReqDto })
+  @ApiResponse({ status: 201, description: 'Create request succesfully' })
+  @ApiResponse({ status: 400, description: 'Create request not succes' })
+  @ApiResponse({ status: 404, description: 'User not found' })
+  createRequest(@Body() dto: TutorReqDto) {
     try {
-      return this.service.findAll();
+      return this.service.createRequest(dto);
     } catch (err) {
       return err;
     }
@@ -64,17 +53,17 @@ export class TutorReqController {
 
   @Patch()
   @UseGuards(FirebaseAuthGuard)
-  update(@Query('_id') id: string, @Body() dto: updateStatusDto) {
+  @ApiOperation({ summary: 'Update request status' })
+  @ApiQuery({ name: '_id', required: true })
+  @ApiBody({ type: updateStatusDto })
+  @ApiResponse({ status: 201, description: 'Update request succesfully' })
+  @ApiResponse({ status: 403, description: 'Can not connect Zoom API' })
+  @ApiResponse({ status: 404, description: 'User not found' })
+  updateStatus(@Query('_id') id: string, @Body() dto: updateStatusDto) {
     try {
       return this.service.updateStatus(id, dto);
     } catch (err) {
       return err;
     }
-  }
-
-  
-  @Post()
-  genZoom(){
-    this.service.genZoom();
   }
 }

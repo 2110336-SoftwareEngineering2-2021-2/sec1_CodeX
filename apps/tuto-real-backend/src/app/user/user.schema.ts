@@ -28,6 +28,8 @@ export const UserSchema = new mongoose.Schema({
   },
   pricePerSlot: { type: Number, default: 0 },
   schedule_id: [String],
+  isBan: { type: Boolean, default: false },
+  unBanDate: { type: Date, default: null },
 });
 
 UserSchema.path('email').index({ unique: true });
