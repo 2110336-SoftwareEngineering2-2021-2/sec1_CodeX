@@ -5,10 +5,9 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { deleteImg, uploadImage, uploadImageBy64 } from '../util/google';
+import { deleteImg, uploadImageBy64 } from '../util/google';
 import { updateUserDto } from './updateUser.dto';
-import { UserDto } from './user.dto';
-import * as dotenv from 'dotenv';
+import { NewUserDto } from './user.dto';
 import { User } from './user.interface';
 const mongoose = require('mongoose');
 
@@ -18,6 +17,7 @@ export class UserService {
 
   public async getProfile(id: String, email: String): Promise<any> {
     let profile;
+    
     if (id) {
       profile = await this.userModel
         .findOne({ _id: mongoose.Types.ObjectId(id) })
@@ -32,7 +32,7 @@ export class UserService {
     return { success: true, data: profile };
   }
 
-  public async createProfile(dto: UserDto): Promise<any> {
+  public async createProfile(dto: NewUserDto): Promise<any> {
     const profile = await this.userModel.create(dto);
 
     if (!profile)
@@ -63,23 +63,11 @@ export class UserService {
         await deleteImg(url.split('Profile/')[1], 'Profile');
       }
       url = await uploadImageBy64('Profile', dto.profile64);
+      dto.profileImg = { url };
     }
 
     const user = await this.userModel
-      .findByIdAndUpdate(
-        id,
-        {
-          subjects: dto.subjects,
-          description: dto.description,
-          firstName: dto.firstName,
-          lastName: dto.lastName,
-          address: dto.address,
-          birthDate: dto.birthDate,
-          profileImg: { url },
-          pricePerSlot,
-        },
-        { new: true }
-      )
+      .findByIdAndUpdate(id, dto, { new: true })
       .exec();
 
     if (!user)

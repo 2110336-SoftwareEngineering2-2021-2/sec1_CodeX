@@ -2,19 +2,15 @@ import {
   BadRequestException,
   Injectable,
   NotFoundException,
-  ServiceUnavailableException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { datapipelines } from 'googleapis/build/src/apis/datapipelines';
-import { Model, Types } from 'mongoose';
+import { Model } from 'mongoose';
 import { Schedule } from '../schedule/schedule.interface';
 import { User } from '../user/user.interface';
-import { sendMail, uploadImage } from '../util/google';
+import { sendMail } from '../util/google';
 import { BookingDto } from './booking.dto';
 import { LearnSchedule } from '../LearnSchedule/learnSchedule.interface';
-import { LearnScheduleDto, Slot } from '../LearnSchedule/learnSchedule.dto';
-import { domainToASCII } from 'url';
-import { UserDto } from '../user/user.dto';
+import { LearnScheduleDto } from '../LearnSchedule/learnSchedule.dto';
 import { Document } from 'mongoose';
 
 export interface Booking extends Document {

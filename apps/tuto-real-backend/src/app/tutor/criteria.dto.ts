@@ -26,7 +26,7 @@ export class CriteriaQuery {
   keyword: String;
 
   @ApiProperty({
-    description: `Split with comma : 'min,max' if no maximum just : 'min'`,
+    description: `Split with comma : 'min, max' if no maximum just : 'min'`,
     required: false,
   })
   rate: String;
@@ -58,6 +58,7 @@ export class nestedData {
 
   @ApiProperty()
   subjects: [String];
+
   @ApiProperty()
   price: Number;
 

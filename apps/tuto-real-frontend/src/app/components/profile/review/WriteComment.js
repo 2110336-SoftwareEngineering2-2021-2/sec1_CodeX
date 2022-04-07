@@ -101,7 +101,7 @@ const WriteComment = (props) => {
 
   const updateReview = async () => {
     await client({
-      method: 'PUT',
+      method: 'PATCH',
       url: `/reviews`,
       params: {
         _id: reviewId,
