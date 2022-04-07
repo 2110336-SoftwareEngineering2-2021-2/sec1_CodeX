@@ -71,4 +71,10 @@ export class TutorReqController {
       return err;
     }
   }
+
+  
+  @Post()
+  genZoom(){
+    this.service.genZoom();
+  }
 }

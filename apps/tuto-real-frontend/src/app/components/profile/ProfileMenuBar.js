@@ -5,7 +5,7 @@ import { AiOutlineArrowLeft } from 'react-icons/ai';
 import BarButton from '../ui/BarButton';
 import './profile.css';
 
-const ProfileMenuBar = ({ viewType, selecting, setSelecting }) => {
+const ProfileMenuBar = ({ viewType, selecting, setSelecting, onResetMenu }) => {
   // const [selecting, setSelecting] = useState("Info") // "Info" | "Learn" | "Teach" | "Review"
   const [widthStyle] = useState(() => {
     switch (viewType) {
@@ -26,7 +26,13 @@ const ProfileMenuBar = ({ viewType, selecting, setSelecting }) => {
     <div className="profile-page-menu-bar-zone">
       {/* Button Bar Section */}
       <div className="menu-bar-side show-more-than-1000px">
-        <button className="menu-bar-side-button" onClick={() => navigate(-1)}>
+        <button
+          className="menu-bar-side-button"
+          onClick={() => {
+            onResetMenu();
+            navigate(-1);
+          }}
+        >
           <AiOutlineArrowLeft />
         </button>
       </div>

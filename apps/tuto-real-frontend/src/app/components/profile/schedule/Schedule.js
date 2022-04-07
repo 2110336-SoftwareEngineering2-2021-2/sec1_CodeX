@@ -56,9 +56,12 @@ const Schedule = ({
       .find((schedule) => schedule.day === day)
       ?.slots.find((slot) => slot.slot === slotNum);
     // return List of data in a slot //
-    if (slotData.data) return slotData.data;
-    // else return [slotData];
-    else return [slotData, slotData];
+    if (slotData.data)
+      return slotData.data.map((dataInSlot) => ({
+        ...dataInSlot,
+        slot: slotData.slot,
+      }));
+    else return [slotData];
   };
 
   const renderHeader = (
