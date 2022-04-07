@@ -17,10 +17,9 @@ async function bootstrap() {
   app.use(urlencoded({ extended: true, limit: '50mb' }));
   const port = process.env.PORT || 3333;
   const options = new DocumentBuilder()
-    .setTitle('Test Open Api')
+    .setTitle('CodeX API')
     .setDescription('The Open API description')
     .setVersion('1.0')
-    .addTag('Customer')
     .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, options);

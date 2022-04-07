@@ -30,6 +30,8 @@ export class UserController {
   @ApiOperation({ summary: 'Get user profile' })
   @ApiQuery({ name: '_id', required: false })
   @ApiQuery({ name: 'email', required: false })
+  @ApiResponse({ status: 200, description: 'Get user profile succesfully' })
+  @ApiResponse({ status: 404, description: 'User not found' })
   getProfile(@Query('_id') id: string, @Query('email') email: string) {
     try {
       return this.service.getProfile(id, email);
@@ -41,6 +43,8 @@ export class UserController {
   @Post('create')
   @ApiOperation({ summary: 'Create new user' })
   @ApiBody({ type: NewUserDto })
+  @ApiResponse({ status: 201, description: 'Create user profile succesfully' })
+  @ApiResponse({ status: 400, description: 'Create user profile not success' })
   createProfile(@Body() dto: NewUserDto) {
     try {
       return this.service.createProfile(dto);
@@ -51,8 +55,12 @@ export class UserController {
 
   @Patch()
   @UseGuards(FirebaseAuthGuard)
-  @ApiQuery({ name: '_id' })
+  @ApiOperation({ summary: 'Update user profile' })
+  @ApiQuery({ name: '_id', required: true })
   @ApiBody({ type: updateUserDto })
+  @ApiResponse({ status: 200, description: 'Update user profile succesfully' })
+  @ApiResponse({ status: 400, description: 'Create user profile not success' })
+  @ApiResponse({ status: 404, description: 'User not found' })
   updateProfile(@Query('_id') id: string, @Body() dto: updateUserDto) {
     try {
       return this.service.updateProfile(id, dto);
