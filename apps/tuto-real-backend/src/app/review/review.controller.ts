@@ -7,13 +7,13 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FirebaseAuthGuard } from '../auth/firebase-auth.guard';
-import { createReviewDto } from './createReview.dto';
+import { createReviewDto, getReviewsDto, getReviewQuery } from './createReview.dto';
 import { ReviewService } from './review.service';
 import { updateReviewDto } from './updateReview.dto';
 
-@ApiTags('Reviews')
+@ApiTags('Review')
 @Controller('reviews')
 export class ReviewController {
   constructor(private readonly service: ReviewService) {}
@@ -51,15 +51,18 @@ export class ReviewController {
     }
   }
 
+  
+
   @Get()
-  //@UseGuards(FirebaseAuthGuard)
+  @ApiOperation({ summary: "Get tutor's review" })
+  @ApiResponse({
+    status: 200,
+    type: getReviewsDto,
+  })
   getReviews(
-    @Query('_id') id: string,
-    @Query('sortBy') sortBy: string,
-    @Query('sid') sid: string
-  ) {
+    @Query() q : getReviewQuery) {
     try {
-      return this.service.getReviews(id, sortBy, sid);
+      return this.service.getReviews(q._id, q.sortBy, q.sid);
     } catch (err) {
       return err;
     }

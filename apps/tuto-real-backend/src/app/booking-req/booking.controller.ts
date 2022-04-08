@@ -38,14 +38,15 @@ export class BookingController {
     }
   }
 
-  @Post('/test')
+  /*@Post('/test')
   //@UseGuards(FirebaseAuthGuard)
   updateLearnSchedule(@Body() dto: BookingDto) {
     try {
       return this.service.updateLearnSchedule(dto);
     } catch (err) {}
   }
-
+  */
+ 
   @Get('/tutor')
   @UseGuards(FirebaseAuthGuard)
   getBookingTutor(@Query() query: any) {

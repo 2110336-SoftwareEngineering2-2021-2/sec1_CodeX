@@ -84,6 +84,7 @@ export class ReviewService {
 
   public async getReviews(tutorId: string, sortBy: string, sid: string) {
     var id;
+    console.log(tutorId,sortBy,sid)
     if (sortBy == undefined) {
       sortBy = 'createdAt';
     } else if (!['lastUpdated', 'rating', 'createdAt'].includes(sortBy)) {
