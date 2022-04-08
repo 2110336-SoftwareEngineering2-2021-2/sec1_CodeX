@@ -1,7 +1,7 @@
 import { HttpException, Injectable, BadRequestException, InternalServerErrorException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { UserDto } from '../user/user.dto';
+import { NewUserDto } from '../user/user.dto';
 import { User } from '../user/user.interface';
 import { sendMail } from '../util/google';
 import {Report} from './report.interface'
