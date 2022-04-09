@@ -11,7 +11,7 @@ import { Model } from 'mongoose';
 import { LearnScheduleDto } from '../LearnSchedule/learnSchedule.dto';
 import { LearnSchedule } from '../LearnSchedule/learnSchedule.interface';
 import { User } from '../user/user.interface';
-import { ScheduleDto } from './schedule.dto';
+import { Days_Schedule, ScheduleDto } from './schedule.dto';
 import { Schedule } from './schedule.interface';
 import { UpdateScheduleDto } from './updateSchedule.dto';
 import { UpdateSlotWithDeleteDto } from './updateSlotWithDelete.dto';
@@ -25,13 +25,13 @@ const getFinalDate = (startDate: Date): Date => {
   return dateNoTimeZone;
 };
 
-function nextweek(today,flag) {
+function nextweek(today, flag) {
   today.setHours(7, 0, 0);
   console.log(today.getDate());
   var next = new Date(
     today.getFullYear(),
     today.getUTCMonth(),
-    today.getUTCDate() + 7*flag
+    today.getUTCDate() + 7 * flag
   );
   return next;
 }
@@ -59,9 +59,7 @@ export class ScheduleService {
 
   public async getSchedule(id: string): Promise<any> {
     if (id) {
-      const user: User = await this.userModel
-        .findOne({ _id: mongoose.Types.ObjectId(id) })
-        .exec();
+      const user: User = await this.userModel.findOne({ _id: id }).exec();
       if (!user)
         throw new NotFoundException({ success: false, data: 'User not found' });
       const scheduleIdList: String[] = user.schedule_id;
@@ -382,12 +380,12 @@ export class ScheduleService {
     if (maxDate.length == 0) more -= 1;
     else i = 1;
     for (i; i <= more; i++) {
-      if (i==0)  {
-        latestDate = nextweek(latestDate,-1);
+      if (i == 0) {
+        latestDate = nextweek(latestDate, -1);
       }
-      latestDate = nextweek(latestDate,1);
+      latestDate = nextweek(latestDate, 1);
       console.log('add', latestDate);
-      latestDate.setHours(7,0,0)
+      latestDate.setHours(7, 0, 0);
       var add = new LearnScheduleDto();
       add.studentId = studentId;
       add.startDate = latestDate;
@@ -423,8 +421,8 @@ export class ScheduleService {
         for (var slot of day.slots) {
           console.log('slot', slot);
 
-          var j = slot.data.length
-          while(j--){
+          var j = slot.data.length;
+          while (j--) {
             console.log(slot.data[j].slotId);
             var re = await this.scheduleModel
               .findOne(
@@ -437,11 +435,10 @@ export class ScheduleService {
                   data: 'referenced slot not found',
                 });
               });
-            if (re==null) {
-              slot.data.splice(j,1)
-              continue
+            if (re == null) {
+              slot.data.splice(j, 1);
+              continue;
             }
-
 
             var tutorInfo = await this.userModel
               .findOne({ schedule_id: re._id })
