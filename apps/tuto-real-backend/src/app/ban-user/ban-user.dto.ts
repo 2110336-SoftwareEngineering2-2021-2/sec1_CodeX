@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class BanUserDto {
-  @ApiProperty({ type: Date, required: true })
-  unBanDate: Date;
+  @ApiProperty({ type: Number, required: true })
+  duration: Number;
 }

@@ -40,7 +40,7 @@ export class BanUserController {
   })
   banUser(@Query('target_id') tid: string, @Body() dto: BanUserDto) {
     try {
-      return this.banUserService.banUser(tid, dto.unBanDate);
+      return this.banUserService.banUser(tid, dto.duration);
     } catch (err) {
       return err;
     }

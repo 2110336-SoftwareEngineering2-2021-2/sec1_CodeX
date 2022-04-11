@@ -16,14 +16,14 @@ export class BanUserService {
     return { success: true, data: bannedUser };
   }
 
-  public async banUser(tid: String, unBanDate: Date): Promise<any> {
-    if (!unBanDate)
+  public async banUser(tid: String, duration: Number): Promise<any> {
+    if (!duration)
       throw new BadRequestException({
         success: false,
-        data: 'Please provide unBanDate',
+        data: 'Please provide ban duration',
       });
     const user = await this.userModel
-      .findByIdAndUpdate(tid, { isBan: true, unBanDate }, { new: true })
+      .findByIdAndUpdate(tid, { isBan: true, duration }, { new: true })
       .catch((err) => {
         throw new NotFoundException({ success: false, data: 'User not found' });
       });
@@ -32,7 +32,7 @@ export class BanUserService {
 
   public async unBanUser(tid: String): Promise<any> {
     const user = await this.userModel
-      .findByIdAndUpdate(tid, { isBan: false, unBanDate: null }, { new: true })
+      .findByIdAndUpdate(tid, { isBan: false, duration: null }, { new: true })
       .catch((err) => {
         throw new NotFoundException({ success: false, data: 'User not found' });
       });

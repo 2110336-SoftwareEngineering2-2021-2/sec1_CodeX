@@ -1,42 +1,40 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty } from '@nestjs/swagger';
 
 export class ReportDto {
-    @ApiProperty({required:true})
-    createdAt: Date;
+  @ApiProperty({ required: true })
+  createdAt: Date;
 
-    @ApiProperty({required:true})
-    text : string;
+  @ApiProperty({ required: true })
+  text: string;
 
-    @ApiProperty({required:true})
-    reporter_id : string;
+  @ApiProperty({ required: true })
+  reporter_id: string;
 
-    @ApiProperty({required:true})
-    target_id : string;
+  @ApiProperty({ required: true })
+  target_id: string;
 
-    @ApiProperty({required:true})
-    status : string;
-
-    @ApiProperty()
-    imageUrl : String
-  }
-  
-export class CreateReportDto{
-  @ApiProperty({required:true})
-  text : string;
-
-  @ApiProperty({required:true})
-  reporter_id : string;
-
-  @ApiProperty({required:true})
-  target_id : string;
+  @ApiProperty({ required: true })
+  status: string;
 
   @ApiProperty()
-  image64 : string
+  imageUrl: String;
 }
 
-  
-export class UpdateReportDto{
-  
-  @ApiProperty({required:true})
-  isBan : boolean;
+export class CreateReportDto {
+  @ApiProperty({ required: true })
+  text: string;
+
+  @ApiProperty({ required: true })
+  reporterId: string;
+
+  @ApiProperty({ required: true })
+  targetId: string;
+
+  @ApiProperty()
+  reportImg: string;
+}
+
+export class UpdateReportDto {
+  @ApiProperty({ required: true })
+  isBan: boolean;
 }
