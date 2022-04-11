@@ -6,7 +6,7 @@ import { User } from '../user/user.interface';
 import { sendMail } from '../util/google';
 import {Report} from './report.interface'
 import { Schedule } from '../schedule/schedule.interface';
-import { ReportDto } from './report.dto';
+import { CreateReportDto, ReportDto } from './report.dto';
 import { networkInterfaces } from 'os';
 
 @Injectable()
@@ -33,8 +33,8 @@ export class ReportService {
     return result
   }
 
-  public async create(dto : ReportDto){
-    var now = new Date()
+  public async create(dto : CreateReportDto){
+    /*var now = new Date()
     now.setHours(now.getHours()+7)
     dto.createdAt = now
     return await this.reportModel.create(dto)
@@ -43,7 +43,11 @@ export class ReportService {
     })
     .catch((err)=>{
       throw new BadRequestException({success:false,data:err})
-    })
+    })*/
+  }
+
+  public async updateReportStatus(_id:string , isBan:boolean){
+    return 
   }
 
 
