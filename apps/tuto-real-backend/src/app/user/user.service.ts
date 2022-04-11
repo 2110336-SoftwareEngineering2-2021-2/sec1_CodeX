@@ -53,9 +53,6 @@ export class UserService {
       });
 
     let url = profile.profileImg.url;
-    let pricePerSlot = dto.pricePerSlot
-      ? dto.pricePerSlot
-      : profile.pricePerSlot;
 
     if (dto.profile64) {
       //if prev img is not default, delete it
