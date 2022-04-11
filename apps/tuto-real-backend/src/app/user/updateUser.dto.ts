@@ -32,10 +32,4 @@ export class updateUserDto {
 
   @ApiProperty()
   readonly pricePerSlot: Number;
-
-  @ApiProperty()
-  isBan: Boolean;
-
-  @ApiProperty()
-  unBanDate: Date;
 }
