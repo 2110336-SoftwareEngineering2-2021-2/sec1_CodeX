@@ -2,15 +2,18 @@ import {
   Body,
   Controller,
   Get,
-  NotFoundException,
   Post,
   Patch,
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FirebaseAuthGuard } from '../auth/firebase-auth.guard';
-import { createReviewDto, getReviewsDto, getReviewQuery } from './createReview.dto';
+import {
+  createReviewDto,
+  getReviewsDto,
+  getReviewQuery,
+} from './createReview.dto';
 import { ReviewService } from './review.service';
 import { updateReviewDto } from './updateReview.dto';
 
@@ -52,16 +55,13 @@ export class ReviewController {
     }
   }
 
-  
-
   @Get()
   @ApiOperation({ summary: "Get tutor's review" })
   @ApiResponse({
     status: 200,
     type: getReviewsDto,
   })
-  getReviews(
-    @Query() q : getReviewQuery) {
+  getReviews(@Query() q: getReviewQuery) {
     try {
       return this.service.getReviews(q._id, q.sortBy, q.sid);
     } catch (err) {

@@ -1,13 +1,8 @@
-import { HttpException, Injectable, BadRequestException, InternalServerErrorException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { NewUserDto } from '../user/user.dto';
-import { User } from '../user/user.interface';
-import { sendMail } from '../util/google';
 import {Report} from './report.interface'
-import { Schedule } from '../schedule/schedule.interface';
-import { CreateReportDto, ReportDto } from './report.dto';
-import { networkInterfaces } from 'os';
+import { CreateReportDto } from './report.dto';
 
 @Injectable()
 export class ReportService {
