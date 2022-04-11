@@ -18,9 +18,14 @@ import {
   ApiOperation,
   ApiBody,
   ApiQuery,
+  ApiCreatedResponse,
+  ApiBadRequestResponse,
+  ApiOkResponse,
+  ApiNotFoundResponse,
 } from '@nestjs/swagger';
 import { UpdateSlotWithDeleteDto } from './updateSlotWithDelete.dto';
 import { FirebaseAuthGuard } from '../auth/firebase-auth.guard';
+import { LearnScheduleDto } from '../LearnSchedule/learnSchedule.dto';
 
 @ApiTags('Schedule')
 @Controller('schedule')
@@ -29,6 +34,13 @@ export class ScheduleController {
 
   @Post()
   @UseGuards(FirebaseAuthGuard)
+  @ApiOperation({ summary: 'Create the schedule' })
+  @ApiCreatedResponse({
+    description: 'The schedule has been successfully created.',
+  })
+  @ApiBadRequestResponse({ description: 'The schedule cannot be created.' })
+  @ApiBody({ type: ScheduleDto })
+  @ApiQuery({ name: '_id', description: 'Enter the tutor ID' })
   createSchedule(@Query() query: any, @Body() dto: ScheduleDto) {
     try {
       return this.service.createSchedule(query._id, dto);
@@ -38,7 +50,11 @@ export class ScheduleController {
   }
 
   @Patch('/add')
-  @UseGuards(FirebaseAuthGuard)
+  //@UseGuards(FirebaseAuthGuard)
+  @ApiOperation({ summary: 'Add slot to teach' })
+  @ApiOkResponse({ description: 'The slots are added' })
+  @ApiNotFoundResponse({ description: 'The schedule is not found' })
+  @ApiQuery({ name: '_id', description: 'Enter the schedule ID' })
   updateSlotWithAdd(@Query() query: any, @Body() dto: UpdateScheduleDto) {
     try {
       return this.service.updateSlotWithAdd(query._id, dto);
@@ -48,7 +64,11 @@ export class ScheduleController {
   }
 
   @Patch('/delete')
-  @UseGuards(FirebaseAuthGuard)
+  //@UseGuards(FirebaseAuthGuard)
+  @ApiOperation({ summary: 'Delete slot to teach' })
+  @ApiOkResponse({ description: 'The slots are deleted' })
+  @ApiNotFoundResponse({ description: 'The schedule is not found' })
+  @ApiQuery({ name: '_id', description: 'Enter the schedule ID' })
   updateSlotWithDelete(
     @Query() query: any,
     @Body() dto: UpdateSlotWithDeleteDto
@@ -62,7 +82,11 @@ export class ScheduleController {
 
   @Get()
   //@UseGuards(FirebaseAuthGuard)
-  getSchedule(@Query('_id') id: string) {
+  @ApiOperation({ summary: 'Get tutor schedule' })
+  @ApiOkResponse({ description: 'Get all schedule successfully' })
+  @ApiNotFoundResponse({ description: 'Tutor is not found or has no schedule' })
+  @ApiQuery({ name: '_id', description: 'Please enter the tutor ID' })
+  getSchedule(@Query() id: string) {
     try {
       return this.service.getSchedule(id);
     } catch (err) {
@@ -70,17 +94,12 @@ export class ScheduleController {
     }
   }
 
-  @Delete()
-  @UseGuards(FirebaseAuthGuard)
-  deleteSchedule(@Query('_id') id: string) {
-    try {
-      return this.service.deleteSchedule(id);
-    } catch (err) {
-      return err;
-    }
-  }
-
   @Get('/learn')
+  @ApiOperation({ summary: "Get user's learnSchedule" })
+  @ApiResponse({
+    status: 200,
+    type: [LearnScheduleDto],
+  })
   @UseGuards(FirebaseAuthGuard)
   getLearnSchedules(@Query('studentId') studentId: string) {
     try {
