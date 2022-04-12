@@ -1,0 +1,119 @@
+.report-list-container {
+    /* background-color: aqua; */
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+    gap: 15px; 
+    padding: 0px 20px;
+    width: 720px; 
+}
+
+@media only screen and (max-width: 720px) {
+    .report-list-container {
+        width: 100%;
+    }
+}
+
+.report-card {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+
+    border-style: solid;
+    border-width: 1px;
+    border-color: var(--lightgray);
+    border-radius: 8px;
+    
+    padding: 5px;
+    margin: 0px 3px;
+
+    box-shadow: 0px 2px 2px rgb(0, 0, 0, 0.25) !important;
+
+    transition: 0.3s;
+    /* border-color: var(--lightgray); */
+}
+
+.report-card:hover {
+    margin: 0px 0px;
+    background-color: var(--gray);
+    /* animation-iteration-count: infinite; */
+}
+
+.report-card p {
+    margin: 0px;
+    color: var(--darkgray);
+}
+
+.report-card .header {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.report-card .header p{
+    font-size: 16px;
+    color: var(--darkgray);
+}
+
+.report-card hr {
+    margin: 0px;
+    color: var(--darkgray);
+    opacity: 1;
+}
+
+.report-card .body {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin: 2px 0px;
+}
+
+.report-card .body #report-target {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+}
+
+.report-card .body #report-target p{
+    font-weight: 400;
+    font-size: 24px;
+    color: var(--darkgray);
+}
+
+.report-card .body #reporter {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+}
+/* .report-card-container {
+    padding: 6px;
+    margin: 0px;
+} */
+
+/* .report-card-container:hover {
+    animation-name: report-card-container-hover-animate;
+    animation-duration: 0.3s;
+    animation-fill-mode: forwards;
+} */
+
+/* @keyframes report-card-container-hover-animate {
+    0% {
+        padding: 6px;
+        margin: 0px;
+    }
+    100% {
+        padding: 3px;
+        margin: 3px 0px; 
+    }
+} */
+/* @keyframes report-card-hover-animate {
+    0% {
+        background-color: white;
+        margin: 0px 0px;
+    }
+    100% {
+        background-color: var(--gray); 
+        margin: 0px 3px;
+    }
+} */
