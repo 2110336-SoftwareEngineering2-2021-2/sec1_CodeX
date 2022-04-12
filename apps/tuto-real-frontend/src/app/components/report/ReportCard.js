@@ -20,13 +20,13 @@ const ReportCard = (prop) => {
             <hr />
             <div className="body">
                 <div id="report-target">
-                    <p>Reporting</p>
+                    <p>REPORTING</p>
                     <p style={{color:"red", fontWeight:"500"}}>
                         {reportingName}
                     </p>    
                 </div>
                 <div id="reporter">
-                    <p>from</p>
+                    <p>FROM</p>
                     <p style={{fontWeight:"500"}}>
                         {reporterName}
                     </p>
