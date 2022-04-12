@@ -13,7 +13,7 @@ class AdminBanUI extends React.Component{
     }
     state = {
         testText: "this is AdminBanUI",
-        isReportDetailModalShow: true,
+        isReportDetailModalShow: false,
         reportDetailModalData: {
             reportId: "",
             reportingName: "",

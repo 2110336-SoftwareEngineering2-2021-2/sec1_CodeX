@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap"
+import ImageModal from "../modal/ImageModal";
 
 
 const ReportDetailModal = (props) => {
@@ -16,6 +17,7 @@ const ReportDetailModal = (props) => {
 
     const [banDuration, setBanDuration] = useState(0);
     const [isGoingToBan, setIsGoingToBan] = useState(false);
+    const [isImageModalShow, setIsImageModalShow] = useState(false);
 
     return (
         <Modal
@@ -60,7 +62,10 @@ const ReportDetailModal = (props) => {
                         </p>
                     </div>
                     <div className="image-zone">
-                        <img src={imageURL}></img>
+                        <img src={imageURL} onClick={() => (setIsImageModalShow(true))} />
+                        {isImageModalShow && 
+                            <ImageModal imgURL={imageURL} onHide={() => (setIsImageModalShow(false))}/>
+                        }
                     </div>
                     <div className="report-text-container">
                         <p>{text}</p>
@@ -98,7 +103,7 @@ const ReportDetailModal = (props) => {
                 :
                 <>
                     <button className="outline-gray-button" onClick={onHide}>Close</button>
-                    <button className="ignore-button">Ignore</button>
+                    <button className="ignore-button">Ignore & Delete</button>
                     <button className="ban-button" onClick={() => (setIsGoingToBan(true))}>Ban</button>
                 </>
                 }

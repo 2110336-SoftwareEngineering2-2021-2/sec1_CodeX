@@ -55,8 +55,7 @@ const ReportCard = (prop) => {
                 </p>
                 <p>{translateDateFormat(timeStamp)} {translateTimeFormat(timeStamp)}</p>
             </div>
-            
-            <hr />
+  
             <div className="body">
                 <div id="report-target">
                     <p>REPORTING</p>
