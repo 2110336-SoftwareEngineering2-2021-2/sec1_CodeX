@@ -9,10 +9,11 @@ const ReportCard = (prop) => {
         reporterId,
         timeStamp,
         reportInfo,
-        reportUrl} = prop;
+        reportUrl,
+        onClickCard} = prop;
 
     return (
-        <>
+        <div onClick={onClickCard}>
             <p>{reportId}</p>
             <p>{reportingName}</p>
             <p>{reportingId}</p>
@@ -21,7 +22,7 @@ const ReportCard = (prop) => {
             <p>{timeStamp}</p>
             <p>{reportInfo}</p>
             <p>{reportUrl}</p>
-        </>
+        </div>
     )
 }
 
