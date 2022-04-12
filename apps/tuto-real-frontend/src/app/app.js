@@ -10,6 +10,7 @@ import ChangeAccountRequestListPage from './pages/ChangeAccountRequestListPage';
 import ProfilePage from './pages/ProfilePage';
 import ChangeAccountTypePage from './pages/ChangeAccountTypePage';
 import SearchPage from './pages/SearchPage';
+import UserReportPage from './pages/UserReportPage';
 
 export const SearchContext = createContext({
   searchText: '',
@@ -48,6 +49,7 @@ export function App() {
           element={<ChangeAccountRequestListPage />}
         />
         <Route exact path="/search" element={<SearchPage />} />
+        <Route exact path="/userReport" element={<UserReportPage />} />
       </Routes>
     </SearchContext.Provider>
     // </>
