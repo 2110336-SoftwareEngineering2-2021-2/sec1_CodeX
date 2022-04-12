@@ -163,3 +163,60 @@
     border-color: var(--lightgray);
     padding: 15px;
 }
+
+.report-detail-modal .duration-zone {
+    width: 100%;
+    padding: 15px;
+    border-style: solid;
+    border-color: #dee2e6;
+    border-width: 1px 0px 0px 0px;
+    gap: 5px;
+}
+
+.report-detail-modal .outline-gray-button {
+    background-color: transparent;
+
+    border-color: var(--darkgray);
+    border-style: solid;
+    border-radius: 4px;
+    border-width: 1px;
+    padding: .375rem .75rem;
+    color: var(--darkgray);
+
+    transition: 0.2s;
+}
+
+.report-detail-modal .outline-gray-button:hover {
+    background-color: var(--darkgray);
+    color: white;
+}
+
+.report-detail-modal .ignore-button {
+    background-color: var(--yellow);
+
+    border-color: transparent;
+    border-radius: 4px;
+    padding: .375rem .75rem;
+    color: white;
+
+    transition: 0.2s;
+}
+
+.report-detail-modal .ignore-button:hover {
+    background-color: #DFA91E;
+}
+
+.report-detail-modal .ban-button {
+    background-color: var(--warning);
+
+    border-color: transparent;
+    border-radius: 4px;
+    padding: .375rem .75rem;
+    color: white;
+
+    transition: 0.2s;
+}
+
+.report-detail-modal .ban-button:hover {
+    background-color: #D64F24;
+}
