@@ -2,7 +2,7 @@
     /* background-color: aqua; */
     display: flex;
     flex-direction: column;
-    margin-top: 20px;
+    margin-top: 10px;
     gap: 15px; 
     padding: 0px 20px;
     width: 720px; 
@@ -48,6 +48,10 @@
     display: flex;
     flex-direction: row;
     gap: 10px;
+    border-width: 0px 0px 1px 0px;
+    border-style: solid;
+    border-color: var(--lightgray);
+    margin-bottom: 2px;
 }
 
 .report-card .header p{
