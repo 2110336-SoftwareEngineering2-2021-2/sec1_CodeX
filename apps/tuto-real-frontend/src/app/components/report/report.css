@@ -24,12 +24,12 @@
     border-color: var(--lightgray);
     border-radius: 8px;
     
-    padding: 5px;
+    padding: 8px;
     margin: 0px 3px;
 
     box-shadow: 0px 2px 2px rgb(0, 0, 0, 0.25) !important;
 
-    transition: 0.3s;
+    transition: 0.2s;
     /* border-color: var(--lightgray); */
 }
 
@@ -86,34 +86,3 @@
     flex-direction: row;
     gap: 5px;
 }
-/* .report-card-container {
-    padding: 6px;
-    margin: 0px;
-} */
-
-/* .report-card-container:hover {
-    animation-name: report-card-container-hover-animate;
-    animation-duration: 0.3s;
-    animation-fill-mode: forwards;
-} */
-
-/* @keyframes report-card-container-hover-animate {
-    0% {
-        padding: 6px;
-        margin: 0px;
-    }
-    100% {
-        padding: 3px;
-        margin: 3px 0px; 
-    }
-} */
-/* @keyframes report-card-hover-animate {
-    0% {
-        background-color: white;
-        margin: 0px 0px;
-    }
-    100% {
-        background-color: var(--gray); 
-        margin: 0px 3px;
-    }
-} */

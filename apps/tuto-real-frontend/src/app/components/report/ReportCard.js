@@ -3,14 +3,9 @@ import "./report.css"
 
 const ReportCard = (prop) => {
 
-    const {reportId,
-        reportingName,
-        reportingId,
+    const {reportingName,
         reporterName,
-        reporterId,
         timeStamp,
-        reportInfo,
-        reportUrl,
         onClickCard} = prop;
 
     return (

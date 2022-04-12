@@ -16,103 +16,160 @@ class AdminBanUI extends React.Component{
         isReportDetailModalShow: false,
         reportDetailModalData: {
             reportId: "",
-            reportingName: "Nobi Nobita",
-            reportingId: "6205e3c8618b7d42c9935d03",
-            reporterName: "Takeshi Giant",
-            reporterId: "6205e4b0a5dc5a9a775b9c7c",
-            timeStamp: "2022-04-04T18:00:33.538+00:00",
-
-            reportInfo: "สอนแย่มาก",
-            reportUrl: "http://localhost:4200/userReport",
+            reportingName: "",
+            reportingId: "",
+            reporterName: "",
+            reporterId: "",
+            
+            createdAt: "",
+            status: "",
+            text: "",
+            imageURL: "",
         },
         reportList: [
             {
                 _id: "624acfd1e46797011adbc33d",
-                reportingName: "Nobi Nobita",
-                reportingId: "6205e3c8618b7d42c9935d03",
-                reporterName: "Takeshi Giant",
-                reporterId: "6205e4b0a5dc5a9a775b9c7c",
-                timeStamp: "2022-04-04T18:00:33.538+00:00",
+                reporter: {
+                    _id: "6205e4b0a5dc5a9a775b9c7c",
+                    firstName: "Takeshi",
+                    lastName: "Giant"
+                },
+                target: {
+                    _id: "6205e3c8618b7d42c9935d03",
+                    firstName: "Nobi",
+                    lastName: "Nobita"
+                },
 
-                reportInfo: "สอนแย่มาก",
-                reportUrl: "http://localhost:4200/userReport",
+                text: "สอนแย่มาก",
+                createdAt: "2022-04-04T18:00:33.538+00:00",
+                status: "Pending",
+                imageURL: "https://i.ytimg.com/vi/SQ8nV_PaSss/hqdefault.jpg",
             },
             {
                 _id: "624acfd1e46797011adbc33d",
-                reportingName: "Nobi Nobita",
-                reportingId: "6205e3c8618b7d42c9935d03",
-                reporterName: "Takeshi Giant",
-                reporterId: "6205e4b0a5dc5a9a775b9c7c",
-                timeStamp: "2022-04-04T18:00:33.538+00:00",
+                reporter: {
+                    _id: "6205e4b0a5dc5a9a775b9c7c",
+                    firstName: "Takeshi",
+                    lastName: "Giant"
+                },
+                target: {
+                    _id: "6205e3c8618b7d42c9935d03",
+                    firstName: "Nobi",
+                    lastName: "Nobita"
+                },
 
-                reportInfo: "สอนแย่มาก",
-                reportUrl: "http://localhost:4200/userReport",
+                text: "สอนแย่มาก",
+                createdAt: "2022-04-04T18:00:33.538+00:00",
+                status: "Pending",
+                imageURL: "https://i.ytimg.com/vi/SQ8nV_PaSss/hqdefault.jpg",
             },
             {
                 _id: "624acfd1e46797011adbc33d",
-                reportingName: "Nobi Nobita",
-                reportingId: "6205e3c8618b7d42c9935d03",
-                reporterName: "Takeshi Giant",
-                reporterId: "6205e4b0a5dc5a9a775b9c7c",
-                timeStamp: "2022-04-04T18:00:33.538+00:00",
+                reporter: {
+                    _id: "6205e4b0a5dc5a9a775b9c7c",
+                    firstName: "Takeshi",
+                    lastName: "Giant"
+                },
+                target: {
+                    _id: "6205e3c8618b7d42c9935d03",
+                    firstName: "Nobi",
+                    lastName: "Nobita"
+                },
 
-                reportInfo: "สอนแย่มาก",
-                reportUrl: "http://localhost:4200/userReport",
+                text: "สอนแย่มาก",
+                createdAt: "2022-04-04T18:00:33.538+00:00",
+                status: "Pending",
+                imageURL: "https://i.ytimg.com/vi/SQ8nV_PaSss/hqdefault.jpg",
             },
             {
                 _id: "624acfd1e46797011adbc33d",
-                reportingName: "Nobi Nobita",
-                reportingId: "6205e3c8618b7d42c9935d03",
-                reporterName: "Takeshi Giant",
-                reporterId: "6205e4b0a5dc5a9a775b9c7c",
-                timeStamp: "2022-04-04T18:00:33.538+00:00",
+                reporter: {
+                    _id: "6205e4b0a5dc5a9a775b9c7c",
+                    firstName: "Takeshi",
+                    lastName: "Giant"
+                },
+                target: {
+                    _id: "6205e3c8618b7d42c9935d03",
+                    firstName: "Nobi",
+                    lastName: "Nobita"
+                },
 
-                reportInfo: "สอนแย่มาก",
-                reportUrl: "http://localhost:4200/userReport",
+                text: "สอนแย่มาก",
+                createdAt: "2022-04-04T18:00:33.538+00:00",
+                status: "Pending",
+                imageURL: "https://i.ytimg.com/vi/SQ8nV_PaSss/hqdefault.jpg",
             },
             {
                 _id: "624acfd1e46797011adbc33d",
-                reportingName: "Nobi Nobita",
-                reportingId: "6205e3c8618b7d42c9935d03",
-                reporterName: "Takeshi Giant",
-                reporterId: "6205e4b0a5dc5a9a775b9c7c",
-                timeStamp: "2022-04-04T18:00:33.538+00:00",
+                reporter: {
+                    _id: "6205e4b0a5dc5a9a775b9c7c",
+                    firstName: "Takeshi",
+                    lastName: "Giant"
+                },
+                target: {
+                    _id: "6205e3c8618b7d42c9935d03",
+                    firstName: "Nobi",
+                    lastName: "Nobita"
+                },
 
-                reportInfo: "สอนแย่มาก",
-                reportUrl: "http://localhost:4200/userReport",
+                text: "สอนแย่มาก",
+                createdAt: "2022-04-04T18:00:33.538+00:00",
+                status: "Pending",
+                imageURL: "https://i.ytimg.com/vi/SQ8nV_PaSss/hqdefault.jpg",
             },
             {
                 _id: "624acfd1e46797011adbc33d",
-                reportingName: "Nobi Nobita",
-                reportingId: "6205e3c8618b7d42c9935d03",
-                reporterName: "Takeshi Giant",
-                reporterId: "6205e4b0a5dc5a9a775b9c7c",
-                timeStamp: "2022-04-04T18:00:33.538+00:00",
+                reporter: {
+                    _id: "6205e4b0a5dc5a9a775b9c7c",
+                    firstName: "Takeshi",
+                    lastName: "Giant"
+                },
+                target: {
+                    _id: "6205e3c8618b7d42c9935d03",
+                    firstName: "Nobi",
+                    lastName: "Nobita"
+                },
 
-                reportInfo: "สอนแย่มาก",
-                reportUrl: "http://localhost:4200/userReport",
+                text: "สอนแย่มาก",
+                createdAt: "2022-04-04T18:00:33.538+00:00",
+                status: "Pending",
+                imageURL: "https://i.ytimg.com/vi/SQ8nV_PaSss/hqdefault.jpg",
             },
             {
                 _id: "624acfd1e46797011adbc33d",
-                reportingName: "Nobi Nobita",
-                reportingId: "6205e3c8618b7d42c9935d03",
-                reporterName: "Takeshi Giant",
-                reporterId: "6205e4b0a5dc5a9a775b9c7c",
-                timeStamp: "2022-04-04T18:00:33.538+00:00",
+                reporter: {
+                    _id: "6205e4b0a5dc5a9a775b9c7c",
+                    firstName: "Takeshi",
+                    lastName: "Giant"
+                },
+                target: {
+                    _id: "6205e3c8618b7d42c9935d03",
+                    firstName: "Nobieeee",
+                    lastName: "Nobita"
+                },
 
-                reportInfo: "สอนแย่มาก",
-                reportUrl: "http://localhost:4200/userReport",
+                text: "สอนแย่มาก",
+                createdAt: "2022-04-04T18:00:33.538+00:00",
+                status: "Pending",
+                imageURL: "https://i.ytimg.com/vi/SQ8nV_PaSss/hqdefault.jpg",
             },
             {
                 _id: "624acfd1e46797011adbc33d",
-                reportingName: "Nobi Nobita",
-                reportingId: "6205e3c8618b7d42c9935d03",
-                reporterName: "Takeshi Giant",
-                reporterId: "6205e4b0a5dc5a9a775b9c7c",
-                timeStamp: "2022-04-04T18:00:33.538+00:00",
+                reporter: {
+                    _id: "6205e4b0a5dc5a9a775b9c7c",
+                    firstName: "Takeshi",
+                    lastName: "Giant"
+                },
+                target: {
+                    _id: "6205e3c8618b7d42c9935d03",
+                    firstName: "Nobi",
+                    lastName: "Nobita"
+                },
 
-                reportInfo: "สอนแย่มาก",
-                reportUrl: "http://localhost:4200/userReport",
+                text: "สอนแย่มาก",
+                createdAt: "2022-04-04T18:00:33.538+00:00",
+                status: "Pending",
+                imageURL: "https://i.ytimg.com/vi/SQ8nV_PaSss/hqdefault.jpg",
             },
         ]
     }
@@ -139,25 +196,32 @@ class AdminBanUI extends React.Component{
 
                 {this.state.reportList.map((e,i) => (
                     <ReportCard 
-                        reportId={e._id}
-                        reportingName={e.reportingName}
-                        reportingId={e.reportingId}
-                        reporterName={e.reporterName}
-                        reporterId={e.reporterId}
-                        timeStamp={e.timeStamp}
-                        reportInfo={e.reportInfo}
-                        reportUrl={e.reportUrl}
+                        reportingName={e.target.firstName + " " + e.target.lastName}
+                        reporterName={e.reporter.firstName + " " + e.reporter.lastName}
+                        timeStamp={e.createdAt}
                         onClickCard={() => (
                             this.setState({
+                                // reportId: "",
+                                // reportingName: "",
+                                // reportingId: "",
+                                // reporterName: "",
+                                // reporterId: "",
+                                
+                                // createdAt: "",
+                                // status: "",
+                                // text: "",
+                                // imageURL: "",
                                 reportDetailModalData: {
                                     reportId: e._id,
-                                    reportingName: e.reportingName,
-                                    reportingId: e.reportingId,
-                                    reporterName: e.reporterName,
-                                    reporterId: e.reporterId,
-                                    timeStamp: e.timeStamp,
-                                    reportInfo: e.reportInfo,
-                                    reportUrl: e.reportUrl,
+                                    reportingName: e.target.firstName + " " + e.target.lastName,
+                                    reportingId: e.target._id,
+                                    reporterName: e.reporter.firstName + " " + e.reporter.lastName,
+                                    reporterId: e.reporter._id,
+
+                                    createdAt: e.createdAt,
+                                    status: e.status,
+                                    text: e.text,
+                                    imageURL: e.imageURL,
                                 },
                                 isReportDetailModalShow: true
                             })
@@ -170,9 +234,21 @@ class AdminBanUI extends React.Component{
                     show modal
                 </button>
                 {this.state.isReportDetailModalShow ?
-                    <ReportDetailModal onHide={() => (this.setState({isReportDetailModalShow: !this.state.isReportDetailModalShow}))}/>
-                    :
-                    null}
+                    <ReportDetailModal 
+                        onHide={() => (this.setState({isReportDetailModalShow: false}))}
+                        reportId={this.state.reportDetailModalData.reportId}
+                        reportingName={this.state.reportDetailModalData.reportingName}
+                        reportingId={this.state.reportDetailModalData.reportingId}
+                        reporterName={this.state.reportDetailModalData.reporterName}
+                        reporterId={this.state.reportDetailModalData.reporterId}
+
+                        createdAt={this.state.reportDetailModalData.createdAt}
+                        status={this.state.reportDetailModalData.status}
+                        text={this.state.reportDetailModalData.text}
+                        imageURL={this.state.reportDetailModalData.imageURL}
+                    />
+                :
+                null}
             </div>
         )
     }

@@ -2,11 +2,21 @@ import { Modal, Button } from "react-bootstrap"
 
 
 const ReportDetailModal = (props) => {
+    const {onHide,
+        reportId,
+        reportingName,
+        reportingId,
+        reporterName,
+        reporterId,
+        createdAt,
+        status,
+        text,
+        imageURL} = props;
     return (
         <Modal
             show={true}
             backdrop="static"
-            onHide={props.onHide}
+            onHide={onHide}
             keyboard={false}
             animation={false}
             size="lg"
@@ -27,7 +37,7 @@ const ReportDetailModal = (props) => {
                 </p>
             </Modal.Body>
             <Modal.Footer>
-                <Button onClick={props.onHide}>Close</Button>
+                <Button onClick={onHide}>Close</Button>
             </Modal.Footer>
         </Modal>
     )
