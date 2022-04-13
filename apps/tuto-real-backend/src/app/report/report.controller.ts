@@ -22,15 +22,15 @@ export class ReportController {
   constructor(private readonly reportService: ReportService) {}
 
   @Get()
-  @UseGuards(FirebaseAuthGuard)
+  //@UseGuards(FirebaseAuthGuard)
   @ApiOperation({ summary: 'Get all report' })
   @ApiResponse({
     status: 200,
     description: 'The report has been successfully queried.',
   })
-  getAllReport() {
+  getAllReport(@Query("_id") _id:string) {
     try {
-      return this.reportService.getAll();
+      return this.reportService.getAll(_id);
     } catch (err) {
       return err;
     }

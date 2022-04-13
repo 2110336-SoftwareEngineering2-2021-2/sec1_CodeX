@@ -8,10 +8,10 @@ export class ReportDto {
   text: string;
 
   @ApiProperty({ required: true })
-  reporter_id: string;
+  reporterId: string;
 
   @ApiProperty({ required: true })
-  target_id: string;
+  targetId: string;
 
   @ApiProperty({ required: true })
   status: string;
