@@ -1,4 +1,9 @@
+import { ApiProperty } from '@nestjs/swagger';
+
 export class updateReviewDto {
-  rating: Number;
+  @ApiProperty({ required: false })
+  rating: number;
+
+  @ApiProperty({ required: false })
   comment: string;
 }

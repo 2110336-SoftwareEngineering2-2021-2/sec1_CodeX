@@ -1,0 +1,24 @@
+.image-modal-background {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.image-modal-background img {
+    max-width: 80% !important;
+    width: auto !important;
+    height: 80% !important;
+    border-style: solid;
+    border-width: 2px;
+    border-color: transparent;
+}
+
+.image-modal-background img:hover {
+    border-color: var(--darkgray);
+}

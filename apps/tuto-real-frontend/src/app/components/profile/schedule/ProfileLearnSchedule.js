@@ -13,7 +13,7 @@ import '../profile.css';
 
 import COLORS from '../../../constants/color';
 
-const ProfileLearnSchedule = ({ targetId, viewType }) => {
+const ProfileLearnSchedule = ({ targetId, viewType, redirectToTutor }) => {
   const [isLoading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState('none'); // "none" | "edit" | "info" | "delete" | "book" //
   const [refresh, setRefresh] = useState(false); // Set to true when you want to refresh page //
@@ -24,8 +24,6 @@ const ProfileLearnSchedule = ({ targetId, viewType }) => {
   const [currentSchedule, setCurrentSchedule] = useState(0);
   const [info, setInfo] = useState([]);
   const [modalDay, setModalDay] = useState();
-
-  // const { _id } = useAuth();
 
   const tagColor = [
     'Crimson',
@@ -48,15 +46,6 @@ const ProfileLearnSchedule = ({ targetId, viewType }) => {
         Authorization: `Bearer ${localStorage.getItem('token')}`,
       },
     })
-      // .then(({ data: { data } }) => {
-      //   console.log(data);
-      //   setScheduleList(data.scheduleList ?? []);
-      //   if (data.scheduleList?.length > 0) {
-      //     setSubjectList(data.scheduleList[currentSchedule].allSubjects ?? []);
-      //   }
-      //   setLoading(false);
-      // })
-
       .then(({ data: { data } }) => {
         console.log(data);
         setScheduleList(data ?? []);
@@ -78,9 +67,6 @@ const ProfileLearnSchedule = ({ targetId, viewType }) => {
   }, [fetchData, refresh]);
 
   useEffect(() => {
-    // if (scheduleList[currentSchedule]) {
-    //   setSubjectList(scheduleList[currentSchedule].allSubjects);
-    // }
     if (scheduleList[currentSchedule]) {
       setSubjectList(scheduleList[currentSchedule].subjects ?? []);
     }
@@ -238,6 +224,7 @@ const ProfileLearnSchedule = ({ targetId, viewType }) => {
           day={modalDay}
           info={info}
           fromLearnSchedule={true}
+          redirectToTutor={redirectToTutor}
         />
       )}
     </>

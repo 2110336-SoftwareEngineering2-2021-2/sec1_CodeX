@@ -2,20 +2,26 @@ import {
   BadRequestException,
   Injectable,
   NotFoundException,
-  ServiceUnavailableException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { datapipelines } from 'googleapis/build/src/apis/datapipelines';
-import { Model, Types } from 'mongoose';
+import { Model } from 'mongoose';
 import { Schedule } from '../schedule/schedule.interface';
 import { User } from '../user/user.interface';
-import { uploadImage } from '../util/google';
+import { sendMail } from '../util/google';
 import { BookingDto } from './booking.dto';
-import { Booking } from './booking.interface';
 import { LearnSchedule } from '../LearnSchedule/learnSchedule.interface';
-import { LearnScheduleDto, Slot } from '../LearnSchedule/learnSchedule.dto';
-import { domainToASCII } from 'url';
-import { UserDto } from '../user/user.dto';
+import { LearnScheduleDto } from '../LearnSchedule/learnSchedule.dto';
+import { Document } from 'mongoose';
+
+export interface Booking extends Document {
+  student_id: String;
+  schedule_id: String;
+  readonly days: [{ _id: false; day: String; slots: [Number] }];
+  timeStamp: Date;
+  totalPrice: Number;
+  status: String;
+}
+
 const mongoose = require('mongoose');
 @Injectable()
 export class BookingService {
@@ -98,7 +104,7 @@ export class BookingService {
   }
 
   private getBySlot(slots: any, target: Number) {
-    console.log('GeyBySlot', slots, target);
+    // console.log('GeyBySlot', slots, target);
     for (let i = 0; i < slots.length; i++) {
       if (slots[i].slot == target) {
         return { data: slots[i]._id, idx: i };
@@ -165,8 +171,8 @@ export class BookingService {
         tmpDays.push({ day: day_, slots: [] });
         let slots = booking.days[i].slots;
         let thatDay = this.getByDay(schedule.days, day_).slot;
-        console.log('thatDay', thatDay);
-        console.log('slots', slots);
+        // console.log('thatDay', thatDay);
+        // console.log('slots', slots);
         //for each slot in that day
         for (var idx of slots) {
           var slotId = this.getBySlot(thatDay, idx);
@@ -177,7 +183,7 @@ export class BookingService {
           tmp.slot = idx;
           //has only one subject for sure in this booking
           tmp.data = [{ slotId: slotId.data }];
-          console.log(tmp);
+          // console.log(tmp);
 
           //append in slots of that day
           tmpDays[i].slots.push(tmp);
@@ -234,24 +240,24 @@ export class BookingService {
             tmp1.slot = idx;
             tmp1.data = [{ slotId: slotId.data }];
             let oldSlot = this.getBySlot(oldDay, idx);
-            console.log('tmp', idx, tmp1, oldSlot, day_);
+            // console.log('tmp', idx, tmp1, oldSlot, day_);
             if (oldSlot == null) {
               //create new slot , use tmp1 as list
               oldData.days[id].slots.push(tmp1);
-              console.log('new slot', oldData.days[i].slots[0]);
+              // console.log('new slot', oldData.days[i].slots[0]);
             } else {
               //update that oldSlot , use one data in tmp1
               oldData.days[id].slots[oldSlot.idx].data.push(tmp1.data[0]);
-              console.log(
-                'update slot',
-                tmp1.data,
-                oldData.days[id].slots[oldSlot.idx].data
-              );
+              // console.log(
+              //   'update slot',
+              //   tmp1.data,
+              //   oldData.days[id].slots[oldSlot.idx].data
+              // );
             }
           }
         }
       }
-      console.log(result);
+      // console.log(result);
       var ret = await this.learnScheduleModel
         .replaceOne({ _id: result._id }, result)
         .then((res) => {
@@ -260,7 +266,7 @@ export class BookingService {
         .catch((err) => {
           throw new BadRequestException({ success: false, data: err });
         });
-      console.log('result', result);
+      // console.log('result', result);
       return { success: true, data: ret };
     }
   }
@@ -332,16 +338,24 @@ export class BookingService {
       }
       bookingTutor = [...bookingTutor, ...booking];
     }
-    var ordering = {},
-      sortOrder = ['Pending', 'Approved', 'Reject', 'Cancelled'];
-    for (var i = 0; i < sortOrder.length; i++) ordering[sortOrder[i]] = i;
-    bookingTutor.sort(function (a, b) {
+    let booking_pending = [];
+    let booking_other = [];
+    bookingTutor.forEach((element) => {
+      if (element.status == 'Pending') booking_pending.push(element);
+      else booking_other.push(element);
+    });
+    booking_pending.sort(function (a, b) {
       return (
-        ordering[a.status] - ordering[b.status] ||
-        Number(a.timeStamp > b.timeStamp) - Number(a.timeStamp < b.timeStamp)
+        Number(a.timeStamp < b.timeStamp) - Number(a.timeStamp > b.timeStamp)
       );
     });
-    return { success: true, data: bookingTutor };
+    booking_other.sort(function (a, b) {
+      return (
+        Number(a.timeStamp < b.timeStamp) - Number(a.timeStamp > b.timeStamp)
+      );
+    });
+    var booking_result = booking_pending.concat(booking_other);
+    return { success: true, data: booking_result };
   }
 
   //Get the student booking
@@ -355,89 +369,217 @@ export class BookingService {
       ['Friday', 5],
       ['Saturday', 6],
     ]);
-    try {
-      //Find the student
-      const student = await this.userModel.findById(
-        mongoose.Types.ObjectId(id)
-      );
-      if (!student) {
-        throw new NotFoundException({
-          success: false,
-          message: 'Student not found',
-        });
+
+    //Find the student
+    const student = await this.userModel.findById(mongoose.Types.ObjectId(id));
+    if (!student) {
+      throw new NotFoundException({
+        success: false,
+        message: 'Student not found',
+      });
+    }
+    //Get the student booking
+    const booking = await this.bookingModel
+      .find(
+        {
+          student_id: mongoose.Types.ObjectId(id),
+        },
+        { __v: 0 }
+      )
+      .sort({ timeStamp: 1 })
+      .populate({ path: 'student_id', select: 'firstName lastName' })
+      .lean()
+      .exec();
+    if (!booking)
+      throw new NotFoundException({
+        success: false,
+        meesage: 'booking not found',
+      });
+
+    //Find tutor
+    for (var i = 0; i < booking.length; i++) {
+      const schedule = await this.scheduleModel.findOne({
+        _id: mongoose.Types.ObjectId(booking[i].schedule_id),
+      });
+      const tutor = await this.userModel.findOne({
+        schedule_id: { $in: booking[i].schedule_id },
+      });
+      if (!tutor) {
+        //Delete because the schedule is not exist
+        await this.bookingModel.findByIdAndDelete(
+          mongoose.Types.ObjectId(booking[i]._id)
+        );
+      } else {
+        const tutorName = tutor.firstName + ' ' + tutor.lastName;
+        booking[i]['tutor'] = tutorName;
       }
-      //Get the student booking
-      const booking = await this.bookingModel
-        .find(
+      for (var j = 0; j < booking[i].days.length; j++) {
+        let day = booking[i].days[j].day as string;
+        const numDay = days.get(day);
+        const newDate = new Date(
+          schedule.startDate.getTime() + 1000 * 60 * 60 * 24 * numDay
+        );
+        booking[i].days[j]['date'] = newDate;
+
+        //Subject to learn
+        const subject = await this.scheduleModel.aggregate([
+          { $unwind: '$days' },
+          { $unwind: '$days.slots' },
           {
-            student_id: mongoose.Types.ObjectId(id),
+            $match: {
+              'days.slots.slot': { $in: booking[i].days[j].slots },
+              _id: mongoose.Types.ObjectId(booking[i].schedule_id),
+              'days.day': day,
+            },
           },
-          { __v: 0 }
-        )
-        .sort({ timeStamp: 1 })
-        .populate({ path: 'student_id', select: 'firstName lastName' })
-        .lean()
-        .exec();
-      if (!booking)
-        throw new NotFoundException({
+          { $sort: { 'days.slots.slot': 1 } },
+          { $group: { _id: '$days.slots' } },
+        ]);
+        subject.sort(function (a, b) {
+          return a._id.slot - b._id.slot;
+        });
+
+        let subjects = [];
+        subject.forEach((element) => {
+          subjects.push(element._id.subject);
+        });
+
+        booking[i].days[j]['subject'] = subjects;
+      }
+    }
+    let booking_pending = [];
+    let booking_other = [];
+    booking.forEach((element) => {
+      if (element.status == 'Pending') booking_pending.push(element);
+      else booking_other.push(element);
+    });
+    booking_pending.sort(function (a, b) {
+      return (
+        Number(a.timeStamp < b.timeStamp) - Number(a.timeStamp > b.timeStamp)
+      );
+    });
+    booking_other.sort(function (a, b) {
+      return (
+        Number(a.timeStamp < b.timeStamp) - Number(a.timeStamp > b.timeStamp)
+      );
+    });
+    var booking_result = booking_pending.concat(booking_other);
+
+    return { success: true, message: booking_result };
+  }
+
+  //Update schedule API
+  async updateBooking(id: string, dto: BookingDto): Promise<any> {
+    //Find the booking first
+    const booking = await this.bookingModel.findById(
+      mongoose.Types.ObjectId(id)
+    );
+
+    if (!booking)
+      throw new NotFoundException({
+        success: false,
+        data: 'Booking not found',
+      });
+    // If status is reject or cancelled
+    if (dto.status == 'Reject' || dto.status == 'Cancelled') {
+      //update booking
+      const new_booking = await this.bookingModel.findByIdAndUpdate(
+        { _id: mongoose.Types.ObjectId(id) },
+        { status: dto.status },
+        { new: true }
+      );
+
+      if (!new_booking)
+        throw new BadRequestException({
           success: false,
-          meesage: 'booking not found',
+          data: 'Fail to update',
         });
-
-      //Find tutor
-      for (var i = 0; i < booking.length; i++) {
-        const schedule = await this.scheduleModel.findOne({
-          _id: mongoose.Types.ObjectId(booking[i].schedule_id),
-        });
-        const tutor = await this.userModel.findOne({
-          schedule_id: { $in: booking[i].schedule_id },
-        });
-        if (!tutor) {
-          //Delete because the schedule is not exist
-          await this.bookingModel.findByIdAndDelete(
-            mongoose.Types.ObjectId(booking[i]._id)
-          );
-        } else {
-          const tutorName = tutor.firstName + ' ' + tutor.lastName;
-          booking[i]['tutor'] = tutorName;
-        }
-        for (var j = 0; j < booking[i].days.length; j++) {
-          let day = booking[i].days[j].day as string;
-          const numDay = days.get(day);
-          const newDate = new Date(
-            schedule.startDate.getTime() + 1000 * 60 * 60 * 24 * numDay
-          );
-          booking[i].days[j]['date'] = newDate;
-
-          //Subject to learn
-          const subject = await this.scheduleModel.aggregate([
-            { $unwind: '$days' },
-            { $unwind: '$days.slots' },
-            {
-              $match: {
-                'days.slots.slot': { $in: booking[i].days[j].slots },
-                _id: mongoose.Types.ObjectId(booking[i].schedule_id),
-                'days.day': day,
+      //delete from schedule
+      for (var i = 0; i < booking.days.length; i++) {
+        let schedule = await this.scheduleModel.findByIdAndUpdate(
+          booking.schedule_id,
+          {
+            $pull: {
+              'days.$[elem].slots.$[index].students': {
+                id: mongoose.Types.ObjectId(booking.student_id),
               },
             },
-            { $sort: { 'days.slots.slot': 1 } },
-            { $group: { _id: '$days.slots' } },
-          ]);
-          subject.sort(function (a, b) {
-            return a._id.slot - b._id.slot;
+          },
+          {
+            arrayFilters: [
+              { 'elem.day': booking.days[i].day },
+              { 'index.slot': { $in: booking.days[i].slots } },
+            ],
+          }
+        );
+        if (!schedule)
+          throw new NotFoundException({
+            success: false,
+            data: 'Schedule not found',
           });
-
-          let subjects = [];
-          subject.forEach((element) => {
-            subjects.push(element._id.subject);
-          });
-
-          booking[i].days[j]['subject'] = subjects;
-        }
       }
-      return { success: true, message: booking };
-    } catch (error) {
-      throw new ServiceUnavailableException({ success: false, message: error });
+    } else if (dto.status == 'Approved') {
+      const new_booking = await this.bookingModel.findByIdAndUpdate(
+        { _id: mongoose.Types.ObjectId(id) },
+        { status: dto.status },
+        { new: true }
+      );
+
+      if (!new_booking)
+        throw new BadRequestException({
+          success: false,
+          data: 'Fail to update',
+        });
+
+      const tutor = await this.userModel.findOne({
+        schedule_id: { $in: booking.schedule_id },
+      });
+      console.log(booking, tutor);
+
+      await this.userModel.findById(new_booking.student_id).then((user) => {
+        sendMail(
+          user.email,
+          'Your booking has been approved.',
+          `<p>You can join ${tutor.firstName}'s room with zoom ID: ${tutor.zoomID} or click <a href=${tutor.zoomJoinURL}>here</a></p>`
+        );
+      });
+
+      //update schedule from pending to Approved
+      for (var i = 0; i < booking.days.length; i++) {
+        let schedule = await this.scheduleModel.findByIdAndUpdate(
+          { _id: mongoose.Types.ObjectId(booking.schedule_id) },
+          {
+            $set: {
+              'days.$[elem].slots.$[index].students.$[ind].status': dto.status,
+            },
+          },
+          {
+            arrayFilters: [
+              { 'elem.day': booking.days[i].day },
+              { 'index.slot': { $in: booking.days[i].slots } },
+              { 'ind.id': booking.student_id },
+            ],
+          }
+        );
+        if (!schedule)
+          throw new NotFoundException({
+            success: false,
+            data: 'Schedule not found',
+          });
+      }
+
+      //Add to learn schedule
+      this.updateLearnSchedule(booking);
+    } else {
+      throw new BadRequestException({
+        success: false,
+        data: 'Wrong format of status',
+      });
     }
+    return {
+      success: true,
+      data: dto.status,
+      message: 'Update the booking is done',
+    };
   }
 }

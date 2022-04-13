@@ -1,3 +1,14 @@
+import { ApiProperty } from '@nestjs/swagger';
+
+export class Days_Delete {
+  @ApiProperty({ type: String })
+  day: String;
+
+  @ApiProperty({ type: [Number] })
+  slots: [Number];
+}
+
 export class UpdateSlotWithDeleteDto {
-  days: [{ day: String; slots: [Number] }];
+  @ApiProperty({ type: [Days_Delete] })
+  days: [Days_Delete];
 }

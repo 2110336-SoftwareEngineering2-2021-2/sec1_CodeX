@@ -8,8 +8,10 @@ import { TutorModule } from './tutor/tutor.module';
 import { UserModule } from './user/user.module';
 import { ScheduleModule } from './schedule/schedule.module';
 import { BookingModule } from './booking-req/booking.module';
+import { ReportModule } from './report/report.module';
 import { ReviewModule } from './review/review.module';
 import { FirebaseAuthStrategy } from './auth/firebase-auth.strategy';
+import { BanUserModule } from './ban-user/ban-user.module';
 
 @Module({
   imports: [
@@ -23,6 +25,8 @@ import { FirebaseAuthStrategy } from './auth/firebase-auth.strategy';
     ScheduleModule,
     BookingModule,
     ReviewModule,
+    ReportModule,
+    BanUserModule
   ],
   controllers: [AppController],
   providers: [AppService, FirebaseAuthStrategy],

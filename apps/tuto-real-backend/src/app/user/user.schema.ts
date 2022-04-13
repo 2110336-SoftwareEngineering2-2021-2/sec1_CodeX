@@ -5,9 +5,9 @@ export const UserSchema = new mongoose.Schema({
   //tutor only
   subjects: { type: [String], default: undefined },
   description: { type: String, default: undefined },
-  totalRating: { type: Number, default: undefined },
-  numReviews: { type: Number, default: undefined },
   studiedWith: { type: [String], default: [] },
+  numReviews: { type: Number },
+  avgRating: { type: Number },
   //basic info
   firstName: { type: String, require: true },
   lastName: { type: String, require: true },
@@ -28,6 +28,8 @@ export const UserSchema = new mongoose.Schema({
   },
   pricePerSlot: { type: Number, default: 0 },
   schedule_id: [String],
+  isBan: { type: Boolean, default: false },
+  duration: { type: Number, default: null },
 });
 
 UserSchema.path('email').index({ unique: true });

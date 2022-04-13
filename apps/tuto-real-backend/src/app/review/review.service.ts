@@ -4,13 +4,12 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
+import * as mongoose from 'mongoose';
 import { Model } from 'mongoose';
+import { InjectModel } from '@nestjs/mongoose';
 import { createReviewDto } from './createReview.dto';
 import { Review } from './review.interface';
 import { updateReviewDto } from './updateReview.dto';
-import * as mongoose from 'mongoose';
-import { ReviewDto } from './review.dto';
 import { User } from '../user/user.interface';
 
 @Injectable()
@@ -62,6 +61,8 @@ export class ReviewService {
       path: 'writer',
       select: 'firstName lastName',
     });
+
+    await this.getRating(dto.tutorID);
     return { success: true, data: review };
   }
 
@@ -72,14 +73,18 @@ export class ReviewService {
       rating: dto.rating,
       comment: dto.comment,
     };
+
     const review = await this.reviewModel.findByIdAndUpdate(id, data, {
       new: true,
     });
+
+    await this.getRating(review.tutor.toString());
     return { success: true, data: review };
   }
 
-  async getReviews(tutorId: string, sortBy: string, sid: string) {
+  public async getReviews(tutorId: string, sortBy: string, sid: string) {
     var id;
+    console.log(tutorId,sortBy,sid)
     if (sortBy == undefined) {
       sortBy = 'createdAt';
     } else if (!['lastUpdated', 'rating', 'createdAt'].includes(sortBy)) {
@@ -114,19 +119,21 @@ export class ReviewService {
       .catch((err) => {
         throw new InternalServerErrorException({ success: false, data: err });
       });
-    var rating = null;
+    // console.log(re_);
+    var rating;
     var tutor = await this.userModel
       .findOne({ _id: new mongoose.Types.ObjectId(tutorId) })
       .exec()
       .catch((err) => {
         throw new NotFoundException({ success: false, data: err });
       });
+    console.log(tutor);
     if (tutor == null)
       throw new NotFoundException({ success: false, data: 'Tutor not found' });
     if (tutor.role != 'Tutor')
       throw new BadRequestException({ success: false, data: 'Not a tutor' });
-    if (tutor.totalRating != undefined)
-      rating = tutor.totalRating / tutor.numReviews;
+    if (tutor.avgRating != undefined) rating = tutor.avgRating;
+    else rating = 0;
     var self = null;
     var allow = false;
     //if can not review
@@ -136,6 +143,7 @@ export class ReviewService {
         { studiedWith: tutorId },
       ],
     });
+    // console.log(studiedWith);
     if (studiedWith.length != 0) allow = true;
     var re = [];
     for (let i = 0; i < re_.length; i++) {
@@ -144,9 +152,34 @@ export class ReviewService {
       } else re.push(re_[i]);
     }
     if (sid == tutorId) allow = false;
+
     return {
       success: true,
       data: { rating: rating, allow: allow, self: self, reviews: re },
     };
+  }
+
+  private async getRating(tutorId: string): Promise<Number> {
+    const rating = await this.reviewModel
+      .aggregate([
+        {
+          $match: { tutor: new mongoose.Types.ObjectId(tutorId) },
+        },
+        {
+          $group: {
+            _id: '$tutor',
+            avgRating: { $avg: '$rating' },
+            numReviews: { $sum: 1 },
+          },
+        },
+      ])
+      .then((res) => res[0]);
+
+    await this.userModel.findByIdAndUpdate(tutorId, {
+      avgRating: rating.avgRating,
+      numReviews: rating.numReviews,
+    });
+
+    return rating;
   }
 }

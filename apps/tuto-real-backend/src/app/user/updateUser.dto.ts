@@ -1,14 +1,35 @@
+import { ApiProperty } from '@nestjs/swagger';
+
 export class updateUserDto {
-  readonly subjects: { type: [String]; default: undefined };
-  readonly description: { type: String; default: undefined };
+  @ApiProperty()
+  readonly subjects: [String];
+
+  @ApiProperty()
+  readonly description: String;
+
+  @ApiProperty()
   readonly firstName: String;
+
+  @ApiProperty()
   readonly lastName: String;
+
+  @ApiProperty()
   readonly birthDate: Date;
+
+  @ApiProperty()
   readonly address: String;
+
+  @ApiProperty()
   profileImg: {
     url: String;
   };
+
+  @ApiProperty()
   profile64: String;
+
+  @ApiProperty()
   readonly schedule_id: [String];
-  readonly pricePerSlot: { type: Number; default: 0 };
+
+  @ApiProperty()
+  readonly pricePerSlot: Number;
 }
