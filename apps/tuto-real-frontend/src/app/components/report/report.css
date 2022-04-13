@@ -1,18 +1,28 @@
-.report-list-container {
-    /* background-color: aqua; */
+.ban-unban-container {
     display: flex;
     flex-direction: column;
+    width: 720px; 
+    padding: 0px 20px;
     margin-top: 10px;
     gap: 15px; 
-    padding: 0px 20px;
-    width: 720px; 
 }
 
 @media only screen and (max-width: 720px) {
-    .report-list-container {
+    .ban-unban-container {
         width: 100%;
     }
 }
+
+.card-list-container {
+    /* background-color: aqua; */
+    display: flex;
+    flex-direction: column;
+    margin: 0px;
+    gap: 15px; 
+    padding: 0px;
+    width: 100%; 
+}
+
 
 .report-card {
     display: flex;
@@ -177,7 +187,7 @@
     gap: 5px;
 }
 
-.report-detail-modal .outline-gray-button {
+.outline-gray-button {
     background-color: transparent;
 
     border-color: var(--darkgray);
@@ -190,7 +200,7 @@
     transition: 0.2s;
 }
 
-.report-detail-modal .outline-gray-button:hover {
+.outline-gray-button:hover {
     background-color: var(--darkgray);
     color: white;
 }

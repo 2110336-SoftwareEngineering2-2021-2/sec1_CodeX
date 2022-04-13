@@ -1,10 +1,10 @@
 import React from "react"
 import ReportCard from "./ReportCard";
-import { Modal, Button } from "react-bootstrap"
-import BookingActionModal from "../navbar/BookingActionModal";
-import ModalTwoButton from "../modal/ModalTwoButton";
 import ReportDetailModal from "./ReportDetailModal";
 import "./report.css"
+import { Spinner } from "react-bootstrap";
+import COLORS from "../../constants/color";
+import { DESK } from "../../constants/image"
 
 
 class AdminBanUI extends React.Component{
@@ -12,7 +12,8 @@ class AdminBanUI extends React.Component{
         super(prop);
     }
     state = {
-        testText: "this is AdminBanUI",
+        isLoading: false,
+        isSomethingWentWrong: false,
         isReportDetailModalShow: false,
         reportDetailModalData: {
             reportId: "",
@@ -174,12 +175,41 @@ class AdminBanUI extends React.Component{
         ]
     }
 
-    testButtonHandler() {
-        this.setState({testText: "1111"})
-    }
-
-    fetchReportList() {
-
+    fetchReportList = async() => {
+        this.setState({isLoading: true, isSomethingWentWrong: false})
+        await client({
+            method: 'GET',
+            url: `/report`,
+            // params: {
+            //     subjects: `${searchInfo.subject === 'All' ? '' : searchInfo.subject}`,
+            //     keyword: genKeyword(
+            //     searchWithContext ? searchText : searchInfo.searchText
+            //     ),
+            //     ratePrice: `${searchInfo.minPrice.toString()},${
+            //     searchInfo.maxPrice.toString() ?? '10000'
+            //     }`,
+            //     days: genDayListText(searchInfo.daysCheck),
+            // },
+            headers: {
+                Accept: 'application/json',
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+        })
+        .then(({ data: { data } }) => {
+            console.log(data);
+            this.setState({
+                reportList: data, 
+                isLoading: false, 
+                isSomethingWentWrong: false
+            })
+        })
+        .catch((res) => {
+            console.log(res);
+            this.setState({ 
+                isLoading: false, 
+                isSomethingWentWrong: true
+            })
+        });
     }
 
     onClickBanButton(target_id) {
@@ -192,48 +222,84 @@ class AdminBanUI extends React.Component{
 
     render() {
         return ( 
-            <div className="report-list-container">
+            <div className="ban-unban-container">
 
-                {this.state.reportList.map((e,i) => (
-                    <ReportCard 
-                        reportingName={e.target.firstName + " " + e.target.lastName}
-                        reporterName={e.reporter.firstName + " " + e.reporter.lastName}
-                        timeStamp={e.createdAt}
-                        onClickCard={() => (
-                            this.setState({
-                                // reportId: "",
-                                // reportingName: "",
-                                // reportingId: "",
-                                // reporterName: "",
-                                // reporterId: "",
-                                
-                                // createdAt: "",
-                                // status: "",
-                                // text: "",
-                                // imageURL: "",
-                                reportDetailModalData: {
-                                    reportId: e._id,
-                                    reportingName: e.target.firstName + " " + e.target.lastName,
-                                    reportingId: e.target._id,
-                                    reporterName: e.reporter.firstName + " " + e.reporter.lastName,
-                                    reporterId: e.reporter._id,
+                <div className="flex-row gap5" style={{justifyContent:"center"}}>
+                    <button 
+                        className="outline-gray-button" 
+                        onClick={() => (this.setState({isLoading: !this.state.isLoading}))}
+                        >
+                        toggleLoading
+                    </button>
+                    <button 
+                        className="outline-gray-button" 
+                        onClick={() => (this.setState({reportList: []}))}
+                        >
+                        setEmpty
+                    </button>
+                    <button 
+                        className="outline-gray-button" 
+                        onClick={() => (this.setState({isSomethingWentWrong: !this.state.isSomethingWentWrong}))}
+                        >
+                        toggleSomethingWentWrong
+                    </button>
 
-                                    createdAt: e.createdAt,
-                                    status: e.status,
-                                    text: e.text,
-                                    imageURL: e.imageURL,
-                                },
-                                isReportDetailModalShow: true
-                            })
-                        )}
-                    />
-                ))}
-                <button 
-                    onClick={() => (this.setState({isReportDetailModalShow: !this.state.isReportDetailModalShow}))}
-                >
-                    show modal
-                </button>
-                {this.state.isReportDetailModalShow ?
+                </div>
+
+                {this.state.isLoading ? 
+                    <div className="loading_spinner" style={{marginBottom:"20px", width:"100%", height:"auto"}} >
+                        <Spinner
+                            animation="border"
+                            role="status"
+                            style={{ marginBottom: '2vh' }}
+                        >
+                            <span className="visually-hidden">Loading...</span>
+                        </Spinner>
+                        <h4 style={{ color: COLORS.darkgray }}>Loading</h4>
+                    </div>
+                :
+                    <div className="card-list-container">
+                        {this.state.isSomethingWentWrong ?
+                            <p style={{color:"red", fontSize:"24px", marginTop:"10vh", fontWeight:"500"}}>
+                                Oop!!? Something went wrong.
+                            </p>
+                        :
+                            <>
+                                {this.state.reportList.length === 0 &&
+                                    <div id="place-hover-empty-image">
+                                        <img src={DESK}/>
+                                        <p>We don't have any report</p>
+                                    </div>
+                                }
+                                {this.state.reportList.map((e,i) => (
+                                    <ReportCard 
+                                        reportingName={e.target.firstName + " " + e.target.lastName}
+                                        reporterName={e.reporter.firstName + " " + e.reporter.lastName}
+                                        timeStamp={e.createdAt}
+                                        onClickCard={() => (
+                                            this.setState({
+                                                reportDetailModalData: {
+                                                    reportId: e._id,
+                                                    reportingName: e.target.firstName + " " + e.target.lastName,
+                                                    reportingId: e.target._id,
+                                                    reporterName: e.reporter.firstName + " " + e.reporter.lastName,
+                                                    reporterId: e.reporter._id,
+
+                                                    createdAt: e.createdAt,
+                                                    status: e.status,
+                                                    text: e.text,
+                                                    imageURL: e.imageURL,
+                                                },
+                                                isReportDetailModalShow: true
+                                            })
+                                        )}
+                                    />
+                                ))}
+                            </>
+                        }
+                    </div>
+                }
+                {this.state.isReportDetailModalShow &&
                     <ReportDetailModal 
                         onHide={() => (this.setState({isReportDetailModalShow: false}))}
                         reportId={this.state.reportDetailModalData.reportId}
@@ -247,8 +313,7 @@ class AdminBanUI extends React.Component{
                         text={this.state.reportDetailModalData.text}
                         imageURL={this.state.reportDetailModalData.imageURL}
                     />
-                :
-                null}
+                }
             </div>
         )
     }
