@@ -1,10 +1,12 @@
 import React from "react"
 import ReportCard from "./ReportCard";
-import { Modal, Button } from "react-bootstrap"
-import BookingActionModal from "../navbar/BookingActionModal";
-import ModalTwoButton from "../modal/ModalTwoButton";
 import ReportDetailModal from "./ReportDetailModal";
 import "./report.css"
+import { Spinner } from "react-bootstrap";
+import COLORS from "../../constants/color";
+import { DESK } from "../../constants/image"
+import ConfirmBanModal from "./ConfirmBanModal";
+import ConfirmIgnoreModal from "./ConfirmIgnoreModal";
 
 
 class AdminBanUI extends React.Component{
@@ -12,8 +14,14 @@ class AdminBanUI extends React.Component{
         super(prop);
     }
     state = {
-        testText: "this is AdminBanUI",
+        isLoading: false,
+        isSomethingWentWrong: false,
         isReportDetailModalShow: false,
+        isConfirmBanModalShow: false,
+        confirmBanModalStatus: "normal", // normal | sending | success | fail
+        isConfirmIgnoreModalShow: false,
+        confirmIgnoreModalStatus: "normal", // normal | sending | success | fail
+        banDuration: 0,
         reportDetailModalData: {
             reportId: "",
             reportingName: "",
@@ -174,66 +182,146 @@ class AdminBanUI extends React.Component{
         ]
     }
 
-    testButtonHandler() {
-        this.setState({testText: "1111"})
+    showConfirmBanModal = (duration) => {
+        this.setState({
+            banDuration: duration, 
+            isReportDetailModalShow: false,
+            isConfirmBanModalShow: true
+        });
+        console.log("call showConfirmBanModal",duration);
     }
 
-    fetchReportList() {
-
+    showConfirmIgnoreModal = () => {
+        this.setState({
+            isReportDetailModalShow: false,
+            isConfirmIgnoreModalShow: true
+        });
     }
 
-    onClickBanButton(target_id) {
+    fetchReportList = async() => {
+        this.setState({isLoading: true, isSomethingWentWrong: false})
+        await client({
+            method: 'GET',
+            url: `/report`,
+            headers: {
+                Accept: 'application/json',
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+        })
+        .then(({ data: { data } }) => {
+            console.log(data);
+            this.setState({
+                reportList: data, 
+                isLoading: false, 
+                isSomethingWentWrong: false
+            })
+        })
+        .catch((res) => {
+            console.log(res);
+            this.setState({ 
+                isLoading: false, 
+                isSomethingWentWrong: true
+            })
+        });
+    }
+
+    onClickBanButton = (target_id)=> {
+        console.log("call onClickBanButton");
+        // this.setState({confirmBanModalStatus: "normal"})
+        // this.setState({confirmBanModalStatus: "sending"})
+        this.setState({confirmBanModalStatus: "success"})
+        // this.setState({confirmBanModalStatus: "fail"})
         return null
     }
 
-    onDeleteReport(_id) {
+    onDeleteReport = (_id) => {
+        console.log("call onDeleteReport");
+        // this,this.setState({confirmIgnoreModalStatus: "normal"})
+        // this,this.setState({confirmIgnoreModalStatus: "sending"})
+        this,this.setState({confirmIgnoreModalStatus: "success"})
+        // this,this.setState({confirmIgnoreModalStatus: "fail"})
         return null
     }
 
     render() {
         return ( 
-            <div className="report-list-container">
+            <div className="ban-unban-container">
 
-                {this.state.reportList.map((e,i) => (
-                    <ReportCard 
-                        reportingName={e.target.firstName + " " + e.target.lastName}
-                        reporterName={e.reporter.firstName + " " + e.reporter.lastName}
-                        timeStamp={e.createdAt}
-                        onClickCard={() => (
-                            this.setState({
-                                // reportId: "",
-                                // reportingName: "",
-                                // reportingId: "",
-                                // reporterName: "",
-                                // reporterId: "",
-                                
-                                // createdAt: "",
-                                // status: "",
-                                // text: "",
-                                // imageURL: "",
-                                reportDetailModalData: {
-                                    reportId: e._id,
-                                    reportingName: e.target.firstName + " " + e.target.lastName,
-                                    reportingId: e.target._id,
-                                    reporterName: e.reporter.firstName + " " + e.reporter.lastName,
-                                    reporterId: e.reporter._id,
+                <div className="flex-row gap5" style={{justifyContent:"center"}}>
+                    <button 
+                        className="outline-gray-button" 
+                        onClick={() => (this.setState({isLoading: !this.state.isLoading}))}
+                        >
+                        toggleLoading
+                    </button>
+                    <button 
+                        className="outline-gray-button" 
+                        onClick={() => (this.setState({reportList: []}))}
+                        >
+                        setEmpty
+                    </button>
+                    <button 
+                        className="outline-gray-button" 
+                        onClick={() => (this.setState({isSomethingWentWrong: !this.state.isSomethingWentWrong}))}
+                        >
+                        toggleSomethingWentWrong
+                    </button>
+                </div>
 
-                                    createdAt: e.createdAt,
-                                    status: e.status,
-                                    text: e.text,
-                                    imageURL: e.imageURL,
-                                },
-                                isReportDetailModalShow: true
-                            })
-                        )}
-                    />
-                ))}
-                <button 
-                    onClick={() => (this.setState({isReportDetailModalShow: !this.state.isReportDetailModalShow}))}
-                >
-                    show modal
-                </button>
-                {this.state.isReportDetailModalShow ?
+                {this.state.isLoading ? 
+                    <div className="loading_spinner" style={{marginBottom:"20px", width:"100%", height:"auto"}} >
+                        <Spinner
+                            animation="border"
+                            role="status"
+                            style={{ marginBottom: '2vh' }}
+                        >
+                            <span className="visually-hidden">Loading...</span>
+                        </Spinner>
+                        <h4 style={{ color: COLORS.darkgray }}>Loading</h4>
+                    </div>
+                :
+                    <div className="card-list-container">
+                        {this.state.isSomethingWentWrong ?
+                            <p style={{color:"red", fontSize:"24px", marginTop:"10vh", fontWeight:"500"}}>
+                                Oop!!? Something went wrong.
+                            </p>
+                        :
+                            <>
+                                {this.state.reportList.length === 0 &&
+                                    <div id="place-hover-empty-image">
+                                        <img src={DESK}/>
+                                        <p>We don't have any report</p>
+                                    </div>
+                                }
+                                {this.state.reportList.map((e,i) => (
+                                    <ReportCard 
+                                        reportingName={e.target.firstName + " " + e.target.lastName}
+                                        reporterName={e.reporter.firstName + " " + e.reporter.lastName}
+                                        timeStamp={e.createdAt}
+                                        onClickCard={() => (
+                                            this.setState({
+                                                reportDetailModalData: {
+                                                    reportId: e._id,
+                                                    reportingName: e.target.firstName + " " + e.target.lastName,
+                                                    reportingId: e.target._id,
+                                                    reporterName: e.reporter.firstName + " " + e.reporter.lastName,
+                                                    reporterId: e.reporter._id,
+
+                                                    createdAt: e.createdAt,
+                                                    status: e.status,
+                                                    text: e.text,
+                                                    imageURL: e.imageURL,
+                                                },
+                                                isReportDetailModalShow: true
+                                            })
+                                        )}
+                                    />
+                                ))}
+                            </>
+                        }
+                    </div>
+                }
+                {this.state.isReportDetailModalShow &&
                     <ReportDetailModal 
                         onHide={() => (this.setState({isReportDetailModalShow: false}))}
                         reportId={this.state.reportDetailModalData.reportId}
@@ -246,9 +334,27 @@ class AdminBanUI extends React.Component{
                         status={this.state.reportDetailModalData.status}
                         text={this.state.reportDetailModalData.text}
                         imageURL={this.state.reportDetailModalData.imageURL}
+
+                        onClickBanBtn={this.showConfirmBanModal}
+                        onClickIgnoreBtn={this.showConfirmIgnoreModal}
                     />
-                :
-                null}
+                }
+                {this.state.isConfirmBanModalShow &&
+                    <ConfirmBanModal 
+                        onHide={() => (this.setState({isConfirmBanModalShow: false, isReportDetailModalShow: true}))}
+                        targetName={this.state.reportDetailModalData.reportingName}
+                        duration={this.state.banDuration}
+                        status={this.state.confirmBanModalStatus}
+                        onClickConfirmBtn={() => (this.onClickBanButton(this.state.duration))}
+                    />
+                }
+                {this.state.isConfirmIgnoreModalShow &&
+                    <ConfirmIgnoreModal 
+                        onHide={() => (this.setState({isConfirmIgnoreModalShow: false, isReportDetailModalShow: true}))}
+                        status={this.state.confirmIgnoreModalStatus}
+                        onClickConfirmBtn={() => (this.onDeleteReport(this.state.reportDetailModalData.reportId))}
+                    />
+                }
             </div>
         )
     }

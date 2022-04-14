@@ -1,12 +1,7 @@
-import COLORS from "../../constants/color";
 import "./report.css"
 
-const ReportCard = (prop) => {
-
-    const {reportingName,
-        reporterName,
-        timeStamp,
-        onClickCard} = prop;
+const UserBannedCard = (props) => {
+    const {name, timeStamp, onClickCard, onClickUnBanBtn} = props;
 
     const translateDateFormat = (timeStamp) => {
         //2001-02-15T17:00:00.000+00:00
@@ -48,30 +43,24 @@ const ReportCard = (prop) => {
     };
 
     return (
-        <div className="report-card" onClick={onClickCard}>
-            <div className="header">
-                <p style={{color:COLORS.primary, fontWeight:"500"}}>
-                    Waiting for review
-                </p>
-                <p>{translateDateFormat(timeStamp)} {translateTimeFormat(timeStamp)}</p>
-            </div>
-  
-            <div className="body">
-                <div id="report-target">
-                    <p style={{fontWeight:"500"}}>Reporting:</p>
-                    <p style={{color:"red", fontWeight:"500"}}>
-                        {reportingName}
-                    </p>    
-                </div>
-                <div id="reporter">
-                    <p>From:</p>
-                    <p style={{fontWeight:"500"}}>
-                        {reporterName}
+        <div className="user-banned-card" onClick={onClickCard}>
+            {/* <p>this is banned user card</p> */}
+            <div className="flex-column">
+                <p style={{fontSize:"24px", fontWeight:"500"}}>{name}</p>
+                <div className="flex-row gap5">
+                    <p>Banned Until:</p>
+                    <p>
+                        {translateDateFormat(timeStamp)} {translateTimeFormat(timeStamp)}
                     </p>
                 </div>
             </div>
+            <button className="ignore-button"
+                onClick={onClickUnBanBtn} 
+                style={{maxHeight:"3rem"}}>
+                Unban
+            </button>
         </div>
     )
 }
 
-export default ReportCard
+export default UserBannedCard
