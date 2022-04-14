@@ -41,7 +41,7 @@ export class ReportController {
   }
 
   @Post()
-  //@UseGuards(FirebaseAuthGuard)
+  @UseGuards(FirebaseAuthGuard)
   @ApiOperation({ summary: 'Create report' })
   @ApiResponse({
     status: 200,
