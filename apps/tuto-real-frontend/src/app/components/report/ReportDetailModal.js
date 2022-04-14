@@ -91,20 +91,20 @@ const ReportDetailModal = (props) => {
             <Modal.Footer>
                 {isGoingToBan ?
                 <>
+                    {banDuration > 0 ?
+                    <button className="ban-button" onClick={() => (setIsGoingToBan(true))}>Ban</button>
+                    :null}
                     <button className="outline-gray-button" 
                         onClick={() => {
                             setIsGoingToBan(false),
                             setBanDuration(0)}
-                        }>Cancel</button>
-                    {banDuration > 0 ?
-                    <button className="ban-button" onClick={() => (setIsGoingToBan(true))}>Ban</button>
-                    :null}
+                    }>Cancel</button>
                 </>
                 :
                 <>
-                    <button className="outline-gray-button" onClick={onHide}>Close</button>
                     <button className="ignore-button">Ignore & Delete</button>
                     <button className="ban-button" onClick={() => (setIsGoingToBan(true))}>Ban</button>
+                    <button className="outline-gray-button" onClick={onHide}>Close</button>
                 </>
                 }
             </Modal.Footer>
