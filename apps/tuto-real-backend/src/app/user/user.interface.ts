@@ -25,4 +25,6 @@ export interface User extends Document {
   };
   schedule_id: [String];
   pricePerSlot: { type: Number; default: 0 };
+  isBan: { type: Boolean; default: false };
+  unbanDate: Date;
 }
