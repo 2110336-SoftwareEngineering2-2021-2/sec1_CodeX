@@ -6,6 +6,7 @@ import { Spinner } from "react-bootstrap";
 import COLORS from "../../constants/color";
 import { DESK } from "../../constants/image"
 import ConfirmBanModal from "./ConfirmBanModal";
+import ConfirmIgnoreModal from "./ConfirmIgnoreModal";
 
 
 class AdminBanUI extends React.Component{
@@ -17,7 +18,9 @@ class AdminBanUI extends React.Component{
         isSomethingWentWrong: false,
         isReportDetailModalShow: false,
         isConfirmBanModalShow: false,
+        confirmBanModalStatus: "normal", // normal | sending | success | fail
         isConfirmIgnoreModalShow: false,
+        confirmIgnoreModalStatus: "normal", // normal | sending | success | fail
         banDuration: 0,
         reportDetailModalData: {
             reportId: "",
@@ -224,11 +227,19 @@ class AdminBanUI extends React.Component{
 
     onClickBanButton = (target_id)=> {
         console.log("call onClickBanButton");
+        // this.setState({confirmBanModalStatus: "normal"})
+        // this.setState({confirmBanModalStatus: "sending"})
+        this.setState({confirmBanModalStatus: "success"})
+        // this.setState({confirmBanModalStatus: "fail"})
         return null
     }
 
     onDeleteReport = (_id) => {
         console.log("call onDeleteReport");
+        // this,this.setState({confirmIgnoreModalStatus: "normal"})
+        // this,this.setState({confirmIgnoreModalStatus: "sending"})
+        this,this.setState({confirmIgnoreModalStatus: "success"})
+        // this,this.setState({confirmIgnoreModalStatus: "fail"})
         return null
     }
 
@@ -333,7 +344,15 @@ class AdminBanUI extends React.Component{
                         onHide={() => (this.setState({isConfirmBanModalShow: false, isReportDetailModalShow: true}))}
                         targetName={this.state.reportDetailModalData.reportingName}
                         duration={this.state.banDuration}
+                        status={this.state.confirmBanModalStatus}
                         onClickConfirmBtn={() => (this.onClickBanButton(this.state.duration))}
+                    />
+                }
+                {this.state.isConfirmIgnoreModalShow &&
+                    <ConfirmIgnoreModal 
+                        onHide={() => (this.setState({isConfirmIgnoreModalShow: false, isReportDetailModalShow: true}))}
+                        status={this.state.confirmIgnoreModalStatus}
+                        onClickConfirmBtn={() => (this.onDeleteReport(this.state.reportDetailModalData.reportId))}
                     />
                 }
             </div>

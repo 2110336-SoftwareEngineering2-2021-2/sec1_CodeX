@@ -235,6 +235,21 @@
     background-color: #D64F24;
 }
 
+.acknowledge-button {
+    background-color: var(--third);
+
+    border-color: transparent;
+    border-radius: 4px;
+    padding: .375rem .75rem;
+    color: white;
+
+    transition: 0.2s;
+}
+
+.acknowledge-button:hover {
+    background-color: var(--primary);
+}
+
 .user-banned-card {
     display: flex;
     flex-direction: row;
