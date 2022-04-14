@@ -4,8 +4,10 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, mongo, Mongoose } from 'mongoose';
 import { User } from '../user/user.interface';
+
+const mongoose = require('mongoose');
 
 @Injectable()
 export class BanUserService {
@@ -22,20 +24,66 @@ export class BanUserService {
         success: false,
         data: 'Please provide ban duration',
       });
-    const user = await this.userModel
-      .findByIdAndUpdate(tid, { isBan: true, duration }, { new: true })
-      .catch((err) => {
-        throw new NotFoundException({ success: false, data: 'User not found' });
+
+    //Find user
+    const user = await this.userModel.findById(tid).exec();
+    if (!user)
+      throw new NotFoundException({
+        success: false,
+        message: 'User is not found',
       });
-    return { success: true, data: user };
+
+    //If the user has not been already banned
+    if (!user.isBan) {
+      let date = new Date(Date.now());
+      date.setHours((date.getHours() as number) + (duration as number));
+      await this.userModel.updateOne(
+        { _id: mongoose.Types.ObjectId(tid) },
+        { isBan: true, unbanDate: date },
+        { new: true }
+      );
+    }
+    //If the user has already been banned
+    else {
+      let date = user.unbanDate;
+      date.setHours(date.getHours() + (duration as number));
+      await this.userModel.updateOne(
+        { _id: mongoose.Types.ObjectId(tid) },
+        { unbanDate: date },
+        { new: true }
+      );
+    }
+
+    const user_new = await this.userModel
+      .findById(
+        { _id: tid },
+        { firstName: 1, lastName: 1, isBan: 1, unbanDate: 1 }
+      )
+      .exec();
+
+    //Handle report
+    //updateReportStatus();
+
+    return { success: true, data: user_new };
   }
 
   public async unBanUser(tid: String): Promise<any> {
-    const user = await this.userModel
-      .findByIdAndUpdate(tid, { isBan: false, duration: null }, { new: true })
+    await this.userModel
+      .findByIdAndUpdate(tid, { isBan: false, unbanDate: null }, { new: true })
       .catch((err) => {
         throw new NotFoundException({ success: false, data: 'User not found' });
       });
-    return { success: true, data: user };
+
+    const user_new = await this.userModel
+      .findById(
+        { _id: tid },
+        { firstName: 1, lastName: 1, isBan: 1, unbanDate: 1 }
+      )
+      .exec();
+
+    return { success: true, data: user_new };
   }
+}
+function updateReportStatus() {
+  throw new Error('Function not implemented.');
 }
