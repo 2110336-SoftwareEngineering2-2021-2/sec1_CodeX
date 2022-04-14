@@ -58,13 +58,13 @@ const ReportCard = (prop) => {
   
             <div className="body">
                 <div id="report-target">
-                    <p>REPORTING</p>
+                    <p style={{fontWeight:"500"}}>Reporting:</p>
                     <p style={{color:"red", fontWeight:"500"}}>
                         {reportingName}
                     </p>    
                 </div>
                 <div id="reporter">
-                    <p>FROM</p>
+                    <p>From:</p>
                     <p style={{fontWeight:"500"}}>
                         {reporterName}
                     </p>

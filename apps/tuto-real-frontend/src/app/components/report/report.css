@@ -34,7 +34,7 @@
     border-color: var(--lightgray);
     border-radius: 8px;
     
-    padding: 8px;
+    padding: 8px 12px 8px 12px;
     margin: 0px 3px;
 
     box-shadow: 0px 2px 2px rgb(0, 0, 0, 0.25) !important;
@@ -205,7 +205,7 @@
     color: white;
 }
 
-.report-detail-modal .ignore-button {
+.ignore-button {
     background-color: var(--yellow);
 
     border-color: transparent;
@@ -216,11 +216,11 @@
     transition: 0.2s;
 }
 
-.report-detail-modal .ignore-button:hover {
+.ignore-button:hover {
     background-color: #DFA91E;
 }
 
-.report-detail-modal .ban-button {
+.ban-button {
     background-color: var(--warning);
 
     border-color: transparent;
@@ -231,6 +231,37 @@
     transition: 0.2s;
 }
 
-.report-detail-modal .ban-button:hover {
+.ban-button:hover {
     background-color: #D64F24;
+}
+
+.user-banned-card {
+    display: flex;
+    flex-direction: row;
+    background-color: white;
+    justify-content: space-between;
+    align-items: center;
+
+    border-style: solid;
+    border-width: 1px;
+    border-color: var(--lightgray);
+    border-radius: 8px;
+    
+    padding: 8px 12px 8px 12px;
+    margin: 0px 3px;
+
+    box-shadow: 0px 2px 2px rgb(0, 0, 0, 0.25) !important;
+
+    transition: 0.2s;
+    /* border-color: var(--lightgray); */
+}
+
+.user-banned-card:hover {
+    margin: 0px 0px;
+    background-color: var(--gray);
+    /* animation-iteration-count: infinite; */
+}
+
+.user-banned-card p {
+    color: var(--darkgray);
 }

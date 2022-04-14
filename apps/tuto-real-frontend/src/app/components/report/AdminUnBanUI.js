@@ -13,7 +13,50 @@ class AdminUnBanUI extends React.Component{
     state = {
         isLoading: false,
         isSomethingWentWrong: false,
-        userBannedList: [1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+        userBannedList: [
+            {
+                _id: "hosehfegnlnlbnldnbldlfm",
+                firstName: "Veerin",
+                lastName: "Juurek",
+                timeStamp: "2022-04-04T18:00:33.538+00:00",
+            },
+            {
+                _id: "hosehfegnlnlbnldnbldlfm",
+                firstName: "Veerin",
+                lastName: "Juurek",
+                timeStamp: "2022-04-04T18:00:33.538+00:00",
+            },
+            {
+                _id: "hosehfegnlnlbnldnbldlfm",
+                firstName: "Veerin",
+                lastName: "Juurek",
+                timeStamp: "2022-04-04T18:00:33.538+00:00",
+            },
+            {
+                _id: "hosehfegnlnlbnldnbldlfm",
+                firstName: "Veerin",
+                lastName: "Juurek",
+                timeStamp: "2022-04-04T18:00:33.538+00:00",
+            },
+            {
+                _id: "hosehfegnlnlbnldnbldlfm",
+                firstName: "Veerin",
+                lastName: "Juurek",
+                timeStamp: "2022-04-04T18:00:33.538+00:00",
+            },
+            {
+                _id: "hosehfegnlnlbnldnbldlfm",
+                firstName: "Veerin",
+                lastName: "Juurek",
+                timeStamp: "2022-04-04T18:00:33.538+00:00",
+            },
+            {
+                _id: "hosehfegnlnlbnldnbldlfm",
+                firstName: "Veerin",
+                lastName: "Juurek",
+                timeStamp: "2022-04-04T18:00:33.538+00:00",
+            },
+        ]
     }
 
     fetchBannedList() {
@@ -77,7 +120,12 @@ class AdminUnBanUI extends React.Component{
                                     </div>
                                 }
                                 {this.state.userBannedList.map((e,i) => (
-                                    <UserBannedCard />
+                                    <UserBannedCard 
+                                        name={e.firstName + " " + e.lastName}
+                                        timeStamp={e.timeStamp}
+                                        // onClickUnbanButton={}
+                                        // onClickCard={}
+                                    />
                                 ))}
                             </>
                         }
