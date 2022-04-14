@@ -2,7 +2,8 @@ import * as mongoose from 'mongoose';
 
 export const ReportSchema = new mongoose.Schema({
   createdAt: Date,
-  reportInfo : String,
+  text : String,
+  imageUrl : String,
   reporterId : { type : mongoose.Schema.Types.ObjectId , ref: 'User'},
   targetId : { type : mongoose.Schema.Types.ObjectId , ref: 'User'},
   status : {
@@ -12,7 +13,7 @@ export const ReportSchema = new mongoose.Schema({
       },
 });
 
-ReportSchema.path('reportInfo').required(true);
+ReportSchema.path('text').required(true);
 ReportSchema.path('targetId').required(true);
 ReportSchema.path('reporterId').required(true);
 ReportSchema.path('createdAt').required(true);

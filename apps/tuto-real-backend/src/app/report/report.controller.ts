@@ -28,9 +28,13 @@ export class ReportController {
     status: 200,
     description: 'The report has been successfully queried.',
   })
-  getAllReport() {
+  @ApiResponse({
+    status: 400,
+    description: 'Wrong Id format',
+  })
+  getAllReport(@Query("_id") _id:string) {
     try {
-      return this.reportService.getAll();
+      return this.reportService.getAll(_id);
     } catch (err) {
       return err;
     }
@@ -46,6 +50,10 @@ export class ReportController {
   @ApiResponse({
     status: 400,
     description: 'Wrong report format!',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Target or reporter not found',
   })
   @ApiBody({ type: CreateReportDto })
   create(@Body() dto: CreateReportDto) {
