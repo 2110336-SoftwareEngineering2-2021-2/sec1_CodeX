@@ -44,10 +44,15 @@ export class ReportService {
   public async create(dto : CreateReportDto){
     var report = new ReportDto()
     var now = new Date()
-    now.setHours(now.getHours()+7)
     report.createdAt = now
     report.status = "Pending"
     report.text = dto.text
+    var target = await this.userModel.findById(dto.targetId);
+    if (!target)
+      throw new NotFoundException({ success: false, data: 'Target not found' });
+    var reporter = await this.userModel.findById(dto.reporterId);
+    if (!reporter)
+      throw new NotFoundException({ success: false, data: 'User not found' });
     report.targetId = dto.targetId
     report.reporterId = dto.reporterId
     report.imageUrl = dto.reportImg==undefined? undefined : await uploadImageBy64('Report', dto.reportImg);
@@ -58,7 +63,7 @@ export class ReportService {
     .catch((err)=>{
       throw new BadRequestException({success:false,data:err})
     })
-    return {success : true,data : re}
+    return re
   }
 
 

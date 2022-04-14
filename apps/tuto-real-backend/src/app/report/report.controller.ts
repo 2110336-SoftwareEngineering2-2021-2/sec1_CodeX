@@ -41,7 +41,7 @@ export class ReportController {
   }
 
   @Post()
-  @UseGuards(FirebaseAuthGuard)
+  //@UseGuards(FirebaseAuthGuard)
   @ApiOperation({ summary: 'Create report' })
   @ApiResponse({
     status: 200,
@@ -50,6 +50,10 @@ export class ReportController {
   @ApiResponse({
     status: 400,
     description: 'Wrong report format!',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Target or reporter not found',
   })
   @ApiBody({ type: CreateReportDto })
   create(@Body() dto: CreateReportDto) {
