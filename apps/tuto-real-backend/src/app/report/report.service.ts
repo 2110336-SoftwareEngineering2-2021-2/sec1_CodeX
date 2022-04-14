@@ -4,17 +4,18 @@ import { Model, Mongoose } from 'mongoose';
 import {Report} from './report.interface'
 import { CreateReportDto , ReportDto } from './report.dto';
 import { uploadImageBy64 } from '../util/google';
+import { User } from '../user/user.interface';
 const mongoose = require('mongoose');
 @Injectable()
 export class ReportService {
   constructor(
     @InjectModel('Report') private reportModel: Model<Report>,
-  
+    @InjectModel('User') private userModel: Model<User>
   ) {}
 
   public async getAll(_id : string){
    
-    var filter = {}
+    var filter : any = {status:"Pending"}
     if (_id!=undefined) {
       try{
         var objId = _id==undefined? undefined:new mongoose.Types.ObjectId(_id)
@@ -34,10 +35,10 @@ export class ReportService {
       select: 'firstName lastName',
     }))
       .catch((err)=>{
-        throw new InternalServerErrorException({success:false,data:err})
+        throw new NotFoundException({success:false,data:"UserId is not exist"})
       })
     console.log(result)
-    return result
+    return {success : true , data : result}
   }
 
   public async create(dto : CreateReportDto){
@@ -50,14 +51,17 @@ export class ReportService {
     report.targetId = dto.targetId
     report.reporterId = dto.reporterId
     report.imageUrl = dto.reportImg==undefined? undefined : await uploadImageBy64('Report', dto.reportImg);
-    return await this.reportModel.create(report)
+    var re = await this.reportModel.create(report)
     .then((res)=>{
       return {sucess : true , data : dto}
     })
     .catch((err)=>{
       throw new BadRequestException({success:false,data:err})
     })
+    return {success : true,data : re}
   }
+
+
 
   public async updateReportStatus(_id:string , isBan:boolean){
     try {
@@ -65,26 +69,32 @@ export class ReportService {
     } catch(err){
       throw new BadRequestException({success:false,data:"Id wrong format"})
     }
+    var re ;
     if (isBan){
-      return await this.reportModel.updateOne(
+      re= await this.reportModel.updateOne(
         {"_id":_id},
         { $set: { "status" : "Approved" } }) 
         .then((res)=>{
           return res
         })
         .catch((err)=>{
-          throw new NotFoundException({success:false,data:"Report not found"})
+          throw new InternalServerErrorException({success:false,data:err})
         })
+      if (re.matchedCount == 0) 
+          throw new NotFoundException({success:false,data:"Report not found"})
     }
     else {
-      return await this.reportModel.deleteOne({_id:new mongoose.Types.ObjectId(_id)})
+      re = await this.reportModel.deleteOne({_id:new mongoose.Types.ObjectId(_id)})
       .then((res)=>{
         return res
       })
       .catch((err)=>{
-        throw new NotFoundException({success:false,data:"Report not found"})
+        throw new InternalServerErrorException({success:false,data:err})
       })
+      if (re.deletedCount == 0) 
+        throw new NotFoundException({success:false,data:"Report not found"})
   }
+  return {success : true , data : re}
 }
 
 

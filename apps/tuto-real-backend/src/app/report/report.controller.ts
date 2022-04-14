@@ -22,11 +22,15 @@ export class ReportController {
   constructor(private readonly reportService: ReportService) {}
 
   @Get()
-  //@UseGuards(FirebaseAuthGuard)
+  @UseGuards(FirebaseAuthGuard)
   @ApiOperation({ summary: 'Get all report' })
   @ApiResponse({
     status: 200,
     description: 'The report has been successfully queried.',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Wrong Id format',
   })
   getAllReport(@Query("_id") _id:string) {
     try {
