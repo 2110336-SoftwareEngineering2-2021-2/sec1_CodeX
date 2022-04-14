@@ -91,7 +91,6 @@ class AdminUnBanUI extends React.Component{
                         >
                         toggleSomethingWentWrong
                     </button>
-
                 </div>
 
                 {this.state.isLoading ? 

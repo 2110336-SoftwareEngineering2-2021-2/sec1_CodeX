@@ -5,6 +5,7 @@ import "./report.css"
 import { Spinner } from "react-bootstrap";
 import COLORS from "../../constants/color";
 import { DESK } from "../../constants/image"
+import ConfirmBanModal from "./ConfirmBanModal";
 
 
 class AdminBanUI extends React.Component{
@@ -15,6 +16,9 @@ class AdminBanUI extends React.Component{
         isLoading: false,
         isSomethingWentWrong: false,
         isReportDetailModalShow: false,
+        isConfirmBanModalShow: false,
+        isConfirmIgnoreModalShow: false,
+        banDuration: 0,
         reportDetailModalData: {
             reportId: "",
             reportingName: "",
@@ -175,21 +179,27 @@ class AdminBanUI extends React.Component{
         ]
     }
 
+    showConfirmBanModal = (duration) => {
+        this.setState({
+            banDuration: duration, 
+            isReportDetailModalShow: false,
+            isConfirmBanModalShow: true
+        });
+        console.log("call showConfirmBanModal",duration);
+    }
+
+    showConfirmIgnoreModal = () => {
+        this.setState({
+            isReportDetailModalShow: false,
+            isConfirmIgnoreModalShow: true
+        });
+    }
+
     fetchReportList = async() => {
         this.setState({isLoading: true, isSomethingWentWrong: false})
         await client({
             method: 'GET',
             url: `/report`,
-            // params: {
-            //     subjects: `${searchInfo.subject === 'All' ? '' : searchInfo.subject}`,
-            //     keyword: genKeyword(
-            //     searchWithContext ? searchText : searchInfo.searchText
-            //     ),
-            //     ratePrice: `${searchInfo.minPrice.toString()},${
-            //     searchInfo.maxPrice.toString() ?? '10000'
-            //     }`,
-            //     days: genDayListText(searchInfo.daysCheck),
-            // },
             headers: {
                 Accept: 'application/json',
                 Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -212,11 +222,13 @@ class AdminBanUI extends React.Component{
         });
     }
 
-    onClickBanButton(target_id) {
+    onClickBanButton = (target_id)=> {
+        console.log("call onClickBanButton");
         return null
     }
 
-    onDeleteReport(_id) {
+    onDeleteReport = (_id) => {
+        console.log("call onDeleteReport");
         return null
     }
 
@@ -243,7 +255,6 @@ class AdminBanUI extends React.Component{
                         >
                         toggleSomethingWentWrong
                     </button>
-
                 </div>
 
                 {this.state.isLoading ? 
@@ -312,6 +323,17 @@ class AdminBanUI extends React.Component{
                         status={this.state.reportDetailModalData.status}
                         text={this.state.reportDetailModalData.text}
                         imageURL={this.state.reportDetailModalData.imageURL}
+
+                        onClickBanBtn={this.showConfirmBanModal}
+                        onClickIgnoreBtn={this.showConfirmIgnoreModal}
+                    />
+                }
+                {this.state.isConfirmBanModalShow &&
+                    <ConfirmBanModal 
+                        onHide={() => (this.setState({isConfirmBanModalShow: false, isReportDetailModalShow: true}))}
+                        targetName={this.state.reportDetailModalData.reportingName}
+                        duration={this.state.banDuration}
+                        onClickConfirmBtn={() => (this.onClickBanButton(this.state.duration))}
                     />
                 }
             </div>

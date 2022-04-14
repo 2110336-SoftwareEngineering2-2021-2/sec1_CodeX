@@ -13,7 +13,9 @@ const ReportDetailModal = (props) => {
         createdAt,
         status,
         text,
-        imageURL} = props;
+        imageURL,
+        onClickBanBtn,
+        onClickIgnoreBtn} = props;
 
     const [banDuration, setBanDuration] = useState(0);
     const [isGoingToBan, setIsGoingToBan] = useState(false);
@@ -72,12 +74,12 @@ const ReportDetailModal = (props) => {
                     </div>
                 </div>
             </Modal.Body>
-            {isGoingToBan ?
+            {isGoingToBan &&
                 <div className="flex-column duration-zone">
                     <div className="flex-row" style={{alignItems:"center", gap:"5px"}}>
                         <p>BAN DURATION (HOURS)</p>
                         {banDuration > 0 ? null:
-                        <p style={{color:"red"}}>*(require)</p>
+                            <p style={{color:"red"}}>*(require)</p>
                         }
                     </div>
                     <Form.Control
@@ -87,25 +89,38 @@ const ReportDetailModal = (props) => {
                         onChange={(e) => setBanDuration(e.target.value)}
                     />
                 </div>
-            :null}
+            }
             <Modal.Footer>
                 {isGoingToBan ?
-                <>
-                    {banDuration > 0 ?
-                    <button className="ban-button" onClick={() => (setIsGoingToBan(true))}>Ban</button>
-                    :null}
-                    <button className="outline-gray-button" 
-                        onClick={() => {
-                            setIsGoingToBan(false),
-                            setBanDuration(0)}
-                    }>Cancel</button>
-                </>
+                    <>
+                        {banDuration > 0 ?
+                            <button className="ban-button" 
+                                onClick={() => (onClickBanBtn(banDuration))}>
+                                Ban
+                            </button>
+                        :null}
+                        <button className="outline-gray-button" 
+                            onClick={() => {
+                                setIsGoingToBan(false),
+                                setBanDuration(0)}}>
+                            Cancel
+                        </button>
+                    </>
                 :
-                <>
-                    <button className="ignore-button">Ignore & Delete</button>
-                    <button className="ban-button" onClick={() => (setIsGoingToBan(true))}>Ban</button>
-                    <button className="outline-gray-button" onClick={onHide}>Close</button>
-                </>
+                    <>
+                        <button className="ignore-button" 
+                            onClick={() => (onClickIgnoreBtn())}>
+                            Ignore & Delete
+                        </button>
+                        <button className="ban-button" 
+                            onClick={() => (setIsGoingToBan(true))}>
+                            Ban
+                        </button>
+                        <button className="outline-gray-button" 
+                            onClick={onHide}>
+                            Close
+                        </button>
+                    </>
                 }
             </Modal.Footer>
         </Modal>

@@ -265,3 +265,7 @@
 .user-banned-card p {
     color: var(--darkgray);
 }
+
+.text-highlight {
+    color: var(--primary);
+}
