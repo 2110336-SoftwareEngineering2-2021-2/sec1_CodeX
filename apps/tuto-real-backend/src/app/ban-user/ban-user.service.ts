@@ -1,24 +1,33 @@
 import {
   BadRequestException,
+  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, mongo, Mongoose } from 'mongoose';
+import { ReportService } from '../report/report.service';
 import { User } from '../user/user.interface';
 
 const mongoose = require('mongoose');
 
 @Injectable()
 export class BanUserService {
-  constructor(@InjectModel('User') private userModel: Model<User>) {}
+  constructor(
+    @InjectModel('User') private userModel: Model<User>,
+    private readonly reportService: ReportService
+  ) {}
 
   public async getBannedUser(): Promise<any> {
     const bannedUser = await this.userModel.find({ isBan: true });
     return { success: true, data: bannedUser };
   }
 
-  public async banUser(tid: String, duration: Number): Promise<any> {
+  public async banUser(
+    tid: String,
+    duration: Number,
+    rid: String
+  ): Promise<any> {
     if (!duration)
       throw new BadRequestException({
         success: false,
@@ -62,7 +71,8 @@ export class BanUserService {
       .exec();
 
     //Handle report
-    //updateReportStatus();
+    const Rid = rid as string;
+    this.reportService.updateReportStatus(Rid, true);
 
     return { success: true, data: user_new };
   }
@@ -83,7 +93,4 @@ export class BanUserService {
 
     return { success: true, data: user_new };
   }
-}
-function updateReportStatus() {
-  throw new Error('Function not implemented.');
 }

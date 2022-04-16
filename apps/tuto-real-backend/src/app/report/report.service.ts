@@ -1,8 +1,13 @@
-import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Mongoose } from 'mongoose';
-import {Report} from './report.interface'
-import { CreateReportDto , ReportDto } from './report.dto';
+import { Report } from './report.interface';
+import { CreateReportDto, ReportDto } from './report.dto';
 import { uploadImageBy64 } from '../util/google';
 import { User } from '../user/user.interface';
 const mongoose = require('mongoose');
@@ -13,98 +18,110 @@ export class ReportService {
     @InjectModel('User') private userModel: Model<User>
   ) {}
 
-  public async getAll(_id : string){
-   
-    var filter : any = {status:"Pending"}
-    if (_id!=undefined) {
-      try{
-        var objId = _id==undefined? undefined:new mongoose.Types.ObjectId(_id)
-      }catch(err){
-        throw new BadRequestException({success:false,data:"Id wrong format"})
+  public async getAll(_id: string) {
+    var filter: any = { status: 'Pending' };
+    if (_id != undefined) {
+      try {
+        var objId =
+          _id == undefined ? undefined : new mongoose.Types.ObjectId(_id);
+      } catch (err) {
+        throw new BadRequestException({
+          success: false,
+          data: 'Id wrong format',
+        });
       }
-      filter = {targetId:objId , status:"Approved"}
+      filter = { targetId: objId, status: 'Approved' };
     }
-    
-    var result = await (
-      this.reportModel.find(filter).sort({status : -1 , createAt : 1}).populate({
+
+    var result = await this.reportModel
+      .find(filter)
+      .sort({ status: -1, createAt: 1 })
+      .populate({
         path: 'reporterId',
         select: 'firstName lastName',
       })
-    .populate({
-      path: 'targetId',
-      select: 'firstName lastName',
-    }))
-      .catch((err)=>{
-        throw new NotFoundException({success:false,data:"UserId is not exist"})
+      .populate({
+        path: 'targetId',
+        select: 'firstName lastName',
       })
-    console.log(result)
-    return {success : true , data : result}
+      .catch((err) => {
+        throw new NotFoundException({
+          success: false,
+          data: 'UserId is not exist',
+        });
+      });
+    console.log(result);
+    return { success: true, data: result };
   }
 
-  public async create(dto : CreateReportDto){
-    var report = new ReportDto()
-    var now = new Date()
-    report.createdAt = now
-    report.status = "Pending"
-    report.text = dto.text
+  public async create(dto: CreateReportDto) {
+    var report = new ReportDto();
+    var now = new Date();
+    report.createdAt = now;
+    report.status = 'Pending';
+    report.text = dto.text;
     var target = await this.userModel.findById(dto.targetId);
     if (!target)
       throw new NotFoundException({ success: false, data: 'Target not found' });
     var reporter = await this.userModel.findById(dto.reporterId);
     if (!reporter)
       throw new NotFoundException({ success: false, data: 'User not found' });
-    report.targetId = dto.targetId
-    report.reporterId = dto.reporterId
-    report.imageUrl = dto.reportImg==undefined? undefined : await uploadImageBy64('Report', dto.reportImg);
-    var re = await this.reportModel.create(report)
-    .then((res)=>{
-      return {sucess : true , data : dto}
-    })
-    .catch((err)=>{
-      throw new BadRequestException({success:false,data:err})
-    })
-    return re
+    report.targetId = dto.targetId;
+    report.reporterId = dto.reporterId;
+    report.imageUrl =
+      dto.reportImg == undefined
+        ? undefined
+        : await uploadImageBy64('Report', dto.reportImg);
+    var re = await this.reportModel
+      .create(report)
+      .then((res) => {
+        return { sucess: true, data: dto };
+      })
+      .catch((err) => {
+        throw new BadRequestException({ success: false, data: err });
+      });
+    return re;
   }
 
-
-
-  public async updateReportStatus(_id:string , isBan:boolean){
+  public async updateReportStatus(_id: string, isBan: boolean) {
     try {
-      _id = new mongoose.Types.ObjectId(_id)
-    } catch(err){
-      throw new BadRequestException({success:false,data:"Id wrong format"})
+      _id = new mongoose.Types.ObjectId(_id);
+    } catch (err) {
+      throw new BadRequestException({
+        success: false,
+        data: 'Id wrong format',
+      });
     }
-    var re ;
-    if (isBan){
-      re= await this.reportModel.updateOne(
-        {"_id":_id},
-        { $set: { "status" : "Approved" } }) 
-        .then((res)=>{
-          return res
+    var re;
+    if (isBan) {
+      re = await this.reportModel
+        .updateOne({ _id: _id }, { $set: { status: 'Approved' } })
+        .then((res) => {
+          return res;
         })
-        .catch((err)=>{
-          throw new InternalServerErrorException({success:false,data:err})
+        .catch((err) => {
+          throw new InternalServerErrorException({ success: false, data: err });
+        });
+      if (re.matchedCount == 0)
+        throw new NotFoundException({
+          success: false,
+          data: 'Report not found',
+        });
+    } else {
+      re = await this.reportModel
+        .deleteOne({ _id: new mongoose.Types.ObjectId(_id) })
+        .then((res) => {
+          return res;
         })
-      if (re.matchedCount == 0) 
-          throw new NotFoundException({success:false,data:"Report not found"})
+        .catch((err) => {
+          throw new InternalServerErrorException({ success: false, data: err });
+        });
+      if (re.deletedCount == 0)
+        throw new NotFoundException({
+          success: false,
+          data: 'Report not found',
+        });
     }
-    else {
-      re = await this.reportModel.deleteOne({_id:new mongoose.Types.ObjectId(_id)})
-      .then((res)=>{
-        return res
-      })
-      .catch((err)=>{
-        throw new InternalServerErrorException({success:false,data:err})
-      })
-      if (re.deletedCount == 0) 
-        throw new NotFoundException({success:false,data:"Report not found"})
+    return { success: true, data: re };
   }
-  return {success : true , data : re}
 }
-
-
-}
-
-
-
-
