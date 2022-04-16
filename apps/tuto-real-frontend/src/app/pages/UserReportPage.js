@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { AiOutlineArrowLeft } from 'react-icons/ai';
 import "../components/profile/profile.css"
 import AdminBanUI from '../components/report/AdminBanUI';
+import AdminUnBanUI from '../components/report/AdminUnBanUI';
 import BarButton from '../components/ui/BarButton';
 
 const UserReportPage = () => {
@@ -12,7 +13,7 @@ const UserReportPage = () => {
             case "report":
                 return <AdminBanUI/>;
             case "ban":
-                return <p>this is AdminUnBanUI class</p>;
+                return <AdminUnBanUI />;
             default :
                 return <p>something went wrong</p>;
         }

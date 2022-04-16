@@ -1,18 +1,28 @@
-.report-list-container {
-    /* background-color: aqua; */
+.ban-unban-container {
     display: flex;
     flex-direction: column;
+    width: 720px; 
+    padding: 0px 20px;
     margin-top: 10px;
     gap: 15px; 
-    padding: 0px 20px;
-    width: 720px; 
 }
 
 @media only screen and (max-width: 720px) {
-    .report-list-container {
+    .ban-unban-container {
         width: 100%;
     }
 }
+
+.card-list-container {
+    /* background-color: aqua; */
+    display: flex;
+    flex-direction: column;
+    margin: 0px;
+    gap: 15px; 
+    padding: 0px;
+    width: 100%; 
+}
+
 
 .report-card {
     display: flex;
@@ -24,7 +34,7 @@
     border-color: var(--lightgray);
     border-radius: 8px;
     
-    padding: 8px;
+    padding: 8px 12px 8px 12px;
     margin: 0px 3px;
 
     box-shadow: 0px 2px 2px rgb(0, 0, 0, 0.25) !important;
@@ -177,7 +187,7 @@
     gap: 5px;
 }
 
-.report-detail-modal .outline-gray-button {
+.outline-gray-button {
     background-color: transparent;
 
     border-color: var(--darkgray);
@@ -190,12 +200,12 @@
     transition: 0.2s;
 }
 
-.report-detail-modal .outline-gray-button:hover {
+.outline-gray-button:hover {
     background-color: var(--darkgray);
     color: white;
 }
 
-.report-detail-modal .ignore-button {
+.ignore-button {
     background-color: var(--yellow);
 
     border-color: transparent;
@@ -206,11 +216,11 @@
     transition: 0.2s;
 }
 
-.report-detail-modal .ignore-button:hover {
+.ignore-button:hover {
     background-color: #DFA91E;
 }
 
-.report-detail-modal .ban-button {
+.ban-button {
     background-color: var(--warning);
 
     border-color: transparent;
@@ -221,6 +231,56 @@
     transition: 0.2s;
 }
 
-.report-detail-modal .ban-button:hover {
+.ban-button:hover {
     background-color: #D64F24;
+}
+
+.acknowledge-button {
+    background-color: var(--third);
+
+    border-color: transparent;
+    border-radius: 4px;
+    padding: .375rem .75rem;
+    color: white;
+
+    transition: 0.2s;
+}
+
+.acknowledge-button:hover {
+    background-color: var(--primary);
+}
+
+.user-banned-card {
+    display: flex;
+    flex-direction: row;
+    background-color: white;
+    justify-content: space-between;
+    align-items: center;
+
+    border-style: solid;
+    border-width: 1px;
+    border-color: var(--lightgray);
+    border-radius: 8px;
+    
+    padding: 8px 12px 8px 12px;
+    margin: 0px 3px;
+
+    box-shadow: 0px 2px 2px rgb(0, 0, 0, 0.25) !important;
+
+    transition: 0.2s;
+    /* border-color: var(--lightgray); */
+}
+
+.user-banned-card:hover {
+    margin: 0px 0px;
+    background-color: var(--gray);
+    /* animation-iteration-count: infinite; */
+}
+
+.user-banned-card p {
+    color: var(--darkgray);
+}
+
+.text-highlight {
+    color: var(--primary);
 }
