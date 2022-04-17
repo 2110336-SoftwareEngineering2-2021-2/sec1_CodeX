@@ -7,6 +7,7 @@ const ConfirmBanModal = (props) => {
         onHide, 
         onClickConfirmBtn, 
         duration, 
+        onAcknowledge,
         status,
         targetName} = props;
     
@@ -59,7 +60,7 @@ const ConfirmBanModal = (props) => {
         <Modal
             show={true}
             backdrop="static"
-            onHide={onHide}
+            onHide={() => (status === "normal" ? onHide() : onAcknowledge())}
             keyboard={false}
             animation={false}
             centered
@@ -92,7 +93,7 @@ const ConfirmBanModal = (props) => {
                     </button>
                 :
                     <button className={genConfigWithStatus().closeBtnStyle}
-                        onClick={onHide}
+                        onClick={() => (status === "normal" ? onHide() : onAcknowledge())}
                     >
                         {genConfigWithStatus().closeBtnText}
                     </button>
