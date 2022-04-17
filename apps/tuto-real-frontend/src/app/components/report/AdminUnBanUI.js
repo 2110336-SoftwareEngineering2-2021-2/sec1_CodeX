@@ -4,63 +4,57 @@ import { Spinner } from "react-bootstrap";
 import COLORS from "../../constants/color";
 import { DESK } from "../../constants/image"
 import UserBannedCard from "./UserBannedCard";
+import { client } from "../../axiosConfig";
 
 
 class AdminUnBanUI extends React.Component{
+
     constructor(prop) {
         super(prop);
     }
+
     state = {
         isLoading: false,
         isSomethingWentWrong: false,
         userBannedList: [
             {
-                _id: "hosehfegnlnlbnldnbldlfm",
-                firstName: "Veerin",
-                lastName: "Juurek",
-                timeStamp: "2022-04-04T18:00:33.538+00:00",
-            },
-            {
-                _id: "hosehfegnlnlbnldnbldlfm",
-                firstName: "Veerin",
-                lastName: "Juurek",
-                timeStamp: "2022-04-04T18:00:33.538+00:00",
-            },
-            {
-                _id: "hosehfegnlnlbnldnbldlfm",
-                firstName: "Veerin",
-                lastName: "Juurek",
-                timeStamp: "2022-04-04T18:00:33.538+00:00",
-            },
-            {
-                _id: "hosehfegnlnlbnldnbldlfm",
-                firstName: "Veerin",
-                lastName: "Juurek",
-                timeStamp: "2022-04-04T18:00:33.538+00:00",
-            },
-            {
-                _id: "hosehfegnlnlbnldnbldlfm",
-                firstName: "Veerin",
-                lastName: "Juurek",
-                timeStamp: "2022-04-04T18:00:33.538+00:00",
-            },
-            {
-                _id: "hosehfegnlnlbnldnbldlfm",
-                firstName: "Veerin",
-                lastName: "Juurek",
-                timeStamp: "2022-04-04T18:00:33.538+00:00",
-            },
-            {
-                _id: "hosehfegnlnlbnldnbldlfm",
-                firstName: "Veerin",
-                lastName: "Juurek",
-                timeStamp: "2022-04-04T18:00:33.538+00:00",
+                // _id: "hosehfegnlnlbnldnbldlfm",
+                // firstName: "Veerin",
+                // lastName: "Juurek",
+                // timeStamp: "2022-04-04T18:00:33.538+00:00",
             },
         ]
     }
 
-    fetchBannedList() {
+    componentDidMount() {
+        this.fetchBannedList();
+    }
 
+    fetchBannedList = async() => {
+        this.setState({isLoading: true, isSomethingWentWrong: false})
+        await client({
+            method: 'GET',
+            url: `/punishment`,
+            headers: {
+                Accept: 'application/json',
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+        })
+        .then(({data : { data }}) => {
+            console.log(data);
+            this.setState({
+                userBannedList: data, 
+                isLoading: false, 
+                isSomethingWentWrong: false
+            })
+        })
+        .catch((res) => {
+            console.log(res);
+            this.setState({ 
+                isLoading: false, 
+                isSomethingWentWrong: true
+            })
+        });
     }
     
     onClickUnbanButton(target_id) {
@@ -72,7 +66,14 @@ class AdminUnBanUI extends React.Component{
         return ( 
             <div className="ban-unban-container">
 
+                {/* เด๋วมาลบทีหลัง ตรงนี้ */}
                 <div className="flex-row gap5" style={{justifyContent:"center"}}>
+                    <button 
+                        className="outline-gray-button" 
+                        onClick={() => (this.fetchReportList())}
+                        >
+                        fetchBannedList
+                    </button>
                     <button 
                         className="outline-gray-button" 
                         onClick={() => (this.setState({isLoading: !this.state.isLoading}))}
@@ -121,7 +122,7 @@ class AdminUnBanUI extends React.Component{
                                 {this.state.userBannedList.map((e,i) => (
                                     <UserBannedCard 
                                         name={e.firstName + " " + e.lastName}
-                                        timeStamp={e.timeStamp}
+                                        timeStamp={e.unbanDate}
                                         // onClickUnbanButton={}
                                         // onClickCard={}
                                     />

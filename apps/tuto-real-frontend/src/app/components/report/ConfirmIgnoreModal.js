@@ -3,7 +3,7 @@ import COLORS from "../../constants/color";
 import "./report.css"
 
 const ConfirmIgnoreModal = (props) => {
-    const {onHide, status, onClickConfirmBtn} = props;
+    const {onHide, status, onClickConfirmBtn, onAcknowledge} = props;
 
     const genConfigWithStatus = () => {
         switch (status) {
@@ -54,7 +54,7 @@ const ConfirmIgnoreModal = (props) => {
         <Modal
             show={true}
             backdrop="static"
-            onHide={onHide}
+            onHide={() => (status === "normal" ? onHide() : onAcknowledge())}
             keyboard={false}
             animation={false}
             centered
@@ -83,7 +83,7 @@ const ConfirmIgnoreModal = (props) => {
                     </button>
                 :
                     <button className={genConfigWithStatus().closeBtnStyle}
-                        onClick={onHide}
+                        onClick={() => (status === "normal" ? onHide() : onAcknowledge())}
                     >
                         {genConfigWithStatus().closeBtnText}
                     </button>
