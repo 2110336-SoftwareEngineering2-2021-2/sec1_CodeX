@@ -123,6 +123,7 @@ class AdminUnBanUI extends React.Component{
                                     <UserBannedCard 
                                         name={e.firstName + " " + e.lastName}
                                         timeStamp={e.unbanDate}
+                                        key={"UserBannedCard" + i}
                                         // onClickUnbanButton={}
                                         // onClickCard={}
                                     />
