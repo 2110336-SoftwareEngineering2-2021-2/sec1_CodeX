@@ -172,6 +172,7 @@ class AdminBanUI extends React.Component{
         return ( 
             <div className="ban-unban-container">
 
+                {/* เด๋วมาลบทีหลัง ตรงนี้ */}
                 <div className="flex-row gap5" style={{justifyContent:"center"}}>
                     <button 
                         className="outline-gray-button" 
