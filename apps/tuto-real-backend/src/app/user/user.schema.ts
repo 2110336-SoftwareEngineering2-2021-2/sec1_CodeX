@@ -16,7 +16,11 @@ export const UserSchema = new mongoose.Schema({
   birthDate: { type: Date, require: true },
   address: { type: String, require: true },
   citizenID: { type: String, unique: true, require: true },
-  role: { type: String, default: 'Student' },
+  role: {
+    type: String,
+    enum: ['Admin', 'Student', 'Tutor'],
+    default: 'Student',
+  },
   zoomID: { type: String },
   zoomStartURL: { type: String },
   zoomJoinURL: { type: String },

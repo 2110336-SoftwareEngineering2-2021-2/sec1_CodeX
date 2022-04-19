@@ -1,6 +1,8 @@
 import { Body, Controller, Get, Patch, Query, UseGuards } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FirebaseAuthGuard } from '../auth/firebase-auth.guard';
+import { Roles } from '../auth/roles.decorator';
+import { RolesGuard } from '../auth/roles.guard';
 import { BanUserDto } from './ban-user.dto';
 import { BanUserService } from './ban-user.service';
 
@@ -10,7 +12,8 @@ export class BanUserController {
   constructor(private readonly banUserService: BanUserService) {}
 
   @Get()
-  @UseGuards(FirebaseAuthGuard)
+  @Roles('Admin')
+  @UseGuards(FirebaseAuthGuard, RolesGuard)
   @ApiOperation({ summary: 'Get banned user' })
   @ApiResponse({
     status: 200,
@@ -25,7 +28,8 @@ export class BanUserController {
   }
 
   @Patch('ban')
-  @UseGuards(FirebaseAuthGuard)
+  @Roles('Admin')
+  @UseGuards(FirebaseAuthGuard, RolesGuard)
   @ApiOperation({ summary: 'Ban user' })
   @ApiResponse({
     status: 200,
@@ -47,7 +51,8 @@ export class BanUserController {
   }
 
   @Patch('unban')
-  @UseGuards(FirebaseAuthGuard)
+  @Roles('Admin')
+  @UseGuards(FirebaseAuthGuard, RolesGuard)
   @ApiOperation({ summary: 'Unban user' })
   @ApiResponse({
     status: 200,
