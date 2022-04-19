@@ -1,13 +1,13 @@
-import "./ImageModal.css"
+import './ImageModal.css';
 
 const ImageModal = (props) => {
-    const {imgURL, onHide} = props;
+  const { imgURL, onHide } = props;
 
-    return (
-        <div className="image-modal-background" onClick={() => (onHide())}>
-            <img src={imgURL} />
-        </div>
-    )
-}
+  return (
+    <div className="image-modal-background" onClick={() => onHide()}>
+      <img alt="focusing" src={imgURL} />
+    </div>
+  );
+};
 
-export default ImageModal
+export default ImageModal;

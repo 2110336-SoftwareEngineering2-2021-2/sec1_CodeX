@@ -34,7 +34,3 @@ export class CreateReportDto {
   reportImg: string;
 }
 
-export class UpdateReportDto {
-  @ApiProperty({ required: true })
-  isBan: boolean;
-}

@@ -5,7 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Mongoose } from 'mongoose';
+import { Model } from 'mongoose';
 import { Report } from './report.interface';
 import { CreateReportDto, ReportDto } from './report.dto';
 import { uploadImageBy64 } from '../util/google';

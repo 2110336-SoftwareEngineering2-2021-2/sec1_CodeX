@@ -8,17 +8,6 @@ import { ApiTags, ApiResponse, ApiOperation, ApiQuery } from '@nestjs/swagger';
 export class TutorController {
   constructor(private readonly tutorService: TutorService) {}
 
-  /*@Get()
-  @ApiOperation({ summary: 'Get all tutors' })
-  @ApiResponse({ status: 200, description: 'Get all tutors successfully' })
-  getTutor() {
-    try {
-      return this.tutorService.getTutor();
-    } catch (err) {
-      return err;
-    }
-  }*/
-
   @Get('search')
   @ApiOperation({ summary: 'Search tutor' })
   @ApiQuery({

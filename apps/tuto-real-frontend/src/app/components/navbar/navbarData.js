@@ -107,7 +107,7 @@ const adminData = [
     id: 1,
     icon: renderIcon(MdWarning),
     name: "User's Report",
-    path: "/", // need to connect
+    path: "/userReport", // need to connect
     style: "tertiary-button"
   },
   {

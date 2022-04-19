@@ -2,20 +2,13 @@ import {
   Body,
   Controller,
   Get,
-  Param,
-  ParseIntPipe,
   Patch,
   Post,
   Query,
-  UploadedFile,
   UseGuards,
-  UseInterceptors,
 } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
 import { BookingDto, UpdateBookingDto } from './booking.dto';
-import { Booking } from './booking.interface';
 import { BookingService } from './booking.service';
-import { LearnScheduleDto } from '../LearnSchedule/learnSchedule.dto';
 import { FirebaseAuthGuard } from '../auth/firebase-auth.guard';
 import {
   ApiBadRequestResponse,
@@ -25,23 +18,18 @@ import {
   ApiOkResponse,
   ApiOperation,
   ApiQuery,
-  ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { Roles } from '../auth/roles.decorator';
+import { RolesGuard } from '../auth/roles.guard';
 
 @ApiTags('Bookings')
 @Controller('booking')
 export class BookingController {
   constructor(private readonly service: BookingService) {}
 
-  /* @Get('')
-    GetProfileByMail(@Param('email') mail : String) {
-
-        return this.service.GetProfileByMail(mail); 
-    }*/
-
-  @Post('/create')
-  @UseGuards(FirebaseAuthGuard)
+  @Post('create')
+  @UseGuards(FirebaseAuthGuard, RolesGuard)
   @ApiOperation({ summary: 'Create the booking' })
   @ApiCreatedResponse({
     description: 'The booking has been successfully created.',
@@ -57,17 +45,9 @@ export class BookingController {
     }
   }
 
-  /*@Post('/test')
-  //@UseGuards(FirebaseAuthGuard)
-  updateLearnSchedule(@Body() dto: BookingDto) {
-    try {
-      return this.service.updateLearnSchedule(dto);
-    } catch (err) {}
-  }
-  */
-
-  @Get('/tutor')
-  @UseGuards(FirebaseAuthGuard)
+  @Get('tutor')
+  @Roles('Admin', 'Tutor')
+  @UseGuards(FirebaseAuthGuard, RolesGuard)
   @ApiOperation({ summary: 'Get tutor booking' })
   @ApiOkResponse({ description: 'Get all bookings successfully' })
   @ApiNotFoundResponse({ description: 'Tutor is not found' })
@@ -80,8 +60,9 @@ export class BookingController {
     }
   }
 
-  @Get('/student')
-  @UseGuards(FirebaseAuthGuard)
+  @Get('student')
+  @Roles('Admin', 'Student')
+  @UseGuards(FirebaseAuthGuard, RolesGuard)
   @ApiOperation({ summary: 'Get student booking' })
   @ApiOkResponse({ description: 'Get all bookings successfully' })
   @ApiNotFoundResponse({ description: 'Student is not found' })
@@ -95,6 +76,7 @@ export class BookingController {
   }
 
   @Patch()
+  @UseGuards(FirebaseAuthGuard, RolesGuard)
   @ApiOperation({ summary: 'Update the booking' })
   @ApiOkResponse({ description: 'Get all bookings successfully' })
   @ApiNotFoundResponse({

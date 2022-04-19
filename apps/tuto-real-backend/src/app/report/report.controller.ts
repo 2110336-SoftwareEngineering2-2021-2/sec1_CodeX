@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Patch,
   Post,
@@ -8,21 +9,19 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ReportService } from './report.service';
-import {
-  ApiTags,
-  ApiResponse,
-  ApiOperation,
-  ApiBody,
-} from '@nestjs/swagger';
+import { ApiTags, ApiResponse, ApiOperation, ApiBody } from '@nestjs/swagger';
 import { FirebaseAuthGuard } from '../auth/firebase-auth.guard';
-import {CreateReportDto, UpdateReportDto} from './report.dto'
+import { CreateReportDto } from './report.dto';
+import { Roles } from '../auth/roles.decorator';
+import { RolesGuard } from '../auth/roles.guard';
 @ApiTags('Report')
 @Controller('report')
 export class ReportController {
   constructor(private readonly reportService: ReportService) {}
 
   @Get()
-  @UseGuards(FirebaseAuthGuard)
+  @Roles('Admin')
+  @UseGuards(FirebaseAuthGuard, RolesGuard)
   @ApiOperation({ summary: 'Get all report' })
   @ApiResponse({
     status: 200,
@@ -32,7 +31,7 @@ export class ReportController {
     status: 400,
     description: 'Wrong Id format',
   })
-  getAllReport(@Query("_id") _id:string) {
+  getAllReport(@Query('_id') _id: string) {
     try {
       return this.reportService.getAll(_id);
     } catch (err) {
@@ -41,7 +40,8 @@ export class ReportController {
   }
 
   @Post()
-  @UseGuards(FirebaseAuthGuard)
+  @Roles('Student', 'Tutor')
+  @UseGuards(FirebaseAuthGuard, RolesGuard)
   @ApiOperation({ summary: 'Create report' })
   @ApiResponse({
     status: 200,
@@ -65,8 +65,11 @@ export class ReportController {
   }
 
   @Patch()
-  @UseGuards(FirebaseAuthGuard)
+  @Roles('Admin')
+  @UseGuards(FirebaseAuthGuard, RolesGuard)
   @ApiOperation({ summary: 'Update report status' })
+  @Delete()
+  @ApiOperation({ summary: 'Delete report' })
   @ApiResponse({
     status: 200,
     description: 'Update successful!',
@@ -75,19 +78,9 @@ export class ReportController {
     status: 404,
     description: 'Report not found.',
   })
-  @ApiResponse({
-    status: 400,
-    description: 'Wrong request format',
-  })
-  @ApiBody({
-    type: UpdateReportDto,
-  })
-  updateReportStatus(
-    @Query('report_id') report_id: string,
-    @Body() dto: UpdateReportDto
-  ) {
+  deleteReport(@Query('_id') _id: string) {
     try {
-      return this.reportService.updateReportStatus(report_id, dto.isBan);
+      return this.reportService.updateReportStatus(_id, false);
     } catch (err) {
       return err;
     }

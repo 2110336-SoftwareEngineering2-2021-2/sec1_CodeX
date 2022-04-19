@@ -1,7 +1,6 @@
 import {
   Body,
   Controller,
-  Delete,
   Get,
   Patch,
   Post,
@@ -13,7 +12,6 @@ import { ScheduleService } from './schedule.service';
 import { UpdateScheduleDto } from './updateSchedule.dto';
 import {
   ApiTags,
-  ApiBearerAuth,
   ApiResponse,
   ApiOperation,
   ApiBody,
@@ -26,6 +24,8 @@ import {
 import { UpdateSlotWithDeleteDto } from './updateSlotWithDelete.dto';
 import { FirebaseAuthGuard } from '../auth/firebase-auth.guard';
 import { LearnScheduleDto } from '../LearnSchedule/learnSchedule.dto';
+import { Roles } from '../auth/roles.decorator';
+import { RolesGuard } from '../auth/roles.guard';
 
 @ApiTags('Schedule')
 @Controller('schedule')
@@ -49,8 +49,9 @@ export class ScheduleController {
     }
   }
 
-  @Patch('/add')
-  //@UseGuards(FirebaseAuthGuard)
+  @Patch('add')
+  @Roles('Admin', 'Tutor')
+  @UseGuards(FirebaseAuthGuard, RolesGuard)
   @ApiOperation({ summary: 'Add slot to teach' })
   @ApiOkResponse({ description: 'The slots are added' })
   @ApiNotFoundResponse({ description: 'The schedule is not found' })
@@ -63,8 +64,9 @@ export class ScheduleController {
     }
   }
 
-  @Patch('/delete')
-  //@UseGuards(FirebaseAuthGuard)
+  @Patch('delete')
+  @Roles('Admin', 'Tutor')
+  @UseGuards(FirebaseAuthGuard, RolesGuard)
   @ApiOperation({ summary: 'Delete slot to teach' })
   @ApiOkResponse({ description: 'The slots are deleted' })
   @ApiNotFoundResponse({ description: 'The schedule is not found' })
@@ -81,7 +83,6 @@ export class ScheduleController {
   }
 
   @Get()
-  //@UseGuards(FirebaseAuthGuard)
   @ApiOperation({ summary: 'Get tutor schedule' })
   @ApiOkResponse({ description: 'Get all schedule successfully' })
   @ApiNotFoundResponse({ description: 'Tutor is not found or has no schedule' })
@@ -94,7 +95,8 @@ export class ScheduleController {
     }
   }
 
-  @Get('/learn')
+  @Get('learn')
+  @UseGuards(FirebaseAuthGuard, RolesGuard)
   @ApiOperation({ summary: "Get user's learnSchedule" })
   @ApiResponse({
     status: 200,
