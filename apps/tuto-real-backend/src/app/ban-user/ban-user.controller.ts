@@ -40,7 +40,6 @@ export class BanUserController {
   }
 
   @Patch('ban')
-  //@UseGuards(FirebaseAuthGuard)
   @Roles('Admin')
   @UseGuards(FirebaseAuthGuard, RolesGuard)
   @ApiOperation({ summary: 'Ban user' })
@@ -64,7 +63,6 @@ export class BanUserController {
   }
 
   @Patch('unban')
-  //@UseGuards(FirebaseAuthGuard)
   @Roles('Admin')
   @UseGuards(FirebaseAuthGuard, RolesGuard)
   @ApiOperation({ summary: 'Unban user' })

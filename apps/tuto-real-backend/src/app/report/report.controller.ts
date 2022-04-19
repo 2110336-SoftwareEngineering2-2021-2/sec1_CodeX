@@ -11,10 +11,9 @@ import {
 import { ReportService } from './report.service';
 import { ApiTags, ApiResponse, ApiOperation, ApiBody } from '@nestjs/swagger';
 import { FirebaseAuthGuard } from '../auth/firebase-auth.guard';
-import { CreateReportDto, UpdateReportDto } from './report.dto';
+import { CreateReportDto } from './report.dto';
 import { Roles } from '../auth/roles.decorator';
 import { RolesGuard } from '../auth/roles.guard';
-import {CreateReportDto} from './report.dto'
 @ApiTags('Report')
 @Controller('report')
 export class ReportController {
@@ -32,7 +31,7 @@ export class ReportController {
     status: 400,
     description: 'Wrong Id format',
   })
-  getAllReport(@Query("_id") _id:string) {
+  getAllReport(@Query('_id') _id: string) {
     try {
       return this.reportService.getAll(_id);
     } catch (err) {
@@ -70,7 +69,6 @@ export class ReportController {
   @UseGuards(FirebaseAuthGuard, RolesGuard)
   @ApiOperation({ summary: 'Update report status' })
   @Delete()
-  //@UseGuards(FirebaseAuthGuard)
   @ApiOperation({ summary: 'Delete report' })
   @ApiResponse({
     status: 200,
@@ -80,9 +78,7 @@ export class ReportController {
     status: 404,
     description: 'Report not found.',
   })
-  deleteReport(
-    @Query('_id') _id: string
-  ) {
+  deleteReport(@Query('_id') _id: string) {
     try {
       return this.reportService.updateReportStatus(_id, false);
     } catch (err) {

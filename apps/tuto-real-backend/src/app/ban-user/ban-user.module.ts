@@ -9,9 +9,6 @@ import { UserModule } from '../user/user.module';
   imports: [
     MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
     ReportModule,
-  ],
-  imports: [
-    MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
     UserModule,
   ],
   providers: [BanUserService],
