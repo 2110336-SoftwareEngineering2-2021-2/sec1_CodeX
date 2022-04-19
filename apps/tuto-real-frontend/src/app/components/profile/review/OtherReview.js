@@ -8,7 +8,7 @@ import COLORS from '../../../constants/color';
 import { FULL_STAR, EMPTY_STAR } from '../../../constants/image';
 
 const OtherReview = (props) => {
-  const { data } = props;
+  const { data, reportReview } = props;
 
   const numberOfStar = [1, 2, 3, 4, 5];
 
@@ -57,7 +57,7 @@ const OtherReview = (props) => {
             <IoMegaphoneOutline
               color={COLORS.darkgray}
               size={20}
-              // onClick={() => setShowReportModal(true)}
+              onClick={() => reportReview(comment.writer)}
             />
           </div>
 
