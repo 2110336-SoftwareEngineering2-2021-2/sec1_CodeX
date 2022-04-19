@@ -9,13 +9,11 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ReportService } from './report.service';
-import {
-  ApiTags,
-  ApiResponse,
-  ApiOperation,
-  ApiBody,
-} from '@nestjs/swagger';
+import { ApiTags, ApiResponse, ApiOperation, ApiBody } from '@nestjs/swagger';
 import { FirebaseAuthGuard } from '../auth/firebase-auth.guard';
+import { CreateReportDto, UpdateReportDto } from './report.dto';
+import { Roles } from '../auth/roles.decorator';
+import { RolesGuard } from '../auth/roles.guard';
 import {CreateReportDto} from './report.dto'
 @ApiTags('Report')
 @Controller('report')
@@ -23,7 +21,8 @@ export class ReportController {
   constructor(private readonly reportService: ReportService) {}
 
   @Get()
-  @UseGuards(FirebaseAuthGuard)
+  @Roles('Admin')
+  @UseGuards(FirebaseAuthGuard, RolesGuard)
   @ApiOperation({ summary: 'Get all report' })
   @ApiResponse({
     status: 200,
@@ -42,7 +41,8 @@ export class ReportController {
   }
 
   @Post()
-  @UseGuards(FirebaseAuthGuard)
+  @Roles('Student', 'Tutor')
+  @UseGuards(FirebaseAuthGuard, RolesGuard)
   @ApiOperation({ summary: 'Create report' })
   @ApiResponse({
     status: 200,
@@ -65,6 +65,10 @@ export class ReportController {
     }
   }
 
+  @Patch()
+  @Roles('Admin')
+  @UseGuards(FirebaseAuthGuard, RolesGuard)
+  @ApiOperation({ summary: 'Update report status' })
   @Delete()
   //@UseGuards(FirebaseAuthGuard)
   @ApiOperation({ summary: 'Delete report' })

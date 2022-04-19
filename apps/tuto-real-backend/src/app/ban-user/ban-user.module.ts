@@ -4,10 +4,15 @@ import { BanUserService } from './ban-user.service';
 import { BanUserController } from './ban-user.controller';
 import { UserSchema } from '../user/user.schema';
 import { ReportModule } from '../report/report.module';
+import { UserModule } from '../user/user.module';
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
     ReportModule,
+  ],
+  imports: [
+    MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
+    UserModule,
   ],
   providers: [BanUserService],
   controllers: [BanUserController],

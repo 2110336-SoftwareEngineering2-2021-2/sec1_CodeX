@@ -2,7 +2,6 @@ import {
   Body,
   Controller,
   Get,
-  Param,
   Patch,
   Post,
   Query,
@@ -13,13 +12,13 @@ import { NewUserDto } from './user.dto';
 import { UserService } from './user.service';
 import {
   ApiTags,
-  ApiBearerAuth,
   ApiResponse,
   ApiOperation,
   ApiBody,
   ApiQuery,
 } from '@nestjs/swagger';
 import { FirebaseAuthGuard } from '../auth/firebase-auth.guard';
+import { RolesGuard } from '../auth/roles.guard';
 
 @ApiTags('User')
 @Controller('user')
@@ -54,7 +53,7 @@ export class UserController {
   }
 
   @Patch()
-  @UseGuards(FirebaseAuthGuard)
+  @UseGuards(FirebaseAuthGuard, RolesGuard)
   @ApiOperation({ summary: 'Update user profile' })
   @ApiQuery({ name: '_id', required: true })
   @ApiBody({ type: updateUserDto })

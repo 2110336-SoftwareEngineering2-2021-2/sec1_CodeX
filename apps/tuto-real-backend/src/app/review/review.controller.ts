@@ -9,6 +9,8 @@ import {
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FirebaseAuthGuard } from '../auth/firebase-auth.guard';
+import { Roles } from '../auth/roles.decorator';
+import { RolesGuard } from '../auth/roles.guard';
 import {
   createReviewDto,
   getReviewsDto,
@@ -22,7 +24,8 @@ import { updateReviewDto } from './updateReview.dto';
 export class ReviewController {
   constructor(private readonly service: ReviewService) {}
   @Post()
-  @UseGuards(FirebaseAuthGuard)
+  @Roles('Student', 'Tutor')
+  @UseGuards(FirebaseAuthGuard, RolesGuard)
   @ApiOperation({ summary: 'Create a review' })
   @ApiResponse({
     status: 201,
@@ -41,7 +44,8 @@ export class ReviewController {
   }
 
   @Patch()
-  @UseGuards(FirebaseAuthGuard)
+  @Roles('Student', 'Tutor')
+  @UseGuards(FirebaseAuthGuard, RolesGuard)
   @ApiOperation({ summary: 'Update a review' })
   @ApiResponse({
     status: 200,

@@ -18,6 +18,8 @@ import {
   ApiQuery,
 } from '@nestjs/swagger';
 import { FirebaseAuthGuard } from '../auth/firebase-auth.guard';
+import { Roles } from '../auth/roles.decorator';
+import { RolesGuard } from '../auth/roles.guard';
 
 @ApiTags('TutorReq')
 @Controller('tutorReq')
@@ -25,7 +27,8 @@ export class TutorReqController {
   constructor(private readonly service: TutorReqService) {}
 
   @Get()
-  @UseGuards(FirebaseAuthGuard)
+  @Roles('Admin')
+  @UseGuards(FirebaseAuthGuard, RolesGuard)
   @ApiOperation({ summary: 'Get all requests' })
   @ApiResponse({ status: 200, description: 'Get all requests successfully' })
   getRequests() {
@@ -37,7 +40,8 @@ export class TutorReqController {
   }
 
   @Post('create')
-  @UseGuards(FirebaseAuthGuard)
+  @Roles('Student')
+  @UseGuards(FirebaseAuthGuard, RolesGuard)
   @ApiOperation({ summary: 'Create request' })
   @ApiBody({ type: TutorReqDto })
   @ApiResponse({ status: 201, description: 'Create request succesfully' })
@@ -52,7 +56,8 @@ export class TutorReqController {
   }
 
   @Patch()
-  @UseGuards(FirebaseAuthGuard)
+  @Roles('Admin')
+  @UseGuards(FirebaseAuthGuard, RolesGuard)
   @ApiOperation({ summary: 'Update request status' })
   @ApiQuery({ name: '_id', required: true })
   @ApiBody({ type: updateStatusDto })

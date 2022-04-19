@@ -52,6 +52,11 @@ export function AuthProvider({ children }) {
         },
       })
         .then(({ data: { data } }) => {
+          if (data.isBan) {
+            const date = new Date(data.unBanDate).toUTCString();
+            logOut();
+            alert(`Your account has been banned until ${date}.`);
+          }
           setId(data._id);
           setRole(data.role);
           setFirstName(data.firstName);
@@ -106,8 +111,8 @@ export function AuthProvider({ children }) {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         if (!userCredential.user.emailVerified) {
-          alert('Email verification failed');
           logOut();
+          alert('Please verify your email.');
         } else {
           if (onSuccess) onSuccess();
         }
