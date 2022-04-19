@@ -302,6 +302,11 @@ export class BookingService {
         .populate({ path: 'schedule_id', select: 'startDate' })
         .lean()
         .exec();
+      if (!booking)
+        throw new NotFoundException({
+          success: false,
+          meesage: 'booking not found',
+        });
 
       for (var j = 0; j < booking.length; j++) {
         for (var k = 0; k < booking[j].days.length; k++) {
@@ -395,77 +400,83 @@ export class BookingService {
         success: false,
         meesage: 'booking not found',
       });
-
+    //console.log(booking);
     //Find tutor
     for (var i = 0; i < booking.length; i++) {
       const schedule = await this.scheduleModel.findOne({
         _id: mongoose.Types.ObjectId(booking[i].schedule_id),
       });
+      console.log(schedule);
+      if (!schedule && booking[i].status == 'Pending') {
+        await this.bookingModel.findByIdAndDelete(
+          mongoose.Types.ObjectId(booking[i]._id)
+        );
+        continue;
+      }
       const tutor = await this.userModel.findOne({
         schedule_id: { $in: booking[i].schedule_id },
       });
       if (!tutor) {
-        //Delete because the schedule is not exist
-        await this.bookingModel.findByIdAndDelete(
-          mongoose.Types.ObjectId(booking[i]._id)
-        );
       } else {
         const tutorName = tutor.firstName + ' ' + tutor.lastName;
         booking[i]['tutor'] = tutorName;
       }
-      for (var j = 0; j < booking[i].days.length; j++) {
-        let day = booking[i].days[j].day as string;
-        const numDay = days.get(day);
-        const newDate = new Date(
-          schedule.startDate.getTime() + 1000 * 60 * 60 * 24 * numDay
-        );
-        booking[i].days[j]['date'] = newDate;
 
-        //Subject to learn
-        const subject = await this.scheduleModel.aggregate([
-          { $unwind: '$days' },
-          { $unwind: '$days.slots' },
-          {
-            $match: {
-              'days.slots.slot': { $in: booking[i].days[j].slots },
-              _id: mongoose.Types.ObjectId(booking[i].schedule_id),
-              'days.day': day,
+      if (schedule) {
+        for (var j = 0; j < booking[i].days.length; j++) {
+          let day = booking[i].days[j].day as string;
+          const numDay = days.get(day);
+          const newDate = new Date(
+            schedule.startDate.getTime() + 1000 * 60 * 60 * 24 * numDay
+          );
+          booking[i].days[j]['date'] = newDate;
+
+          //Subject to learn
+          const subject = await this.scheduleModel.aggregate([
+            { $unwind: '$days' },
+            { $unwind: '$days.slots' },
+            {
+              $match: {
+                'days.slots.slot': { $in: booking[i].days[j].slots },
+                _id: mongoose.Types.ObjectId(booking[i].schedule_id),
+                'days.day': day,
+              },
             },
-          },
-          { $sort: { 'days.slots.slot': 1 } },
-          { $group: { _id: '$days.slots' } },
-        ]);
-        subject.sort(function (a, b) {
-          return a._id.slot - b._id.slot;
-        });
+            { $sort: { 'days.slots.slot': 1 } },
+            { $group: { _id: '$days.slots' } },
+          ]);
+          subject.sort(function (a, b) {
+            return a._id.slot - b._id.slot;
+          });
 
-        let subjects = [];
-        subject.forEach((element) => {
-          subjects.push(element._id.subject);
-        });
+          let subjects = [];
+          subject.forEach((element) => {
+            subjects.push(element._id.subject);
+          });
 
-        booking[i].days[j]['subject'] = subjects;
+          booking[i].days[j]['subject'] = subjects;
+        }
       }
-    }
-    let booking_pending = [];
-    let booking_other = [];
-    booking.forEach((element) => {
-      if (element.status == 'Pending') booking_pending.push(element);
-      else booking_other.push(element);
-    });
-    booking_pending.sort(function (a, b) {
-      return (
-        Number(a.timeStamp < b.timeStamp) - Number(a.timeStamp > b.timeStamp)
-      );
-    });
-    booking_other.sort(function (a, b) {
-      return (
-        Number(a.timeStamp < b.timeStamp) - Number(a.timeStamp > b.timeStamp)
-      );
-    });
-    var booking_result = booking_pending.concat(booking_other);
+      let booking_pending = [];
+      let booking_other = [];
+      booking.forEach((element) => {
+        if (element.status == 'Pending') booking_pending.push(element);
+        else booking_other.push(element);
+      });
+      booking_pending.sort(function (a, b) {
+        return (
+          Number(a.timeStamp < b.timeStamp) - Number(a.timeStamp > b.timeStamp)
+        );
+      });
+      booking_other.sort(function (a, b) {
+        return (
+          Number(a.timeStamp < b.timeStamp) - Number(a.timeStamp > b.timeStamp)
+        );
+      });
+      var booking_result = booking_pending.concat(booking_other);
 
-    return { success: true, message: booking_result };
+      return { success: true, data: booking_result };
+    }
   }
 
   //Update schedule API
