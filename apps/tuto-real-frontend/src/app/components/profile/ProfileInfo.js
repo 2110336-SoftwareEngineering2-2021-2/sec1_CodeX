@@ -11,6 +11,7 @@ import EditBasicInfo from './EditBasicInfo';
 import EditContactInfo from './EditContactInfo';
 import NormalButton from '../ui/NormalButton';
 import ChangePassword from '../modal/ChangePassword';
+import UserReportUI from '../report/UserReportUI';
 import './profile.css';
 
 import COLORS from '../../constants/color';
@@ -43,6 +44,7 @@ const ProfileInfo = ({ targetId, viewType }) => {
     raw: '',
   }); // use for preview new upload profile image
   const [changePasswordShow, setChangePasswordShow] = useState(false);
+  const [showReportModal, setShowReportModal] = useState(false);
 
   const {
     register,
@@ -50,7 +52,7 @@ const ProfileInfo = ({ targetId, viewType }) => {
     reset,
     formState: { errors },
   } = useForm();
-  const { setReset } = useAuth();
+  const { _id, setReset } = useAuth();
 
   const fetchData = useCallback(async () => {
     // console.log(targetId)
@@ -165,7 +167,11 @@ const ProfileInfo = ({ targetId, viewType }) => {
   const renderViewForm = () => {
     return (
       <>
-        <ViewBasicInfo viewType={viewType} basicInfo={basicInfo} />
+        <ViewBasicInfo
+          viewType={viewType}
+          basicInfo={basicInfo}
+          setShowReportModal={setShowReportModal}
+        />
         <ViewContactInfo viewType={viewType} contactInfo={contactInfo} />
       </>
     );
@@ -262,6 +268,14 @@ const ProfileInfo = ({ targetId, viewType }) => {
       <ChangePassword
         show={changePasswordShow}
         setShow={setChangePasswordShow}
+      />
+
+      <UserReportUI
+        show={showReportModal}
+        closeModal={() => setShowReportModal(false)}
+        targetId={targetId}
+        targetName={`${basicInfo.firstName} ${basicInfo.lastName}`}
+        reporterId={_id}
       />
     </div>
   );
