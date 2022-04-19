@@ -37,7 +37,7 @@ export class BanUserController {
   }
 
   @Patch('ban')
-  //@UseGuards(FirebaseAuthGuard)
+  @UseGuards(FirebaseAuthGuard)
   @ApiOperation({ summary: 'Ban user' })
   @ApiResponse({
     status: 200,
@@ -59,7 +59,7 @@ export class BanUserController {
   }
 
   @Patch('unban')
-  //@UseGuards(FirebaseAuthGuard)
+  @UseGuards(FirebaseAuthGuard)
   @ApiOperation({ summary: 'Unban user' })
   @ApiResponse({
     status: 200,

@@ -65,7 +65,7 @@ export class BookingController {
     } catch (err) {}
   }
   */
- 
+
   @Get('/tutor')
   @UseGuards(FirebaseAuthGuard)
   @ApiOperation({ summary: 'Get tutor booking' })
