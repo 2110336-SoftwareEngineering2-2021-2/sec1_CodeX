@@ -25,34 +25,6 @@ class UserReportUI extends React.Component {
       reader.onerror = (error) => reject(error);
     });
 
-  createReport = async (reporterId, targetId, text, reportImg) => {
-    const reportImg64 = reportImg
-      ? (await this.toBase64(reportImg)).substr(
-          reportImg.type === 'image/jpeg' ? 23 : 22
-        )
-      : undefined;
-
-    await client({
-      method: 'POST',
-      url: `/report`,
-      headers: {
-        Accept: 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-      data: { reporterId, targetId, text, reportImg: reportImg64 },
-    })
-      .then(({ data: { data } }) => {
-        console.log(data);
-        this.onClose();
-        if (this.props.targetName)
-          alert(`Successfully report ${this.props.targetName}`);
-        else alert(`The user has been reported.`);
-      })
-      .catch((res) => {
-        console.log(res);
-      });
-  };
-
   upload = () => {
     this.uploadRef.current.click();
   };
@@ -65,9 +37,38 @@ class UserReportUI extends React.Component {
 
   onSubmitReport = async (reporterId, targetId, reportText, reportImg) => {
     console.log({ reporterId, targetId, reportText, reportImg });
-    if (reportText)
-      await this.createReport(reporterId, targetId, reportText, reportImg);
-    else alert('Please enter report information.');
+    if (reportText) {
+      const reportImg64 = reportImg
+        ? (await this.toBase64(reportImg)).substr(
+            reportImg.type === 'image/jpeg' ? 23 : 22
+          )
+        : undefined;
+
+      await client({
+        method: 'POST',
+        url: `/report`,
+        headers: {
+          Accept: 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+        data: {
+          reporterId,
+          targetId,
+          text: reportText,
+          reportImg: reportImg64,
+        },
+      })
+        .then(({ data: { data } }) => {
+          console.log(data);
+          this.onClose();
+          if (this.props.targetName)
+            alert(`Successfully report ${this.props.targetName}`);
+          else alert(`The user has been reported.`);
+        })
+        .catch((res) => {
+          console.log(res);
+        });
+    } else alert('Please enter report information.');
   };
 
   onClose = () => {

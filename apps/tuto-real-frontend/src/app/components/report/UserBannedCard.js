@@ -19,7 +19,7 @@ const UserBannedCard = (props) => {
   };
 
   return (
-    <div className="user-banned-card" onClick={onClickCard}>
+    <div className="user-banned-card" name="card" onClick={onClickCard}>
       {/* <p>this is banned user card</p> */}
       <div className="flex-column">
         <p style={{ fontSize: '24px', fontWeight: '500' }}>{name}</p>
@@ -32,6 +32,7 @@ const UserBannedCard = (props) => {
       </div>
       <button
         className="ignore-button"
+        name="button"
         onClick={onClickUnBanBtn}
         style={{ maxHeight: '3rem' }}
       >
