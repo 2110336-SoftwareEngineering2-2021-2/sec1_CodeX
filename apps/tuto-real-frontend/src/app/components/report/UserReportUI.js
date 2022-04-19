@@ -61,11 +61,10 @@ class UserReportUI extends React.Component {
     if (file) this.setState({ ...this.state, image: file });
   };
 
-  onSubmitReport = async () => {
-    const { targetId, reporterId } = this.props;
-    const { image, text } = this.state;
-    console.log({ reporterId, targetId, text, image });
-    if (text) await this.createReport(reporterId, targetId, text, image);
+  onSubmitReport = async (reporterId, targetId, reportText, reportImg) => {
+    console.log({ reporterId, targetId, reportText, reportImg });
+    if (reportText)
+      await this.createReport(reporterId, targetId, reportText, reportImg);
     else alert('Please enter report information.');
   };
 
@@ -155,7 +154,14 @@ class UserReportUI extends React.Component {
           <Button
             variant="warning"
             style={{ color: 'white' }}
-            onClick={this.onSubmitReport}
+            onClick={() =>
+              this.onSubmitReport(
+                this.props.reporterId,
+                this.props.targetId,
+                this.state.text,
+                this.state.image
+              )
+            }
           >
             Send Report
           </Button>

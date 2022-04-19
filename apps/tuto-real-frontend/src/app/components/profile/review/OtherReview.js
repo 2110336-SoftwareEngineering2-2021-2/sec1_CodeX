@@ -1,3 +1,10 @@
+import { IoMegaphoneOutline } from 'react-icons/io5';
+
+import {
+  translateDateFormat,
+  translateTimeFormat,
+} from '../../util/translator';
+import COLORS from '../../../constants/color';
 import { FULL_STAR, EMPTY_STAR } from '../../../constants/image';
 
 const OtherReview = (props) => {
@@ -20,24 +27,38 @@ const OtherReview = (props) => {
     return (
       <div key={comment._id} className="info-card shadow">
         <div style={{ display: 'flex', width: '100%' }}>
-          <div
-            style={{ display: 'flex', flexDirection: 'column', width: '70%' }}
-          >
-            <p
-              className="title"
+          <div style={{ display: 'flex', width: '100%', alignItems: 'center' }}>
+            <div
               style={{
                 display: 'flex',
-                fontWeight: '400',
-                marginBottom: '0%',
-                width: '100%',
-                color: 'var(--darkgray)',
+                flexDirection: 'column',
+                marginRight: '5%',
               }}
             >
-              Anonymous
-            </p>
-            <p className="header" style={{ marginTop: '0%', width: '100%' }}>
-              {comment.created}
-            </p>
+              <p
+                className="title"
+                style={{
+                  display: 'flex',
+                  fontWeight: '400',
+                  marginBottom: '0%',
+                  width: '100%',
+                  color: 'var(--darkgray)',
+                }}
+              >
+                Anonymous
+              </p>
+              <p className="header" style={{ marginTop: '0%', width: '100%' }}>
+                {`${translateDateFormat(
+                  comment.createdAt
+                )} ${translateTimeFormat(comment.createdAt)}
+                `}
+              </p>
+            </div>
+            <IoMegaphoneOutline
+              color={COLORS.darkgray}
+              size={20}
+              // onClick={() => setShowReportModal(true)}
+            />
           </div>
 
           {numberOfStar.map((number) => {

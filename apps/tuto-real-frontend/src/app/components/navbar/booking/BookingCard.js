@@ -1,18 +1,23 @@
 import { useState } from 'react';
-// import { client } from '../../../axiosConfig';
+
+import {
+  translateDateFormat,
+  translateTimeFormat,
+} from '../../util/translator';
 import COLORS from '../../../constants/color';
 
 const BookingCard = (prop) => {
-  const { 
-      setShow,
-      setModalConfig,
-      bookingId, 
-      requestTime, 
-      tutorName, 
-      totalPrice, 
-      days } = prop; //and also with initial booking status(prop.status).
+  const {
+    setShow,
+    setModalConfig,
+    bookingId,
+    requestTime,
+    tutorName,
+    totalPrice,
+    days,
+  } = prop; //and also with initial booking status(prop.status).
 
-  const [status, setStatus] = useState(prop.status);
+  const [status] = useState(prop.status);
 
   const genConfigStatus = () => {
     switch (status) {
@@ -51,38 +56,6 @@ const BookingCard = (prop) => {
         };
     }
   };
-  const translateDateFormat = (timeStamp) => {
-    //2001-02-15T17:00:00.000+00:00
-    //            to be
-    //February 29, 2000 9:30 a.m."
-    let temp = new Date(timeStamp);
-    // console.log(new Date(timeStamp));
-    var date = temp.getDate()
-    var month = temp.getMonth()
-    var year = temp.getFullYear()
-    const monthName = [
-        'January', 
-        'February', 
-        'March', 
-        'April', 
-        'May', 
-        'June', 
-        'July', 
-        'August', 
-        'September', 
-        'October', 
-        'November', 
-        'December']
-    return (monthName[month] + " " + date.toString() + ", " + year.toString());
-}
-
-  const translateTimeFormat = (timeStamp) => {
-    let temp = new Date(timeStamp);
-    // console.log(new Date(timeStamp));
-    var hour = temp.getHours()
-    var min = temp.getMinutes()
-    return hour.toString() + ':' + min.toString();
-  };
 
   const translateSlotsListFormat = (subjectName, timeStamp, slot_no) => {
     // return "1234"
@@ -100,12 +73,12 @@ const BookingCard = (prop) => {
 
   const cancelButtonHandle = () => {
     //todo: show modal or something like that for comfirmation
-    setShow(false)
+    setShow(false);
     setModalConfig({
-      modalType:"Cancel",
+      modalType: 'Cancel',
       bookingId: bookingId,
-      targetName:tutorName
-    })
+      targetName: tutorName,
+    });
   };
 
   return (
