@@ -120,15 +120,18 @@ const BookingCard = (prop) => {
       </div>
       {/* <button onClick={() => (console.log(requestTime))}>print days</button> */}
       <ul>
-        {days.map((e, i) => (
-          <div key={bookingId + i + bookingId} style={{ margin: '0px' }}>
-            {e.slots.map((slot_no, ii) => (
-              <li key={bookingId + i + ii} style={{ margin: '0px 2px' }}>
-                {translateSlotsListFormat(e.subject[ii], e.date, slot_no)}
-              </li>
-            ))}
-          </div>
-        ))}
+        {days.map((e, i) => {
+          if (e.subject && e.data)
+            return (
+              <div key={bookingId + i + bookingId} style={{ margin: '0px' }}>
+                {e.slots.map((slot_no, ii) => (
+                  <li key={bookingId + i + ii} style={{ margin: '0px 2px' }}>
+                    {translateSlotsListFormat(e.subject[ii], e.date, slot_no)}
+                  </li>
+                ))}
+              </div>
+            );
+        })}
       </ul>
     </div>
   );
