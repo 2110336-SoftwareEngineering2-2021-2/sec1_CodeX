@@ -12,6 +12,7 @@ import Schedule from './Schedule';
 import ModalTwoButton from '../../modal/ModalTwoButton';
 import EditingSlotModal from '../../modal/EditingSlotModal';
 import ViewingSlotModal from '../../modal/ViewingSlotModal';
+import UserReportUI from '../../report/UserReportUI';
 import { useAuth } from '../../../auth';
 import '../profile.css';
 
@@ -42,6 +43,9 @@ const ProfileTeachSchedule = ({
   const [selected, setSelected] = useState([]); // Sun: 0-15, Mon: 16-31, Tue: 32-47, ..., Sat: 96-111
   const [info, setInfo] = useState([]);
   const [modalDay, setModalDay] = useState();
+
+  const [studentInfo, setStudentInfo] = useState(null); // ID of student that is going to be reported
+  const [showReportModal, setShowReportModal] = useState(false);
 
   const { _id } = useAuth();
 
@@ -190,6 +194,11 @@ const ProfileTeachSchedule = ({
     setModalDay(day);
     setInfo(slotDataList);
     setShowModal('info');
+  };
+
+  const onReportStudent = (studentId, firstName, lastName) => {
+    setStudentInfo({ id: studentId, firstName, lastName });
+    setShowReportModal(true);
   };
 
   const getDeletingSlot = () => {
@@ -621,6 +630,7 @@ const ProfileTeachSchedule = ({
           info={info}
           firstName={firstName}
           lastName={lastName}
+          onReportStudent={onReportStudent}
         />
       )}
 
@@ -654,6 +664,14 @@ const ProfileTeachSchedule = ({
           leftPendingColor="var(--lightgray)"
         />
       )}
+
+      <UserReportUI
+        show={showReportModal}
+        closeModal={() => setShowReportModal(false)}
+        targetId={studentInfo?.id}
+        targetName={`${studentInfo?.firstName} ${studentInfo?.lastName}`}
+        reporterId={_id}
+      />
     </>
   );
 };

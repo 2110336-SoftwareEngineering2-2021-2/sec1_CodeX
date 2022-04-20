@@ -1,33 +1,9 @@
+import React from 'react';
+import { translateDateFormat } from '../util/translator';
 import './report.css';
 
 const UserBannedCard = (props) => {
   const { name, timeStamp, onClickCard, onClickUnBanBtn } = props;
-
-  const translateDateFormat = (timeStamp) => {
-    //2001-02-15T17:00:00.000+00:00
-    //            to be
-    //February 29, 2000 9:30 a.m."
-    let temp = new Date(timeStamp);
-    // console.log(new Date(timeStamp));
-    var date = temp.getDate();
-    var month = temp.getMonth();
-    var year = temp.getFullYear();
-    const monthName = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December',
-    ];
-    return monthName[month] + ' ' + date.toString() + ', ' + year.toString();
-  };
 
   const translateTimeFormat = (timeStamp) => {
     let temp = new Date(timeStamp);
@@ -44,9 +20,13 @@ const UserBannedCard = (props) => {
   };
 
   return (
-    <div className="user-banned-card" onClick={onClickCard}>
+    <div className="user-banned-card">
       {/* <p>this is banned user card</p> */}
-      <div className="flex-column">
+      <div
+        className="flex-column"
+        style={{ width: '100%' }}
+        onClick={onClickCard}
+      >
         <p style={{ fontSize: '24px', fontWeight: '500' }}>{name}</p>
         <div className="flex-row gap5">
           <p>Banned Until:</p>

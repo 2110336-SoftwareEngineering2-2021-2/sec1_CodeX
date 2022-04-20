@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
+
 import { useAuth } from '../../../auth';
 import { client } from '../../../axiosConfig';
 import OtherReview from './OtherReview';
 import RatingSummary from './RatingSummary';
 import WriteComment from './WriteComment';
+import UserReportUI from '../../report/UserReportUI';
 
 const ProfileReview = (props) => {
   const { viewType, targetId } = props;
@@ -14,6 +16,10 @@ const ProfileReview = (props) => {
   const [myState, setMyState] = useState('');
   const [noReview, setNoReview] = useState(0);
   const [reset, setReset] = useState(true);
+
+  const [reportTargetId, setReportTargetId] = useState(); // report target id //
+  const [showReportModal, setShowReportModal] = useState(false);
+
   const myId = useAuth();
 
   const countReview = (data, myReview) => {
@@ -23,18 +29,20 @@ const ProfileReview = (props) => {
     console.log(myReview);
   };
 
+  const reportReview = (id) => {
+    setReportTargetId(id);
+    setShowReportModal(true);
+  };
+
   const getReview = async () => {
-    const tempParams = 
-    (myId._id ? 
-      {
-        _id: targetId,
-        sid: myId._id
-      }
-      :
-      {
-        _id: targetId,
-      }
-    )
+    const tempParams = myId._id
+      ? {
+          _id: targetId,
+          sid: myId._id,
+        }
+      : {
+          _id: targetId,
+        };
     await client({
       method: 'GET',
       url: `/reviews`,
@@ -92,7 +100,14 @@ const ProfileReview = (props) => {
             setReset={setReset}
           />
         )}
-      <OtherReview data={data} />
+      <OtherReview data={data} reportReview={reportReview} />
+
+      <UserReportUI
+        show={showReportModal}
+        closeModal={() => setShowReportModal(false)}
+        targetId={reportTargetId}
+        reporterId={myId._id}
+      />
     </div>
   );
 };

@@ -5,6 +5,7 @@ import {
   IoIosArrowDroprightCircle,
 } from 'react-icons/io';
 import { RiShareForwardFill } from 'react-icons/ri';
+import { IoMegaphoneOutline } from 'react-icons/io5';
 import './ViewingSlotModal.css';
 
 import { DESK } from '../../constants/image';
@@ -19,6 +20,7 @@ const ViewingSlotModal = (props) => {
     lastName,
     fromLearnSchedule,
     redirectToTutor,
+    onReportStudent,
   } = props;
 
   const [tabValue, setTabValue] = useState('Information');
@@ -114,12 +116,14 @@ const ViewingSlotModal = (props) => {
                 style={{ fontWeight: '500', fontSize: '16px' }}
               >
                 {`${showFirstName} ${showLastName} `}
-                <RiShareForwardFill
-                  size={20}
-                  color={COLORS.third}
-                  style={{ cursor: 'pointer' }}
-                  onClick={onGoToTutor}
-                />
+                {redirectToTutor ? (
+                  <RiShareForwardFill
+                    size={20}
+                    color={COLORS.third}
+                    style={{ cursor: 'pointer' }}
+                    onClick={onGoToTutor}
+                  />
+                ) : null}
               </Modal.Title>
             </div>
 
@@ -146,12 +150,14 @@ const ViewingSlotModal = (props) => {
               style={{ fontWeight: '500', fontSize: '16px' }}
             >
               {`${showFirstName} ${showLastName} `}
-              <RiShareForwardFill
-                size={20}
-                color={COLORS.third}
-                style={{ cursor: 'pointer' }}
-                onClick={onGoToTutor}
-              />
+              {redirectToTutor ? (
+                <RiShareForwardFill
+                  size={20}
+                  color={COLORS.third}
+                  style={{ cursor: 'pointer' }}
+                  onClick={onGoToTutor}
+                />
+              ) : null}
             </Modal.Title>
           </div>
         )}
@@ -240,13 +246,31 @@ const ViewingSlotModal = (props) => {
       <Modal.Body>
         {newInfo.length > 0 ? (
           newInfo.map((student, i) => (
-            <Modal.Title
-              key={i}
-              className="request-header"
-              style={{ fontWeight: '400', fontSize: '16px' }}
-            >
-              {` · ${student.firstName} ${student.lastName}`}
-            </Modal.Title>
+            <div key={student.id} style={{ display: 'flex' }}>
+              <Modal.Title
+                className="request-header"
+                style={{
+                  fontWeight: '400',
+                  fontSize: '16px',
+                  marginRight: '2%',
+                }}
+              >
+                {` · ${student.firstName} ${student.lastName}`}
+              </Modal.Title>
+              {onReportStudent ? (
+                <IoMegaphoneOutline
+                  color={COLORS.darkgray}
+                  size={20}
+                  onClick={() =>
+                    onReportStudent(
+                      student.id,
+                      student.firstName,
+                      student.lastName
+                    )
+                  }
+                />
+              ) : null}
+            </div>
           ))
         ) : (
           <div

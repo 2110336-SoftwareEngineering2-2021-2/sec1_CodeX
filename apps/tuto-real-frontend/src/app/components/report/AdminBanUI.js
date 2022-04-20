@@ -144,7 +144,7 @@ class AdminBanUI extends React.Component {
 
   onDeleteReport = async (_id) => {
     console.log('call onDeleteReport :', _id);
-    this, this.setState({ confirmIgnoreModalStatus: 'sending' });
+    this.setState({ confirmIgnoreModalStatus: 'sending' });
     await client({
       method: 'DELETE',
       url: `/report`,
