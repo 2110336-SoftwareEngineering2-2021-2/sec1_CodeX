@@ -46,7 +46,6 @@ export class BookingController {
   }
 
   @Get('tutor')
-  @Roles('Admin', 'Tutor')
   @UseGuards(FirebaseAuthGuard, RolesGuard)
   @ApiOperation({ summary: 'Get tutor booking' })
   @ApiOkResponse({ description: 'Get all bookings successfully' })
@@ -61,7 +60,6 @@ export class BookingController {
   }
 
   @Get('student')
-  @Roles('Admin', 'Student')
   @UseGuards(FirebaseAuthGuard, RolesGuard)
   @ApiOperation({ summary: 'Get student booking' })
   @ApiOkResponse({ description: 'Get all bookings successfully' })
