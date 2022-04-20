@@ -78,10 +78,6 @@ class AdminBanUI extends React.Component {
     await client({
       method: 'GET',
       url: `/report`,
-      headers: {
-        Accept: 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
     })
       .then(({ data: { data } }) => {
         // console.log(data);
@@ -107,10 +103,6 @@ class AdminBanUI extends React.Component {
     await client({
       method: 'PATCH',
       url: `/punishment/ban`,
-      headers: {
-        Accept: 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
       params: {
         target_id: target_id,
       },
@@ -148,10 +140,6 @@ class AdminBanUI extends React.Component {
     await client({
       method: 'DELETE',
       url: `/report`,
-      headers: {
-        Accept: 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
       params: {
         _id: _id,
       },
@@ -181,38 +169,6 @@ class AdminBanUI extends React.Component {
   render() {
     return (
       <div className="ban-unban-container">
-        {/* เด๋วมาลบทีหลัง ตรงนี้ */}
-        <div className="flex-row gap5" style={{ justifyContent: 'center' }}>
-          <button
-            className="outline-gray-button"
-            onClick={() => this.fetchReportList()}
-          >
-            fetchReportList
-          </button>
-          <button
-            className="outline-gray-button"
-            onClick={() => this.setState({ isLoading: !this.state.isLoading })}
-          >
-            toggleLoading
-          </button>
-          <button
-            className="outline-gray-button"
-            onClick={() => this.setState({ reportList: [] })}
-          >
-            setEmpty
-          </button>
-          <button
-            className="outline-gray-button"
-            onClick={() =>
-              this.setState({
-                isSomethingWentWrong: !this.state.isSomethingWentWrong,
-              })
-            }
-          >
-            toggleSomethingWentWrong
-          </button>
-        </div>
-
         {this.state.isLoading ? (
           <div
             className="loading_spinner"

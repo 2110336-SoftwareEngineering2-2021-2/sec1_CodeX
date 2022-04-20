@@ -12,7 +12,7 @@ const ChangeAccountTypePage = () => {
   const location = useLocation();
   const { ownerRequestEmail } = location.state;
 
-  const {currentUser, _id} = useAuth()
+  const { currentUser, _id } = useAuth();
 
   //use for display
   const [citizenID, setCitizenID] = useState({ preview: '', raw: '' });
@@ -41,9 +41,8 @@ const ChangeAccountTypePage = () => {
     });
 
   useEffect(() => {
-    console.log(sendImage)
-  }, [sendImage])
-
+    console.log(sendImage);
+  }, [sendImage]);
 
   //handle citizenid upload
   const handleSelectCid = async (e) => {
@@ -64,7 +63,7 @@ const ChangeAccountTypePage = () => {
         //png case
         setSendImage({
           ...sendImage,
-          email:currentUser.email,
+          email: currentUser.email,
           citizenID64: (await toBase64(e.target.files[0])).substr(22),
         });
       }
@@ -81,21 +80,21 @@ const ChangeAccountTypePage = () => {
 
       setSendImage({
         ...sendImage,
-        email:currentUser.email
-      })
+        email: currentUser.email,
+      });
 
       if ((await toBase64(e.target.files[0])).substr(11, 4) === 'jpeg') {
         //jpeg case
         setSendImage({
           ...sendImage,
-          email:currentUser.email,
+          email: currentUser.email,
           transcription64: (await toBase64(e.target.files[0])).substr(23),
         });
       } else {
         //png case
         setSendImage({
           ...sendImage,
-          email:currentUser.email,
+          email: currentUser.email,
           transcription64: (await toBase64(e.target.files[0])).substr(22),
         });
       }
@@ -111,10 +110,6 @@ const ChangeAccountTypePage = () => {
       url: '/tutorReq/create',
       method: 'POST',
       data: sendImage,
-      headers: {
-        Accept: 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
     })
       .then(({ data }) => {
         console.log(data);

@@ -48,10 +48,6 @@ class AdminUnBanUI extends React.Component {
     await client({
       method: 'GET',
       url: `/punishment`,
-      headers: {
-        Accept: 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
     })
       .then(({ data: { data } }) => {
         console.log(data);
@@ -80,10 +76,6 @@ class AdminUnBanUI extends React.Component {
     await client({
       method: 'PATCH',
       url: `/punishment/unban`,
-      headers: {
-        Accept: 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
       params: { target_id },
     })
       .then(({ data: { data } }) => {
@@ -115,10 +107,6 @@ class AdminUnBanUI extends React.Component {
     await client({
       method: 'GET',
       url: `/report`,
-      headers: {
-        Accept: 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
       params: { _id: userId },
     })
       .then(({ data: { data } }) => {
@@ -153,38 +141,6 @@ class AdminUnBanUI extends React.Component {
   render() {
     return (
       <div className="ban-unban-container">
-        {/* เด๋วมาลบทีหลัง ตรงนี้ */}
-        <div className="flex-row gap5" style={{ justifyContent: 'center' }}>
-          <button
-            className="outline-gray-button"
-            onClick={() => this.fetchReportList()}
-          >
-            fetchBannedList
-          </button>
-          <button
-            className="outline-gray-button"
-            onClick={() => this.setState({ isLoading: !this.state.isLoading })}
-          >
-            toggleLoading
-          </button>
-          <button
-            className="outline-gray-button"
-            onClick={() => this.setState({ userBannedList: [] })}
-          >
-            setEmpty
-          </button>
-          <button
-            className="outline-gray-button"
-            onClick={() =>
-              this.setState({
-                isSomethingWentWrong: !this.state.isSomethingWentWrong,
-              })
-            }
-          >
-            toggleSomethingWentWrong
-          </button>
-        </div>
-
         {this.state.isLoading ? (
           <div
             className="loading_spinner"
@@ -227,11 +183,6 @@ class AdminUnBanUI extends React.Component {
                     key={user._id}
                     onClickUnBanBtn={() => this.onClickUnbanBtn(user)}
                     onClickCard={() => this.onViewInfo(user._id)}
-                    // onClickCard={(e) => {
-                    //   if (e.target.name === 'card') this.onViewInfo(user._id);
-                    //   else if (e.target.name === 'button')
-                    //     this.setState({ showModal: 'confirm' });
-                    // }}
                   />
                 ))}
               </>

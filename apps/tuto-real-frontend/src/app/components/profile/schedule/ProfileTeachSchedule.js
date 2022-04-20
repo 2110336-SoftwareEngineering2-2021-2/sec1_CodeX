@@ -65,13 +65,9 @@ const ProfileTeachSchedule = ({
       params: {
         _id: targetId,
       },
-      headers: {
-        Accept: 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
     })
       .then(({ data: { data } }) => {
-        console.log(data);
+        // console.log(data);
         setScheduleList(data.scheduleList ?? []);
         setPrice(data.pricePerSlot ?? 0);
         setTempPrice(data.pricePerSlot ?? 0);
@@ -100,12 +96,12 @@ const ProfileTeachSchedule = ({
   }, [currentSchedule]);
 
   const sendEditData = async (subject, description) => {
-    console.log(subject);
-    console.log(description);
+    // console.log(subject);
+    // console.log(description);
 
     setIsPending(true);
     const editData = await selectedToDayAndSlot(subject, description);
-    console.log(editData);
+    // console.log(editData);
     await client({
       method: 'PATCH',
       url: '/schedule/add',
@@ -116,13 +112,9 @@ const ProfileTeachSchedule = ({
         // ต้องการ list ของ day กับ slot ในการส่งข้อมูล
         days: editData,
       },
-      headers: {
-        Accept: 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
     })
       .then(({ data }) => {
-        console.log(data);
+        // console.log(data);
         setIsPending(false);
         setShowModal('none');
         setSelected([]);
@@ -136,7 +128,7 @@ const ProfileTeachSchedule = ({
   const sendBooking = async () => {
     setIsPending(true);
     const bookingData = await selectedToDayAndSlotWithNoSubject();
-    console.log(bookingData);
+    // console.log(bookingData);
 
     await client({
       method: 'POST',
@@ -146,13 +138,9 @@ const ProfileTeachSchedule = ({
         schedule_id: scheduleList[currentSchedule]._id,
         days: bookingData,
       },
-      headers: {
-        Accept: 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
     })
       .then(({ data }) => {
-        console.log(data);
+        // console.log(data);
         setIsPending(false);
         setShowModal('none');
         setSelected([]);
@@ -164,19 +152,15 @@ const ProfileTeachSchedule = ({
   };
 
   const savePrice = async () => {
-    console.log('saving Price...', tempPrice);
+    // console.log('saving Price...', tempPrice);
     await client({
       method: 'PATCH',
       url: '/user',
       params: { _id: targetId },
       data: { pricePerSlot: tempPrice },
-      headers: {
-        Accept: 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
     })
       .then(({ data }) => {
-        console.log(data);
+        // console.log(data);
         setPrice(tempPrice ? tempPrice : 0);
         setEditingPrice(false);
       })
@@ -250,7 +234,7 @@ const ProfileTeachSchedule = ({
   };
 
   const handleDelete = async () => {
-    console.log('Deleting...', getDeletingSlot());
+    // console.log('Deleting...', getDeletingSlot());
     const deletingSlots = getDeletingSlot();
     if (deletingSlots && deletingSlots.length === 0) setSelected([]);
     else if (deletingSlots && deletingSlots.length > 0)
@@ -263,13 +247,9 @@ const ProfileTeachSchedule = ({
         data: {
           days: deletingSlots,
         },
-        headers: {
-          Accept: 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
       })
         .then(({ data }) => {
-          console.log(data);
+          // console.log(data);
           setSelected([]);
           setRefresh(true);
         })
@@ -631,6 +611,7 @@ const ProfileTeachSchedule = ({
           firstName={firstName}
           lastName={lastName}
           onReportStudent={onReportStudent}
+          viewType={viewType}
         />
       )}
 

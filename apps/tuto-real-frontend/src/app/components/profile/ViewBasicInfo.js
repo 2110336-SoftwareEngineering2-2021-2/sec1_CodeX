@@ -59,13 +59,15 @@ const ViewBasicInfo = ({ viewType, basicInfo, setShowReportModal }) => {
             Some of your information may be seen by other users.
           </p>
         </div>
-        <div style={{ width: '5%', textAlign: 'right' }}>
-          <IoMegaphoneOutline
-            color={COLORS.darkgray}
-            size={20}
-            onClick={() => setShowReportModal(true)}
-          />
-        </div>
+        {viewType !== 'TutorSelf' ? (
+          <div style={{ width: '5%', textAlign: 'right' }}>
+            <IoMegaphoneOutline
+              color={COLORS.darkgray}
+              size={20}
+              onClick={() => setShowReportModal(true)}
+            />
+          </div>
+        ) : null}
       </div>
 
       <hr />
