@@ -1,3 +1,4 @@
+import React from 'react';
 import { translateDateFormat } from '../util/translator';
 import './report.css';
 
@@ -19,9 +20,13 @@ const UserBannedCard = (props) => {
   };
 
   return (
-    <div className="user-banned-card" name="card" onClick={onClickCard}>
+    <div className="user-banned-card">
       {/* <p>this is banned user card</p> */}
-      <div className="flex-column">
+      <div
+        className="flex-column"
+        style={{ width: '100%' }}
+        onClick={onClickCard}
+      >
         <p style={{ fontSize: '24px', fontWeight: '500' }}>{name}</p>
         <div className="flex-row gap5">
           <p>Banned Until:</p>
@@ -32,7 +37,6 @@ const UserBannedCard = (props) => {
       </div>
       <button
         className="ignore-button"
-        name="button"
         onClick={onClickUnBanBtn}
         style={{ maxHeight: '3rem' }}
       >

@@ -29,6 +29,7 @@ class AdminUnBanUI extends React.Component {
         // timeStamp: "2022-04-04T18:00:33.538+00:00",
         // },
       ],
+      focusUser: null,
       userReportList: [
         // { imageUrl, reporterId, targetId, text, _id }
       ],
@@ -88,7 +89,9 @@ class AdminUnBanUI extends React.Component {
       .then(({ data: { data } }) => {
         console.log(data);
         this.setState({
-          // userBannedList: data,
+          userBannedList: this.state.userBannedList.filter(
+            (user) => user._id !== data._id
+          ),
           showModal: 'none',
           isLoading: false,
           isSomethingWentWrong: false,
@@ -141,6 +144,10 @@ class AdminUnBanUI extends React.Component {
   onViewInfo = async (userId) => {
     this.setState({ confirmModalStatus: 'normal' });
     await this.getReportFromUser(userId);
+  };
+
+  onClickUnbanBtn = (user) => {
+    this.setState({ focusUser: user, showModal: 'confirm' });
   };
 
   render() {
@@ -218,9 +225,7 @@ class AdminUnBanUI extends React.Component {
                     name={user.firstName + ' ' + user.lastName}
                     timeStamp={user.unbanDate}
                     key={user._id}
-                    onClickUnbanButton={(e) =>
-                      this.setState({ showModal: 'confirm' })
-                    }
+                    onClickUnBanBtn={() => this.onClickUnbanBtn(user)}
                     onClickCard={() => this.onViewInfo(user._id)}
                     // onClickCard={(e) => {
                     //   if (e.target.name === 'card') this.onViewInfo(user._id);
@@ -236,12 +241,12 @@ class AdminUnBanUI extends React.Component {
 
         <ConfirmUnbanModal
           show={this.state.showModal === 'confirm'}
-          onHide={() => this.setState({ showModal: 'info' })}
+          onHide={() => this.setState({ showModal: 'normal' })}
           onClickConfirmBtn={() =>
-            this.onClickUnbanButton(this.state.userReportList[0]?._id)
+            this.onClickUnbanButton(this.state.focusUser?._id)
           }
           status={this.state.confirmModalStatus}
-          targetName={`${this.state.userBannedList.firstName} ${this.state.userBannedList.lastName}`}
+          targetName={`${this.state.focusUser?.firstName} ${this.state.focusUser?.lastName}`}
         />
 
         <BannnedUserDetailModal
