@@ -216,6 +216,7 @@ const ProfileLearnSchedule = ({ targetId, viewType, redirectToTutor }) => {
           </Tabs>
         </div>
       </Form>
+
       {showModal === 'info' && (
         <ViewingSlotModal
           cancelFunc={() => {

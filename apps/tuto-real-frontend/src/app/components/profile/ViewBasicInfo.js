@@ -1,5 +1,6 @@
 import { IoMegaphoneOutline } from 'react-icons/io5';
 
+import COLORS from '../../constants/color';
 import './profile.css';
 
 const ViewBasicInfo = ({ viewType, basicInfo, setShowReportModal }) => {
@@ -60,6 +61,7 @@ const ViewBasicInfo = ({ viewType, basicInfo, setShowReportModal }) => {
         </div>
         <div style={{ width: '5%', textAlign: 'right' }}>
           <IoMegaphoneOutline
+            color={COLORS.darkgray}
             size={20}
             onClick={() => setShowReportModal(true)}
           />
