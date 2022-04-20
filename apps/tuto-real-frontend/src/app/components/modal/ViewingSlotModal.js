@@ -21,6 +21,7 @@ const ViewingSlotModal = (props) => {
     fromLearnSchedule,
     redirectToTutor,
     onReportStudent,
+    viewType,
   } = props;
 
   const [tabValue, setTabValue] = useState('Information');
@@ -257,7 +258,7 @@ const ViewingSlotModal = (props) => {
               >
                 {` · ${student.firstName} ${student.lastName}`}
               </Modal.Title>
-              {onReportStudent ? (
+              {onReportStudent && viewType === 'TutorSelf' ? (
                 <IoMegaphoneOutline
                   color={COLORS.darkgray}
                   size={20}

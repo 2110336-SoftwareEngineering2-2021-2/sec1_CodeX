@@ -14,10 +14,6 @@ const ChangeAccountRequestListPage = () => {
     client({
       method: 'GET',
       url: '/tutorReq',
-      headers: {
-        Accept: 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
     })
       .then(({ data: { data } }) => {
         console.log(data);
@@ -77,4 +73,4 @@ const ChangeAccountRequestListPage = () => {
   );
 };
 
-export default AdminGuard(ChangeAccountRequestListPage)
+export default AdminGuard(ChangeAccountRequestListPage);

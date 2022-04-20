@@ -68,7 +68,7 @@ const SearchPage = () => {
   }
 
   function genDayListText(daysCheckList) {
-    if (daysCheckList[7]) return ''
+    if (daysCheckList[7]) return '';
     var temp = [];
     var dayRefference = [
       'Sunday',
@@ -102,10 +102,6 @@ const SearchPage = () => {
           searchInfo.maxPrice.toString() ?? '10000'
         }`,
         days: genDayListText(searchInfo.daysCheck),
-      },
-      headers: {
-        Accept: 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
       },
     })
       .then(({ data: { data } }) => {
@@ -147,7 +143,7 @@ const SearchPage = () => {
         // onHide={() => setModalShow(false)}
       />
 
-      {searchInfo.orderType==="Descending" ?
+      {searchInfo.orderType === 'Descending' ? (
         <div>
           {tutorList.map((e, i) => (
             <TutorCard
@@ -162,7 +158,7 @@ const SearchPage = () => {
             />
           ))}
         </div>
-        :
+      ) : (
         <div>
           {[...tutorList].reverse().map((e, i) => (
             <TutorCard
@@ -177,7 +173,7 @@ const SearchPage = () => {
             />
           ))}
         </div>
-      }
+      )}
       {!isSearched ? (
         <div
           style={{

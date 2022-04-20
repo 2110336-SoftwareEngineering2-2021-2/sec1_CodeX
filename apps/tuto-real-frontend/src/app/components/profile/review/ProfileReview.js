@@ -47,10 +47,6 @@ const ProfileReview = (props) => {
       method: 'GET',
       url: `/reviews`,
       params: tempParams,
-      // headers: {
-      //   Accept: 'application/json',
-      //   Authorization: `Bearer ${localStorage.getItem('token')}`,
-      // },
     })
       .then(({ data: { data } }) => {
         console.log(data);

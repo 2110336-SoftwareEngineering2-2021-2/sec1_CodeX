@@ -48,10 +48,6 @@ class AdminUnBanUI extends React.Component {
     await client({
       method: 'GET',
       url: `/punishment`,
-      headers: {
-        Accept: 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
     })
       .then(({ data: { data } }) => {
         console.log(data);
@@ -80,10 +76,6 @@ class AdminUnBanUI extends React.Component {
     await client({
       method: 'PATCH',
       url: `/punishment/unban`,
-      headers: {
-        Accept: 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
       params: { target_id },
     })
       .then(({ data: { data } }) => {
@@ -115,10 +107,6 @@ class AdminUnBanUI extends React.Component {
     await client({
       method: 'GET',
       url: `/report`,
-      headers: {
-        Accept: 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
       params: { _id: userId },
     })
       .then(({ data: { data } }) => {

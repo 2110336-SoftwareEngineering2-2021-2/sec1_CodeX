@@ -62,10 +62,6 @@ const ProfileInfo = ({ targetId, viewType }) => {
       params: {
         _id: targetId,
       },
-      headers: {
-        Accept: 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
     })
       .then(({ data: { data } }) => {
         setTempProfile({
@@ -119,10 +115,6 @@ const ProfileInfo = ({ targetId, viewType }) => {
         _id: targetId,
       },
       data: changeData,
-      headers: {
-        Accept: 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
     })
       .then(({ data: { data } }) => {
         console.log(data);

@@ -41,10 +41,6 @@ const ProfileLearnSchedule = ({ targetId, viewType, redirectToTutor }) => {
       params: {
         studentId: targetId,
       },
-      headers: {
-        Accept: 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
     })
       .then(({ data: { data } }) => {
         console.log(data);

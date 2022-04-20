@@ -47,14 +47,14 @@ const BookingOverlay = (prop) => {
         params: {
           _id: `${_id}`,
         },
-        headers: {
-          Accept: 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
       })
         .then(({ data: { data } }) => {
-          console.log(data);
-          setBookingList(data);
+          // console.log(data);
+          setBookingList(
+            data.filter(
+              (booking) => booking.days?.subject && booking.days?.date
+            )
+          );
           setIsLoading(false);
         })
         .catch((res) => {
@@ -86,11 +86,11 @@ const BookingOverlay = (prop) => {
             {/* <button onClick={fetchData}>load data</button> */}
             {bookingList.length === 0 && (
               <div id="place-hover-empty-image">
-                <img src={DESK} />
+                <img src={DESK} style={{ width: '80%' }} />
                 <p>You don't have any booking</p>
               </div>
             )}
-            {bookingList.map((e, i) => (
+            {bookingList.map((e) => (
               <BookingCard
                 setShow={setShow}
                 setModalConfig={setModalConfig}

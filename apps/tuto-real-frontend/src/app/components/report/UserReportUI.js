@@ -47,10 +47,6 @@ class UserReportUI extends React.Component {
       await client({
         method: 'POST',
         url: `/report`,
-        headers: {
-          Accept: 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
         data: {
           reporterId,
           targetId,

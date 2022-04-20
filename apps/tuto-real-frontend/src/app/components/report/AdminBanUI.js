@@ -78,10 +78,6 @@ class AdminBanUI extends React.Component {
     await client({
       method: 'GET',
       url: `/report`,
-      headers: {
-        Accept: 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
     })
       .then(({ data: { data } }) => {
         // console.log(data);
@@ -107,10 +103,6 @@ class AdminBanUI extends React.Component {
     await client({
       method: 'PATCH',
       url: `/punishment/ban`,
-      headers: {
-        Accept: 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
       params: {
         target_id: target_id,
       },
@@ -148,10 +140,6 @@ class AdminBanUI extends React.Component {
     await client({
       method: 'DELETE',
       url: `/report`,
-      headers: {
-        Accept: 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
       params: {
         _id: _id,
       },

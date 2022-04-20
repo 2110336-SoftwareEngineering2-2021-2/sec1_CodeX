@@ -47,10 +47,6 @@ const ChangeAccountApprovePage = () => {
       method: 'PATCH',
       params: { _id: _id },
       data: { status: 'Approved' },
-      headers: {
-        Accept: 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
     })
       .then(({ data }) => {
         console.log(data);
@@ -75,10 +71,6 @@ const ChangeAccountApprovePage = () => {
       method: 'PATCH',
       params: { _id: _id },
       data: { status: 'Reject' },
-      headers: {
-        Accept: 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
     })
       .then(({ data }) => {
         console.log(data);
@@ -95,9 +87,9 @@ const ChangeAccountApprovePage = () => {
   };
 
   const handleCancel = () => {
-    setShowModalApprove(false)
-    setShowModalReject(false)
-  }
+    setShowModalApprove(false);
+    setShowModalReject(false);
+  };
 
   return (
     <div
@@ -179,35 +171,39 @@ const ChangeAccountApprovePage = () => {
       </div>
 
       {/* modal component */}
-      {showModalApprove && <ModalTwoButton
-        title="Please confirm the approvol"
-        header="The user will become a tutor role. Are you sure?"
-        leftFunc={handleApprove}
-        rightFunc={handleCancel}
-        leftMessage="Approve"
-        rightMessage="Cancel"
-        leftColor="var(--third)"
-        rightColor="cancel-button"
-        isPending={isPending}
-        leftPending="Approving..."
-        leftPendingColor="var(--lightgray)"
-      />}
+      {showModalApprove && (
+        <ModalTwoButton
+          title="Please confirm the approvol"
+          header="The user will become a tutor role. Are you sure?"
+          leftFunc={handleApprove}
+          rightFunc={handleCancel}
+          leftMessage="Approve"
+          rightMessage="Cancel"
+          leftColor="var(--third)"
+          rightColor="cancel-button"
+          isPending={isPending}
+          leftPending="Approving..."
+          leftPendingColor="var(--lightgray)"
+        />
+      )}
 
-      {showModalReject && <ModalTwoButton
-        title="Please confirm the reject"
-        header="The request will be deleted. Are you sure?"
-        leftFunc={handleReject}
-        rightFunc={handleCancel}
-        leftMessage="Reject"
-        rightMessage="Cancel"
-        leftColor="red"
-        rightColor="cancel-button"
-        isPending={isPending}
-        leftPending="Rejecting..."
-        leftPendingColor="var(--lightgray)"
-      />}
+      {showModalReject && (
+        <ModalTwoButton
+          title="Please confirm the reject"
+          header="The request will be deleted. Are you sure?"
+          leftFunc={handleReject}
+          rightFunc={handleCancel}
+          leftMessage="Reject"
+          rightMessage="Cancel"
+          leftColor="red"
+          rightColor="cancel-button"
+          isPending={isPending}
+          leftPending="Rejecting..."
+          leftPendingColor="var(--lightgray)"
+        />
+      )}
     </div>
   );
 };
 
-export default AdminGuard(ChangeAccountApprovePage)
+export default AdminGuard(ChangeAccountApprovePage);
