@@ -33,14 +33,16 @@ export class UserService {
   }
 
   public async createProfile(dto: NewUserDto): Promise<any> {
-    const profile = await this.userModel.create(dto);
-
-    if (!profile)
+    const profile = await this.userModel.create(dto)
+    .then((res)=>{
+      return res
+    })
+    .catch((err)=>{
       throw new BadRequestException({
         success: false,
-        data: 'Create not success',
+        data: err,
       });
-
+    })
     return { success: true, data: profile };
   }
 
