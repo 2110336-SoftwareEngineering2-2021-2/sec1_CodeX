@@ -50,11 +50,15 @@ const BookingOverlay = (prop) => {
       })
         .then(({ data: { data } }) => {
           // console.log(data);
-          setBookingList(
-            data.filter(
-              (booking) => booking.days?.subject && booking.days?.date
-            )
-          );
+          if (data)
+            setBookingList(
+              data.filter(
+                (booking) =>
+                  booking.days &&
+                  booking.days[0]?.subject &&
+                  booking.days[0]?.date
+              )
+            );
           setIsLoading(false);
         })
         .catch((res) => {
