@@ -39,7 +39,7 @@ export function AuthProvider({ children }) {
   }, [currentUser, reset]);
 
   const setUserData = async (user) => {
-    if (user) {
+    if (user && auth.currentUser) {
       const token = await user.getIdToken(true);
       console.log(token);
       localStorage.setItem('token', token);

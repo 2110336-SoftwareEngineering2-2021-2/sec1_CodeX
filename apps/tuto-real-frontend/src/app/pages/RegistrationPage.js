@@ -5,7 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth';
 import './RegistrationPage.css';
 
-const RegistrationPage = () => {
+export const RegistrationPage = () => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [mobilePhone, setMobilePhone] = useState('');

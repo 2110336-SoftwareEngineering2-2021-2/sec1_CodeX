@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "root": "apps/tuto-real-backend",
   "sourceRoot": "apps/tuto-real-backend/src",
   "projectType": "application",
