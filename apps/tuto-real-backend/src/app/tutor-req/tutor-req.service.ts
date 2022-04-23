@@ -120,6 +120,7 @@ export class TutorReqService {
       );
       const date = new Date().toISOString().slice(0, 11) + '00:00:00Z';
 
+      /*
       const user = await axios({
         method: 'post',
         url: 'https://api.zoom.us/v2/users',
@@ -174,6 +175,7 @@ export class TutorReqService {
           data: 'Can not connect Zoom API',
         });
       });
+      */
 
       await this.reqModel
         .updateOne({ _id: id }, { status: 'Approved' })
@@ -185,17 +187,17 @@ export class TutorReqService {
           });
         });
 
-      const zoomID = meeting.data.id;
-      const zoomStartURL = meeting.data.start_url;
-      const zoomJoinURL = meeting.data.join_url;
+      // const zoomID = meeting.data.id;
+      // const zoomStartURL = meeting.data.start_url;
+      // const zoomJoinURL = meeting.data.join_url;
 
       return await this.userModel
         .findOneAndUpdate(
           { email },
           {
-            zoomID,
-            zoomStartURL,
-            zoomJoinURL,
+            // zoomID,
+            // zoomStartURL,
+            // zoomJoinURL,
             role: 'Tutor',
             numReviews: 0,
             avgRating: 0,
