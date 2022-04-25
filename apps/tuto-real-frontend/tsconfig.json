@@ -1,6 +1,8 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "Node",
     "jsx": "react-jsx",
     "allowJs": true,
     "esModuleInterop": true,
@@ -12,6 +14,9 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true
   },
+   "ts-node": {
+        "esm": true
+    },
   "files": [],
   "include": [],
   "references": [
