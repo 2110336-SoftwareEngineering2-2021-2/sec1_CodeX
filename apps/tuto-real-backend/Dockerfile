@@ -20,7 +20,7 @@ WORKDIR /app
 
 COPY --from=build /build/dist/apps/tuto-real-backend dist
 # COPY /apps/tuto-real-backend ./
-# COPY --from=build /build/node_modules node_modules
+COPY --from=build /build/node_modules node_modules
 
 ENV PORT=3333
 EXPOSE ${PORT}
