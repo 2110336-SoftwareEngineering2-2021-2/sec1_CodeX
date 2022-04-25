@@ -11,7 +11,8 @@
         "outputPath": "dist/apps/tuto-real-backend",
         "main": "apps/tuto-real-backend/src/main.ts",
         "tsConfig": "apps/tuto-real-backend/tsconfig.app.json",
-        "assets": ["apps/tuto-real-backend/src/assets"]
+        "assets": ["apps/tuto-real-backend/src/assets"],
+        "generatePackageJson": true
       },
       "configurations": {
         "production": {

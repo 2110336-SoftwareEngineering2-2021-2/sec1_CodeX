@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+
+  tuto-real-backend:
+    build:
+      context: .
+      dockerfile: ./apps/tuto-real-backend/Dockerfile
+    # image: backend:test
+    container_name: backend
+    environment:
+        - PORT=3333
+    ports:
+      - '3333:3333'
+    networks:
+      - private
+
+  # tuto-real-frontend:
+  #   build: 
+  #     context: .
+  #     dockerfile: ./apps/tuto-real-frontend/Dockerfile
+  #   # image: frontend:test
+  #   ports:
+  #     - '3334:3334'
+  #   networks:
+  #     - private
+
+  app:
+    build: 
+      context: .
+      dockerfile: ./Dockerfile
+    container_name: app
+    # image: frontend:test
+    restart: always
+    ports:
+      - '4200:4200'
+    networks:
+      - private
+
+networks:
+  private:
+    # external: true
+    name: private

@@ -4,11 +4,13 @@
   "license": "MIT",
   "scripts": {
     "start": "nx serve",
-    "build": "nx build",
+    "build": "yarn nx run-many --target=build --parallel --all",
+    "build:frontend": "yarn nx run tuto-real-frontend:build --prod",
+    "build:backend": "yarn nx run tuto-real-backend:build --prod",
     "start-front": "nx run tuto-real-frontend:serve",
     "start-back": "nx run tuto-real-backend:serve",
     "test": "jest",
-  "test:cov": "jest --coverage"
+    "test:cov": "jest --coverage"
   },
   "private": true,
   "dependencies": {
@@ -44,6 +46,7 @@
     "reflect-metadata": "^0.1.13",
     "regenerator-runtime": "0.13.7",
     "rxjs": "^7.0.0",
+    "serve": "^13.0.2",
     "swagger-ui-express": "^4.3.0",
     "tslib": "^2.0.0",
     "universal-cookie": "^4.0.4",
@@ -89,16 +92,27 @@
     "typescript": "~4.4.3"
   },
   "jest": {
-    "moduleFileExtensions": ["js", "json", "ts"],
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
     "rootDir": "./",
-    "modulePaths": ["<rootDir>"],
+    "modulePaths": [
+      "<rootDir>"
+    ],
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
-    "^.+\\.(t|j)s$": "ts-jest"
+      "^.+\\.(t|j)s$": "ts-jest"
     },
-    "collectCoverageFrom": ["**/*.(t|j)s"],
+    "collectCoverageFrom": [
+      "**/*.(t|j)s"
+    ],
     "testEnvironment": "node",
-    "coverageReporters": ["text", "html"],
+    "coverageReporters": [
+      "text",
+      "html"
+    ],
     "coverageDirectory": "<rootDir>/coverage/"
-    }
+  }
 }
