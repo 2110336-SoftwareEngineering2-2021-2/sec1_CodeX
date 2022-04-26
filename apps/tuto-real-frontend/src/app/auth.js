@@ -53,7 +53,7 @@ export function AuthProvider({ children }) {
       })
         .then(({ data: { data } }) => {
           if (data.isBan) {
-            const date = new Date(data.unBanDate).toUTCString();
+            const date = new Date(data.unbanDate).toUTCString();
             logOut();
             alert(`Your account has been banned until ${date}.`);
           }
