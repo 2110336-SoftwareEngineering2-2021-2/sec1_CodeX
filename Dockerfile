@@ -1,14 +1,6 @@
 FROM node:14-alpine AS base
 # FROM node:14-alpine
 WORKDIR /build
-# WORKDIR /app
-
-ARG ZOOM_TOKEN=eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOm51bGwsImlzcyI6Im02MXRfSE1iUXZpWjlZLWhLSkFSMFEiLCJleHAiOjE2NDU1MzQzMTYsImlhdCI6MTY0NDkyOTUxNn0.lFpbXhFilf0CRSzUtYyeXA7dm5TMTNzfGd8Uzlc9Ri4
-ARG API_KEY=m61t_HMbQviZ9Y-hKJAR0Q
-ARG API_SECRET=SE2KsFwLl6wXSn13vD7MrkJrVClWROMbHX4z
-ARG TZ=Asia/Bangkok
-ARG JWT_EXPIRE=180s
-ARG EMAIL_PASSWORD=mekmekmekmek123
 
 # Prepare for installing dependencies
 # Utilise Docker cache to save re-installing dependencies if unchanged
