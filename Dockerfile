@@ -37,7 +37,7 @@ RUN apt-get install -y musl-dev \
   && ln -s /usr/lib/x86_64-linux-musl/libc.so /lib/libc.musl-x86_64.so.1
 
 # Copy application files
-COPY nginx.conf .
+COPY ["nginx.conf", "default.conf.template"] .
 
 # WORKDIR /
 COPY --from=base /build/package.json ./package.json
@@ -59,5 +59,6 @@ RUN sed -i 's/\r$//' start_production.sh  && \
 
 # # Run Start command
 ENTRYPOINT ["/docker-entrypoint.sh"]
-# CMD ["yarn", "start-front"]
-CMD ["./start_production.sh"]
+
+# CMD ["./start_production.sh"]
+CMD /bin/bash -c "envsubst '\$PORT' < /etc/nginx/default.conf.template > /etc/nginx/nginx.conf" && nginx -g 'daemon off;' && ./start_production.sh

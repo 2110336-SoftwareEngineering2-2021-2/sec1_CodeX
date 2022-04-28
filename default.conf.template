@@ -1,0 +1,9 @@
+server {
+  listen       $PORT;
+  listen  [::]:$PORT;
+  server_name  localhost;
+  location / {
+    root   /etc/nginx/dist;
+    index  index.html index.htm;
+  }
+}
