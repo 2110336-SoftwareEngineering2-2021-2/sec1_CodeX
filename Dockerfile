@@ -53,7 +53,7 @@ RUN echo '\nnginx -g "daemon off;\n"' >> start_production.sh
 
 RUN sed -i 's/\r$//' start_production.sh  && \
   chmod +x start_production.sh && \
-  chmod +x /etc/nginx/nginx.conf &&
+  chmod +x nginx.conf &&
 
 
 # Expose nginx port
@@ -65,7 +65,7 @@ RUN echo ${PORT}
 # # Run Start command
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
-CMD ["./start_production.sh"]
+# CMD ["./start_production.sh"]
 # CMD /bin/bash -c "envsubst '\$PORT' < /etc/nginx/default.conf.template > /etc/nginx/nginx.conf" && nginx -g 'daemon off;' && ./start_production.sh
-# CMD sed -i -e 's/$PORT/'"$PORT"'/g' /etc/nginx/nginx.conf && nginx -g 'daemon off;'
+CMD sed -i -e 's/$PORT/'"${PORT}"'/g' /etc/nginx/nginx.conf && nginx -g 'daemon off;'
 # CMD sed -i -e 's/$PORT/'"$PORT"'/g' /etc/nginx/nginx.conf && nginx -g 'daemon off;' && ./start_production.sh
