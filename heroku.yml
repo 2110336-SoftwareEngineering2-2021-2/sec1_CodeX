@@ -8,4 +8,4 @@ build:
     JWT_EXPIRE: 180s
     EMAIL_PASSWORD: mekmekmekmek123
   docker:
-    web: ./apps/tuto-real-backend/Dockerfile
+    web: Dockerfile
