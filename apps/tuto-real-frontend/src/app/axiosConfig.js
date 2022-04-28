@@ -1,7 +1,7 @@
 import Axios from 'axios';
 // import Cookies from 'universal-cookie'
 
-const apiUrl = process.env.APP_API_URL | 'http://localhost:3333/api/v1';
+const apiUrl = process.env.APP_API_URL || 'http://localhost:3333/api/v1';
 
 export const client = Axios.create({
   baseURL: apiUrl,

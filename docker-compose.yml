@@ -2,24 +2,24 @@ version: '3.8'
 
 services:
 
-  tuto-real-backend:
-    build:
-      context: .
-      dockerfile: ./apps/tuto-real-backend/Dockerfile
-    # image: backend:test
-    container_name: backend
-    environment:
-        - PORT=3333
-        - ZOOM_TOKEN=eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOm51bGwsImlzcyI6Im02MXRfSE1iUXZpWjlZLWhLSkFSMFEiLCJleHAiOjE2NDU1MzQzMTYsImlhdCI6MTY0NDkyOTUxNn0.lFpbXhFilf0CRSzUtYyeXA7dm5TMTNzfGd8Uzlc9Ri4
-        - API_KEY=m61t_HMbQviZ9Y-hKJAR0Q
-        - API_SECRET=SE2KsFwLl6wXSn13vD7MrkJrVClWROMbHX4z
-        - TZ=Asia/Bangkok
-        - JWT_EXPIRE=180s
-        - EMAIL_PASSWORD=mekmekmekmek123
-    ports:
-      - '3333:3333'
-    networks:
-      - private
+  # tuto-real-backend:
+  #   build:
+  #     context: .
+  #     dockerfile: ./apps/tuto-real-backend/Dockerfile
+  #   # image: backend:test
+  #   container_name: backend
+  #   environment:
+  #       - PORT=3333
+  #       - ZOOM_TOKEN=eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOm51bGwsImlzcyI6Im02MXRfSE1iUXZpWjlZLWhLSkFSMFEiLCJleHAiOjE2NDU1MzQzMTYsImlhdCI6MTY0NDkyOTUxNn0.lFpbXhFilf0CRSzUtYyeXA7dm5TMTNzfGd8Uzlc9Ri4
+  #       - API_KEY=m61t_HMbQviZ9Y-hKJAR0Q
+  #       - API_SECRET=SE2KsFwLl6wXSn13vD7MrkJrVClWROMbHX4z
+  #       - TZ=Asia/Bangkok
+  #       - JWT_EXPIRE=180s
+  #       - EMAIL_PASSWORD=mekmekmekmek123
+  #   ports:
+  #     - '3333:3333'
+  #   networks:
+  #     - private
 
   # tuto-real-frontend:
   #   build: 
@@ -35,15 +35,17 @@ services:
     build: 
       context: .
       dockerfile: ./Dockerfile
+      args:
+        - PORT=80
     container_name: app
     # image: frontend:test
     restart: always
     ports:
       - '4200:4200'
-    networks:
-      - private
+    # networks:
+    #   - private
 
-networks:
-  private:
-    # external: true
-    name: private
+# networks:
+#   private:
+#     # external: true
+#     name: private
