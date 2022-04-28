@@ -39,13 +39,14 @@ const ChangeAccountRequestListPage = () => {
       }}
     >
       {/* title */}
-      <div style={{ display: 'flex', width: '45%' }}>
+      <div className='odd-button-container'>
         <p
           className="title left"
           style={{ width: '100%', fontSize: 'xx-large' }}
         >
           Promote Submission List
         </p>
+        {/* <p>test</p> */}
       </div>
 
       {/* request box */}

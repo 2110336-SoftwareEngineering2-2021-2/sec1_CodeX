@@ -138,7 +138,7 @@ const ChangeAccountTypePage = () => {
       }}
     >
       {/* back button */}
-      <div style={{ display: 'flex', width: '45%' }}>
+      <div className='odd-button-container'>
         <Link
           className="backtoprofile shadow"
           to={`/profile/${_id}`}
@@ -195,7 +195,8 @@ const ChangeAccountTypePage = () => {
 
       {/* submit with disabled */}
       <div
-        style={{ display: 'flex', flexDirection: 'row-reverse', width: '45%' }}
+        className='odd-button-container'
+        style={{flexDirection: 'row-reverse'}}
       >
         {(!transcription.preview || !citizenID.preview) && (
           <button className="submit-close shadow" disabled>
@@ -206,7 +207,8 @@ const ChangeAccountTypePage = () => {
 
       {/* submit without disabled */}
       <div
-        style={{ display: 'flex', flexDirection: 'row-reverse', width: '45%' }}
+        className='odd-button-container'
+        style={{flexDirection: 'row-reverse'}}
       >
         {!isPending && transcription.preview && citizenID.preview && (
           <button
@@ -221,7 +223,8 @@ const ChangeAccountTypePage = () => {
 
       {/* submit is pending */}
       <div
-        style={{ display: 'flex', flexDirection: 'row-reverse', width: '45%' }}
+        className='odd-button-container'
+        style={{flexDirection: 'row-reverse'}}
       >
         {isPending && (
           <button className="submit-close shadow" disabled>

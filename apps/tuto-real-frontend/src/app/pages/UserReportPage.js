@@ -4,6 +4,7 @@ import "../components/profile/profile.css"
 import AdminBanUI from '../components/report/AdminBanUI';
 import AdminUnBanUI from '../components/report/AdminUnBanUI';
 import BarButton from '../components/ui/BarButton';
+import AdminGuard from '../components/guards/adminGuard';
 
 const UserReportPage = () => {
     const [selectedBar, setSelectedBar] = useState('report'); // report || ban
@@ -46,4 +47,4 @@ const UserReportPage = () => {
     )
 }
 
-export default UserReportPage
+export default AdminGuard(UserReportPage);
