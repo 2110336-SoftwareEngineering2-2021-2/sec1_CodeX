@@ -47,6 +47,14 @@ body {
   border-radius: 10px;
 }
 
+.odd-button-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  gap: 15px;
+}
+
 .loading_spinner {
   display: flex;
   flex-direction: column;
@@ -60,6 +68,9 @@ body {
 } */
 @media only screen and (min-width: 720px) {
   .info-card {
+    width: 680px;
+  }
+  .odd-button-container {
     width: 680px;
   }
 }

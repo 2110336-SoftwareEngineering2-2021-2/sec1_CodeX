@@ -100,7 +100,7 @@ const ChangeAccountApprovePage = () => {
         width: '100%',
       }}
     >
-      <div style={{ display: 'flex', width: '45%' }}>
+      <div className='odd-button-container'>
         <NormalButton
           title="< Back"
           whenClick={handleBack}
@@ -151,7 +151,8 @@ const ChangeAccountApprovePage = () => {
 
       {/*approve reject button */}
       <div
-        style={{ display: 'flex', flexDirection: 'row-reverse', width: '45%' }}
+        className='odd-button-container'
+        style={{flexDirection: 'row-reverse'}}
       >
         <NormalButton
           title="Reject"
