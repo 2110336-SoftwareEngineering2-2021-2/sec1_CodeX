@@ -1,10 +1,10 @@
 import Axios from 'axios';
 // import Cookies from 'universal-cookie'
 
-const APP_API_URL = process.env.APP_API_URL || 'http://localhost:3333/api/v1';
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3333/api/v1';
 
 export const client = Axios.create({
-  baseURL: APP_API_URL,
+  baseURL: API_URL,
 });
 
 client.interceptors.request.use(

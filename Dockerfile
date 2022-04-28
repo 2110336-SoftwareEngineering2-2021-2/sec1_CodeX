@@ -56,7 +56,7 @@ RUN sed -i 's/\r$//' start_production.sh  && \
 
 # Expose nginx port
 EXPOSE 80
-ENV APP_API_URL = https://tuto-real-backend.herokuapp.com/api/v1
+ENV REACT_APP_API_URL = https://tuto-real-backend.herokuapp.com/api/v1
 
 # # Run Start command
 ENTRYPOINT ["/docker-entrypoint.sh"]
