@@ -1,0 +1,8 @@
+build:
+  config:
+    PORT: 4200
+    TZ: Asia/Bangkok
+    JWT_EXPIRE: 180s
+    APP_API_URL: https://tuto-real-backend.herokuapp.com/
+  docker:
+    web: Dockerfile
