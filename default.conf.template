@@ -1,3 +1,5 @@
+worker_processes 4; # Heroku dynos have at least four cores.
+
 server {
   listen       $PORT;
   listen  [::]:$PORT;

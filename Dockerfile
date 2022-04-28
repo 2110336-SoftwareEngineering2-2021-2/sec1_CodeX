@@ -56,9 +56,11 @@ RUN sed -i 's/\r$//' start_production.sh  && \
 
 # Expose nginx port
 # EXPOSE 80
+ARG PORT
 
 # # Run Start command
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
 # CMD ["./start_production.sh"]
-CMD /bin/bash -c "envsubst '\$PORT' < /etc/nginx/default.conf.template > /etc/nginx/nginx.conf" && nginx -g 'daemon off;' && ./start_production.sh
+# CMD /bin/bash -c "envsubst '\$PORT' < /etc/nginx/default.conf.template > /etc/nginx/nginx.conf" && nginx -g 'daemon off;' && ./start_production.sh
+CMD sed -i -e 's/$PORT/'"$PORT"'/g' /etc/nginx/nginx.conf && nginx -g 'daemon off;' && ./start_production.sh
