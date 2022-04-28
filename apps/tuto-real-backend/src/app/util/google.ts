@@ -2,8 +2,6 @@ import { Storage } from '@google-cloud/storage';
 
 const uuid = require('uuid');
 const gc = require('./config').storage;
-const oAuth = require('./config').oAuth2Client;
-const mailKey = require('./config').mailKey;
 const BUCKETNAME = 'vimsbin';
 const nodemailer = require('nodemailer');
 const bucket = gc.bucket('codex_img');
