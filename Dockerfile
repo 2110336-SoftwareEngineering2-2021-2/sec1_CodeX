@@ -52,7 +52,9 @@ COPY start_production.sh .
 RUN echo '\nnginx -g "daemon off;\n"' >> start_production.sh
 
 RUN sed -i 's/\r$//' start_production.sh  && \
-  chmod +x start_production.sh
+  chmod +x start_production.sh && \
+  chmod +x /etc/nginx/nginx.conf &&
+
 
 # Expose nginx port
 # EXPOSE 80
