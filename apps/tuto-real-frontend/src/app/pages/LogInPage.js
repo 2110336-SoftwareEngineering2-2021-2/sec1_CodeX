@@ -8,7 +8,7 @@ import './RegistrationPage.css';
 
 import COLORS from '../constants/color';
 
-export default function Signin() {
+export default function LogInPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showModal, setShowModal] = useState(false); // Forgot password modal //
