@@ -64,11 +64,10 @@ export class ReportController {
     }
   }
 
-  @Patch()
+  @Delete()
   @Roles('Admin')
   @UseGuards(FirebaseAuthGuard, RolesGuard)
   @ApiOperation({ summary: 'Update report status' })
-  @Delete()
   @ApiOperation({ summary: 'Delete report' })
   @ApiResponse({
     status: 200,

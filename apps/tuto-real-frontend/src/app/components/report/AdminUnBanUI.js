@@ -129,12 +129,13 @@ class AdminUnBanUI extends React.Component {
       });
   };
 
-  onViewInfo = async (userId) => {
-    this.setState({ confirmModalStatus: 'normal' });
-    await this.getReportFromUser(userId);
+  onViewInfo = async (user) => {
+    this.setState({ focusUser: user, confirmModalStatus: 'normal' });
+    await this.getReportFromUser(user._id);
   };
 
   onClickUnbanBtn = (user) => {
+    console.log(user);
     this.setState({ focusUser: user, showModal: 'confirm' });
   };
 
@@ -182,7 +183,7 @@ class AdminUnBanUI extends React.Component {
                     timeStamp={user.unbanDate}
                     key={user._id}
                     onClickUnBanBtn={() => this.onClickUnbanBtn(user)}
-                    onClickCard={() => this.onViewInfo(user._id)}
+                    onClickCard={() => this.onViewInfo(user)}
                   />
                 ))}
               </>
