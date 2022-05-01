@@ -97,8 +97,7 @@ export function AuthProvider({ children }) {
         else logOut();
       })
       .catch((err) => {
-        console.log(err.message);
-        let msg = 'Please complete the information.';
+        let msg = 'Something went wrong...';
         if (err.message.includes('email')) msg = 'Email already existed.';
         else if (err.message.includes('citizenID'))
           msg = 'CitizenID already existed.';
@@ -118,7 +117,7 @@ export function AuthProvider({ children }) {
         }
       })
       .catch((err) => {
-        alert('User not found.');
+        alert(err.message);
       });
   };
 
