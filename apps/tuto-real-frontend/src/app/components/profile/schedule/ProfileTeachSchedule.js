@@ -339,19 +339,21 @@ const ProfileTeachSchedule = ({
             value={tempPrice ?? 0}
             onChange={(e) => setTempPrice(parseInt(e.target.value))}
           />
-          <Button
-            variant="success"
-            style={{
-              backgroundColor: COLORS.third,
-              borderColor: 'none',
-              color: COLORS.white,
-              margin: '0% 2% 0% 0%',
-              width: '25%',
-            }}
-            onClick={savePrice}
-          >
-            Save Change
-          </Button>
+          {tempPrice >= 0 && (
+            <Button
+              variant="success"
+              style={{
+                backgroundColor: COLORS.third,
+                borderColor: 'none',
+                color: COLORS.white,
+                margin: '0% 2% 0% 0%',
+                width: '25%',
+              }}
+              onClick={savePrice}
+              >
+              Save Change
+            </Button>
+          )}
           <Button variant="outline-secondary" onClick={cancelPrice}>
             Cancel
           </Button>

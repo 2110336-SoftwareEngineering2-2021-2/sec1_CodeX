@@ -33,19 +33,25 @@ export class UserService {
   }
 
   public async createProfile(dto: NewUserDto): Promise<any> {
-    const profile = await this.userModel.create(dto)
-    .then((res)=>{
-      return res
-    })
-    .catch((err)=>{
-      throw new BadRequestException({
-        success: false,
-        data: err,
-      });
-    })
-    return { success: true, data: profile };
+    try {
+      const profile = await this.userModel
+        .create(dto)
+        .then((res) => {
+          return res;
+        })
+        .catch((err) => {
+          // console.log(err.message);
+          throw new BadRequestException({
+            success: false,
+            data: err.message,
+          });
+        });
+      return { success: true, data: profile };
+    } catch (err) {
+      console.log(err)
+      return err.response;
+    }
   }
-
   public async updateProfile(id: String, dto: updateUserDto): Promise<any> {
     const profile = await this.userModel.findById(id).exec();
     if (!profile)
