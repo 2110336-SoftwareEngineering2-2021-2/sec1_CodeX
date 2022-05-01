@@ -16,6 +16,7 @@ const SUBJECTS = {
   Japanese: 'Jap',
   Chinese: 'Chin',
   Thai: 'Th',
+  Singing: 'Sing'
 };
 
 export default SUBJECTS;

@@ -75,13 +75,16 @@ export function AuthProvider({ children }) {
   };
 
   const signUp = (data, onSuccess, onError) => {
+    console.log('first');
     client({
       method: 'POST',
       url: '/user/create',
       data: data,
     })
-      .then(async (res) => {
-        if (!res.data.success) throw new Error(res.data.data);
+      .then(async ({ data }) => {
+        console.log(data);
+        // throw new Error(res.data.data);
+        if (!data.success) throw new Error(data.data);
         return await createUserWithEmailAndPassword(
           auth,
           data.email,
@@ -97,14 +100,15 @@ export function AuthProvider({ children }) {
         else logOut();
       })
       .catch((err) => {
-        let msg = 'Something went wrong...';
+        console.log(err);
+        let msg = 'Something went wrong';
         if (err.message.includes('email')) msg = 'Email already existed.';
         else if (err.message.includes('citizenID'))
           msg = 'CitizenID already existed.';
         alert(msg);
         if (onError) onError();
       });
-  };
+  }
 
   const logIn = (email, password, onSuccess) => {
     signInWithEmailAndPassword(auth, email, password)
