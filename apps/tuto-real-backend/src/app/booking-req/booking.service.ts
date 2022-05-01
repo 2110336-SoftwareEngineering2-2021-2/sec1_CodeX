@@ -423,38 +423,40 @@ export class BookingService {
         booking[i]['tutor'] = tutorName;
       }
 
-      for (var j = 0; j < booking[i].days.length; j++) {
-        let day = booking[i].days[j].day as string;
-        const numDay = days.get(day);
-        const newDate = new Date(
-          schedule.startDate.getTime() + 1000 * 60 * 60 * 24 * numDay
-        );
-        booking[i].days[j]['date'] = newDate;
+      if(schedule) {
+        for (var j = 0; j < booking[i].days.length; j++) {
+          let day = booking[i].days[j].day as string;
+          const numDay = days.get(day);
+          const newDate = new Date(
+            schedule.startDate.getTime() + 1000 * 60 * 60 * 24 * numDay
+          );
+          booking[i].days[j]['date'] = newDate;
 
-        //Subject to learn
-        const subject = await this.scheduleModel.aggregate([
-          { $unwind: '$days' },
-          { $unwind: '$days.slots' },
-          {
-            $match: {
-              'days.slots.slot': { $in: booking[i].days[j].slots },
-              _id: mongoose.Types.ObjectId(booking[i].schedule_id),
-              'days.day': day,
+          //Subject to learn
+          const subject = await this.scheduleModel.aggregate([
+            { $unwind: '$days' },
+            { $unwind: '$days.slots' },
+            {
+              $match: {
+                'days.slots.slot': { $in: booking[i].days[j].slots },
+                _id: mongoose.Types.ObjectId(booking[i].schedule_id),
+                'days.day': day,
+              },
             },
-          },
-          { $sort: { 'days.slots.slot': 1 } },
-          { $group: { _id: '$days.slots' } },
-        ]);
-        subject.sort(function (a, b) {
-          return a._id.slot - b._id.slot;
-        });
+            { $sort: { 'days.slots.slot': 1 } },
+            { $group: { _id: '$days.slots' } },
+          ]);
+          subject.sort(function (a, b) {
+            return a._id.slot - b._id.slot;
+          });
 
-        let subjects = [];
-        subject.forEach((element) => {
-          subjects.push(element._id.subject);
-        });
+          let subjects = [];
+          subject.forEach((element) => {
+            subjects.push(element._id.subject);
+          });
 
-        booking[i].days[j]['subject'] = subjects;
+          booking[i].days[j]['subject'] = subjects;
+        }
       }
     }
     let booking_pending = [];
