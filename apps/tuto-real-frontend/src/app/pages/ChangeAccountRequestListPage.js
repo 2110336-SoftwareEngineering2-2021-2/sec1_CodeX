@@ -16,7 +16,7 @@ const ChangeAccountRequestListPage = () => {
       url: '/tutorReq',
     })
       .then(({ data: { data } }) => {
-        console.log(data);
+        // console.log(data);
         if (data) setDataList(data);
         setIsPending(false);
       }, [])
@@ -39,7 +39,7 @@ const ChangeAccountRequestListPage = () => {
       }}
     >
       {/* title */}
-      <div className='odd-button-container'>
+      <div className="odd-button-container">
         <p
           className="title left"
           style={{ width: '100%', fontSize: 'xx-large' }}

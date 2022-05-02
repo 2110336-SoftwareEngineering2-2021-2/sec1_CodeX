@@ -117,7 +117,7 @@ const ProfileInfo = ({ targetId, viewType }) => {
       data: changeData,
     })
       .then(({ data: { data } }) => {
-        console.log(data);
+        // console.log(data);
         setReset(true);
       })
       .catch((res) => {

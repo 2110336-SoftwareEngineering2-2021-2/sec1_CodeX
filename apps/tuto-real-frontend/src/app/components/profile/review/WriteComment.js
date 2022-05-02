@@ -58,7 +58,7 @@ const WriteComment = (props) => {
       },
     })
       .then(({ data: { data } }) => {
-        console.log(data);
+        // console.log(data);
         setReviewId(data._id);
         setReset(true);
       })
@@ -80,7 +80,7 @@ const WriteComment = (props) => {
       },
     })
       .then(({ data: { data } }) => {
-        console.log(data);
+        // console.log(data);
         setReset(true);
       })
       .catch((res) => {

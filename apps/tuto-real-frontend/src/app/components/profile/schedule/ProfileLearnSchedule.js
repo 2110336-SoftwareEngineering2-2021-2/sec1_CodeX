@@ -43,7 +43,7 @@ const ProfileLearnSchedule = ({ targetId, viewType, redirectToTutor }) => {
       },
     })
       .then(({ data: { data } }) => {
-        console.log(data);
+        // console.log(data);
         setScheduleList(data ?? []);
         if (data?.length > 0) {
           setSubjectList(data[currentSchedule].subjects ?? []);

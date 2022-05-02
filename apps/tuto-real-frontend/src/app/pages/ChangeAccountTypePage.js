@@ -112,7 +112,7 @@ const ChangeAccountTypePage = () => {
       data: sendImage,
     })
       .then(({ data }) => {
-        console.log(data);
+        // console.log(data);
         setIsPending(false);
         setShowModal(true);
       })
@@ -138,7 +138,7 @@ const ChangeAccountTypePage = () => {
       }}
     >
       {/* back button */}
-      <div className='odd-button-container'>
+      <div className="odd-button-container">
         <Link
           className="backtoprofile shadow"
           to={`/profile/${_id}`}
@@ -195,8 +195,8 @@ const ChangeAccountTypePage = () => {
 
       {/* submit with disabled */}
       <div
-        className='odd-button-container'
-        style={{flexDirection: 'row-reverse'}}
+        className="odd-button-container"
+        style={{ flexDirection: 'row-reverse' }}
       >
         {(!transcription.preview || !citizenID.preview) && (
           <button className="submit-close shadow" disabled>
@@ -207,8 +207,8 @@ const ChangeAccountTypePage = () => {
 
       {/* submit without disabled */}
       <div
-        className='odd-button-container'
-        style={{flexDirection: 'row-reverse'}}
+        className="odd-button-container"
+        style={{ flexDirection: 'row-reverse' }}
       >
         {!isPending && transcription.preview && citizenID.preview && (
           <button
@@ -223,8 +223,8 @@ const ChangeAccountTypePage = () => {
 
       {/* submit is pending */}
       <div
-        className='odd-button-container'
-        style={{flexDirection: 'row-reverse'}}
+        className="odd-button-container"
+        style={{ flexDirection: 'row-reverse' }}
       >
         {isPending && (
           <button className="submit-close shadow" disabled>

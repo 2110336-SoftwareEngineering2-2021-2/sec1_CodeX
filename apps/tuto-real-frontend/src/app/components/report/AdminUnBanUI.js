@@ -50,7 +50,7 @@ class AdminUnBanUI extends React.Component {
       url: `/punishment`,
     })
       .then(({ data: { data } }) => {
-        console.log(data);
+        // console.log(data);
         this.setState({
           userBannedList: data,
           isLoading: false,
@@ -79,7 +79,7 @@ class AdminUnBanUI extends React.Component {
       params: { target_id },
     })
       .then(({ data: { data } }) => {
-        console.log(data);
+        // console.log(data);
         this.setState({
           userBannedList: this.state.userBannedList.filter(
             (user) => user._id !== data._id
@@ -110,7 +110,7 @@ class AdminUnBanUI extends React.Component {
       params: { _id: userId },
     })
       .then(({ data: { data } }) => {
-        console.log(data);
+        // console.log(data);
         this.setState({
           // loadingReportInfo: false,
           isLoading: false,

@@ -25,7 +25,7 @@ const ProfileReview = (props) => {
   const countReview = (data, myReview) => {
     const sumCount = data + myReview;
     setNoReview(sumCount);
-    console.log(data);
+    // console.log(data);
     console.log(myReview);
   };
 
@@ -49,7 +49,7 @@ const ProfileReview = (props) => {
       params: tempParams,
     })
       .then(({ data: { data } }) => {
-        console.log(data);
+        // console.log(data);
         setSumRating(data.rating);
         setCheckMy(data.allow);
         if (data.self !== null) setMyReview(data.self);

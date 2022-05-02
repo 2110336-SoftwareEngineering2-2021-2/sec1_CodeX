@@ -35,7 +35,7 @@ const ProfilePage = () => {
       },
     })
       .then(({ data: { data } }) => {
-        console.log(data);
+        // console.log(data);
         setTargetRole(data?.role);
         setZoomUrl(data?.zoomStartURL ?? null);
         setFirstName(data.firstName);

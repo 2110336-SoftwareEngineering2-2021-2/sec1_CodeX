@@ -55,7 +55,7 @@ class UserReportUI extends React.Component {
         },
       })
         .then(({ data: { data } }) => {
-          console.log(data);
+          // console.log(data);
           this.onClose();
           if (this.props.targetName)
             alert(`Successfully report ${this.props.targetName}`);

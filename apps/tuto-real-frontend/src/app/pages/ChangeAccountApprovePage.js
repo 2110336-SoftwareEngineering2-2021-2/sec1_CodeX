@@ -49,7 +49,7 @@ const ChangeAccountApprovePage = () => {
       data: { status: 'Approved' },
     })
       .then(({ data }) => {
-        console.log(data);
+        // console.log(data);
         setIsPending(false);
         setShowModalApprove(!showModalApprove);
       })
@@ -73,7 +73,7 @@ const ChangeAccountApprovePage = () => {
       data: { status: 'Reject' },
     })
       .then(({ data }) => {
-        console.log(data);
+        // // console.log(data);
         setIsPending(false);
         setShowModalReject(!showModalReject);
       })
@@ -100,7 +100,7 @@ const ChangeAccountApprovePage = () => {
         width: '100%',
       }}
     >
-      <div className='odd-button-container'>
+      <div className="odd-button-container">
         <NormalButton
           title="< Back"
           whenClick={handleBack}
@@ -151,8 +151,8 @@ const ChangeAccountApprovePage = () => {
 
       {/*approve reject button */}
       <div
-        className='odd-button-container'
-        style={{flexDirection: 'row-reverse'}}
+        className="odd-button-container"
+        style={{ flexDirection: 'row-reverse' }}
       >
         <NormalButton
           title="Reject"
