@@ -81,10 +81,10 @@ export function AuthProvider({ children }) {
       url: '/user/create',
       data: data,
     })
-      .then(async ({ data }) => {
-        console.log(data);
+      .then(async (res) => {
+        console.log(res);
         // throw new Error(res.data.data);
-        if (!data.success) throw new Error(data.data);
+        if (!res.data.success) throw new Error(res.data.data);
         return await createUserWithEmailAndPassword(
           auth,
           data.email,
@@ -108,7 +108,7 @@ export function AuthProvider({ children }) {
         alert(msg);
         if (onError) onError();
       });
-  }
+  };
 
   const logIn = (email, password, onSuccess) => {
     signInWithEmailAndPassword(auth, email, password)
