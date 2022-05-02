@@ -43,25 +43,16 @@ export class BanUserService {
       });
 
     //If the user has not been already banned
-    if (!user.isBan) {
-      let date = new Date(Date.now());
-      date.setHours((date.getHours() as number) + (duration as number));
-      await this.userModel.updateOne(
-        { _id: mongoose.Types.ObjectId(tid) },
-        { isBan: true, unbanDate: date },
-        { new: true }
-      );
-    }
-    //If the user has already been banned
-    else {
-      let date = user.unbanDate;
-      date.setHours(date.getHours() + (duration as number));
-      await this.userModel.updateOne(
-        { _id: mongoose.Types.ObjectId(tid) },
-        { unbanDate: date },
-        { new: true }
-      );
-    }
+    let date =
+      (!user.isBan
+        ? Date.now() //
+        : new Date(user.unbanDate).getTime()) +
+      (duration as number) * 60 * 60 * 1000;
+    await this.userModel.updateOne(
+      { _id: mongoose.Types.ObjectId(tid) },
+      { isBan: true, unbanDate: new Date(date) },
+      { new: true }
+    );
 
     const user_new = await this.userModel
       .findById(
