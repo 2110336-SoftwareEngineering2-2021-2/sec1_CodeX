@@ -19,8 +19,7 @@ import { BanUserService } from './ban-user.service';
 @Controller('punishment')
 export class BanUserController {
   constructor(
-    private readonly banUserService: BanUserService,
-    @Inject(ReportService) private readonly service: ReportService
+    private readonly banUserService: BanUserService
   ) {}
 
   @Get()
