@@ -50,7 +50,7 @@ export class ReportService {
           data: 'UserId is not exist',
         });
       });
-    console.log(result);
+    // console.log(result);
     return { success: true, data: result };
   }
 

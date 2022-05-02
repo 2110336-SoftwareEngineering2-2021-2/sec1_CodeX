@@ -18,7 +18,7 @@ export class TutorService {
   }
 
   public async searchTutor(dto: CriteriaDto) {
-    console.log(dto);
+    // console.log(dto);
     var queryKeyword = [],
       queryDays = [];
     if (!!dto.keyword) {

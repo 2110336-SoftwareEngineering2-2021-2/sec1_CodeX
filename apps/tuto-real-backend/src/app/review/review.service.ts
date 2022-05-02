@@ -84,7 +84,7 @@ export class ReviewService {
 
   public async getReviews(tutorId: string, sortBy: string, sid: string) {
     var id;
-    console.log(tutorId,sortBy,sid)
+    // console.log(tutorId,sortBy,sid)
     if (sortBy == undefined) {
       sortBy = 'createdAt';
     } else if (!['lastUpdated', 'rating', 'createdAt'].includes(sortBy)) {
@@ -127,7 +127,7 @@ export class ReviewService {
       .catch((err) => {
         throw new NotFoundException({ success: false, data: err });
       });
-    console.log(tutor);
+    // console.log(tutor);
     if (tutor == null)
       throw new NotFoundException({ success: false, data: 'Tutor not found' });
     if (tutor.role != 'Tutor')

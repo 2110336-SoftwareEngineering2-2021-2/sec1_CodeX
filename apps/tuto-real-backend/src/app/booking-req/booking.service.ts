@@ -546,7 +546,7 @@ export class BookingService {
       const tutor = await this.userModel.findOne({
         schedule_id: { $in: booking.schedule_id },
       });
-      console.log(booking, tutor);
+      // console.log(booking, tutor);
 
       await this.userModel.findById(new_booking.student_id).then((user) => {
         sendMail(

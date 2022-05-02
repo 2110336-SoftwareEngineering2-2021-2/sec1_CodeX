@@ -27,7 +27,7 @@ const getFinalDate = (startDate: Date): Date => {
 
 function nextweek(today, flag) {
   today.setHours(7, 0, 0);
-  console.log(today.getDate());
+  // console.log(today.getDate());
   var next = new Date(
     today.getFullYear(),
     today.getUTCMonth(),
@@ -384,7 +384,7 @@ export class ScheduleService {
         latestDate = nextweek(latestDate, -1);
       }
       latestDate = nextweek(latestDate, 1);
-      console.log('add', latestDate);
+      // console.log('add', latestDate);
       latestDate.setHours(7, 0, 0);
       var add = new LearnScheduleDto();
       add.studentId = studentId;
@@ -412,18 +412,18 @@ export class ScheduleService {
         });
       });
     //lastedtSunday
-    console.log(latestDate);
+    // console.log(latestDate);
     for (let i = 0; i < raw.length; i++) {
       var subjects = new Set();
 
       if (raw[i].startDate > latestDate) latestDate = raw[i].startDate;
       for (var day of raw[i].days) {
         for (var slot of day.slots) {
-          console.log('slot', slot);
+          // console.log('slot', slot);
 
           var j = slot.data.length;
           while (j--) {
-            console.log(slot.data[j].slotId);
+            // console.log(slot.data[j].slotId);
             var re = await this.scheduleModel
               .findOne(
                 { 'days.slots._id': slot.data[j].slotId },
@@ -467,7 +467,7 @@ export class ScheduleService {
                 });
               }
             }
-            console.log(slot.data[j]);
+            // console.log(slot.data[j]);
           }
         }
       }
